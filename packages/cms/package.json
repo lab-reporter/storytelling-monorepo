@@ -18,6 +18,7 @@
   "dependencies": {
     "@keystone-6/auth": "7.0.0",
     "@keystone-6/core": "5.2.0",
+    "@readr-media/react-embed-code-generator": "^2.4.3-alpha.15",
     "@story-telling-reporter/cms-core": "^0.0.1",
     "@types/react-beautiful-dnd": "^13.1.4",
     "cors": "^2.8.5",
