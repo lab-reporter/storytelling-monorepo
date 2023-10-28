@@ -28,7 +28,7 @@ const getAllowOrigins = (cors: string) => {
   } else if (typeof cors === 'string') {
     return cors.split(',')
   } else {
-    return ['https://kids.twreporter.org', 'https://next-kids.twreporter.org']
+    return ['https://kids.twreporter.org', 'https://www.twreporter.org']
   }
 }
 
@@ -46,7 +46,7 @@ export default {
       DATABASE_PROVIDER === 'sqlite'
         ? DatabaseProvider.Sqlite
         : DatabaseProvider.Postgres,
-    url: DATABASE_URL || 'postgres://user:password@localhost:5432/kids',
+    url: DATABASE_URL || 'postgres://user:password@localhost:5432/story-telling',
   },
   session: {
     secret:
