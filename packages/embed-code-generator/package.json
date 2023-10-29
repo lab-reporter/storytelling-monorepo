@@ -1,0 +1,70 @@
+{
+  "name": "@story-telling-reporter/react-embed-code-generator",
+  "version": "0.0.1",
+  "description": "",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "make dev",
+    "build": "make build",
+    "clean": "make clean",
+    "build-dist": "make build-dist",
+    "build-lib": "make build-lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nickhsine/story-telling-monorepo.git",
+    "directory": "packages/embed-code-generator"
+  },
+  "keywords": [
+    "react",
+    "embed code",
+    "embed code generator",
+    "dual slides",
+    "karaoke",
+    "threejs",
+    "story telling"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@story-telling-reporter/react-dual-slides": "0.0.4",
+    "@story-telling-reporter/react-karaoke": "0.0.1",
+    "@story-telling-reporter/react-three-story-points": "0.0.1",
+    "lodash": "^4.17.21",
+    "serialize-javascript": "^6.0.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.10.5",
+    "@babel/core": "^7.11.1",
+    "@babel/eslint-parser": "^7.11.4",
+    "@babel/preset-env": "^7.17.12",
+    "@babel/preset-react": "^7.17.12",
+    "@story-telling-reporter/react-embed-code-generator": "0.0.1",
+    "@svgr/webpack": "^6.2.1",
+    "babel-eslint": "^10.1.0",
+    "babel-loader": "^8.2.5",
+    "babel-plugin-inline-react-svg": "^2.0.1",
+    "babel-plugin-styled-components": "^2.0.7",
+    "eslint": "^7.7.0",
+    "eslint-config-prettier": "^6.9.0",
+    "eslint-plugin-babel": "^5.3.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.30.0",
+    "html-webpack-plugin": "^5.5.0",
+    "husky": "^8.0.1",
+    "lint-staged": "^12.4.2",
+    "prettier": "1.19.1",
+    "react": "18.1.0",
+    "react-dom": "18.1.0",
+    "styled-components": "5.3.5",
+    "webpack": "^5.72.1",
+    "webpack-bundle-analyzer": "^4.5.0",
+    "webpack-cli": "^4.9.2",
+    "webpack-dev-server": "^4.9.0"
+  },
+  "files": [
+    "lib",
+    "dist"
+  ]
+}
