@@ -1,6 +1,6 @@
 {
   "name": "@story-telling-reporter/react-karaoke",
-  "version": "0.0.1",
+  "version": "0.0.8",
   "description": "",
   "main": "lib/index.js",
   "scripts": {
