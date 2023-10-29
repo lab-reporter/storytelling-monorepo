@@ -1,4 +1,3 @@
-/* global process, module */
 const isProduction = process.env.NODE_ENV === 'production'
 
 module.exports = {
@@ -17,8 +16,15 @@ module.exports = {
       '@babel/preset-react',
       {
         development: !isProduction,
+        runtime: 'automatic',
       },
     ],
     '@babel/preset-typescript',
+  ],
+  plugins: [
+    [
+      'babel-plugin-styled-components',
+      { ssr: true, displayName: true, preprocess: false },
+    ],
   ],
 }
