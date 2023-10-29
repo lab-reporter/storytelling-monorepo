@@ -1347,6 +1347,18 @@
     styled-components "5.3.5"
     uuid "^8.3.2"
 
+"@story-telling-reporter/react-karaoke@0.0.8":
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/@story-telling-reporter/react-karaoke/-/react-karaoke-0.0.8.tgz#67cafc04a06df762422f3627f213fe1d864dafaf"
+  integrity sha512-8PGPgrE+Jbv8dm1N6glqUNtS2EATvdj08SBORWiVpoQAaPQhqyf6Jicwzr68f7019npuk74XPbVa5t9RdxL/JQ==
+  dependencies:
+    react "18.1.0"
+    react-dom "18.1.0"
+    react-intersection-observer "^9.3.5"
+    serialize-javascript "^6.0.0"
+    styled-components "5.3.5"
+    uuid "^8.3.2"
+
 "@story-telling-reporter/react-three-story-points@0.0.1":
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/@story-telling-reporter/react-three-story-points/-/react-three-story-points-0.0.1.tgz#657ad315f6b6297920353b8364299344935469d0"
