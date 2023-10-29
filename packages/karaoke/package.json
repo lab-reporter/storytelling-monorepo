@@ -1,0 +1,38 @@
+{
+  "name": "@story-telling-reporter/react-karaoke",
+  "version": "0.0.1",
+  "description": "",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "make dev",
+    "build": "make build",
+    "clean": "make clean",
+    "build-dist": "make build-dist",
+    "build-lib": "make build-lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nickhsine/story-telling-monorepo.git",
+    "directory": "packages/karaoke"
+  },
+  "keywords": [
+    "react",
+    "audio",
+    "quote",
+    "karaoke"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "react": "18.1.0",
+    "react-dom": "18.1.0",
+    "react-intersection-observer": "^9.3.5",
+    "serialize-javascript": "^6.0.0",
+    "styled-components": "5.3.5",
+    "uuid": "^8.3.2"
+  },
+  "files": [
+    "lib",
+    "dist"
+  ]
+}
