@@ -5,7 +5,9 @@
     "packages/draft-editor",
     "packages/draft-renderer",
     "packages/cms",
-    "packages/karaoke"
+    "packages/karaoke",
+    "packages/dual-slides",
+    "packages/three-story-points"
   ],
   "scripts": {
     "prepare": "husky install"
