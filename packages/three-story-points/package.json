@@ -1,0 +1,48 @@
+{
+  "name": "@story-telling-reporter/react-three-story-points",
+  "version": "1.0.2",
+  "description": "",
+  "main": "lib/index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "make dev",
+    "build": "make build",
+    "clean": "make clean",
+    "build-dist": "make build-dist",
+    "build-lib": "make build-lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nickhsine/story-telling-reporter.git",
+    "directory": "packages/three-story-points"
+  },
+  "keywords": [
+    "react",
+    "readr",
+    "threejs",
+    "3D Model"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "gsap": "^3.11.4",
+    "lodash": "^4.17.21",
+    "react-intersection-observer": "^9.3.5",
+    "three": "^0.150.1",
+    "three-story-controls": "^1.0.6"
+  },
+  "devDependencies": {
+    "@types/three": "^0.149.0",
+    "react": "18.1.0",
+    "react-dom": "18.1.0",
+    "styled-components": "5.3.5"
+  },
+  "peerDependencies": {
+    "react": "18.1.0",
+    "react-dom": "18.1.0",
+    "styled-components": "5.3.5"
+  },
+  "files": [
+    "lib"
+  ]
+}
