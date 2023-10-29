@@ -1,6 +1,6 @@
 {
   "name": "@story-telling-reporter/react-embed-code-generator",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "",
   "main": "lib/index.js",
   "scripts": {
@@ -29,7 +29,7 @@
   "dependencies": {
     "@story-telling-reporter/react-dual-slides": "0.0.5",
     "@story-telling-reporter/react-karaoke": "0.0.8",
-    "@story-telling-reporter/react-three-story-points": "0.0.1",
+    "@story-telling-reporter/react-three-story-points": "0.0.2",
     "lodash": "^4.17.21",
     "serialize-javascript": "^6.0.0"
   },

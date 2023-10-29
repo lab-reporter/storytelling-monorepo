@@ -1370,6 +1370,17 @@
     three "^0.150.1"
     three-story-controls "^1.0.6"
 
+"@story-telling-reporter/react-three-story-points@0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@story-telling-reporter/react-three-story-points/-/react-three-story-points-0.0.2.tgz#ce2b7dc30ddfdbe23fe891526e994684a3f1e30f"
+  integrity sha512-U+Q26Xz/2kAzcIrEI24+AcAWoIzHm1RUvB3dxV2c7nBHT0VVBPvxARxxbAassIgUbmdE9VOAvLcCkwJ2SYlBFg==
+  dependencies:
+    gsap "^3.11.4"
+    lodash "^4.17.21"
+    react-intersection-observer "^9.3.5"
+    three "^0.150.1"
+    three-story-controls "^1.0.6"
+
 "@svgr/babel-plugin-add-jsx-attribute@^6.5.1":
   version "6.5.1"
   resolved "https://registry.yarnpkg.com/@svgr/babel-plugin-add-jsx-attribute/-/babel-plugin-add-jsx-attribute-6.5.1.tgz#74a5d648bd0347bda99d82409d87b8ca80b9a1ba"
