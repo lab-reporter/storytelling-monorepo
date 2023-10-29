@@ -141,7 +141,12 @@ export default function Background({
                 </ImgBlock>
                 <Content>
                   {slide.content.map((text, index) => {
-                    return <p key={index}>{text}</p>
+                    return (
+                      <div
+                        key={index}
+                        dangerouslySetInnerHTML={{ __html: text }}
+                      />
+                    )
                   })}
                 </Content>
               </FlexBox>
