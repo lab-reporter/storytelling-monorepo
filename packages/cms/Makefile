@@ -16,6 +16,7 @@ build-deps:
 		cd ../core; make build; \
 		cd ../draft-editor; make build; \
 		cd ../draft-renderer; make build; \
+		cd ../karaoke; make build; \
 	fi
 
 .PHONY: build-deps
