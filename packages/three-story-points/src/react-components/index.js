@@ -5,6 +5,7 @@ import throttle from 'lodash/throttle.js'
 import { CameraRig, StoryPointsControls } from 'three-story-controls'
 import { getCentralizedMutedManager } from './audio.js'
 import {
+  AmbientLight,
   PerspectiveCamera,
   Vector3,
   Quaternion,
@@ -173,6 +174,8 @@ function createThreeObj(models, pois, canvasRef) {
       scene.add(model.scene)
     })
   }
+  const light = new AmbientLight(0x404040) // soft white light
+  scene.add(light)
 
   /**
    *  Camera
