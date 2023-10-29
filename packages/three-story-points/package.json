@@ -1,6 +1,6 @@
 {
   "name": "@story-telling-reporter/react-three-story-points",
-  "version": "1.0.2",
+  "version": "0.0.1",
   "description": "",
   "main": "lib/index.js",
   "type": "module",
