@@ -347,7 +347,7 @@ type Karaoke {
   audioLink: String
   imageLink: String
   muteHint: Boolean
-  previewButton: JSON
+  embedCode: String
 }
 
 input KaraokeWhereUniqueInput {

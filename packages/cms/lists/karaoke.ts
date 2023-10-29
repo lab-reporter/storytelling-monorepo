@@ -3,14 +3,7 @@ import config from '../config'
 import embedCodeGen from '@readr-media/react-embed-code-generator'
 // @ts-ignore: no definition
 import { list, graphql } from '@keystone-6/core'
-import {
-  checkbox,
-  relationship,
-  text,
-  image,
-  file,
-  virtual,
-} from '@keystone-6/core/fields'
+import { checkbox, text, image, file, virtual } from '@keystone-6/core/fields'
 
 const embedCodeWebpackAssets = embedCodeGen.loadWebpackAssets()
 
@@ -61,18 +54,64 @@ const listConfigurations = list({
       label: '是否顯示聲音播放提醒',
       defaultValue: false,
     }),
-    previewButton: virtual({
+    /*
+    alignCenter: select({
+      label: '哪裡要使用 embed code？',
+      options: [
+        {
+          label: '報導者文章頁',
+          value: 'twreporter',
+        },
+        {
+          label: '少年報導者文章頁',
+          value: 'kids-reporter',
+        },
+        {
+          label: '其他網站',
+          value: 'others',
+        }
+      ],
+      defaultValue: 'twreporter',
+    }),
+    */
+    embedCode: virtual({
+      label: 'embed code',
       field: graphql.field({
-        type: graphql.JSON,
-        resolve(item: Record<string, unknown>): Record<string, string> {
-          return {
-            href: `/demo/karaokes/${item?.id}`,
-            label: 'Preview',
-          }
+        type: graphql.String,
+        resolve: async (item: Record<string, unknown>): Promise<string> => {
+          const audioSrc =
+            (item?.audioLink && `${item.audioLink}`) ||
+            (item?.audio_filename &&
+              `${config.googleCloudStorage.origin}/files/${item?.audio_filename}`)
+          const imgSrc =
+            (item?.imageLink && `${item.imageLink}`) ||
+            (item?.imageFile_id &&
+              `${config.googleCloudStorage.origin}/images/${item.imageFile_id}.${item.imageFile_extension}`)
+
+          const code = embedCodeGen.buildEmbeddedCode(
+            'react-karaoke',
+            {
+              audioUrls: [audioSrc],
+              textArr:
+                typeof item?.quote === 'string' && item.quote.split('\n'),
+              imgSrc,
+              muteHint: item?.muteHint,
+            },
+            embedCodeWebpackAssets
+          )
+
+          return `
+            <style>
+            .margin-left-to-center {
+              margin-left: calc((50vw - 580px) * -1);
+            }
+            </style>
+            ${code}
+          `
         },
       }),
       ui: {
-        views: './lists/views/link-button',
+        views: './lists/views/embed-code',
         createView: {
           fieldMode: 'hidden',
         },
@@ -88,7 +127,7 @@ const listConfigurations = list({
     labelField: 'name',
   },
 
-  access: () => true, 
+  access: () => true,
   hooks: {},
 })
 
