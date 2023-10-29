@@ -1316,10 +1316,10 @@
     react-intersection-observer "^9.3.5"
     react-transition-group "^4.4.5"
 
-"@story-telling-reporter/react-dual-slides@0.0.4":
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/@story-telling-reporter/react-dual-slides/-/react-dual-slides-0.0.4.tgz#505a51ca42f804daacf4df041d5d081d6dcabd52"
-  integrity sha512-cYggcPY28FVQy9xLZ+SHac7KLsFQdPrMhLQ0dMrn8bZ0HiuEWCnht0clCiSu+tFaynq6YKc0/GkAeF0aXNqjhQ==
+"@story-telling-reporter/react-dual-slides@0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@story-telling-reporter/react-dual-slides/-/react-dual-slides-0.0.5.tgz#b25397781b40d7c53a3aba236c7ba16172bdeb84"
+  integrity sha512-BXOhSmRwHeyIp+DG0+Gre80bsaxvXxLLLX5liTAu5oo9CTFHznuwd3xg39icXXiTJ5Jtoz26QayYTORA+6uZkw==
   dependencies:
     react-intersection-observer "^9.3.5"
     react-transition-group "^4.4.5"
