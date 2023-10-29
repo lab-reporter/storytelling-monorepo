@@ -1,9 +1,9 @@
 // @ts-ignore: no definition
-import embedCodeGen from '@readr-media/react-embed-code-generator'
+import embedCodeGen from '@story-telling-reporter/react-embed-code-generator'
 import { list, graphql } from '@keystone-6/core'
 import {
-  checkbox,
-  relationship,
+  // checkbox,
+  // relationship,
   text,
   json,
   virtual,

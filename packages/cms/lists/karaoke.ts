@@ -1,6 +1,6 @@
 import config from '../config'
 // @ts-ignore: no definition
-import embedCodeGen from '@readr-media/react-embed-code-generator'
+import embedCodeGen from '@story-telling-reporter/react-embed-code-generator'
 // @ts-ignore: no definition
 import { list, graphql } from '@keystone-6/core'
 import { checkbox, text, image, file, virtual } from '@keystone-6/core/fields'
