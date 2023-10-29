@@ -3636,12 +3636,12 @@
     "@smithy/types" "^2.4.0"
     tslib "^2.5.0"
 
-"@story-telling-reporter/react-embed-code-generator@0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@story-telling-reporter/react-embed-code-generator/-/react-embed-code-generator-0.0.6.tgz#bccad6cf490c1d7e76bc6db826c6231d9f30859a"
-  integrity sha512-HF1uVZH8bGvLLdoFRqfD21Nbpt8u2mSZBpVr5s9kmJ/5Ll6HfjtA0ndJRrSetURVVP4ENhU2MW3RkHyJ6p40mg==
+"@story-telling-reporter/react-embed-code-generator@0.0.7":
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/@story-telling-reporter/react-embed-code-generator/-/react-embed-code-generator-0.0.7.tgz#22404e2fac6d98db87f96608e9730bf037f0375c"
+  integrity sha512-bVev+6Z+9y5TMnguk0rEoxYMHqzCLK6QsHUO/1pGN5Maqh7NjowJJZlkkTq7FVR3x783A8iDyG8qO+Fr8oWEbA==
   dependencies:
-    "@story-telling-reporter/react-dual-slides" "0.0.4"
+    "@story-telling-reporter/react-dual-slides" "0.0.5"
     "@story-telling-reporter/react-karaoke" "0.0.8"
     "@story-telling-reporter/react-three-story-points" "0.0.1"
     lodash "^4.17.21"
