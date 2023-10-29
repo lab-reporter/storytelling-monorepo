@@ -103,10 +103,12 @@ const listConfigurations = list({
           return `
             <style>
             .margin-left-to-center {
-              margin-left: calc((50vw - 580px) * -1);
+              margin-left: calc((50vw - 350px) * -1);
             }
             </style>
-            ${code}
+            <div class="margin-left-to-center">
+              ${code}
+            </div>
           `
         },
       }),
