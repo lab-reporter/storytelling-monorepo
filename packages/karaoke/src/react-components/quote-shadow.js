@@ -67,7 +67,7 @@ export default function QuoteShadow({
 
   return (
     <Quote styles={styles} className={className}>
-      <mockups.quote.LeftUpperQuoteMark isTransitioned={play} />
+      <mockups.quote.LeftUpperQuoteMark />
       {charArrJsx}
     </Quote>
   )

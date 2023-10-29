@@ -120,6 +120,7 @@ export default function Karaoke({
   useEffect(() => {
     const audio = audioRef.current
     const onLoadedMetadata = () => {
+      console.log('onLoadedMetadata:', audio.duration)
       setAudioOpts((opts) => {
         return Object.assign({}, opts, {
           duration: audio.duration || defaultDuration,
@@ -128,6 +129,19 @@ export default function Karaoke({
     }
 
     if (audio) {
+      if (audio.readyState > 0) {
+        console.log(
+          'set duration without `onLoadedMetadata` event triggered. duration: ',
+          audio.duration
+        )
+        setAudioOpts((opts) => {
+          return Object.assign({}, opts, {
+            duration: audio.duration || defaultDuration,
+          })
+        })
+        return
+      }
+
       audio.addEventListener('loadedmetadata', onLoadedMetadata)
     }
 
@@ -317,7 +331,9 @@ export default function Karaoke({
           ))}
         </audio>
         <QuoteShadow
-          key={`quote_in_view_${inView}` /** use key to force re-rendering */}
+          key={
+            `quote_in_view_${inView}_${audioOpts.duration}` /** use key to force re-rendering */
+          }
           textArr={textArr}
           play={!audioOpts.paused}
           duration={audioOpts.duration}
