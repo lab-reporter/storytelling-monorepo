@@ -7,6 +7,8 @@ import { Request, Response, NextFunction } from 'express'
 import { createAuth } from '@keystone-6/auth'
 import { statelessSessions } from '@keystone-6/core/session'
 import { InMemoryLRUCache } from '@apollo/utils.keyvaluecache'
+import express from 'express'
+import path from 'path'
 
 const { withAuth } = createAuth({
   listKey: 'User',
@@ -74,6 +76,24 @@ export default withAuth(
         path: '/health_check',
         data: { status: 'healthy' },
       },
+      extendExpressApp: (app, commonContext) => {
+        const corsOpts = {
+          origin: envVar.cors.allowOrigins,
+        }
+        const corsMiddleware = cors(corsOpts)
+        app.use('*', corsMiddleware)
+
+        // ThreeJS router
+        app.use(
+          '/three',
+          // Serve static files, including js, css and html
+          // BTW, the reason we use `process.cwd()` rather than `__dirname`
+          // is because `__dirname` won't return the correct absolute path;
+          // it return a wrong relative path `../..`.
+          // I think it is a bug for `@keystone/core`.
+          express.static(path.resolve(process.cwd(), './public/three'))
+        )
+      }
     },
   })
 )
