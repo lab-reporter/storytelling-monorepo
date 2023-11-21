@@ -7,7 +7,7 @@ import {
   ImageEntityWithMeta,
 } from '../buttons/selector/image-selector'
 import { EditButton, EditableBlock as _EditableBlock } from './styled'
-import { blockRenderers } from '@stroy-telling-reporter/draft-renderer'
+import { blockRenderers } from '@story-telling-reporter/draft-renderer'
 
 const { SlideshowInArticleBody } = blockRenderers
 

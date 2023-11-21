@@ -35,7 +35,7 @@ import {
   blockRenderMap,
   customStyleFn,
   decorator,
-} from '@stroy-telling-reporter/draft-renderer'
+} from '@story-telling-reporter/draft-renderer'
 import { createAnnotationButton } from './buttons/annotation'
 import { createInfoBoxButton } from './buttons/info-box'
 

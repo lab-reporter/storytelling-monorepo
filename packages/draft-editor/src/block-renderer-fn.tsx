@@ -5,7 +5,7 @@ import { EditableEmbeddedCode } from './block-renderers/embedded-code'
 import { EditableImage } from './block-renderers/image'
 import { EditableInfoBox } from './block-renderers/info-box'
 import { EditableSlideshow } from './block-renderers/slideshow'
-import { blockRenderers } from '@stroy-telling-reporter/draft-renderer'
+import { blockRenderers } from '@story-telling-reporter/draft-renderer'
 
 const { Divider, NewsReading } = blockRenderers
 

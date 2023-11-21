@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { AtomicBlockProps } from '../block-renderer-fn.type'
 import { EditButton, EditableBlock as _EditableBlock } from './styled'
 import { InfoBoxInput, InfoBoxInputValue } from '../buttons/info-box'
-import { blockRenderers } from '@stroy-telling-reporter/draft-renderer'
+import { blockRenderers } from '@story-telling-reporter/draft-renderer'
 
 const { InfoBoxInArticleBody } = blockRenderers
 
