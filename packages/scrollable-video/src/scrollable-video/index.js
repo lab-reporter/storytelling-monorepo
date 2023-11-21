@@ -1,4 +1,4 @@
-import Component from './components/scrollable-video'
+import Component from './scrollable-video'
 
 export default {
   Component,

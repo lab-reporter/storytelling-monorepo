@@ -2,7 +2,7 @@ import {
   getViewportWidth,
   getElementHeight,
   getXRelativeToDocument,
-} from '../utils/measurement'
+} from './utils/measurement'
 import Captions from './captions'
 import Dimmer from './dimmer-with-message'
 import PropTypes from 'prop-types'
@@ -15,7 +15,7 @@ import React, {
   useLayoutEffect,
 } from 'react'
 import styled, { ThemeProvider, keyframes } from 'styled-components'
-import useScrollTrigger from '../hooks/use-scroll-trigger'
+import useScrollTrigger from './hooks/use-scroll-trigger'
 import Video from './video'
 // lodash
 import merge from 'lodash/merge'
@@ -59,16 +59,16 @@ const Section = styled.section`
     box-sizing: border-box;
   }
   position: relative;
-  height: ${props =>
+  height: ${(props) =>
     props.isVideoError || props.isVideoLoading || !props.pixel100vh
       ? defaultViewportHeight
       : Math.round(props.videoDuration / props.secondsPer100vh + 1) *
           props.pixel100vh +
         'px'};
-  width: ${props =>
+  width: ${(props) =>
     props.viewportWidth ? `${props.viewportWidth}px` : defaultSectionWidth};
   max-width: 100vw;
-  left: ${props => (props.translateX ? `${-1 * props.translateX}px` : 0)};
+  left: ${(props) => (props.translateX ? `${-1 * props.translateX}px` : 0)};
 `
 
 const CaptionsSizer = styled.div`
@@ -81,7 +81,7 @@ const CaptionsSizer = styled.div`
 
 const VideoSizer = styled.div`
   width: 100%;
-  height: ${props => props.pixel100vh}px;
+  height: ${(props) => props.pixel100vh}px;
   position: sticky;
   top: 0;
   left: 0;
@@ -109,7 +109,7 @@ const PlaceHolder = styled.div`
 `
 
 const Padding = styled.div`
-  height: ${props => props.pixel100vh}px;
+  height: ${(props) => props.pixel100vh}px;
 `
 
 const circle = keyframes`
@@ -219,12 +219,8 @@ export default function ScrollableVideo({
     xRelativeToDocument: 0,
     pixel100vh: 0,
   })
-  const {
-    sectionHeight,
-    viewportWidth,
-    xRelativeToDocument,
-    pixel100vh,
-  } = domValues
+  const { sectionHeight, viewportWidth, xRelativeToDocument, pixel100vh } =
+    domValues
 
   // WARNING:
   // Mutating the ref.current will not trigger any re-rendering

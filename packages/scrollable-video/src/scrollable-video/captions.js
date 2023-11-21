@@ -95,36 +95,36 @@ function geyStyleOfX(xBoxAlign, xPositionExp, xLocalOffsetExp) {
 }
 
 const Caption = styled.div`
-  opacity: ${props => (props.show ? '1' : '0')};
+  opacity: ${(props) => (props.show ? '1' : '0')};
   transition: opacity 900ms ease-in;
-  width: ${props => props.theme.captions.box.width};
+  width: ${(props) => props.theme.captions.box.width};
   z-index: 5;
   > span {
-    font-size: ${props => props.theme.captions.fontSize};
-    background: ${props => props.theme.captions.box.background};
+    font-size: ${(props) => props.theme.captions.fontSize};
+    background: ${(props) => props.theme.captions.box.background};
     box-decoration-break: clone;
-    padding: ${props => props.theme.captions.box.spanPadding};;
-    line-height: ${props => props.theme.captions.lineHeight};
-    font-weight: ${props => props.theme.captions.fontWeight};
+    padding: ${(props) => props.theme.captions.box.spanPadding};
+    line-height: ${(props) => props.theme.captions.lineHeight};
+    font-weight: ${(props) => props.theme.captions.fontWeight};
     font-stretch: normal;
-    font-style: ${props => props.theme.captions.fontStyle};
+    font-style: ${(props) => props.theme.captions.fontStyle};
     letter-spacing: 0.44px;
-    color: ${props => props.theme.captions.color};
+    color: ${(props) => props.theme.captions.color};
     a,
     a:link,
     a:visited,
     a:active,
     a:hover {
-      color: ${props => props.theme.captions.link.color};
+      color: ${(props) => props.theme.captions.link.color};
       text-decoration: none;
-      border-bottom: ${props => props.theme.captions.link.underlineColor};
+      border-bottom: ${(props) => props.theme.captions.link.underlineColor};
     }
   }
   position: absolute;
-  text-align: ${props => props.textAlign};
-  ${props =>
+  text-align: ${(props) => props.textAlign};
+  ${(props) =>
     geyStyleOfX(props.xBoxAlign, props.xPositionExp, props.xLocalOffsetExp)};
-  ${props =>
+  ${(props) =>
     getStyleOfY(
       props.yBoxAlign,
       props.yPositionExp,
@@ -133,19 +133,19 @@ const Caption = styled.div`
       props.captionTime,
       props.duration
     )}
-  @media screen and (max-width: ${props => props.theme.mq.mobileMaxWidth}) {
-    >span {
-      font-size: ${props => props.theme.captions.mobileFontSize};
+  @media screen and (max-width: ${(props) => props.theme.mq.mobileMaxWidth}) {
+    > span {
+      font-size: ${(props) => props.theme.captions.mobileFontSize};
       background: transparent;
       box-decoration-break: initial;
       padding: 0;
     }
-    padding: ${props => props.theme.captions.box.mobilePadding};
-    background: ${props => props.theme.captions.box.background};
+    padding: ${(props) => props.theme.captions.box.mobilePadding};
+    background: ${(props) => props.theme.captions.box.background};
     left: 50%;
     transform: translateX(-50%);
-    width: ${props => props.theme.captions.box.mobileWidth};
-    line-height: ${props => props.theme.captions.mobileLineHeight};
+    width: ${(props) => props.theme.captions.box.mobileWidth};
+    line-height: ${(props) => props.theme.captions.mobileLineHeight};
   }
 `
 
@@ -154,8 +154,8 @@ const Caption = styled.div`
  *
  * @export
  * @param {Object} props
- * @param {import('../types.js').Caption[]} props.captions
- * @param {import('../types.js').CaptionsSetting} props.captionsSetting
+ * @param {import('./types.js').Caption[]} props.captions
+ * @param {import('./types.js').CaptionsSetting} props.captionsSetting
  * @param {number} props.duration - Duration of the video (in second)
  * @param {number} props.sectionHeight - Height of the section (in px)
  * @param {number} props.pixel100vh - Height of 100vh (in px)
