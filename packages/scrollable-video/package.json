@@ -1,0 +1,50 @@
+{
+  "name": "@story-telling-reporter/react-scrollable-video",
+  "version": "0.0.1-alpha.2",
+  "description": "",
+  "main": "lib/cjs/index.js",
+  "module": "lib/esm/index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "make dev",
+    "build": "make build",
+    "clean": "make clean",
+    "build-lib": "make build-lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nickhsine/story-telling-reporter.git",
+    "directory": "packages/scrollable-video"
+  },
+  "keywords": [
+    "react",
+    "readr",
+    "slides"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@keystone-ui/fields": "^7.2.0",
+    "@keystone-ui/modals": "^6.0.3",
+    "@story-telling-reporter/draft-editor": "^0.0.1",
+    "lodash": "^4.17.15",
+    "prop-types": "^15.0.0",
+    "react": "^16.8.0",
+    "react-transition-group": "^4.4.1",
+    "whatwg-fetch": "^3.4.1"
+  },
+  "devDependencies": {
+    "react": "18.1.0",
+    "react-dom": "18.1.0",
+    "styled-components": "5.3.5"
+  },
+  "peerDependencies": {
+    "react": "18.1.0",
+    "react-dom": "18.1.0",
+    "styled-components": "5.3.5"
+  },
+  "files": [
+    "lib",
+    "public"
+  ]
+}
