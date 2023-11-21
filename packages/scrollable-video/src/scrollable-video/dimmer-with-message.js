@@ -35,7 +35,7 @@ const Container = styled.div`
   width: 100%;
   height: 100%;
   opacity: 0;
-  opacity: ${props => {
+  opacity: ${(props) => {
     switch (props.state) {
       case 'exited':
       case 'exiting': {
@@ -48,7 +48,7 @@ const Container = styled.div`
       }
     }
   }};
-  transition: ${props => {
+  transition: ${(props) => {
     switch (props.state) {
       case 'exiting':
       case 'exited': {
@@ -76,7 +76,7 @@ const Text = styled.div`
   }
   font-weight: bold;
   color: #fff;
-  ${props =>
+  ${(props) =>
     props.shining
       ? css`
           opacity: 1;
@@ -103,7 +103,7 @@ DimmerWithMessage.defaultProps = {
 export default function DimmerWithMessage(props) {
   return (
     <Transition unmountOnExit in={props.show} timeout={transitionDuration}>
-      {state => (
+      {(state) => (
         <Container state={state}>
           <Dimmer />
           <Text shining={props.shining}>{props.message}</Text>

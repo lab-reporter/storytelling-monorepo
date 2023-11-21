@@ -43,7 +43,7 @@ function pickSource(
   const smallerSources = []
   const sourcesToBePicked =
     filteredByOrientation.length > 0 ? filteredByOrientation : sources
-  sourcesToBePicked.forEach(source => {
+  sourcesToBePicked.forEach((source) => {
     if (source.width >= viewportWidthInPixel) {
       largerSources.push(source)
     } else {
@@ -99,7 +99,7 @@ const ForwardRefVideo = React.forwardRef(
       setVideoError,
       setVideoLoading,
       setVideoDuration,
-      preloadCacheType,
+      preloadCacheType, // eslint-disable-line
     },
     ref
   ) => {
@@ -129,7 +129,7 @@ const ForwardRefVideo = React.forwardRef(
         const orientationChecker = window.matchMedia('(orientation: portrait)')
         setIsScreenPortrait(orientationChecker.matches)
         // Add a listener to detect screen orientation changes
-        const handleOrientationChange = e => {
+        const handleOrientationChange = (e) => {
           setIsScreenPortrait(e.matches)
           console.log(e.matches ? 'portrait' : 'landscape')
         }
@@ -168,7 +168,7 @@ const ForwardRefVideo = React.forwardRef(
                 // `pause()` video after `play()` successfully
                 ref.current.pause()
               })
-              .catch(err => {
+              .catch((err) => {
                 console.warn('Can not play video by JavaScript due to ', err)
               })
           }
@@ -183,26 +183,26 @@ const ForwardRefVideo = React.forwardRef(
         key={pickedSourceSrc}
         preload="auto"
         playsInline={true}
-        onCanPlay={e => {
+        onCanPlay={() => {
           setVideoLoading(false)
           setVideoError(false)
         }}
-        onWaiting={e => {
+        onWaiting={() => {
           setVideoLoading(true)
         }}
-        onDurationChange={e => {
+        onDurationChange={(e) => {
           setVideoDuration(e.target.duration)
         }}
-        onPlay={e => {
+        onPlay={(e) => {
           e.target.pause()
         }}
-        onEnded={e => {
+        onEnded={(e) => {
           console.log(
             'the video should be paused before last frame and not to be ended'
           )
           e.target.pause()
         }}
-        onError={e => {
+        onError={() => {
           setVideoError(true)
           setVideoLoading(false)
         }}
