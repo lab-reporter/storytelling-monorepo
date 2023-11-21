@@ -1,7 +1,7 @@
 import { Transition } from 'react-transition-group'
 import PropTypes from 'prop-types'
 import React from 'react'
-import styled, { keyframes, css } from 'styled-components'
+import styled, { keyframes, css } from '../styled-components'
 
 const transitionDuration = {
   enter: 1200,

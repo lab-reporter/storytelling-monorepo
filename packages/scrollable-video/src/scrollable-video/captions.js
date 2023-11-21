@@ -1,8 +1,9 @@
-import styled, { css } from 'styled-components'
+import styled, { css } from '../styled-components'
 import React, { useMemo } from 'react'
 import PropTypes from 'prop-types'
 // lodash
 import map from 'lodash/map'
+import { DraftRenderer } from '@story-telling-reporter/draft-renderer'
 
 const _ = {
   map,
@@ -154,8 +155,8 @@ const Caption = styled.div`
  *
  * @export
  * @param {Object} props
- * @param {import('./types.js').Caption[]} props.captions
- * @param {import('./types.js').CaptionsSetting} props.captionsSetting
+ * @param {import('../types.js').Caption[]} props.captions
+ * @param {import('../types.js').CaptionsSetting} props.captionsSetting
  * @param {number} props.duration - Duration of the video (in second)
  * @param {number} props.sectionHeight - Height of the section (in px)
  * @param {number} props.pixel100vh - Height of 100vh (in px)
@@ -184,32 +185,41 @@ export default function Captions(props) {
         const yPerSecond = pixel100vh / secondsPer100vh
         const globalXPositionExp = buildOffsetCSSExpression(globalXPosition)
         const globalYPositionExp = buildOffsetCSSExpression(globalYPosition)
-        return _.map(captions, (caption, i) => (
-          <Caption
-            key={`${i}-caption`}
-            show={show}
-            yPerSecond={yPerSecond}
-            captionTime={caption.time}
-            duration={duration}
-            xBoxAlign={caption.xBoxAlign || globalXBoxAlign}
-            xPositionExp={
-              caption.xPosition
-                ? buildOffsetCSSExpression(caption.xPosition)
-                : globalXPositionExp
-            }
-            xLocalOffsetExp={buildOffsetCSSExpression(caption.xOffset)}
-            yBoxAlign={caption.yBoxAlign || globalYBoxAlign}
-            yPositionExp={
-              caption.yPosition
-                ? buildOffsetCSSExpression(caption.yPosition)
-                : globalYPositionExp
-            }
-            yLocalOffsetExp={buildOffsetCSSExpression(caption.yOffset)}
-            textAlign={caption.textAlign || textAlign}
-          >
-            <span dangerouslySetInnerHTML={{ __html: caption.text }} />
-          </Caption>
-        ))
+        return _.map(captions, (caption, i) => {
+          return (
+            <Caption
+              key={`${i}-caption`}
+              show={show}
+              yPerSecond={yPerSecond}
+              captionTime={caption.startTime}
+              duration={duration}
+              xBoxAlign={caption.xBoxAlign || globalXBoxAlign}
+              xPositionExp={
+                caption.xPosition
+                  ? buildOffsetCSSExpression(caption.xPosition)
+                  : globalXPositionExp
+              }
+              xLocalOffsetExp={buildOffsetCSSExpression(caption.xOffset)}
+              yBoxAlign={caption.yBoxAlign || globalYBoxAlign}
+              yPositionExp={
+                caption.yPosition
+                  ? buildOffsetCSSExpression(caption.yPosition)
+                  : globalYPositionExp
+              }
+              yLocalOffsetExp={buildOffsetCSSExpression(caption.yOffset)}
+              textAlign={caption.textAlign || textAlign}
+            >
+              <div
+                style={{
+                  padding: '50px',
+                  background: 'rgba(255, 255, 255, 0.6)',
+                }}
+              >
+                <DraftRenderer rawContentState={caption.rawContentState} />
+              </div>
+            </Caption>
+          )
+        })
       }, [
         pixel100vh,
         duration,
@@ -239,7 +249,7 @@ Captions.propTypes = {
   captions: PropTypes.arrayOf(
     PropTypes.shape({
       text: PropTypes.string,
-      time: PropTypes.number,
+      startTime: PropTypes.number,
       xOffset: PropTypes.string,
       yOffset: PropTypes.string,
       ...captionsSettingShape,

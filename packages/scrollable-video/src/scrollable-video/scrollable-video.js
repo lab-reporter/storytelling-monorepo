@@ -14,7 +14,7 @@ import React, {
   useCallback,
   useLayoutEffect,
 } from 'react'
-import styled, { ThemeProvider, keyframes } from 'styled-components'
+import styled, { ThemeProvider, keyframes } from '../styled-components'
 import useScrollTrigger from './hooks/use-scroll-trigger'
 import Video from './video'
 // lodash
@@ -40,7 +40,7 @@ const defaultTheme = {
       underlineColor: '#a67a44',
     },
     box: {
-      width: '450px',
+      width: '700px',
       mobileWidth: '77%',
       spanPadding: '6px 15px',
       mobilePadding: '12px 12px 14px 18px',
@@ -293,14 +293,7 @@ export default function ScrollableVideo({
   if (skipLoad) {
     return (
       <PlaceHolder>
-        <Dimmer
-          show
-          message={
-            '捲動式影片元件（編輯模式，不載入影片）：「' +
-            (captions[0] && captions[0].text.slice(0, 49)) +
-            '……」'
-          }
-        />
+        <Dimmer show message={'捲動式影片元件（編輯模式，不載入影片）'} />
       </PlaceHolder>
     )
   }
