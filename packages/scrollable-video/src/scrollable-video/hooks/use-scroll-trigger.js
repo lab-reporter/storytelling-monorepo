@@ -40,7 +40,7 @@ function startPollingDocumentHeight(timeout = 700) {
     if (startPollingLocation !== getHrefWithoutHash()) {
       // kill all ScrollTrigger instances
       try {
-        ScrollTrigger.getAll().forEach(instance => instance.kill())
+        ScrollTrigger.getAll().forEach((instance) => instance.kill())
       } catch (error) {
         console.error('failed to kill ScrollTrigger instances:', error)
       }
