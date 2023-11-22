@@ -55,7 +55,7 @@ if (window?.[namespace][`react-dual-slides${pkgVersion}`]) {
 
 if (window?.[namespace][`react-scrollable-video${pkgVersion}`]) {
   import(
-    /* webpackChunkName: "react-scrollable-video" */ '@story-telling-reporter/react-scrollable-video'
+    /* webpackChunkName: "react-scrollable-video" */ '@story-telling-reporter/react-scrollable-video/lib/esm/scrollable-video/index'
   ).then(({ ScrollableVideo }) => {
     render(namespace, `react-scrollable-video${pkgVersion}`, ScrollableVideo)
   })
