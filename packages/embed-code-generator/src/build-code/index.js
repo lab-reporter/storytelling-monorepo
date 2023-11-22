@@ -1,8 +1,8 @@
 /* eslint no-console: 0 */
 import DualSlides from '@story-telling-reporter/react-dual-slides'
+import Karaoke from '@story-telling-reporter/react-karaoke'
 import React from 'react' // eslint-disable-line
 import ReactDOMServer from 'react-dom/server'
-import Karaoke from '@story-telling-reporter/react-karaoke'
 import get from 'lodash/get.js'
 import map from 'lodash/map'
 import serialize from 'serialize-javascript'
@@ -49,6 +49,15 @@ export function buildKaraokeEmbedCode(data, webpackAssets) {
 }
 
 /**
+ *  @param {Object} data
+ *  @param {WebpackAssets} webpackAssets
+ *  @returns string
+ */
+export function buildScrollableVideoEmbedCode(data, webpackAssets) {
+  return buildEmbeddedCode('react-scrollable-video', data, webpackAssets)
+}
+
+/**
  *
  * @export
  * @param {('react-karaoke'|
@@ -80,6 +89,9 @@ export function buildEmbeddedCode(pkgName, data, webpackAssets) {
       Component = DualSlides
       break
     case 'react-three-story-points':
+      skipServerSideRendering = true
+      break
+    case 'react-scrollable-video':
       skipServerSideRendering = true
       break
     default:

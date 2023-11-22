@@ -62,6 +62,9 @@ const webpackConfig = {
     rules: [
       {
         test: /\.jsx?$/,
+        resolve: {
+          fullySpecified: false,
+        },
         loader: 'babel-loader',
         exclude: /node_modules/,
         options: {

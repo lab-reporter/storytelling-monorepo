@@ -52,3 +52,11 @@ if (window?.[namespace][`react-dual-slides${pkgVersion}`]) {
     hydrate(namespace, `react-dual-slides${pkgVersion}`, DualSlides)
   })
 }
+
+if (window?.[namespace][`react-scrollable-video${pkgVersion}`]) {
+  import(
+    /* webpackChunkName: "react-scrollable-video" */ '@story-telling-reporter/react-scrollable-video'
+  ).then(({ ScrollableVideo }) => {
+    render(namespace, `react-scrollable-video${pkgVersion}`, ScrollableVideo)
+  })
+}

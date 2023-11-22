@@ -61,6 +61,11 @@ const pkgOptions = [
     name: 'Three Story Points',
     value: 'react-three-story-points',
   },
+  {
+    id: 'react-scrollable-video',
+    name: '捲動式影片 2.0',
+    value: 'react-scrollable-video',
+  },
 ]
 
 const scriptUrlOptios = [

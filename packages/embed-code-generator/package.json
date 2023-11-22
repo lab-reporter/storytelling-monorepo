@@ -29,6 +29,7 @@
   "dependencies": {
     "@story-telling-reporter/react-dual-slides": "0.0.6",
     "@story-telling-reporter/react-karaoke": "0.0.8",
+    "@story-telling-reporter/react-scrollable-video": "0.0.2-alpha.3",
     "@story-telling-reporter/react-three-story-points": "0.0.3",
     "lodash": "^4.17.21",
     "serialize-javascript": "^6.0.0"
