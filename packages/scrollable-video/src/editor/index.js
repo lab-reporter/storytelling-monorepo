@@ -83,7 +83,7 @@ const defaultDuration = 10 // seconds
  *  @param {CaptionState[]} [opts.captions=[]]
  *  @param {OnCaptionEditorChange} opts.onChange
  */
-function CaptionEditor({ sources, caption: _captions = [], onChange }) {
+function CaptionEditor({ sources, captions: _captions = [], onChange }) {
   const videoRef = useRef(null)
   const progressRef = useRef(null)
   const [duration, setDuration] = useState(defaultDuration)

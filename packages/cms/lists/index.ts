@@ -5,6 +5,7 @@ import Photo from './photo'
 import Karaoke from './karaoke'
 import ThreeStoryPoints from './three-story-points'
 import DualSlides from './dual-slides'
+import ScrollableVideo from './scrollable-video'
 // import Helper from './helper'
 
 export const listDefinition = {
@@ -15,4 +16,5 @@ export const listDefinition = {
   Karaoke,
   ThreeStoryPoint: ThreeStoryPoints,
   DualSlide: DualSlides,
+  ScrollableVideo,
 }
