@@ -83,6 +83,23 @@ export default withAuth(
         const corsMiddleware = cors(corsOpts)
         app.use('*', corsMiddleware)
 
+        // Check if the request is sent by an authenticated user
+        const authenticationMw = async (
+          req: Request,
+          res: Response,
+          next: NextFunction
+        ) => {
+          const context = await commonContext.withRequest(req, res)
+
+          // User has been logged in
+          if (context?.session?.data?.role) {
+            return next()
+          }
+
+          // Otherwise, redirect them to login page
+          res.redirect('/signin')
+        }
+
         // ThreeJS router
         app.use(
           '/three',
@@ -93,7 +110,31 @@ export default withAuth(
           // I think it is a bug for `@keystone/core`.
           express.static(path.resolve(process.cwd(), './public/three'))
         )
-      }
+
+        app.get(
+          '/demo/scrollable-videos/:id',
+          authenticationMw,
+          async (req, res) => {
+            const itemId = req.params.id
+
+            const context = await commonContext.withRequest(req, res)
+            const item = await context.query.ScrollableVideo.findOne({
+              where: { id: itemId },
+              query: 'embedCode',
+            })
+
+            if (!item) {
+              return res
+                .status(404)
+                .send(`ScrollableVideo ${itemId} is not found`)
+            }
+
+            res.send(
+              `<html><head><meta name="viewport" content="width=device-width, initial-scale=1"><style> * { box-sizing: border-box; } body { margin:0; } </style></head><body>${item?.embedCode}</body></html>`
+            )
+          }
+        )
+      },
     },
   })
 )
