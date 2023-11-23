@@ -49,4 +49,6 @@ gcskeyfile.json
 # generated files
 packages/**/lib
 packages/**/dist
-# packages/**/public/*
+
+# user generated local files 
+packages/cms/public/*
