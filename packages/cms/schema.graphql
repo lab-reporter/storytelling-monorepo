@@ -506,6 +506,55 @@ input DualSlideCreateInput {
   slides: JSON
 }
 
+type ScrollableVideo {
+  id: ID!
+  name: String
+  videoUrl: String
+  mobileVideoUrl: String
+  editorState: JSON
+  embedCode: String
+}
+
+input ScrollableVideoWhereUniqueInput {
+  id: ID
+}
+
+input ScrollableVideoWhereInput {
+  AND: [ScrollableVideoWhereInput!]
+  OR: [ScrollableVideoWhereInput!]
+  NOT: [ScrollableVideoWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  videoUrl: StringFilter
+  mobileVideoUrl: StringFilter
+}
+
+input ScrollableVideoOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  videoUrl: OrderDirection
+  mobileVideoUrl: OrderDirection
+}
+
+input ScrollableVideoUpdateInput {
+  name: String
+  videoUrl: String
+  mobileVideoUrl: String
+  editorState: JSON
+}
+
+input ScrollableVideoUpdateArgs {
+  where: ScrollableVideoWhereUniqueInput!
+  data: ScrollableVideoUpdateInput!
+}
+
+input ScrollableVideoCreateInput {
+  name: String
+  videoUrl: String
+  mobileVideoUrl: String
+  editorState: JSON
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -554,6 +603,12 @@ type Mutation {
   updateDualSlides(data: [DualSlideUpdateArgs!]!): [DualSlide]
   deleteDualSlide(where: DualSlideWhereUniqueInput!): DualSlide
   deleteDualSlides(where: [DualSlideWhereUniqueInput!]!): [DualSlide]
+  createScrollableVideo(data: ScrollableVideoCreateInput!): ScrollableVideo
+  createScrollableVideos(data: [ScrollableVideoCreateInput!]!): [ScrollableVideo]
+  updateScrollableVideo(where: ScrollableVideoWhereUniqueInput!, data: ScrollableVideoUpdateInput!): ScrollableVideo
+  updateScrollableVideos(data: [ScrollableVideoUpdateArgs!]!): [ScrollableVideo]
+  deleteScrollableVideo(where: ScrollableVideoWhereUniqueInput!): ScrollableVideo
+  deleteScrollableVideos(where: [ScrollableVideoWhereUniqueInput!]!): [ScrollableVideo]
   endSession: Boolean!
   authenticateUserWithPassword(email: String!, password: String!): UserAuthenticationWithPasswordResult
   createInitialUser(data: CreateInitialUserInput!): UserAuthenticationWithPasswordSuccess!
@@ -599,6 +654,9 @@ type Query {
   dualSlides(where: DualSlideWhereInput! = {}, orderBy: [DualSlideOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: DualSlideWhereUniqueInput): [DualSlide!]
   dualSlide(where: DualSlideWhereUniqueInput!): DualSlide
   dualSlidesCount(where: DualSlideWhereInput! = {}): Int
+  scrollableVideos(where: ScrollableVideoWhereInput! = {}, orderBy: [ScrollableVideoOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ScrollableVideoWhereUniqueInput): [ScrollableVideo!]
+  scrollableVideo(where: ScrollableVideoWhereUniqueInput!): ScrollableVideo
+  scrollableVideosCount(where: ScrollableVideoWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
 }

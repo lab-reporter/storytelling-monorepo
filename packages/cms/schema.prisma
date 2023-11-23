@@ -94,3 +94,11 @@ model DualSlide {
   name   String @default("")
   slides Json?  @default("[{\"content\":[\"\"],\"imgSrc\":\"\"}]")
 }
+
+model ScrollableVideo {
+  id             Int    @id @default(autoincrement())
+  name           String @default("")
+  videoUrl       String @default("")
+  mobileVideoUrl String @default("")
+  editorState    Json?  @default("{\"captions\":[],\"video\":{\"sources\":[{\"mediaType\":\"video/mp4\",\"src\":\"\"}]}}")
+}
