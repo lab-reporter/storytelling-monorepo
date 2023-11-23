@@ -62,7 +62,8 @@ export function buildScrollableVideoEmbedCode(data, webpackAssets) {
  * @export
  * @param {('react-karaoke'|
  * 'react-three-story-points' |
- * 'react-dual-slides'} pkgName
+ * 'react-dual-slides' |
+ * 'react-scrollable-video'} pkgName
  * @param {Object} data - Data for react component
  * @param {Object} webpackAssets - webpack bundles and chunks
  * @param {string[]} webpackAssets.entrypoints - webpack bundles
