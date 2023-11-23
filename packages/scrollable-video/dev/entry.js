@@ -21,12 +21,14 @@ function Root() {
   return (
     <>
       <CaptionEditor
-        sources={[
-          {
-            src: './static/2020091916-tnrail-01-1440.mp4',
-            mediaType: 'video/mp4',
-          },
-        ]}
+        video={{
+          sources: [
+            {
+              src: './static/2020091916-tnrail-01-1440.mp4',
+              mediaType: 'video/mp4',
+            },
+          ],
+        }}
         onChange={(editorState) => {
           setCaptions(editorState.captions)
         }}

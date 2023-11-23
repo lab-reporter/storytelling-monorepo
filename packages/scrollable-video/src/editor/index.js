@@ -75,15 +75,17 @@ const defaultDuration = 10 // seconds
  *  @callback OnCaptionEditorChange
  *  @params {Object} opts
  *  @params {CaptionState[]} [opts.captions]
+ *  @returns {void}
  */
 
 /**
  *  @param {Object} opts
- *  @param {{mediaType: string, src: string}[]} opts.sources
+ *  @param {Object} opts.video
+ *  @param {{mediaType: string, src: string}[]} opts.video.sources
  *  @param {CaptionState[]} [opts.captions=[]]
  *  @param {OnCaptionEditorChange} opts.onChange
  */
-function CaptionEditor({ sources, captions: _captions = [], onChange }) {
+function CaptionEditor({ video, captions: _captions = [], onChange }) {
   const videoRef = useRef(null)
   const progressRef = useRef(null)
   const [duration, setDuration] = useState(defaultDuration)
@@ -163,11 +165,11 @@ function CaptionEditor({ sources, captions: _captions = [], onChange }) {
     }
   }
 
-  if (!Array.isArray(sources)) {
+  if (!Array.isArray(video?.sources)) {
     return null
   }
 
-  const sourcesJsx = sources.map((source, index) => {
+  const sourcesJsx = video.sources.map((source, index) => {
     return <source key={index} src={source.src} type={source.mediaType} />
   })
 
