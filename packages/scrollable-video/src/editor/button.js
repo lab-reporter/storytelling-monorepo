@@ -12,7 +12,7 @@ import {
   RichTextEditor,
   buttonNames,
   decorator,
-} from '@story-telling-reporter/draft-editor'
+} from '@kids-reporter/draft-editor'
 
 const disabledButtons = [
   buttonNames.code,

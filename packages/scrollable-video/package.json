@@ -26,6 +26,8 @@
   "dependencies": {
     "@keystone-ui/fields": "^7.2.0",
     "@keystone-ui/modals": "^6.0.3",
+    "@kids-reporter/draft-editor": "^0.4.35",
+    "@kids-reporter/draft-renderer": "^0.4.35",
     "@story-telling-reporter/draft-editor": "0.1.1",
     "@story-telling-reporter/draft-renderer": "0.1.1",
     "lodash": "^4.17.15",

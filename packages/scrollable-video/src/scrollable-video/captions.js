@@ -3,7 +3,7 @@ import React, { useMemo } from 'react'
 import PropTypes from 'prop-types'
 // lodash
 import map from 'lodash/map'
-import { DraftRenderer } from '@story-telling-reporter/draft-renderer'
+import { DraftRenderer } from '@kids-reporter/draft-renderer'
 
 const _ = {
   map,

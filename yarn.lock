@@ -3472,6 +3472,28 @@
     "@keystone-ui/popover" "^6.0.2"
     apply-ref "^1.0.0"
 
+"@kids-reporter/draft-editor@^0.4.35":
+  version "0.4.35"
+  resolved "https://registry.yarnpkg.com/@kids-reporter/draft-editor/-/draft-editor-0.4.35.tgz#b86efc7dcf7947c07369217cc520296110b0dc3d"
+  integrity sha512-Mcu1BGb2GG14lNWS24vk0OftvKzzcpqAWiGxZz/2hW9Dq8LFiEGIe//Xwfi7wz7o+pBVuZpyk50uj/HQvkNSSA==
+  dependencies:
+    "@kids-reporter/draft-renderer" "^0.4.35"
+    "@twreporter/errors" "^1.1.2"
+    draft-js "^0.11.7"
+
+"@kids-reporter/draft-renderer@^0.4.35":
+  version "0.4.35"
+  resolved "https://registry.yarnpkg.com/@kids-reporter/draft-renderer/-/draft-renderer-0.4.35.tgz#d01d69a142cb684ab684d3d6632acc76daf0cbf5"
+  integrity sha512-dhl6lkXpnUvhyJmIC71WPuOQ8WervDnWGYyKAC/PWH4m+R3+3UIzGVCeIJCHGi16sNPNyEvAyhmX52GFa6e6yw==
+  dependencies:
+    "@readr-media/react-image" "1.6.0"
+    babel-loader "^8.2.5"
+    body-scroll-lock "3.1.5"
+    html-webpack-plugin "^5.5.0"
+    node-html-parser "^6.1.5"
+    webpack "^5.72.1"
+    webpack-cli "^4.9.2"
+
 "@leichtgewicht/ip-codec@^2.0.1":
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/@leichtgewicht/ip-codec/-/ip-codec-2.0.4.tgz#b2ac626d6cb9c8718ab459166d4bb405b8ffa78b"
@@ -4328,81 +4350,6 @@
     "@smithy/abort-controller" "^2.0.12"
     "@smithy/types" "^2.4.0"
     tslib "^2.5.0"
-
-"@story-telling-reporter/draft-editor@^0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@story-telling-reporter/draft-editor/-/draft-editor-0.0.1.tgz#16126815c46b575df44b50fff92dc4a0dd49d034"
-  integrity sha512-hvBASL/dgLpzdkaAr8AkWirv8G/cDXlZO/f3VSX+nYTVPC7VOc3BslGTgNPLiPVz3+5nfRZpPrnJvnnl2BhcQw==
-  dependencies:
-    "@story-telling-reporter/draft-renderer" "^0.0.1"
-    "@twreporter/errors" "^1.1.2"
-    draft-js "^0.11.7"
-
-"@story-telling-reporter/draft-renderer@^0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@story-telling-reporter/draft-renderer/-/draft-renderer-0.0.1.tgz#459d9c1682f7c188f879a0698a7a3fef5a32a4da"
-  integrity sha512-a10UyXlhchpSH6ccZ5uDoGmIOBafBkyIVWVzQtfge9qm15bBc6mLZzpEqGiXwyt9ERVNcLmeUEoEd9l4d11wDw==
-  dependencies:
-    "@readr-media/react-image" "1.6.0"
-    babel-loader "^8.2.5"
-    body-scroll-lock "3.1.5"
-    html-webpack-plugin "^5.5.0"
-    node-html-parser "^6.1.5"
-    webpack "^5.72.1"
-    webpack-cli "^4.9.2"
-
-"@story-telling-reporter/react-dual-slides@0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@story-telling-reporter/react-dual-slides/-/react-dual-slides-0.0.2.tgz#50272e430948312cc86463e19a2c41b37beb8c42"
-  integrity sha512-t8DSJ2ANS7xRoCtx3+s5L3HkN9yNf7ot65e/vDLjUVJONB/i51tf4eh/afc/ay6vEcWjV97hyUUmGHys3X59qw==
-  dependencies:
-    react-intersection-observer "^9.3.5"
-    react-transition-group "^4.4.5"
-
-"@story-telling-reporter/react-embed-code-generator@0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@story-telling-reporter/react-embed-code-generator/-/react-embed-code-generator-0.0.1.tgz#febdde453048fd91e4c08981927b03e649ce33a1"
-  integrity sha512-Aji8ZT7ROnWfFsdfx6yXZOrie4QYS4dx0ndi/2vGvktyyEoBWV3ZJ7yjBymgDiQbl+8YZ5VDlmpELPjoc/4E6A==
-  dependencies:
-    "@story-telling-reporter/react-dual-slides" "0.0.2"
-    "@story-telling-reporter/react-karaoke" "0.0.1"
-    "@story-telling-reporter/react-three-story-points" "0.0.1"
-    lodash "^4.17.21"
-    serialize-javascript "^6.0.0"
-
-"@story-telling-reporter/react-karaoke@0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@story-telling-reporter/react-karaoke/-/react-karaoke-0.0.1.tgz#2eb84581ea0165875fc10404ffcb6fc6811cd43d"
-  integrity sha512-JCcl0PShWD0quIh1+UBwJMp40VxXi9kQyJaKT7QmDUBLQVtC/n4OjdnvHaQNvXKblW59R8t6B1SP8ArWcrkcSg==
-  dependencies:
-    react "18.1.0"
-    react-dom "18.1.0"
-    react-intersection-observer "^9.3.5"
-    serialize-javascript "^6.0.0"
-    styled-components "5.3.5"
-    uuid "^8.3.2"
-
-"@story-telling-reporter/react-three-story-points@0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@story-telling-reporter/react-three-story-points/-/react-three-story-points-0.0.1.tgz#657ad315f6b6297920353b8364299344935469d0"
-  integrity sha512-hiXgzIITwvznqm2HdMGbbr8JKXkrHjofXejpfeHtJnJz5hjrF1T17ZCJUjJiEKm2rGtN/RkIl43leIj2gGUsiw==
-  dependencies:
-    gsap "^3.11.4"
-    lodash "^4.17.21"
-    react-intersection-observer "^9.3.5"
-    three "^0.150.1"
-    three-story-controls "^1.0.6"
-
-"@story-telling-reporter/react-three-story-points@0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@story-telling-reporter/react-three-story-points/-/react-three-story-points-0.0.3.tgz#78ea0a988a30735a642430a371e5f17182984fbf"
-  integrity sha512-5b86wi2ZtebZWE9ngM32pxoYe4E+MC08FU3McFRtKnaxjQvheMHpWmqqJWvFKmwvrWUNhkG4R7KrYWIfvqhpZg==
-  dependencies:
-    gsap "^3.11.4"
-    lodash "^4.17.21"
-    react-intersection-observer "^9.3.5"
-    three "^0.150.1"
-    three-story-controls "^1.0.6"
 
 "@svgr/babel-plugin-add-jsx-attribute@^6.5.1":
   version "6.5.1"
