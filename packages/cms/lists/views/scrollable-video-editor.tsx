@@ -15,7 +15,7 @@ export const Field = ({
     <FieldContainer>
       <FieldLabel>{field.label}</FieldLabel>
       <CaptionEditor
-        sources={editorState?.video?.sources}
+        video={editorState?.video}
         captions={editorState?.captions}
         // @ts-ignore @story-telling-reporter/react-scrollable-video lacks of type definition
         onChange={(state) => {
