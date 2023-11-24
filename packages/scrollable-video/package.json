@@ -1,6 +1,6 @@
 {
   "name": "@story-telling-reporter/react-scrollable-video",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "",
   "main": "lib/cjs/index.js",
   "module": "lib/esm/index.js",
@@ -26,8 +26,8 @@
   "dependencies": {
     "@keystone-ui/fields": "^7.2.0",
     "@keystone-ui/modals": "^6.0.3",
-    "@story-telling-reporter/draft-editor": "0.1.0",
-    "@story-telling-reporter/draft-renderer": "0.1.0",
+    "@story-telling-reporter/draft-editor": "0.1.1",
+    "@story-telling-reporter/draft-renderer": "0.1.1",
     "lodash": "^4.17.15",
     "prop-types": "^15.0.0",
     "react-transition-group": "^4.4.1",

@@ -1,6 +1,6 @@
 {
   "name": "@story-telling-reporter/draft-editor",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "",
   "main": "lib/index.js",
   "scripts": {
@@ -23,7 +23,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@story-telling-reporter/draft-renderer": "0.1.0",
+    "@story-telling-reporter/draft-renderer": "0.1.1",
     "@twreporter/errors": "^1.1.2",
     "draft-js": "^0.11.7"
   },
