@@ -3494,6 +3494,18 @@
     webpack "^5.72.1"
     webpack-cli "^4.9.2"
 
+"@kids-reporter/draft-renderer@^0.4.36":
+  version "0.4.36"
+  resolved "https://registry.yarnpkg.com/@kids-reporter/draft-renderer/-/draft-renderer-0.4.36.tgz#ea640600684a8faf4d68556d60a5e162cbe7594f"
+  integrity sha512-ana6PKn+SFNwKcvb2CYZR5AH5PDE3gkpIaRS9hBCGXA6yaICQSBI61O3QQJLR8ZYYpfDRxrWNi9btWKUYG6acw==
+  dependencies:
+    "@readr-media/react-image" "1.6.0"
+    babel-loader "^8.2.5"
+    body-scroll-lock "3.1.5"
+    html-webpack-plugin "^5.5.0"
+    webpack "^5.72.1"
+    webpack-cli "^4.9.2"
+
 "@leichtgewicht/ip-codec@^2.0.1":
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/@leichtgewicht/ip-codec/-/ip-codec-2.0.4.tgz#b2ac626d6cb9c8718ab459166d4bb405b8ffa78b"
@@ -4350,6 +4362,53 @@
     "@smithy/abort-controller" "^2.0.12"
     "@smithy/types" "^2.4.0"
     tslib "^2.5.0"
+
+"@story-telling-reporter/draft-editor@0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@story-telling-reporter/draft-editor/-/draft-editor-0.1.1.tgz#9c340c71701616e4d1b9949ec1e4e983bb239122"
+  integrity sha512-pYysC5zAxGGpTNhpUWv3l0Tk2uN7BBEWC5mUnP2q8/sQFS7PlmjulsRiEhWzlCmCci3TpF8TUHyrvuRVznkMFw==
+  dependencies:
+    "@story-telling-reporter/draft-renderer" "0.1.1"
+    "@twreporter/errors" "^1.1.2"
+    draft-js "^0.11.7"
+
+"@story-telling-reporter/draft-renderer@0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@story-telling-reporter/draft-renderer/-/draft-renderer-0.1.1.tgz#0590113425c377d2f94fa9489df686592960c638"
+  integrity sha512-LqiPPWuTn3LbomFey8fiBoJEmYKzS1hg8DSm1amT5/nmt6zAA0f26emKu/LMFLLFT23blpygoo2fzlEPM81ZIg==
+  dependencies:
+    "@readr-media/react-image" "1.6.0"
+    babel-loader "^8.2.5"
+    body-scroll-lock "3.1.5"
+    html-webpack-plugin "^5.5.0"
+    webpack "^5.72.1"
+    webpack-cli "^4.9.2"
+
+"@story-telling-reporter/react-embed-code-generator@0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@story-telling-reporter/react-embed-code-generator/-/react-embed-code-generator-0.1.1.tgz#77e812bad533261e152923080678700aac29fb7e"
+  integrity sha512-7XODxzwOwZFHo/mMylbwCyav15lMHnBEjVvU3ZDbkVCR/sjrCXMk4aykkE+Ky3azxYfxcPlnbM+iWnIF2sLx2w==
+  dependencies:
+    "@story-telling-reporter/react-dual-slides" "0.1.1"
+    "@story-telling-reporter/react-karaoke" "0.1.1"
+    "@story-telling-reporter/react-scrollable-video" "0.1.1"
+    "@story-telling-reporter/react-three-story-points" "0.1.1"
+    lodash "^4.17.21"
+    serialize-javascript "^6.0.0"
+
+"@story-telling-reporter/react-scrollable-video@0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@story-telling-reporter/react-scrollable-video/-/react-scrollable-video-0.1.1.tgz#a066cb334590bf16efc04ae3e89f0ae9d735275b"
+  integrity sha512-2yI+2H2JpO5FBh5jwBgRYoyDjO7dian3G1JblvtJQyRHGrU/v8OFcvqjlFLWI2s3F2UO+npDwj2DBlh0EtcAoA==
+  dependencies:
+    "@keystone-ui/fields" "^7.2.0"
+    "@keystone-ui/modals" "^6.0.3"
+    "@story-telling-reporter/draft-editor" "0.1.1"
+    "@story-telling-reporter/draft-renderer" "0.1.1"
+    lodash "^4.17.15"
+    prop-types "^15.0.0"
+    react-transition-group "^4.4.1"
+    whatwg-fetch "^3.4.1"
 
 "@svgr/babel-plugin-add-jsx-attribute@^6.5.1":
   version "6.5.1"
