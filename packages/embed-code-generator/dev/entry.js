@@ -4,13 +4,13 @@ import React, { useRef, useState } from 'react' // eslint-disable-line
 import styled from 'styled-components'
 import webpackAssets from '../dist/webpack-assets.json'
 import { createRoot } from 'react-dom/client'
-//import ecgWebpackAssets from '@readr-media/react-embed-code-generator/dist/webpack-assets.json'
-//import { buildEmbeddedCode as ecgBuildEmbeddedCode } from '@readr-media/react-embed-code-generator/lib/build-code/index.js'
+import ecgWebpackAssets from '@story-telling-reporter/react-embed-code-generator/dist/webpack-assets.json'
+import { buildEmbeddedCode as ecgBuildEmbeddedCode } from '@story-telling-reporter/react-embed-code-generator/lib/build-code/index.js'
 
-//const ecg = {
-//webpackAssets: ecgWebpackAssets,
-//buildEmbeddedCode: ecgBuildEmbeddedCode,
-//}
+const ecg = {
+  webpackAssets: ecgWebpackAssets,
+  buildEmbeddedCode: ecgBuildEmbeddedCode,
+}
 
 const reactRootId = 'root'
 const container = document.getElementById(reactRootId)
@@ -91,12 +91,11 @@ function Panel() {
     if (selectedScriptUrl === 'localhost') {
       embedCode = buildEmbeddedCode(selectedPkg, mockData, webpackAssets)
     } else if (selectedScriptUrl === 'cdn') {
-      //embedCode = ecg.buildEmbeddedCode(
-      //  // @ts-ignore
-      //  selectedPkg,
-      //  mockData,
-      //  ecg.webpackAssets
-      //)
+      embedCode = ecg.buildEmbeddedCode(
+        selectedPkg,
+        mockData,
+        ecg.webpackAssets
+      )
     }
   }
 
