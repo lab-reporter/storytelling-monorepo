@@ -3,12 +3,15 @@ import styled from 'styled-components'
 import { ContentBlock, ContentState } from 'draft-js'
 
 const LinkWrapper = styled.a`
-  text-decoration: underline;
-  color: #27b5f7;
-  transition: color 0.1s ease-in;
-
+  &:link,
+  &:visited,
+  &:active {
+    color: #9f7544;
+    text-decoration: none;
+    border-bottom: 1px solid #d8d8d8;
+  }
   &:hover {
-    color: #232323;
+    border-color: #9f7544;
   }
 `
 

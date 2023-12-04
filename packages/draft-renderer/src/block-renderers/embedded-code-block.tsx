@@ -23,6 +23,38 @@ export const Caption = styled.div`
   padding: 15px 15px 0 15px;
 `
 
+const ArticleBodyContainer = styled.div`
+  max-width: 100%;
+  margin: 40px auto;
+
+  ${mediaQuery.mobileOnly} {
+    width: calc(350 / 375 * 100%);
+  }
+
+  ${mediaQuery.tabletOnly} {
+    width: 513px;
+  }
+
+  ${mediaQuery.desktopOnly} {
+    width: 550px;
+  }
+
+  ${mediaQuery.hdOnly} {
+    width: 730px;
+  }
+`
+
+export function EmbeddedCodeInArticleBody({
+  className = '',
+  data,
+}: EmbeddedCodeBlockProps) {
+  return (
+    <ArticleBodyContainer className={className}>
+      <EmbeddedCodeBlock data={data} />
+    </ArticleBodyContainer>
+  )
+}
+
 type EmbeddedCodeBlockProps = {
   className?: string
   data: {
@@ -93,27 +125,5 @@ export const EmbeddedCodeBlock = ({
       <Block ref={embedded} />
       {caption && <Caption>{caption}</Caption>}
     </div>
-  )
-}
-
-const ArticleBodyContainer = styled.div`
-  max-width: 700px;
-  margin: 0 auto 27px auto;
-
-  ${mediaQuery.smallOnly} {
-    width: calc(100vw - 30px);
-    margin-left: auto;
-    margin-right: auto;
-  }
-`
-
-export function EmbeddedCodeInArticleBody({
-  className = '',
-  data,
-}: EmbeddedCodeBlockProps) {
-  return (
-    <ArticleBodyContainer className={className}>
-      <EmbeddedCodeBlock data={data} />
-    </ArticleBodyContainer>
   )
 }

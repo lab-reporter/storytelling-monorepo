@@ -1,17 +1,23 @@
 const breakpoints = {
-  small: 320,
-  medium: 760,
-  large: 1440,
+  mobile: 375,
+  tablet: 768,
+  desktop: 1024,
+  hd: 1440,
 }
 
 const mediaQuery = {
-  smallOnly: `@media (max-width: ${breakpoints.medium - 1}px)`,
-  mediumOnly: `@media (min-width: ${breakpoints.medium}px) and (max-width: ${
-    breakpoints.large - 1
+  mobileOnly: `@media (max-width: ${breakpoints.tablet - 1}px)`,
+  tabletOnly: `@media (min-width: ${breakpoints.tablet}px) and (max-width: ${
+    breakpoints.desktop - 1
   }px)`,
-  mediumAbove: `@media (min-width: ${breakpoints.medium}px)`,
-  largeBelow: `@media (max-width: ${breakpoints.large - 1}px)`,
-  largeOnly: `@media (min-width: ${breakpoints.large}px)`,
+  tabletAbove: `@media (min-width: ${breakpoints.tablet}px)`,
+  desktopBelow: `@media (max-width: ${breakpoints.desktop - 1}px)`,
+  desktopOnly: `@media (min-width: ${breakpoints.desktop}px) and (max-width: ${
+    breakpoints.hd - 1
+  }px)`,
+  desktopAbove: `@media (min-width: ${breakpoints.desktop}px)`,
+  hdBelow: `@media (max-width: ${breakpoints.hd - 1}px)`,
+  hdOnly: `@media (min-width: ${breakpoints.hd}px)`,
 }
 
 export { breakpoints, mediaQuery }

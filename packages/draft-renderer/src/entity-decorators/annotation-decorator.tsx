@@ -13,15 +13,23 @@ import { decorator } from '../entity-decorators/index'
 const AnnotationWrapper = styled.span`
   display: inline-block;
   cursor: pointer;
-  color: #27b5f7;
+  color: #9f7544;
 `
 
 const AnnotationBody = styled.div`
-  color: #494949;
-  margin-bottom: 10px;
-  border-top: 2px solid #27b5f7;
+  color: #4a4a4a;
+
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 2.11;
+  letter-spacing: 0.5px;
+
+  border-top: 2px solid #c09662;
+
   background-color: #fff;
-  padding: 25px 25px;
+
+  margin-bottom: 10px;
+  padding: 25px 11px;
 `
 
 const ArrowIcon = styled.span<{ $showContent: boolean }>`
@@ -37,7 +45,7 @@ const ArrowIcon = styled.span<{ $showContent: boolean }>`
   top: -1px;
 
   &::before {
-    background-color: #27b5f7;
+    background-color: #9f7544;
     content: '';
     width: 2px;
     height: 6.5px;
@@ -51,7 +59,7 @@ const ArrowIcon = styled.span<{ $showContent: boolean }>`
   }
 
   &::after {
-    background-color: #27b5f7;
+    background-color: #9f7544;
     content: '';
     width: 2px;
     height: 6.5px;

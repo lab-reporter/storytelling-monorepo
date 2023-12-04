@@ -2,84 +2,63 @@ import Immutable from 'immutable'
 import React from 'react'
 import styled from 'styled-components'
 import { DefaultDraftBlockRenderMap } from 'draft-js'
-import { mediaQuery } from '../utils/media-query'
 
 export const Paragraph = styled.div`
   width: 100%;
-  max-width: 700px;
+  max-width: 580px;
   font-size: ${({ theme }) =>
     theme?.fontSizeLevel === 'large' ? '22px' : '18px'};
   font-weight: 400;
-  color: #3a4f66;
-  letter-spacing: 0.9px;
-  line-height: 2;
+  color: #404040;
+  letter-spacing: 0.6px;
+  line-height: 2.11;
   margin: 0 auto;
-
-  ${mediaQuery.smallOnly} {
-    padding-left: 15px;
-    padding-right: 15px;
-  }
-
-  > div[data-block='true'] {
-    margin-bottom: 27px;
-  }
+  margin: 40px auto;
 `
 
 export const Heading = styled.div`
-  font-weight: 700;
-  line-height: 1.5;
-  color: #232323;
   width: 100%;
-  max-width: 700px;
-  margin: 45px auto 20px auto;
+  max-width: 580px;
 
-  h2,
-  h3,
-  h4,
-  h5 {
-    letter-spacing: 1.5px;
-    margin: 0;
-  }
+  margin: 60px auto 40px;
+
+  font-weight: 700;
+  line-height: 1.4;
+  color: #404040;
+  letter-spacing: 04px;
 
   h2 {
     font-size: ${({ theme }) =>
-      theme?.fontSizeLevel === 'large' ? '39px' : '35px'};
+      theme?.fontSizeLevel === 'large' ? '38px' : '34px'};
   }
 
   h3 {
     font-size: ${({ theme }) =>
-      theme?.fontSizeLevel === 'large' ? '34px' : '30px'};
-  }
-
-  h4 {
-    font-size: ${({ theme }) =>
-      theme?.fontSizeLevel === 'large' ? '29px' : '25px'};
-  }
-
-  h5 {
-    font-size: ${({ theme }) =>
-      theme?.fontSizeLevel === 'large' ? '24px' : '20px'};
-  }
-
-  ${mediaQuery.smallOnly} {
-    padding-left: 15px;
-    padding-right: 15px;
+      theme?.fontSizeLevel === 'large' ? '32px' : '28px'};
   }
 `
 
 export const List = styled.ol`
   width: 100%;
-  max-width: 700px;
-  margin: 0 auto 27px auto;
+  max-width: 580px;
+
+  margin: 0 0 0 3em;
+  margin-block-start: 0;
+  margin-block-end: 0;
+  padding: 0;
+
   font-size: ${({ theme }) =>
     theme?.fontSizeLevel === 'large' ? '22px' : '18px'};
-  line-height: 2;
-  letter-spacing: 0.9px;
-  color: #3a4f66;
-  padding-left: 2rem;
+  line-height: 2.11;
+  letter-spacing: 0.6px;
+  color: #404040;
 
   > li {
-    margin-bottom: 6px;
+    margin: 0 0 1em 0;
+    padding: 0;
+    &:last-child {
+      margin-bottom: 0;
+    }
   }
 `
 
