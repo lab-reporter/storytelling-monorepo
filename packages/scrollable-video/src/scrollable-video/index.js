@@ -40,7 +40,7 @@ const defaultTheme = {
       underlineColor: '#a67a44',
     },
     box: {
-      width: '700px',
+      width: '450px',
       mobileWidth: '77%',
       spanPadding: '6px 15px',
       mobilePadding: '12px 12px 14px 18px',

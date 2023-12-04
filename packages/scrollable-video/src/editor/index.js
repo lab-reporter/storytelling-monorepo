@@ -3,6 +3,7 @@ import React, { useEffect, useState, useRef } from 'react'
 import styled from '../styled-components.js'
 import { CaptionMark } from './mark.js'
 import { PlayButton, PauseButton } from './styled.js'
+import { ThemeContext } from './themeContext.js'
 
 /**
  * @typedef {import('./button.js').CaptionState} CaptionState
@@ -83,12 +84,14 @@ const defaultDuration = 10 // seconds
  *  @param {Object} opts.video
  *  @param {{mediaType: string, src: string}[]} opts.video.sources
  *  @param {CaptionState[]} [opts.captions=[]]
+ *  @param {'twreporter'|'kids'} [opts.theme]
  *  @param {OnCaptionEditorChange} opts.onChange
  */
 function CaptionEditor({
   video: videoProp,
   captions: _captions = [],
   onChange,
+  theme = 'twreporter',
 }) {
   const videoRef = useRef(null)
   const progressRef = useRef(null)
@@ -214,30 +217,37 @@ function CaptionEditor({
 
   return (
     <Container>
-      <video id="video" preload="metadata" ref={videoRef}>
-        {sourcesJsx}
-      </video>
-      <Controls id="video-controls">
-        <ProgressAndMarksBlock>
-          {marksJsx}
-          <Progress id="progress" value="0" max={duration} ref={progressRef} />
-        </ProgressAndMarksBlock>
-        <PlayButton onClick={onPlayButtonClick}></PlayButton>
-        <PauseButton onClick={onPauseButtonClick}></PauseButton>
-        <div onClick={onPauseButtonClick}>
-          <AddCaptionButton
-            getVideoCurrentTime={() => {
-              return videoRef?.current?.currentTime?.toFixed(2) || 0
-            }}
-            onChange={(captionState) => {
-              const newCaptions = captions.concat(captionState)
-              setCaptions(newCaptions)
+      <ThemeContext.Provider value={theme}>
+        <video id="video" preload="metadata" ref={videoRef}>
+          {sourcesJsx}
+        </video>
+        <Controls id="video-controls">
+          <ProgressAndMarksBlock>
+            {marksJsx}
+            <Progress
+              id="progress"
+              value="0"
+              max={duration}
+              ref={progressRef}
+            />
+          </ProgressAndMarksBlock>
+          <PlayButton onClick={onPlayButtonClick}></PlayButton>
+          <PauseButton onClick={onPauseButtonClick}></PauseButton>
+          <div onClick={onPauseButtonClick}>
+            <AddCaptionButton
+              getVideoCurrentTime={() => {
+                return videoRef?.current?.currentTime?.toFixed(2) || 0
+              }}
+              onChange={(captionState) => {
+                const newCaptions = captions.concat(captionState)
+                setCaptions(newCaptions)
 
-              onChange({ captions: newCaptions })
-            }}
-          />
-        </div>
-      </Controls>
+                onChange({ captions: newCaptions })
+              }}
+            />
+          </div>
+        </Controls>
+      </ThemeContext.Provider>
     </Container>
   )
 }

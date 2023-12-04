@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import {
   EditorState,
   RawDraftContentState, // eslint-disable-line
@@ -9,16 +9,16 @@ import { AddCaptionIcon } from './styled.js'
 import { Drawer, DrawerController, DrawerProvider } from '@keystone-ui/modals'
 import { FieldLabel, TextInput } from '@keystone-ui/fields'
 import {
-  RichTextEditor,
-  buttonNames,
-  decorator,
+  RichTextEditor as KidsTextEditor,
+  buttonNames as kidsButtonNames,
+  decorator as kidsDecorator,
 } from '@kids-reporter/draft-editor'
-
-const disabledButtons = [
-  buttonNames.code,
-  buttonNames.codeBlock,
-  buttonNames.newsReading,
-]
+import {
+  RichTextEditor as TwreporterTextEditor,
+  buttonNames as twreporterButtonNames,
+  decorator as twreporterDecorator,
+} from '@story-telling-reporter/draft-editor'
+import { ThemeContext, themeEnum } from './themeContext.js'
 
 /**
  *  @typedef {Object} CaptionState
@@ -46,6 +46,31 @@ const disabledButtons = [
  *  @param {EditorState} props.inputValue.rawContentState
  */
 export function CaptionInput({ isOpen, onConfirm, onCancel, inputValue }) {
+  const theme = useContext(ThemeContext)
+  const Editor =
+    theme === themeEnum.kids ? KidsTextEditor : TwreporterTextEditor
+  const decorator =
+    theme === themeEnum.kids ? kidsDecorator : twreporterDecorator
+  const disabledButtons =
+    theme === themeEnum.kids
+      ? [
+          kidsButtonNames.code,
+          kidsButtonNames.codeBlock,
+          kidsButtonNames.newsReading,
+        ]
+      : [
+          twreporterButtonNames.code,
+          twreporterButtonNames.codeBlock,
+          twreporterButtonNames.newsReading,
+          twreporterButtonNames.image,
+          twreporterButtonNames.slideshow,
+          twreporterButtonNames.blockquote,
+          twreporterButtonNames.divider,
+          twreporterButtonNames.infoBox,
+          twreporterButtonNames.h4,
+          twreporterButtonNames.h5,
+        ]
+
   const contentState = convertFromRaw(inputValue.rawContentState)
   const [inputValueState, setInputValueState] = useState({
     startTime: inputValue.startTime,
@@ -93,7 +118,7 @@ export function CaptionInput({ isOpen, onConfirm, onCancel, inputValue }) {
             style={{ marginBottom: '30px' }}
           />
           <FieldLabel>字幕內容</FieldLabel>
-          <RichTextEditor
+          <Editor
             disabledButtons={disabledButtons}
             editorState={inputValueState.editorState}
             onChange={(editorState) => {

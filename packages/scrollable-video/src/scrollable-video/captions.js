@@ -1,9 +1,11 @@
 import styled, { css } from '../styled-components'
-import React, { useMemo } from 'react'
+import React, { Suspense, lazy, useMemo } from 'react'
 import PropTypes from 'prop-types'
 // lodash
 import map from 'lodash/map'
-import { DraftRenderer } from '@kids-reporter/draft-renderer'
+
+const KidsDraftRenderer = lazy(() => import('./kids-draft-renderer.js'))
+const DraftRenderer = lazy(() => import('./draft-renderer.js'))
 
 const _ = {
   map,
@@ -160,6 +162,7 @@ const Caption = styled.div`
  * @param {number} props.duration - Duration of the video (in second)
  * @param {number} props.sectionHeight - Height of the section (in px)
  * @param {number} props.pixel100vh - Height of 100vh (in px)
+ * @param {'twreporter|kids'} props.captionUiTheme - twreporter or kids ui style
  * @returns
  */
 export default function Captions(props) {
@@ -170,6 +173,7 @@ export default function Captions(props) {
     secondsPer100vh,
     pixel100vh,
     captionsSetting,
+    captionUiTheme = 'twreporter',
   } = props
   const {
     xBoxAlign: globalXBoxAlign,
@@ -212,10 +216,18 @@ export default function Captions(props) {
               <div
                 style={{
                   padding: '50px',
-                  background: 'rgba(255, 255, 255, 0.6)',
+                  background: 'rgba(255, 255, 255, 0.8)',
                 }}
               >
-                <DraftRenderer rawContentState={caption.rawContentState} />
+                <Suspense>
+                  {captionUiTheme === 'kids' ? (
+                    <KidsDraftRenderer
+                      rawContentState={caption.rawContentState}
+                    />
+                  ) : (
+                    <DraftRenderer rawContentState={caption.rawContentState} />
+                  )}
+                </Suspense>
               </div>
             </Caption>
           )
