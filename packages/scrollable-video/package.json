@@ -1,6 +1,6 @@
 {
   "name": "@story-telling-reporter/react-scrollable-video",
-  "version": "0.1.1",
+  "version": "0.1.2-alpha.0",
   "description": "",
   "main": "lib/cjs/index.js",
   "module": "lib/esm/index.js",
@@ -27,7 +27,7 @@
     "@keystone-ui/fields": "^7.2.0",
     "@keystone-ui/modals": "^6.0.3",
     "@kids-reporter/draft-editor": "^0.4.35",
-    "@kids-reporter/draft-renderer": "^0.4.35",
+    "@kids-reporter/draft-renderer": "^0.4.36",
     "@story-telling-reporter/draft-editor": "0.1.1",
     "@story-telling-reporter/draft-renderer": "0.1.1",
     "lodash": "^4.17.15",
