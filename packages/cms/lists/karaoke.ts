@@ -100,16 +100,7 @@ const listConfigurations = list({
             embedCodeWebpackAssets
           )
 
-          return `
-            <style>
-            .margin-left-to-center {
-              margin-left: calc((50vw - 350px) * -1);
-            }
-            </style>
-            <div class="margin-left-to-center">
-              ${code}
-            </div>
-          `
+          return code
         },
       }),
       ui: {
