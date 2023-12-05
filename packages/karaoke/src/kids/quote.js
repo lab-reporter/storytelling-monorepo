@@ -40,6 +40,15 @@ export default function QuoteShadow({
         onCurrentTimeUpdate((currentCharIndex * durationPerChar) / 1000) // in seconds
       }, durationPerChar)
     }
+
+    // The following condition is to clean up the previous setTimeout.
+    // Since setTimeout will be executed asynchrously, it may update
+    // `currentTime` unnecessarily.
+    if (currentCharIndex === 0 && !play) {
+      setTimeout(() => {
+        onCurrentTimeUpdate(0)
+      }, durationPerChar)
+    }
   }, [currentCharIndex, textLen, play])
 
   let charOffset = 0
@@ -61,11 +70,7 @@ export default function QuoteShadow({
     return rtn
   })
 
-  return (
-    <Quote className={className}>
-      {charArrJsx}
-    </Quote>
-  )
+  return <Quote className={className}>{charArrJsx}</Quote>
 }
 
 const Char = styled.span`
@@ -76,7 +81,7 @@ const Char = styled.span`
      */
     (props) => {
       return `
-      color: ${ props.isTransitioned ? '#27B5F7' : '#232323' };
+      color: ${props.isTransitioned ? '#27B5F7' : '#232323'};
       transition: color 0.5s linear;
       font-size: 24px;
       font-weight: 400;
@@ -90,9 +95,4 @@ const Char = styled.span`
   }
 `
 
-const Quote = styled.blockquote`
-  position: relative;
-
-  /* clear default margin */
-  margin: 0;
-`
+const Quote = styled.span``

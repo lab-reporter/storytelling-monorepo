@@ -135,6 +135,8 @@ export function Karaoke({
       } else {
         // leave the viewport
         audio.pause()
+        // reset currentTime
+        currentTime.current = 0
       }
     },
     // `inView` is used to avoid from infinite re-rendering.
