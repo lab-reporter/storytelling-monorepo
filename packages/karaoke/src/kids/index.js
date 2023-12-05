@@ -60,7 +60,6 @@ export function Karaoke({
   })
 
   const [audioOpts, setAudioOpts] = useState({
-    paused: !inView,
     duration: defaultDuration,
     ended: false,
   })
@@ -68,7 +67,10 @@ export function Karaoke({
   useEffect(() => {
     const audio = audioRef.current
     const onLoadedMetadata = () => {
-      console.log('[react-karaoke] `onLoadedMetadata` event invoked. audio duration:', audio.duration)
+      console.log(
+        '[react-karaoke] `onLoadedMetadata` event invoked. audio duration:',
+        audio.duration
+      )
       setAudioOpts((opts) => {
         return Object.assign({}, opts, {
           duration: audio.duration || defaultDuration,
@@ -134,11 +136,6 @@ export function Karaoke({
         // leave the viewport
         audio.pause()
       }
-      setAudioOpts((opts) =>
-        Object.assign({}, opts, {
-          paused: !inView,
-        })
-      )
     },
     // `inView` is used to avoid from infinite re-rendering.
     // `muted` is avoid state not changed due to closure.
@@ -191,7 +188,7 @@ export function Karaoke({
       onClick={() => {
         const audio = audioRef.current
         if (audio) {
-          if (muted || audioOpts.paused) {
+          if (muted) {
             audio.currentTime = currentTime.current
             audio.muted = false
             audio.play()
@@ -206,11 +203,7 @@ export function Karaoke({
         safariWorkaround()
       }}
     >
-      {audioOpts.paused || muted ? (
-        <MuteIcon />
-      ) : (
-        <SoundIcon />
-      )}
+      {muted ? <MuteIcon /> : <SoundIcon />}
     </AudioBt>
   )
 
@@ -232,13 +225,13 @@ export function Karaoke({
           `quote_in_view_${inView}_${audioOpts.duration}` /** use key to force re-rendering */
         }
         textArr={quoteArr}
-        play={!audioOpts.paused}
+        play={inView}
         duration={audioOpts.duration}
         onCurrentTimeUpdate={(_currentTime) => {
           currentTime.current = _currentTime
         }}
       />
-      { quoteBy ? <QuoteBy>{quoteBy}</QuoteBy> : null }
+      {quoteBy ? <QuoteBy>{quoteBy}</QuoteBy> : null}
       {audioBtJsx}
     </QuoteContainer>
   )
@@ -249,7 +242,7 @@ const AudioBt = styled.div`
 `
 
 const QuoteBy = styled.div`
-  font-family: Noto Sans TC,Sans-Serif,serif;
+  font-family: Noto Sans TC, Sans-Serif, serif;
   font-size: 16px;
   font-weight: 500;
   line-height: 1.5;
@@ -260,17 +253,17 @@ const QuoteBy = styled.div`
   color: #747474;
 `
 
-const QuoteContainer = styled.div`
+const QuoteContainer = styled.blockquote`
   box-sizing: border-box;
 
   /* clients should provide below fonts */
-  font-family: SweiMarkerSansCJKtc-Regular,Noto Sans TC,Sans-Serif,serif;
+  font-family: SweiMarkerSansCJKtc-Regular, Noto Sans TC, Sans-Serif, serif;
 
   position: relative;
   width: 100%;
   max-width: 700px;
 
-  background-color: #F4F4F4;
+  background-color: #f4f4f4;
 
   border-radius: 20px;
 
