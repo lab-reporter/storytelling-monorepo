@@ -92,7 +92,7 @@ const listConfigurations = list({
             'react-karaoke',
             {
               audioUrls: [audioSrc],
-              textArr:
+              quoteArr:
                 typeof item?.quote === 'string' && item.quote.split('\n'),
               imgSrc,
               muteHint: item?.muteHint,
