@@ -1,7 +1,8 @@
-import Karaoke from '../src/react-components'
+// import Karaoke from '../src/react-components'
 import React from 'react' // eslint-disable-line
 import styled from 'styled-components'
 import { createRoot } from 'react-dom/client'
+import { dynmaicImportKidsComponent } from '../src/index'
 
 const reactRootId = 'root'
 const container = document.getElementById(reactRootId)
@@ -10,16 +11,18 @@ const root = createRoot(container)
 const mocks = [
   {
     audioUrls: ['./audio-twreporter-1.mp3'],
-    textArr: [
+    quoteArr: [
       '演員，我覺得他就是一個生活的體驗者，',
       '然後生命的實踐家；',
       '期許自己啦，可以這麼做。',
     ],
+    quoteBy:
+      '──史賓塞伯爵（Charles Spencer, 9th Earl Spencer），黛安娜王妃（Diana, Princess of Wales）之弟',
     imgSrc: '',
   },
   {
     audioUrls: ['./audio-twreporter-2.mp3'],
-    textArr: [
+    quoteArr: [
       '不可能讓海關知道我是去捐卵的，',
       '這個是不行的，這也是仲介覺得不可以提的，',
       '因為這個是不符合那個簽證嘛。',
@@ -29,7 +32,7 @@ const mocks = [
   },
   {
     audioUrls: ['./audio-twreporter-3.mp3'],
-    textArr: [
+    quoteArr: [
       '我們不像香港，',
       '這幾10年，我們完全沒有接受過社會運動的教育，',
       '不知道怎麼走上街，怎麼整理我們的訴求，也完全沒有人會組織。',
@@ -47,21 +50,29 @@ const mocks = [
 const MockContentBlock = styled.div`
   height: 100vh;
   background-color: pink;
+  margin-bottom: 50px;
+  margin-top: 50px;
 `
 
-root.render(
-  <div>
-    <MockContentBlock />
-    {mocks.map((mock, index) => {
-      return (
-        <Karaoke
-          key={index}
-          muteHint={index === 0}
-          audioUrls={mock.audioUrls}
-          textArr={mock.textArr}
-          imgSrc={mock.imgSrc}
-        />
-      )
-    })}
-  </div>
-)
+dynmaicImportKidsComponent().then((Karaoke) => {
+  root.render(
+    <div>
+      <MockContentBlock />
+      {mocks.map((mock, index) => {
+        return (
+          <div key={index}>
+            <Karaoke
+              key={index}
+              muteHint={index === 0}
+              audioUrls={mock.audioUrls}
+              quoteArr={mock.quoteArr}
+              imgSrc={mock.imgSrc}
+              quoteBy={mock.quoteBy}
+            />
+            <MockContentBlock />
+          </div>
+        )
+      })}
+    </div>
+  )
+})
