@@ -32,8 +32,8 @@ function render(namespace, pkgName, Component) {
 if (window?.[namespace][`react-karaoke${pkgVersion}`]) {
   import(
     /* webpackChunkName: "react-karaoke" */ '@story-telling-reporter/react-karaoke'
-  ).then(({ default: Karaoke }) => {
-    hydrate(namespace, `react-karaoke${pkgVersion}`, Karaoke)
+  ).then(({ KidsKaraoke }) => {
+    hydrate(namespace, `react-karaoke${pkgVersion}`, KidsKaraoke)
   })
 }
 

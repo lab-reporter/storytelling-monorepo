@@ -1,12 +1,12 @@
 /* eslint no-console: 0 */
 import DualSlides from '@story-telling-reporter/react-dual-slides'
-import Karaoke from '@story-telling-reporter/react-karaoke'
 import React from 'react' // eslint-disable-line
 import ReactDOMServer from 'react-dom/server'
 import get from 'lodash/get.js'
 import map from 'lodash/map'
 import serialize from 'serialize-javascript'
 import { ServerStyleSheet } from 'styled-components'
+import { KidsKaraoke } from '@story-telling-reporter/react-karaoke'
 import { v4 as uuidv4 } from 'uuid'
 
 const _ = {
@@ -84,7 +84,7 @@ export function buildEmbeddedCode(pkgName, data, webpackAssets) {
   let skipServerSideRendering = false
   switch (pkgName) {
     case 'react-karaoke':
-      Component = Karaoke
+      Component = KidsKaraoke
       break
     case 'react-dual-slides':
       Component = DualSlides
