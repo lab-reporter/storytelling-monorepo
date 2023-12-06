@@ -15,6 +15,16 @@ function hydrate(namespace, pkgName, Component) {
       hydrateRoot(container, <Component {...dataOfComponent} />)
     })
   }
+
+  // Clean up data to avoid repeated hydration.
+  // Repeated hydration might cause unexpected error, such as:
+  // there are two karaoke embedded codes in the same web page.
+  // The first one embed code script already these two embedded codes
+  // on the DOM.
+  // However, the second embed code script hydrates them again since
+  // `window[namespace][pkgName]` has data.
+  // The second hydration will cause unexpected React errors.
+  window[namespace][pkgName] = []
 }
 
 function render(namespace, pkgName, Component) {
@@ -27,6 +37,9 @@ function render(namespace, pkgName, Component) {
       root.render(<Component {...dataOfComponent} />)
     })
   }
+
+  // Clean up data to avoid repeated rendering.
+  window[namespace][pkgName] = []
 }
 
 if (window?.[namespace][`react-karaoke${pkgVersion}`]) {
