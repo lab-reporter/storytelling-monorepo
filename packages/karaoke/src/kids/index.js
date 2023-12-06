@@ -210,32 +210,34 @@ export function Karaoke({
   )
 
   return (
-    <QuoteContainer className={className} ref={containerRef}>
-      <Logo />
-      <audio
-        ref={audioRef}
-        preload={preload}
-        data-react-karaoke
-        data-played={false}
-      >
-        {audioUrls.map((url, index) => (
-          <source key={`audio_source_${index}`} src={url}></source>
-        ))}
-      </audio>
-      <Quote
-        key={
-          `quote_in_view_${inView}_${audioOpts.duration}` /** use key to force re-rendering */
-        }
-        textArr={quoteArr}
-        play={inView}
-        duration={audioOpts.duration}
-        onCurrentTimeUpdate={(_currentTime) => {
-          currentTime.current = _currentTime
-        }}
-      />
-      {quoteBy ? <QuoteBy>{quoteBy}</QuoteBy> : null}
-      {audioBtJsx}
-    </QuoteContainer>
+    <OuterBox>
+      <QuoteContainer className={className} ref={containerRef}>
+        <Logo />
+        <audio
+          ref={audioRef}
+          preload={preload}
+          data-react-karaoke
+          data-played={false}
+        >
+          {audioUrls.map((url, index) => (
+            <source key={`audio_source_${index}`} src={url}></source>
+          ))}
+        </audio>
+        <Quote
+          key={
+            `quote_in_view_${inView}_${audioOpts.duration}` /** use key to force re-rendering */
+          }
+          textArr={quoteArr}
+          play={inView}
+          duration={audioOpts.duration}
+          onCurrentTimeUpdate={(_currentTime) => {
+            currentTime.current = _currentTime
+          }}
+        />
+        {quoteBy ? <QuoteBy>{quoteBy}</QuoteBy> : null}
+        {audioBtJsx}
+      </QuoteContainer>
+    </OuterBox>
   )
 }
 
@@ -256,10 +258,14 @@ const QuoteBy = styled.div`
 `
 
 const QuoteContainer = styled.blockquote`
+  /* clear default margin */
+  margin: 0;
+
   box-sizing: border-box;
 
   /* clients should provide below fonts */
   font-family: SweiMarkerSansCJKtc-Regular, Noto Sans TC, Sans-Serif, serif;
+  letter-spacing: 1.5px;
 
   position: relative;
   width: 100%;
@@ -270,8 +276,6 @@ const QuoteContainer = styled.blockquote`
   border-radius: 20px;
 
   padding: 60px 40px 90px 40px;
-  margin-left: auto;
-  margin-right: auto;
 
   ${mediaQuery.smallOnly} {
     padding: 60px 20px 80px 20px;
@@ -290,11 +294,16 @@ const QuoteContainer = styled.blockquote`
   }
 `
 
+const OuterBox = styled.div`
+  padding-top: 54px;
+  width: fit-content;
+`
+
 function SoundIcon({ className, onClick }) {
   return (
     <img
       className={className}
-      src="https://www.unpkg.com/@story-telling-reporter/react-karaoke/public/icons/playing.kids.svg"
+      src="https://www.unpkg.com/@story-telling-reporter/react-karaoke/public/icons/kids/sound.svg"
       width="100%"
       onClick={onClick}
     />
@@ -305,7 +314,7 @@ function MuteIcon({ className, onClick }) {
   return (
     <img
       className={className}
-      src="https://www.unpkg.com/@story-telling-reporter/react-karaoke/public/icons/paused.kids.svg"
+      src="https://www.unpkg.com/@story-telling-reporter/react-karaoke/public/icons/kids/mute.svg"
       width="100%"
       onClick={onClick}
     />
@@ -316,7 +325,7 @@ function LogoIcon({ className }) {
   return (
     <img
       className={className}
-      src="https://www.unpkg.com/@story-telling-reporter/react-karaoke/public/icons/karaoke-logo.kids.svg"
+      src="https://www.unpkg.com/@story-telling-reporter/react-karaoke/public/icons/kids/karaoke-logo.svg"
       width="100%"
     />
   )
