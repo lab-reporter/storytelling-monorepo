@@ -2,7 +2,7 @@
 import React from 'react' // eslint-disable-line
 import styled from 'styled-components'
 import { createRoot } from 'react-dom/client'
-import { dynmaicImportKidsComponent } from '../src/index'
+import { KidsKaraoke } from '../src/index'
 
 const reactRootId = 'root'
 const container = document.getElementById(reactRootId)
@@ -54,14 +54,21 @@ const MockContentBlock = styled.div`
   margin-top: 50px;
 `
 
-dynmaicImportKidsComponent().then((Karaoke) => {
-  root.render(
-    <div>
-      <MockContentBlock />
-      {mocks.map((mock, index) => {
-        return (
-          <div key={index}>
-            <Karaoke
+root.render(
+  <div>
+    <MockContentBlock />
+    {mocks.map((mock, index) => {
+      return (
+        <>
+          <div
+            key={index}
+            style={{
+              marginLeft: 'auto',
+              marginRight: 'auto',
+              width: 'fit-content',
+            }}
+          >
+            <KidsKaraoke
               key={index}
               muteHint={index === 0}
               audioUrls={mock.audioUrls}
@@ -69,10 +76,10 @@ dynmaicImportKidsComponent().then((Karaoke) => {
               imgSrc={mock.imgSrc}
               quoteBy={mock.quoteBy}
             />
-            <MockContentBlock />
           </div>
-        )
-      })}
-    </div>
-  )
-})
+          <MockContentBlock />
+        </>
+      )
+    })}
+  </div>
+)
