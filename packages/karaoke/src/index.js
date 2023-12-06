@@ -1,7 +1,7 @@
-import Karaoke from './react-components'
+import { Karaoke as KidsKaraoke } from './kids/index'
 
-/**
- *  @typedef {import('./react-components/index').KaraokeProps} KaraokeProps
- */
+export { KidsKaraoke }
 
-export default Karaoke
+export default {
+  KidsKaraoke,
+}
