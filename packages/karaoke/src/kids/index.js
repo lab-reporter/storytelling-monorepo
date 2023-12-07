@@ -167,6 +167,19 @@ export function Karaoke({
               <source key={`audio_source_${index}`} src={url}></source>
             ))}
           </audio>
+          {/**
+           *  Even though we set `audio.muted=true` before auto playing audio,
+           *  it still may encounter error to autoplay audio.
+           *  The error message is 'error:  DOMException: play() failed because the user didn't interact with the document first. https://goo.gl/xX8pDD'
+           *  It seems that Chrome does not follow the autoplay policy which is designed by Google itself.
+           *  The autoplay policy says that if we want to autoplay, and then we need to make audio muted.
+           *  However, in our case, setting `audio.muted=true` is not working at all.
+           *
+           *  Since autoplay may fail, we could not listen to `timeupdate` event to get the `currentTime`,
+           *  and pass `currentTime` to `Quote` component.
+           *
+           *  Therefore, we let `Quote` to roughly calculate the `currentTime` and pass it back via `onCurrentTimeUpdate` prop.
+           */}
           <Quote
             key={
               `quote_in_view_${inView}_${audioOpts.duration}` /** use key to force re-rendering */
