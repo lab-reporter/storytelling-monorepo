@@ -348,6 +348,7 @@ type Karaoke {
   imageLink: String
   muteHint: Boolean
   embedCode: String
+  hintEmbedCode: String
 }
 
 input KaraokeWhereUniqueInput {
