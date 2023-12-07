@@ -56,6 +56,7 @@ const MockContentBlock = styled.div`
 
 root.render(
   <div>
+    <KidsKaraoke hintOnly={true} />
     <MockContentBlock />
     {mocks.map((mock, index) => {
       return (
