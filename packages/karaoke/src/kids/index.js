@@ -2,6 +2,7 @@ import React/* eslint-disable-line */, { useEffect, useRef, useState } from 'rea
 import Quote from './quote'
 import styled from 'styled-components'
 import { Hint, safariWorkaround, useMuted } from './hint'
+import { LogoIcon, MuteIcon, SoundIcon } from './icons'
 import { mediaQuery } from './utils/media-query'
 import { useInView } from 'react-intersection-observer'
 
@@ -99,7 +100,6 @@ export function Karaoke({
         // start with `currentTime` to catch up `Quote` animation
         audio.currentTime = currentTime.current
         const startPlayPromise = audio.play()
-        console.log('audio.muted:', audio.muted)
         startPlayPromise
           // play successfully
           .then(() => {
@@ -243,38 +243,6 @@ const OuterBox = styled.div`
   padding-top: 54px;
   width: fit-content;
 `
-
-function SoundIcon({ className, onClick }) {
-  return (
-    <img
-      className={className}
-      src="https://www.unpkg.com/@story-telling-reporter/react-karaoke/public/icons/kids/sound.svg"
-      width="100%"
-      onClick={onClick}
-    />
-  )
-}
-
-function MuteIcon({ className, onClick }) {
-  return (
-    <img
-      className={className}
-      src="https://www.unpkg.com/@story-telling-reporter/react-karaoke/public/icons/kids/mute.svg"
-      width="100%"
-      onClick={onClick}
-    />
-  )
-}
-
-function LogoIcon({ className }) {
-  return (
-    <img
-      className={className}
-      src="https://www.unpkg.com/@story-telling-reporter/react-karaoke/public/icons/kids/karaoke-logo.svg"
-      width="100%"
-    />
-  )
-}
 
 const Logo = styled(LogoIcon)`
   position: absolute;

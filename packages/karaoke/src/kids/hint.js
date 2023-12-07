@@ -1,5 +1,6 @@
 import React/* eslint-disable-line */, { useEffect, useState } from 'react'
 import styled from 'styled-components'
+import { MuteIcon, SoundIcon } from './icons'
 import { mediaQuery } from './utils/media-query'
 
 /**
@@ -33,66 +34,25 @@ export function Hint({ className }) {
   const [muted, setMuted] = useMuted(true)
   return (
     <Container className={className}>
-      <IconContainer
-        onClick={() => {
-          if (muted) {
-            safariWorkaround()
-          }
-          setMuted(!muted)
-        }}
-      >
-        <MuteIcon style={{ display: muted ? 'inline-block' : 'none' }} />
-        <SoundIcon style={{ display: muted ? 'none' : 'inline-block' }} />
-      </IconContainer>
       <HintText>
-        本文章有金句聲音元件，可聽見兒少代表的心聲，
-        <br />
-        按<StyledToggleIcon />
-        開啟／關閉體驗
-      </HintText>
-      <MobileHintText>
-        本文章有金句聲音元件，
-        <br />
+        本文章有金句聲音元件，{'\n'}
         可聽見兒少代表的心聲，
-        <br />
-        按<StyledToggleIcon />
-        開啟／關閉體驗
-      </MobileHintText>
+      </HintText>
+      <Button>
+        <Icon
+          onClick={() => {
+            if (muted) {
+              safariWorkaround()
+            }
+            setMuted(!muted)
+          }}
+        >
+          <MuteIcon style={{ display: muted ? 'inline-block' : 'none' }} />
+          <SoundIcon style={{ display: muted ? 'none' : 'inline-block' }} />
+        </Icon>
+        <span>點擊開啟聲音</span>
+      </Button>
     </Container>
-  )
-}
-
-function SoundIcon({ className, onClick, style }) {
-  return (
-    <img
-      className={className}
-      src="https://www.unpkg.com/@story-telling-reporter/react-karaoke/public/icons/kids/hint-sound.svg"
-      style={style}
-      width="100%"
-      onClick={onClick}
-    />
-  )
-}
-
-function MuteIcon({ className, onClick, styles }) {
-  return (
-    <img
-      className={className}
-      src="https://www.unpkg.com/@story-telling-reporter/react-karaoke/public/icons/kids/hint-mute.svg"
-      styles={styles}
-      width="100%"
-      onClick={onClick}
-    />
-  )
-}
-
-function ToggleIcon({ className }) {
-  return (
-    <img
-      className={className}
-      src="https://www.unpkg.com/@story-telling-reporter/react-karaoke/public/icons/kids/hint-toggle.svg"
-      width="100%"
-    />
   )
 }
 
@@ -103,11 +63,11 @@ const Container = styled.div`
   gap: 10px;
 `
 
-const IconContainer = styled.div`
+const Icon = styled.div`
   position: relative;
 
-  width: 100px;
-  height: 100px;
+  width: 36px;
+  height: 36px;
 
   cursor: pointer;
 
@@ -116,10 +76,18 @@ const IconContainer = styled.div`
   }
 `
 
-const StyledToggleIcon = styled(ToggleIcon)`
-  display: inline;
-  width: 30px;
-  vertical-align: bottom;
+const Button = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+
+  > span {
+    font-size: 14px;
+    font-family: Noto Sans TC, Sans-Serif, serif;
+    font-weight: 500;
+    color: #666;
+  }
 `
 
 const HintText = styled.p`
@@ -131,18 +99,10 @@ const HintText = styled.p`
   line-height: 1.5;
   color: #000;
 
-  ${mediaQuery.smallOnly} {
-    display: none;
-  }
-`
+  white-space: nowrap;
 
-const MobileHintText = styled(HintText)`
   ${mediaQuery.smallOnly} {
-    display: block;
-  }
-
-  ${mediaQuery.mediumAbove} {
-    display: none;
+    white-space: pre-wrap;
   }
 `
 
