@@ -51,7 +51,7 @@ const listConfigurations = list({
     audioLink: text(),
     imageLink: text(),
     muteHint: checkbox({
-      label: '是否顯示聲音播放提醒',
+      label: '是否產生「聲音播放提示」的 embed code',
       defaultValue: false,
     }),
     /*
@@ -75,7 +75,7 @@ const listConfigurations = list({
     }),
     */
     embedCode: virtual({
-      label: 'embed code',
+      label: 'Karaoke embed code',
       field: graphql.field({
         type: graphql.String,
         resolve: async (item: Record<string, unknown>): Promise<string> => {
@@ -95,12 +95,37 @@ const listConfigurations = list({
               quoteArr:
                 typeof item?.quote === 'string' && item.quote.split('\n'),
               imgSrc,
-              muteHint: item?.muteHint,
             },
             embedCodeWebpackAssets
           )
 
           return code
+        },
+      }),
+      ui: {
+        views: './lists/views/embed-code',
+        createView: {
+          fieldMode: 'hidden',
+        },
+      },
+    }),
+    hintEmbedCode: virtual({
+      label: '聲音提示 embed code',
+      field: graphql.field({
+        type: graphql.String,
+        resolve: async (item: Record<string, unknown>): Promise<string> => {
+          const muteHint = item?.muteHint
+          if (muteHint) {
+            return embedCodeGen.buildEmbeddedCode(
+              'react-karaoke',
+              {
+                hintOnly: true,
+              },
+              embedCodeWebpackAssets
+            )
+          }
+
+          return ''
         },
       }),
       ui: {

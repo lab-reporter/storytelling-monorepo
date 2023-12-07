@@ -5,7 +5,7 @@ import { FieldLabel, FieldContainer } from '@keystone-ui/fields'
 import { controller } from '@keystone-6/core/fields/types/virtual/views'
 import { TextArea } from '@keystone-ui/fields'
 
-export const Field = ({ value }: FieldProps<typeof controller>) => {
+export const Field = ({ field, value }: FieldProps<typeof controller>) => {
   const defaultText = 'Copy to Clipboard'
   const copiedText = 'Copied!'
 
@@ -25,7 +25,7 @@ export const Field = ({ value }: FieldProps<typeof controller>) => {
 
   return (
     <FieldContainer>
-      <FieldLabel>Embedded Code</FieldLabel>
+      <FieldLabel>{field.label}</FieldLabel>
       <TextArea readOnly value={value} />
       <Button onClick={copyToClipboard} style={{ marginRight: '10px' }}>
         {buttonText}
