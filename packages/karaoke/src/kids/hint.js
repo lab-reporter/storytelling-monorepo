@@ -2,6 +2,7 @@ import React/* eslint-disable-line */, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { MuteIcon, SoundIcon } from './icons'
 import { mediaQuery } from './utils/media-query'
+import { useInView } from 'react-intersection-observer'
 
 /**
  * This hook is used to record the mute status in the whole web page.
@@ -32,8 +33,11 @@ export function useMuted(initialValue = true) {
 
 export function Hint({ className }) {
   const [muted, setMuted] = useMuted(true)
+  const [containerRef] = useInView({
+    threshold: 0,
+  })
   return (
-    <Container className={className}>
+    <Container className={className} ref={containerRef}>
       <HintText>
         本文章有金句聲音元件，{'\n'}
         可聽見兒少代表的心聲，
