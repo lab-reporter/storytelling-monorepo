@@ -1,35 +1,9 @@
 import React/* eslint-disable-line */, { useEffect, useRef, useState } from 'react'
 import Quote from './quote'
 import styled from 'styled-components'
-import { mediaQuery } from './media-query'
+import { Hint, safariWorkaround, useMuted } from './hint'
+import { mediaQuery } from './utils/media-query'
 import { useInView } from 'react-intersection-observer'
-
-/**
- * This hook is used to record the mute status in the whole web page.
- * It's useful when there are multiple `Karaoke`s in the same web page.
- * If the user has clicked mute button in one `Karaoke` component,
- * we should mute all the rest audios as well.
- *
- * @param {boolean} initialValue
- * @return {[boolean, Function]}
- */
-function useMuted(initialValue = false) {
-  const [muted, _setMuted] = useState(initialValue)
-  useEffect(() => {
-    const _muted = window?.['__story_telling_react_karaoke']?.muted
-    if (typeof _muted === 'boolean') {
-      _setMuted(_muted)
-    }
-  })
-  const setMuted = (_muted) => {
-    window['__story_telling_react_karaoke'] = {
-      muted: _muted,
-    }
-    _setMuted(_muted)
-  }
-
-  return [muted, setMuted]
-}
 
 /**
  *  @typedef {Object} KaraokeProps
@@ -38,6 +12,8 @@ function useMuted(initialValue = false) {
  *  @property {string} [preload='auto'] - 'auto', 'none' or 'metadata'. `preload` attribute of `audio` tag.
  *  @property {string[]} quoteArr - quote text
  *  @property {string} [quoteBy]
+ *  @property {boolean} [hint=false] - render `Karaoke` along with `Hint` component
+ *  @property {boolean} [hintOnly=false] - render `Hint` component only, without `Karaoke`
  */
 
 /**
@@ -49,6 +25,8 @@ export function Karaoke({
   preload = 'auto',
   quoteArr,
   quoteBy,
+  hint = false,
+  hintOnly = false,
 }) {
   const defaultDuration = 10 // second
   const audioRef = useRef(null)
@@ -121,6 +99,7 @@ export function Karaoke({
         // start with `currentTime` to catch up `Quote` animation
         audio.currentTime = currentTime.current
         const startPlayPromise = audio.play()
+        console.log('audio.muted:', audio.muted)
         startPlayPromise
           // play successfully
           .then(() => {
@@ -143,47 +122,6 @@ export function Karaoke({
     // `muted` is avoid state not changed due to closure.
     [inView]
   )
-
-  /**
-   *  The following codes are WORKAROUND for Safari.
-   *  Problem to workaround:
-   *  In Safari, we still encounter `audio.play()` Promise rejection
-   *  even users have had interactions. The interactions, in our case, will be button clicking.
-   *
-   *  Therefore, the following logics find all Karaoke `audio` elements which has NOT been played before,
-   *  and try to `audio.play()` them.
-   *  Since this event is triggered by user clicking,
-   *  `audio.play()` will be successful without Promise rejection.
-   *  After this event finishes, Safari browser won't block `audio.play()` anymore.
-   */
-  const safariWorkaround = () => {
-    const otherAudios = document.querySelectorAll(
-      'audio[data-react-karaoke][data-played=false]'
-    )
-    otherAudios.forEach(
-      (
-        /**
-         *  @type HTMLAudioElement
-         */
-        audio
-      ) => {
-        audio.muted = true
-        const playAttempt = audio.play()
-        if (playAttempt) {
-          playAttempt
-            // play successfully
-            .then(() => {
-              // pause audio immediately
-              audio.pause()
-            })
-            // fail to play
-            .catch(() => {
-              // do nothing
-            })
-        }
-      }
-    )
-  }
 
   const audioBtJsx = (
     <AudioBt
@@ -209,35 +147,42 @@ export function Karaoke({
     </AudioBt>
   )
 
+  if (hintOnly) {
+    return <Hint />
+  }
+
   return (
-    <OuterBox>
-      <QuoteContainer className={className} ref={containerRef}>
-        <Logo />
-        <audio
-          ref={audioRef}
-          preload={preload}
-          data-react-karaoke
-          data-played={false}
-        >
-          {audioUrls.map((url, index) => (
-            <source key={`audio_source_${index}`} src={url}></source>
-          ))}
-        </audio>
-        <Quote
-          key={
-            `quote_in_view_${inView}_${audioOpts.duration}` /** use key to force re-rendering */
-          }
-          textArr={quoteArr}
-          play={inView}
-          duration={audioOpts.duration}
-          onCurrentTimeUpdate={(_currentTime) => {
-            currentTime.current = _currentTime
-          }}
-        />
-        {quoteBy ? <QuoteBy>{quoteBy}</QuoteBy> : null}
-        {audioBtJsx}
-      </QuoteContainer>
-    </OuterBox>
+    <>
+      {hint && <Hint />}
+      <OuterBox>
+        <QuoteContainer className={className} ref={containerRef}>
+          <Logo />
+          <audio
+            ref={audioRef}
+            preload={preload}
+            data-react-karaoke
+            data-played={false}
+          >
+            {audioUrls.map((url, index) => (
+              <source key={`audio_source_${index}`} src={url}></source>
+            ))}
+          </audio>
+          <Quote
+            key={
+              `quote_in_view_${inView}_${audioOpts.duration}` /** use key to force re-rendering */
+            }
+            textArr={quoteArr}
+            play={inView}
+            duration={audioOpts.duration}
+            onCurrentTimeUpdate={(_currentTime) => {
+              currentTime.current = _currentTime
+            }}
+          />
+          {quoteBy ? <QuoteBy>{quoteBy}</QuoteBy> : null}
+          {audioBtJsx}
+        </QuoteContainer>
+      </OuterBox>
+    </>
   )
 }
 
