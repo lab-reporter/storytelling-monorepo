@@ -1,5 +1,5 @@
 import React/* eslint-disable-line */, { useEffect, useState } from 'react'
-import { mediaQuery } from './media-query'
+import { mediaQuery } from './utils/media-query'
 import styled from 'styled-components'
 
 /**
