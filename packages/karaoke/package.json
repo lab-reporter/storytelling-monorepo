@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/nickhsine/story-telling-monorepo.git",
+    "url": "git+https://github.com/nickhsine/story-telling-monorepo.git",
     "directory": "packages/karaoke"
   },
   "keywords": [
@@ -33,6 +33,7 @@
   },
   "files": [
     "lib",
-    "dist"
+    "dist",
+    "public"
   ]
 }
