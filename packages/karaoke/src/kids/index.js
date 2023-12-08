@@ -227,7 +227,6 @@ const QuoteContainer = styled.blockquote`
 
   position: relative;
   width: 100%;
-  max-width: 700px;
 
   background-color: #f4f4f4;
 
@@ -254,7 +253,8 @@ const QuoteContainer = styled.blockquote`
 
 const OuterBox = styled.div`
   padding-top: 54px;
-  width: fit-content;
+  width: 100%;
+  max-width: 700px;
 `
 
 const Logo = styled(LogoIcon)`
