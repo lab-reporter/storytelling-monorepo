@@ -64,9 +64,8 @@ root.render(
           <div
             key={index}
             style={{
-              marginLeft: 'auto',
-              marginRight: 'auto',
-              width: 'fit-content',
+              display: 'flex',
+              justifyContent: 'center',
             }}
           >
             <KidsKaraoke
