@@ -40,7 +40,7 @@ export function Hint({ className }) {
     <Container className={className} ref={containerRef}>
       <HintText>
         本文章有金句聲音元件，{'\n'}
-        可聽見兒少代表的心聲，
+        可聽見兒少代表的心聲！
       </HintText>
       <Button>
         <Icon
@@ -54,7 +54,7 @@ export function Hint({ className }) {
           <MuteIcon style={{ display: muted ? 'inline-block' : 'none' }} />
           <SoundIcon style={{ display: muted ? 'none' : 'inline-block' }} />
         </Icon>
-        <span>點擊開啟聲音</span>
+        <span>點擊{muted ? '開啟' : '關閉'}聲音</span>
       </Button>
     </Container>
   )
