@@ -4384,31 +4384,29 @@
     webpack "^5.72.1"
     webpack-cli "^4.9.2"
 
-"@story-telling-reporter/react-embed-code-generator@0.1.1":
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/@story-telling-reporter/react-embed-code-generator/-/react-embed-code-generator-0.1.1.tgz#77e812bad533261e152923080678700aac29fb7e"
-  integrity sha512-7XODxzwOwZFHo/mMylbwCyav15lMHnBEjVvU3ZDbkVCR/sjrCXMk4aykkE+Ky3azxYfxcPlnbM+iWnIF2sLx2w==
+"@story-telling-reporter/react-embed-code-generator@0.1.2-alpha.4":
+  version "0.1.2-alpha.4"
+  resolved "https://registry.yarnpkg.com/@story-telling-reporter/react-embed-code-generator/-/react-embed-code-generator-0.1.2-alpha.4.tgz#f01e2277343f253756b4d7b9a73fd726bc900b89"
+  integrity sha512-OCRejXDiXf9Q0QZF3MRzxwgp/rwLpFbsUiiu2oQYIoQfkJ0koywWpkSDAWgUiq1IHCXO+qzzLdkgP5EbahQY4g==
   dependencies:
     "@story-telling-reporter/react-dual-slides" "0.1.1"
-    "@story-telling-reporter/react-karaoke" "0.1.1"
-    "@story-telling-reporter/react-scrollable-video" "0.1.1"
+    "@story-telling-reporter/react-karaoke" "0.1.2-alpha.5"
+    "@story-telling-reporter/react-scrollable-video" "0.1.2-alpha.0"
     "@story-telling-reporter/react-three-story-points" "0.1.1"
     lodash "^4.17.21"
     serialize-javascript "^6.0.0"
 
-"@story-telling-reporter/react-scrollable-video@0.1.1":
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/@story-telling-reporter/react-scrollable-video/-/react-scrollable-video-0.1.1.tgz#a066cb334590bf16efc04ae3e89f0ae9d735275b"
-  integrity sha512-2yI+2H2JpO5FBh5jwBgRYoyDjO7dian3G1JblvtJQyRHGrU/v8OFcvqjlFLWI2s3F2UO+npDwj2DBlh0EtcAoA==
+"@story-telling-reporter/react-karaoke@0.1.2-alpha.5":
+  version "0.1.2-alpha.5"
+  resolved "https://registry.yarnpkg.com/@story-telling-reporter/react-karaoke/-/react-karaoke-0.1.2-alpha.5.tgz#d0848ddd3b8d7b4dcfa1459d47f165b5deaa02d6"
+  integrity sha512-g6cSb15+vtzI0r5TSeaDogU3H5KuqQs5JbbzyoPqvytg/+fR4/VuYT6eM6tuQYsDf9SPMnsbMe/JejsnVBQE+g==
   dependencies:
-    "@keystone-ui/fields" "^7.2.0"
-    "@keystone-ui/modals" "^6.0.3"
-    "@story-telling-reporter/draft-editor" "0.1.1"
-    "@story-telling-reporter/draft-renderer" "0.1.1"
-    lodash "^4.17.15"
-    prop-types "^15.0.0"
-    react-transition-group "^4.4.1"
-    whatwg-fetch "^3.4.1"
+    react "18.1.0"
+    react-dom "18.1.0"
+    react-intersection-observer "^9.3.5"
+    serialize-javascript "^6.0.0"
+    styled-components "5.3.5"
+    uuid "^8.3.2"
 
 "@svgr/babel-plugin-add-jsx-attribute@^6.5.1":
   version "6.5.1"
@@ -9446,7 +9444,7 @@ new-github-issue-url@0.2.1:
   resolved "https://registry.yarnpkg.com/new-github-issue-url/-/new-github-issue-url-0.2.1.tgz#e17be1f665a92de465926603e44b9f8685630c1d"
   integrity sha512-md4cGoxuT4T4d/HDOXbrUHkTKrp/vp+m3aOA7XXVYwNsUNMK49g3SQicTSeV5GIz/5QVGAeYRAOlyp9OvlgsYA==
 
-next@^13.3.0:
+next@13.3.4, next@^13.3.0:
   version "13.3.4"
   resolved "https://registry.yarnpkg.com/next/-/next-13.3.4.tgz#ce2d96053cabfca092cc829941efe5dfbe015d16"
   integrity sha512-sod7HeokBSvH5QV0KB+pXeLfcXUlLrGnVUXxHpmhilQ+nQYT3Im2O8DswD5e4uqbR8Pvdu9pcWgb1CbXZQZlmQ==
@@ -10249,12 +10247,12 @@ react-day-picker@^8.0.4:
   integrity sha512-W0SPApKIsYq+XCtfGeMYDoU0KbsG3wfkYtlw8l+vZp6KoBXGOlhzBUp4tNx1XiwiOZwhfdGOlj7NGSCKGSlg5Q==
 
 react-dom@18.1.0, react-dom@18.2.0, react-dom@^18.2.0:
-  version "18.1.0"
-  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-18.1.0.tgz#7f6dd84b706408adde05e1df575b3a024d7e8a2f"
-  integrity sha512-fU1Txz7Budmvamp7bshe4Zi32d0ll7ect+ccxNu9FlObT605GOEB8BfO4tmRJ39R5Zj831VCpvQ05QPBW5yb+w==
+  version "18.2.0"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-18.2.0.tgz#22aaf38708db2674ed9ada224ca4aa708d821e3d"
+  integrity sha512-6IMTriUmvsjHUjNtEDudZfuDQUoWXVxKHhlEGSk81n4YFS+r/Kl99wXiwlVXtPBtJenozv2P+hxDsw9eA7Xo6g==
   dependencies:
     loose-envify "^1.1.0"
-    scheduler "^0.22.0"
+    scheduler "^0.23.0"
 
 react-fast-compare@^3.0.1:
   version "3.2.2"
@@ -10362,9 +10360,9 @@ react-transition-group@^4.3.0, react-transition-group@^4.4.1, react-transition-g
     prop-types "^15.6.2"
 
 react@18.1.0, react@18.2.0, react@^18.1.0, react@^18.2.0:
-  version "18.1.0"
-  resolved "https://registry.yarnpkg.com/react/-/react-18.1.0.tgz#6f8620382decb17fdc5cc223a115e2adbf104890"
-  integrity sha512-4oL8ivCz5ZEPyclFQXaNksK3adutVS8l2xzZU0cqEFrE9Sb7fC0EFK5uEk74wIreL1DERyjvsU915j1pcT2uEQ==
+  version "18.2.0"
+  resolved "https://registry.yarnpkg.com/react/-/react-18.2.0.tgz#555bd98592883255fa00de14f1151a917b5d77d5"
+  integrity sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==
   dependencies:
     loose-envify "^1.1.0"
 
@@ -10699,10 +10697,10 @@ safe-regex-test@^1.0.0:
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
 
-scheduler@^0.22.0:
-  version "0.22.0"
-  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.22.0.tgz#83a5d63594edf074add9a7198b1bae76c3db01b8"
-  integrity sha512-6QAm1BgQI88NPYymgGQLCZgvep4FyePDWFpXVK+zNSUgHwlqpJy8VEh8Et0KxTACS4VWwMousBElAZOH9nkkoQ==
+scheduler@^0.23.0:
+  version "0.23.0"
+  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.23.0.tgz#ba8041afc3d30eb206a487b6b384002e4e61fdfe"
+  integrity sha512-CtuThmgHNg7zIZWAXi3AsyIzA3n4xx7aNyjwC2VJldO2LMVDhFK+63xGqq6CsJH4rTAt6/M+N4GhZiDYPx9eUw==
   dependencies:
     loose-envify "^1.1.0"
 
