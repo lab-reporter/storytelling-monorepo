@@ -29,12 +29,13 @@ export function SubtitledAudio({
   hintOnly = false,
 }) {
   const firstCueTextRef = useRef('')
-  const hasBeenInViewRef = useRef(false)
+  const clickPauseIconRef = useRef(false)
+  // const hasBeenInViewRef = useRef(false)
   const audioRef = useRef(null)
   const trackRef = useRef(null)
   const [muted, setMuted] = useMuted(true)
-  const [containerRef, inView] = useInView({
-    rootMargin: '-25% 0% -25% 0%',
+  const [bodyRef, inView] = useInView({
+    rootMargin: hintText ? '-25% 0% -50% 0%' : '-25% 0% -25% 0%',
     threshold: 0,
   })
   const [duration, setDuration] = useState(0)
@@ -176,9 +177,13 @@ export function SubtitledAudio({
       }
       // in the viewport
       if (inView) {
-        const hasBeenInView = hasBeenInViewRef.current
-        if (!hasBeenInView) {
-          hasBeenInViewRef.current = true
+        // const hasBeenInView = hasBeenInViewRef.current
+        // if (!hasBeenInView) {
+        //   hasBeenInViewRef.current = true
+        //   ...
+        // }
+        const clickPauseIcon = clickPauseIconRef.current
+        if (!clickPauseIcon) {
           const startPlayPromise = audio.play()
           setPaused(false)
           startPlayPromise
@@ -231,9 +236,11 @@ export function SubtitledAudio({
           if (paused) {
             audio.play()
             setPaused(false)
+            clickPauseIconRef.current = false
           } else {
             audio.pause()
             setPaused(true)
+            clickPauseIconRef.current = true
           }
           audio.setAttribute('data-played', true)
         }
@@ -272,7 +279,7 @@ export function SubtitledAudio({
   )
 
   return (
-    <>
+    <Container className={className}>
       {hintText && (
         <Hint
           text={hintText}
@@ -292,7 +299,7 @@ export function SubtitledAudio({
         />
       )}
       <PaddingTop />
-      <Container className={className} ref={containerRef}>
+      <Body ref={bodyRef}>
         <Logo />
         {audioJsx}
         <SubtitleAndControls>
@@ -320,12 +327,17 @@ export function SubtitledAudio({
             </Buttons>
           </Controls>
         </SubtitleAndControls>
-      </Container>
-    </>
+      </Body>
+    </Container>
   )
 }
 
 const Container = styled.div`
+  margin-top: 60px;
+  margin-bottom: 60px;
+`
+
+const Body = styled.div`
   /* clear default margin */
   margin: 0;
 
