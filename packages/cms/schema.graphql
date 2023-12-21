@@ -406,6 +406,50 @@ input KaraokeCreateInput {
   muteHint: Boolean
 }
 
+type SubtitledAudio {
+  id: ID!
+  name: String
+  audio: FileFieldOutput
+  webVtt: String
+  embedCode: String
+}
+
+input SubtitledAudioWhereUniqueInput {
+  id: ID
+}
+
+input SubtitledAudioWhereInput {
+  AND: [SubtitledAudioWhereInput!]
+  OR: [SubtitledAudioWhereInput!]
+  NOT: [SubtitledAudioWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  webVtt: StringFilter
+}
+
+input SubtitledAudioOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  webVtt: OrderDirection
+}
+
+input SubtitledAudioUpdateInput {
+  name: String
+  audio: FileFieldInput
+  webVtt: String
+}
+
+input SubtitledAudioUpdateArgs {
+  where: SubtitledAudioWhereUniqueInput!
+  data: SubtitledAudioUpdateInput!
+}
+
+input SubtitledAudioCreateInput {
+  name: String
+  audio: FileFieldInput
+  webVtt: String
+}
+
 type ThreeStoryPoint {
   id: ID!
   name: String
@@ -592,6 +636,12 @@ type Mutation {
   updateKaraokes(data: [KaraokeUpdateArgs!]!): [Karaoke]
   deleteKaraoke(where: KaraokeWhereUniqueInput!): Karaoke
   deleteKaraokes(where: [KaraokeWhereUniqueInput!]!): [Karaoke]
+  createSubtitledAudio(data: SubtitledAudioCreateInput!): SubtitledAudio
+  createSubtitledAudios(data: [SubtitledAudioCreateInput!]!): [SubtitledAudio]
+  updateSubtitledAudio(where: SubtitledAudioWhereUniqueInput!, data: SubtitledAudioUpdateInput!): SubtitledAudio
+  updateSubtitledAudios(data: [SubtitledAudioUpdateArgs!]!): [SubtitledAudio]
+  deleteSubtitledAudio(where: SubtitledAudioWhereUniqueInput!): SubtitledAudio
+  deleteSubtitledAudios(where: [SubtitledAudioWhereUniqueInput!]!): [SubtitledAudio]
   createThreeStoryPoint(data: ThreeStoryPointCreateInput!): ThreeStoryPoint
   createThreeStoryPoints(data: [ThreeStoryPointCreateInput!]!): [ThreeStoryPoint]
   updateThreeStoryPoint(where: ThreeStoryPointWhereUniqueInput!, data: ThreeStoryPointUpdateInput!): ThreeStoryPoint
@@ -649,6 +699,9 @@ type Query {
   karaokes(where: KaraokeWhereInput! = {}, orderBy: [KaraokeOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: KaraokeWhereUniqueInput): [Karaoke!]
   karaoke(where: KaraokeWhereUniqueInput!): Karaoke
   karaokesCount(where: KaraokeWhereInput! = {}): Int
+  subtitledAudios(where: SubtitledAudioWhereInput! = {}, orderBy: [SubtitledAudioOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubtitledAudioWhereUniqueInput): [SubtitledAudio!]
+  subtitledAudio(where: SubtitledAudioWhereUniqueInput!): SubtitledAudio
+  subtitledAudiosCount(where: SubtitledAudioWhereInput! = {}): Int
   threeStoryPoints(where: ThreeStoryPointWhereInput! = {}, orderBy: [ThreeStoryPointOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ThreeStoryPointWhereUniqueInput): [ThreeStoryPoint!]
   threeStoryPoint(where: ThreeStoryPointWhereUniqueInput!): ThreeStoryPoint
   threeStoryPointsCount(where: ThreeStoryPointWhereInput! = {}): Int

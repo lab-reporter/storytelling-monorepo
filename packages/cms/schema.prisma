@@ -74,6 +74,14 @@ model Karaoke {
   muteHint            Boolean @default(false)
 }
 
+model SubtitledAudio {
+  id             Int     @id @default(autoincrement())
+  name           String  @default("")
+  audio_filesize Int?
+  audio_filename String?
+  webVtt         String  @default("WEBVTT\n\n00:00:00.000 --> 00:00:02.500\n我想和14歲的妳說\n\n00:00:03.500 --> 00:00:12.500\n妳經歷了很多事，有些是好事，有些的確不太好，也帶來某種難以言喻的創傷。")
+}
+
 model ThreeStoryPoint {
   id                    Int     @id @default(autoincrement())
   name                  String  @default("")
