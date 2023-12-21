@@ -30,6 +30,13 @@ const listConfigurations = list({
 00:00:03.500 --> 00:00:12.500
 妳經歷了很多事，有些是好事，有些的確不太好，也帶來某種難以言喻的創傷。`,
     }),
+    hintText: text({
+      label: '聲音提示文字',
+      defaultValue: '本文有金句聲音元件，\n聽聽作者想和14歲的自己說什麼？',
+      ui: {
+        displayMode: 'textarea',
+      },
+    }),
     embedCode: virtual({
       label: 'SubtitledAudio embed code',
       field: graphql.field({
@@ -42,6 +49,7 @@ const listConfigurations = list({
             {
               audioUrls: [audioSrc],
               webVtt: item?.webVtt,
+              hintText: item?.hintText,
             },
             embedCodeWebpackAssets
           )

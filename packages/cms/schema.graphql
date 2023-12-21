@@ -411,6 +411,7 @@ type SubtitledAudio {
   name: String
   audio: FileFieldOutput
   webVtt: String
+  hintText: String
   embedCode: String
 }
 
@@ -425,18 +426,21 @@ input SubtitledAudioWhereInput {
   id: IDFilter
   name: StringFilter
   webVtt: StringFilter
+  hintText: StringFilter
 }
 
 input SubtitledAudioOrderByInput {
   id: OrderDirection
   name: OrderDirection
   webVtt: OrderDirection
+  hintText: OrderDirection
 }
 
 input SubtitledAudioUpdateInput {
   name: String
   audio: FileFieldInput
   webVtt: String
+  hintText: String
 }
 
 input SubtitledAudioUpdateArgs {
@@ -448,6 +452,7 @@ input SubtitledAudioCreateInput {
   name: String
   audio: FileFieldInput
   webVtt: String
+  hintText: String
 }
 
 type ThreeStoryPoint {
