@@ -3,13 +3,13 @@ import styled from 'styled-components'
 import { MuteIcon, SoundIcon } from './icons'
 import { mediaQuery } from './utils/media-query'
 
-export function Hint({ className, text, muted, onClick }) {
+export function Hint({ className, text, muted = true, onClick }) {
   return (
     <Container className={className}>
       <HintText>{text}</HintText>
       <Button onClick={onClick}>
         <Icon>{muted ? <MuteIcon /> : <SoundIcon />}</Icon>
-        <span>點擊{muted ? '開啟' : '關閉'}聲音</span>
+        <span>{muted ? '點擊開啟聲音' : '點擊關閉聲音'}</span>
       </Button>
     </Container>
   )
