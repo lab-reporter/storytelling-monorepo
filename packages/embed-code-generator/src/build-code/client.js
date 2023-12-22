@@ -50,6 +50,14 @@ if (window?.[namespace][`react-karaoke${pkgVersion}`]) {
   })
 }
 
+if (window?.[namespace][`react-subtitled-audio${pkgVersion}`]) {
+  import(
+    /* webpackChunkName: "react-subtitled-audio" */ '@story-telling-reporter/react-subtitled-audio'
+  ).then(({ KidsSubtitledAudio }) => {
+    hydrate(namespace, `react-subtitled-audio${pkgVersion}`, KidsSubtitledAudio)
+  })
+}
+
 if (window?.[namespace][`react-three-story-points${pkgVersion}`]) {
   import(
     /* webpackChunkName: "react-three-story-points" */ '@story-telling-reporter/react-three-story-points'

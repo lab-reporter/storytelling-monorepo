@@ -7,6 +7,7 @@ import map from 'lodash/map'
 import serialize from 'serialize-javascript'
 import { ServerStyleSheet } from 'styled-components'
 import { KidsKaraoke } from '@story-telling-reporter/react-karaoke'
+import { KidsSubtitledAudio } from '@story-telling-reporter/react-subtitled-audio'
 import { v4 as uuidv4 } from 'uuid'
 
 const _ = {
@@ -49,6 +50,15 @@ export function buildKaraokeEmbedCode(data, webpackAssets) {
 }
 
 /**
+ *  @param {import('@story-telling-reporter/react-subtitled-audio').SubtitledAduioProps} data
+ *  @param {WebpackAssets} webpackAssets
+ *  @returns string
+ */
+export function buildSubtitledAudioEmbedCode(data, webpackAssets) {
+  return buildEmbeddedCode('react-subtitled-audio', data, webpackAssets)
+}
+
+/**
  *  @param {Object} data
  *  @param {WebpackAssets} webpackAssets
  *  @returns string
@@ -63,7 +73,8 @@ export function buildScrollableVideoEmbedCode(data, webpackAssets) {
  * @param {('react-karaoke'|
  * 'react-three-story-points' |
  * 'react-dual-slides' |
- * 'react-scrollable-video'} pkgName
+ * 'react-scrollable-video' |
+ * 'react-subtitled-audio' } pkgName
  * @param {Object} data - Data for react component
  * @param {Object} webpackAssets - webpack bundles and chunks
  * @param {string[]} webpackAssets.entrypoints - webpack bundles
@@ -85,6 +96,9 @@ export function buildEmbeddedCode(pkgName, data, webpackAssets) {
   switch (pkgName) {
     case 'react-karaoke':
       Component = KidsKaraoke
+      break
+    case 'react-subtitled-audio':
+      Component = KidsSubtitledAudio
       break
     case 'react-dual-slides':
       Component = DualSlides
