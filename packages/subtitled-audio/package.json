@@ -1,6 +1,6 @@
 {
   "name": "@story-telling-reporter/react-subtitled-audio",
-  "version": "0.0.1-alpha.3",
+  "version": "0.0.1",
   "description": "",
   "main": "lib/index.js",
   "scripts": {
