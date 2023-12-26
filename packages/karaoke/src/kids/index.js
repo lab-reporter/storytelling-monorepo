@@ -39,7 +39,10 @@ export function Karaoke({
   const [duration, setDuration] = useState(defaultDuration)
   const [currentTime, setCurrentTime] = useState(0)
   const [ended, setEnded] = useState(false)
+  const [paused, setPaused] = useState(false)
+  const [hasBeenPlayed, setHasBeenPlayed] = useState(false)
 
+  // add event listener to load audio's duration
   useEffect(() => {
     const audio = audioRef.current
     const onLoadedMetadata = () => {
@@ -69,12 +72,8 @@ export function Karaoke({
     }
   }, [])
 
-  // listen audio's `timeupdate` event to update progress bar
+  // listen audio's `timeupdate` and  `ended` events
   useEffect(() => {
-    if (duration === 0) {
-      return
-    }
-
     const audio = audioRef.current
     const handleEnded = () => {
       setEnded(true)
@@ -93,8 +92,9 @@ export function Karaoke({
         audio.removeEventListener('ended', handleEnded)
       }
     }
-  }, [duration, currentTime])
+  }, [])
 
+  // set audio muted attribute according to browser muted state
   useEffect(() => {
     const audio = audioRef.current
     if (!audio) {
@@ -104,14 +104,16 @@ export function Karaoke({
     audio.muted = muted
   }, [muted])
 
-  useEffect(
-    () => {
-      const audio = audioRef.current
-      if (!audio) {
-        return
-      }
-      // in the viewport
-      if (inView) {
+  // pause audio when `Karaoke` is leaving the viewport
+  // and play audio when `Karaoke` is entering the viewport for the first time.
+  useEffect(() => {
+    const audio = audioRef.current
+    if (!audio) {
+      return
+    }
+    // in the viewport
+    if (inView) {
+      if (!hasBeenPlayed) {
         const startPlayPromise = audio.play()
         startPlayPromise
           // play successfully
@@ -124,52 +126,56 @@ export function Karaoke({
             console.log('[react-karaoke] unable to play audio')
             console.log('[react-karaoke] error: ', error)
           })
-      } else {
-        // leave the viewport
-        audio.pause()
+        setHasBeenPlayed(true)
+        setPaused(false)
       }
-    },
-    // `inView` is used to avoid from infinite re-rendering.
-    // `muted` is avoid state not changed due to closure.
-    [inView]
-  )
+    } else {
+      // leave the viewport
+      audio.pause()
+      setPaused(true)
+    }
+  }, [inView, paused, hasBeenPlayed])
 
-  const audioBtJsx = ended ? (
-    <AudioBt
-      onClick={() => {
-        const audio = audioRef.current
-        if (audio) {
-          setCurrentTime(0)
-          setEnded(false)
-          audio.currentTime = 0
-          audio.play()
-          audio.setAttribute('data-played', true)
-        }
-      }}
-    >
-      <PlayIcon />
-    </AudioBt>
-  ) : (
-    <AudioBt
-      onClick={() => {
-        const audio = audioRef.current
-        if (audio) {
-          if (muted) {
-            audio.muted = false
-            setMuted(false)
-          } else {
-            audio.muted = true
-            setMuted(true)
+  const audioBtJsx =
+    (hasBeenPlayed && paused) || ended ? (
+      <AudioBt
+        onClick={() => {
+          const audio = audioRef.current
+          if (audio) {
+            if (ended) {
+              setEnded(false)
+              setCurrentTime(0)
+              audio.currentTime = 0
+            }
+            audio.play()
+            audio.setAttribute('data-played', true)
+            setPaused(false)
           }
-          audio.setAttribute('data-played', true)
-        }
+        }}
+      >
+        <PlayIcon />
+      </AudioBt>
+    ) : (
+      <AudioBt
+        onClick={() => {
+          const audio = audioRef.current
+          if (audio) {
+            if (muted) {
+              audio.muted = false
+              setMuted(false)
+            } else {
+              audio.muted = true
+              setMuted(true)
+            }
+            audio.setAttribute('data-played', true)
+          }
 
-        safariWorkaround()
-      }}
-    >
-      {muted ? <MuteIcon /> : <SoundIcon />}
-    </AudioBt>
-  )
+          safariWorkaround()
+        }}
+      >
+        {muted ? <MuteIcon /> : <SoundIcon />}
+      </AudioBt>
+    )
 
   if (hintOnly) {
     return <Hint />
@@ -215,9 +221,6 @@ export function Karaoke({
             ))}
           </video>
           <Quote
-            key={
-              `quote_in_view_${inView}_${duration}` /** use key to force re-rendering */
-            }
             textArr={quoteArr}
             play={inView}
             currentCharIdx={currentCharIdx}
