@@ -3,54 +3,11 @@ import { mediaQuery } from './utils/media-query'
 import styled from 'styled-components'
 
 /**
- *  @callback onCurrentTimeUpdate
- *  @param {number} currentTime - how long the shadow animation runs in seconds
- *  @return void
- */
-
-/**
  *  @param {Object} opts
- *  @param {boolean} [opts.play] - whether to play the shadow animation or not
- *  @param {number} [opts.duration] - animation duration for entire quote text. Unit is second.
  *  @param {string} [opts.className]
  *  @param {string[]} opts.textArr - quote text
- *  @param {onCurrentTimeUpdate} [opts.onCurrentTimeUpdate] -
  */
-export default function QuoteShadow({
-  className,
-  textArr,
-  duration,
-  play = false,
-  onCurrentTimeUpdate = () => {
-    console.log('`onCurrentTimeUpdate` is not provided')
-  },
-}) {
-  const [currentCharIndex, setCurrentCharIndex] = useState(0)
-  const textLen = textArr.join('').length
-
-  let durationPerChar = 300 // ms, default value
-  if (duration) {
-    durationPerChar = (duration / textLen) * 1000 // ms
-  }
-
-  useEffect(() => {
-    if (currentCharIndex < textLen && play) {
-      setTimeout(() => {
-        setCurrentCharIndex((currentCharIndex) => currentCharIndex + 1)
-        onCurrentTimeUpdate((currentCharIndex * durationPerChar) / 1000) // in seconds
-      }, durationPerChar)
-    }
-
-    // The following condition is to clean up the previous setTimeout.
-    // Since setTimeout will be executed asynchrously, it may update
-    // `currentTime` unnecessarily.
-    if (currentCharIndex === 0 && !play) {
-      setTimeout(() => {
-        onCurrentTimeUpdate(0)
-      }, durationPerChar)
-    }
-  }, [currentCharIndex, textLen, play])
-
+export default function QuoteShadow({ className, textArr, currentCharIdx }) {
   let charOffset = 0
   const charArrJsx = textArr.map((t) => {
     const chars = Array.from(t)
@@ -59,7 +16,7 @@ export default function QuoteShadow({
         return (
           <Char
             key={`char_${cIndex}`}
-            isTransitioned={cIndex + charOffset < currentCharIndex}
+            isTransitioned={cIndex + charOffset < currentCharIdx}
           >
             {char}
           </Char>
