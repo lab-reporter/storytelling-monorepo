@@ -38,10 +38,7 @@ export function Karaoke({
     threshold: 0,
   })
 
-  const [audioOpts, setAudioOpts] = useState({
-    duration: defaultDuration,
-    ended: false,
-  })
+  const [duration, setDuration] = useState(defaultDuration)
 
   useEffect(() => {
     const audio = audioRef.current
@@ -50,11 +47,7 @@ export function Karaoke({
         '[react-karaoke] `onLoadedMetadata` event invoked. audio duration:',
         audio.duration
       )
-      setAudioOpts((opts) => {
-        return Object.assign({}, opts, {
-          duration: audio.duration || defaultDuration,
-        })
-      })
+      setDuration(audio.duration)
     }
 
     if (audio) {
@@ -63,11 +56,7 @@ export function Karaoke({
           '[react-karaoke] set duration without `onLoadedMetadata` event triggered. duration: ',
           audio.duration
         )
-        setAudioOpts((opts) => {
-          return Object.assign({}, opts, {
-            duration: audio.duration || defaultDuration,
-          })
-        })
+        setDuration(audio.duration)
         return
       }
 
@@ -201,11 +190,11 @@ export function Karaoke({
            */}
           <Quote
             key={
-              `quote_in_view_${inView}_${audioOpts.duration}` /** use key to force re-rendering */
+              `quote_in_view_${inView}_${duration}` /** use key to force re-rendering */
             }
             textArr={quoteArr}
             play={inView}
-            duration={audioOpts.duration}
+            duration={duration}
             onCurrentTimeUpdate={(_currentTime) => {
               currentTime.current = _currentTime
             }}
