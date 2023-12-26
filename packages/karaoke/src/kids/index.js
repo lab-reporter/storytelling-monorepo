@@ -2,7 +2,7 @@ import React/* eslint-disable-line */, { useEffect, useRef, useState } from 'rea
 import Quote from './quote'
 import styled from 'styled-components'
 import { Hint, safariWorkaround, useMuted } from './hint'
-import { LogoIcon, MuteIcon, SoundIcon } from './icons'
+import { LogoIcon, MuteIcon, PlayIcon, SoundIcon } from './icons'
 import { mediaQuery } from './utils/media-query'
 import { useInView } from 'react-intersection-observer'
 
@@ -31,14 +31,14 @@ export function Karaoke({
 }) {
   const defaultDuration = 10 // second
   const audioRef = useRef(null)
-  const currentTime = useRef(0)
   const [muted, setMuted] = useMuted(true)
   const [containerRef, inView] = useInView({
     rootMargin: '-25% 0% -25% 0%',
     threshold: 0,
   })
-
   const [duration, setDuration] = useState(defaultDuration)
+  const [currentTime, setCurrentTime] = useState(0)
+  const [ended, setEnded] = useState(false)
 
   useEffect(() => {
     const audio = audioRef.current
@@ -69,6 +69,32 @@ export function Karaoke({
     }
   }, [])
 
+  // listen audio's `timeupdate` event to update progress bar
+  useEffect(() => {
+    if (duration === 0) {
+      return
+    }
+
+    const audio = audioRef.current
+    const handleEnded = () => {
+      setEnded(true)
+    }
+    const handleTimeUpdate = () => {
+      const currentTime = audio.currentTime
+      setCurrentTime(currentTime)
+    }
+    if (audio) {
+      audio.addEventListener('timeupdate', handleTimeUpdate)
+      audio.addEventListener('ended', handleEnded)
+    }
+    return () => {
+      if (audio) {
+        audio.removeEventListener('timeupdate', handleTimeUpdate)
+        audio.removeEventListener('ended', handleEnded)
+      }
+    }
+  }, [duration, currentTime])
+
   useEffect(() => {
     const audio = audioRef.current
     if (!audio) {
@@ -86,8 +112,6 @@ export function Karaoke({
       }
       // in the viewport
       if (inView) {
-        // start with `currentTime` to catch up `Quote` animation
-        audio.currentTime = currentTime.current
         const startPlayPromise = audio.play()
         startPlayPromise
           // play successfully
@@ -103,8 +127,6 @@ export function Karaoke({
       } else {
         // leave the viewport
         audio.pause()
-        // reset currentTime
-        currentTime.current = 0
       }
     },
     // `inView` is used to avoid from infinite re-rendering.
@@ -112,18 +134,31 @@ export function Karaoke({
     [inView]
   )
 
-  const audioBtJsx = (
+  const audioBtJsx = ended ? (
+    <AudioBt
+      onClick={() => {
+        const audio = audioRef.current
+        if (audio) {
+          setCurrentTime(0)
+          setEnded(false)
+          audio.currentTime = 0
+          audio.play()
+          audio.setAttribute('data-played', true)
+        }
+      }}
+    >
+      <PlayIcon />
+    </AudioBt>
+  ) : (
     <AudioBt
       onClick={() => {
         const audio = audioRef.current
         if (audio) {
           if (muted) {
-            audio.currentTime = currentTime.current
             audio.muted = false
-            audio.play()
             setMuted(false)
           } else {
-            audio.pause()
+            audio.muted = true
             setMuted(true)
           }
           audio.setAttribute('data-played', true)
@@ -139,6 +174,10 @@ export function Karaoke({
   if (hintOnly) {
     return <Hint />
   }
+
+  const textLen = quoteArr.join('').length
+  const durationPerChar = duration / textLen // sec
+  const currentCharIdx = Math.floor(currentTime / durationPerChar)
 
   return (
     <>
@@ -175,29 +214,13 @@ export function Karaoke({
               <source key={`audio_source_${index}`} src={url}></source>
             ))}
           </video>
-          {/**
-           *  Even though we set `audio.muted=true` before auto playing audio,
-           *  it still may encounter error to autoplay audio.
-           *  The error message is 'error:  DOMException: play() failed because the user didn't interact with the document first. https://goo.gl/xX8pDD'
-           *  It seems that Chrome does not follow the autoplay policy which is designed by Google itself.
-           *  The autoplay policy says that if we want to autoplay, and then we need to make audio muted.
-           *  However, in our case, setting `audio.muted=true` is not working at all.
-           *
-           *  Since autoplay may fail, we could not listen to `timeupdate` event to get the `currentTime`,
-           *  and pass `currentTime` to `Quote` component.
-           *
-           *  Therefore, we let `Quote` to roughly calculate the `currentTime` and pass it back via `onCurrentTimeUpdate` prop.
-           */}
           <Quote
             key={
               `quote_in_view_${inView}_${duration}` /** use key to force re-rendering */
             }
             textArr={quoteArr}
             play={inView}
-            duration={duration}
-            onCurrentTimeUpdate={(_currentTime) => {
-              currentTime.current = _currentTime
-            }}
+            currentCharIdx={currentCharIdx}
           />
           {quoteBy ? <QuoteBy>{quoteBy}</QuoteBy> : null}
           {audioBtJsx}
