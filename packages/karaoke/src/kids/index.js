@@ -157,16 +157,35 @@ export function Karaoke({
       <OuterBox>
         <QuoteContainer className={className} ref={containerRef}>
           <Logo />
-          <audio
+          {/**
+           *  There are two reasons to use `<video>` tag, instead of `<audio>` tag, for workaround.
+           *
+           *  1. <audio> elements can't have subtitles or captions associated with them in the same way that <video> elements can.
+           *  See [WebVTT and Audio](https://www.iandevlin.com/blog/2015/12/html5/webvtt-and-audio/) by Ian Devlin
+           *  for some useful information and workarounds.
+           *
+           *  2. Even though we set `audio.muted=true` before auto playing audio,
+           *  it still may encounter error to autoplay audio.
+           *  The error message is 'error:  DOMException: play() failed because the user didn't interact with the document first. https://goo.gl/xX8pDD'.
+           *  It seems that Chrome does not follow the autoplay policy which is designed by Google itself.
+           *  The autoplay policy says that if we want to autoplay, and then we need to make audio muted.
+           *  But, in our case, setting `audio.muted=true` is not working at all.
+           *  However, audio can be autoplayed by setting `video.muted=true` instead.
+           */}
+          <video
             ref={audioRef}
             preload={preload}
+            data-twreporter-story-telling
             data-react-karaoke
+            data-autoplay={true}
             data-played={false}
+            playsInline
+            style={{ display: 'none' }}
           >
             {audioUrls.map((url, index) => (
               <source key={`audio_source_${index}`} src={url}></source>
             ))}
-          </audio>
+          </video>
           {/**
            *  Even though we set `audio.muted=true` before auto playing audio,
            *  it still may encounter error to autoplay audio.
