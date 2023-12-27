@@ -60,9 +60,8 @@ root.render(
     <MockContentBlock />
     {mocks.map((mock, index) => {
       return (
-        <>
+        <div key={index}>
           <div
-            key={index}
             style={{
               display: 'flex',
               justifyContent: 'center',
@@ -78,7 +77,7 @@ root.render(
             />
           </div>
           <MockContentBlock />
-        </>
+        </div>
       )
     })}
   </div>
