@@ -220,11 +220,7 @@ export function Karaoke({
               <source key={`audio_source_${index}`} src={url}></source>
             ))}
           </video>
-          <Quote
-            textArr={quoteArr}
-            play={inView}
-            currentCharIdx={currentCharIdx}
-          />
+          <Quote textArr={quoteArr} currentCharIdx={currentCharIdx} />
           {quoteBy ? <QuoteBy>{quoteBy}</QuoteBy> : null}
           {audioBtJsx}
         </QuoteContainer>
