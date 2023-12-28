@@ -1,4 +1,4 @@
-import React/* eslint-disable-line */, { useEffect, useRef, useState } from 'react'
+import React/* eslint-disable-line */, { useEffect, useMemo, useRef, useState } from 'react'
 import Quote from './quote'
 import styled from 'styled-components'
 import { Hint, safariWorkaround, useMuted } from './hint'
@@ -8,10 +8,10 @@ import { useInView } from 'react-intersection-observer'
 
 /**
  *  @typedef {Object} KaraokeProps
- *  @property {string[]} audioUrls,
+ *  @property {string[]} audioUrls
+ *  @property {string} webVtt - subtitles in WebVTT format
  *  @property {string} [className]
  *  @property {string} [preload='auto'] - 'auto', 'none' or 'metadata'. `preload` attribute of `audio` tag.
- *  @property {string[]} quoteArr - quote text
  *  @property {string} [quoteBy]
  *  @property {boolean} [hint=false] - render `Karaoke` along with `Hint` component
  *  @property {boolean} [hintOnly=false] - render `Hint` component only, without `Karaoke`
@@ -22,55 +22,72 @@ import { useInView } from 'react-intersection-observer'
  */
 export function Karaoke({
   audioUrls,
+  webVtt,
   className,
   preload = 'auto',
-  quoteArr,
   quoteBy,
   hint = false,
   hintOnly = false,
 }) {
-  const defaultDuration = 10 // second
   const audioRef = useRef(null)
+  const trackRef = useRef(null)
   const [muted, setMuted] = useMuted(true)
   const [containerRef, inView] = useInView({
     rootMargin: '-25% 0% -25% 0%',
     threshold: 0,
   })
-  const [duration, setDuration] = useState(defaultDuration)
   const [currentTime, setCurrentTime] = useState(0)
   const [ended, setEnded] = useState(false)
   const [paused, setPaused] = useState(false)
   const [hasBeenPlayed, setHasBeenPlayed] = useState(false)
+  const [cues, setCues] = useState([])
+  const [activeCue, setActiveCue] = useState(null)
+  const [webVttBlob, setWebVttBlob] = useState(null)
 
-  // add event listener to load audio's duration
+  // Due to `<track>` tag needs `src` attribute to load vtt file.
+  // So, we create blob url for it.
   useEffect(() => {
-    const audio = audioRef.current
-    const onLoadedMetadata = () => {
-      console.log(
-        '[react-karaoke] `onLoadedMetadata` event invoked. audio duration:',
-        audio.duration
-      )
-      setDuration(audio.duration)
-    }
+    const vttBlob = new Blob([webVtt], {
+      type: 'text/plain',
+    })
+    setWebVttBlob(URL.createObjectURL(vttBlob))
+  }, [])
 
-    if (audio) {
-      if (audio.readyState > 0) {
-        console.log(
-          '[react-karaoke] set duration without `onLoadedMetadata` event triggered. duration: ',
-          audio.duration
-        )
-        setDuration(audio.duration)
-        return
+  // listen track's `cuechange` event to load active cue
+  useEffect(() => {
+    const track = trackRef.current
+    const handleCueChange = (event) => {
+      const cuesList = event.target?.track?.cues || []
+
+      if (cues.length !== cuesList.length) {
+        console.log("[react-subtitled-audio] track's cues list: ", cuesList)
+        const trackCues = []
+        for (const cue of cuesList) {
+          trackCues.push(cue)
+        }
+        console.log('trackCues:', trackCues)
+        setCues(trackCues)
       }
 
-      audio.addEventListener('loadedmetadata', onLoadedMetadata)
+      const activeCue = event.target?.track?.activeCues?.[0]
+      if (activeCue) {
+        console.log(
+          '[react-subtitled-audio] cue changed. active cue: ',
+          activeCue
+        )
+        setActiveCue(activeCue)
+      }
+    }
+    if (track) {
+      track.addEventListener('cuechange', handleCueChange)
     }
 
-    // clear event listeners
     return () => {
-      audio.removeEventListener('loadedmetadata', onLoadedMetadata)
+      if (track) {
+        track.removeEventListener('cuechange', handleCueChange)
+      }
     }
-  }, [])
+  }, [cues, activeCue])
 
   // listen audio's `timeupdate` and  `ended` events
   useEffect(() => {
@@ -92,7 +109,7 @@ export function Karaoke({
         audio.removeEventListener('ended', handleEnded)
       }
     }
-  }, [])
+  }, [currentTime])
 
   // set audio muted attribute according to browser muted state
   useEffect(() => {
@@ -177,13 +194,26 @@ export function Karaoke({
       </AudioBt>
     )
 
+  const textArr = useMemo(() => getTextArrayFromCues(cues), [cues])
+  let currentCharIdx = useMemo(
+    () => getLastEndCharIdx(cues, activeCue),
+    [cues, activeCue]
+  )
+
+  if (activeCue) {
+    const cText = activeCue.text
+    const cDuration = activeCue.endTime - activeCue.startTime
+    const durationPerChar = cDuration / cText.length
+    if (currentTime > activeCue.startTime) {
+      currentCharIdx =
+        currentCharIdx +
+        Math.floor((currentTime - activeCue.startTime) / durationPerChar)
+    }
+  }
+
   if (hintOnly) {
     return <Hint />
   }
-
-  const textLen = quoteArr.join('').length
-  const durationPerChar = duration / textLen // sec
-  const currentCharIdx = Math.floor(currentTime / durationPerChar)
 
   return (
     <>
@@ -216,11 +246,17 @@ export function Karaoke({
             playsInline
             style={{ display: 'none' }}
           >
+            <track
+              ref={trackRef}
+              default
+              kind="metadata"
+              src={webVttBlob}
+            ></track>
             {audioUrls.map((url, index) => (
               <source key={`audio_source_${index}`} src={url}></source>
             ))}
           </video>
-          <Quote textArr={quoteArr} currentCharIdx={currentCharIdx} />
+          <Quote textArr={textArr} currentCharIdx={currentCharIdx} />
           {quoteBy ? <QuoteBy>{quoteBy}</QuoteBy> : null}
           {audioBtJsx}
         </QuoteContainer>
@@ -296,3 +332,37 @@ const Logo = styled(LogoIcon)`
   transform: translate(-50%, -50%);
   width: 100px;
 `
+
+function getTextArrayFromCues(cues) {
+  if (!Array.isArray(cues)) {
+    return []
+  }
+  const textArr = cues
+    .map((cue) => cue?.text)
+    ?.filter((txt) => typeof txt === 'string')
+  return textArr
+}
+
+function getLastEndCharIdx(cues, activeCue) {
+  if (!Array.isArray(cues) || !activeCue) {
+    return 0
+  }
+
+  const previousCues = getCuesBeforeActiveCue(cues, activeCue)
+  const lastEndCharIdx = previousCues
+    .map((cue) => cue.text)
+    .filter((txt) => typeof txt === 'string')
+    .join('').length
+  return lastEndCharIdx
+}
+
+function getCuesBeforeActiveCue(cues, activeCue) {
+  if (!Array.isArray(cues) || !activeCue) {
+    return []
+  }
+
+  const cueIdx = cues.findIndex(
+    (cue) => cue?.startTime === activeCue?.startTime
+  )
+  return cues.slice(0, cueIdx)
+}
