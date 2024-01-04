@@ -31,6 +31,15 @@ export default function QuoteShadow({ className, textArr, currentCharIdx }) {
 }
 
 const Char = styled.span`
+  transition: color 0.5s linear;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1.5;
+
+  ${mediaQuery.smallOnly} {
+    font-size: 20px;
+  }
+
   ${
     /**
      *  @param {Object} props
@@ -39,14 +48,6 @@ const Char = styled.span`
     (props) => {
       return `
       color: ${props.isTransitioned ? '#27B5F7' : '#232323'};
-      transition: color 0.5s linear;
-      font-size: 24px;
-      font-weight: 400;
-      line-height: 1.5;
-
-      ${mediaQuery.smallOnly} {
-        font-size: 20px;
-      }
     `
     }
   }

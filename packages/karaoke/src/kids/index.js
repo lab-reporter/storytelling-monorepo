@@ -56,7 +56,7 @@ export function Karaoke({
   // listen track's `cuechange` event to load active cue
   useEffect(() => {
     const track = trackRef.current
-    const handleCueChange = (event) => {
+    const handleLoad = (event) => {
       const cuesList = event.target?.track?.cues || []
 
       if (cues.length !== cuesList.length) {
@@ -65,10 +65,11 @@ export function Karaoke({
         for (const cue of cuesList) {
           trackCues.push(cue)
         }
-        console.log('trackCues:', trackCues)
         setCues(trackCues)
       }
+    }
 
+    const handleCueChange = (event) => {
       const activeCue = event.target?.track?.activeCues?.[0]
       if (activeCue) {
         console.log(
@@ -80,11 +81,13 @@ export function Karaoke({
     }
     if (track) {
       track.addEventListener('cuechange', handleCueChange)
+      track.addEventListener('load', handleLoad)
     }
 
     return () => {
       if (track) {
         track.removeEventListener('cuechange', handleCueChange)
+        track.removeEventListener('load', handleLoad)
       }
     }
   }, [cues, activeCue])
@@ -145,6 +148,7 @@ export function Karaoke({
           })
         setHasBeenPlayed(true)
         setPaused(false)
+        audio.setAttribute('data-played', true)
       }
     } else {
       // leave the viewport

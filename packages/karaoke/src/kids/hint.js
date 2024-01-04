@@ -16,13 +16,14 @@ import { useInView } from 'react-intersection-observer'
 export function useMuted(initialValue = true) {
   const [muted, _setMuted] = useState(initialValue)
   useEffect(() => {
-    const _muted = window?.['__story_telling_react_karaoke']?.muted
+    const _muted =
+      window?.['__twreporter_story_telling_muted_controller']?.muted
     if (typeof _muted === 'boolean') {
       _setMuted(_muted)
     }
   })
   const setMuted = (_muted) => {
-    window['__story_telling_react_karaoke'] = {
+    window['__twreporter_story_telling_muted_controller'] = {
       muted: _muted,
     }
     _setMuted(_muted)
@@ -123,10 +124,10 @@ const HintText = styled.p`
  *  After this event finishes, Safari browser won't block `audio.play()` anymore.
  */
 export const safariWorkaround = () => {
-  const otherAudios = document.querySelectorAll(
-    'audio[data-react-karaoke][data-played=false]'
+  const otherMediaElements = document.querySelectorAll(
+    'audio[data-autoplay="true"][data-played="false"],video[data-autoplay="true"][data-played="false"]'
   )
-  otherAudios.forEach(
+  otherMediaElements.forEach(
     (
       /**
        *  @type HTMLAudioElement
