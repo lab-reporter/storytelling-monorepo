@@ -1,6 +1,6 @@
 import React/* eslint-disable-line */, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { MuteIcon, SoundIcon } from './icons'
+import { MuteIcon, SoundIcon, SeparationLine } from './icons'
 import { mediaQuery } from './utils/media-query'
 import { useInView } from 'react-intersection-observer'
 
@@ -16,13 +16,14 @@ import { useInView } from 'react-intersection-observer'
 export function useMuted(initialValue = true) {
   const [muted, _setMuted] = useState(initialValue)
   useEffect(() => {
-    const _muted = window?.['__story_telling_react_karaoke']?.muted
+    const _muted =
+      window?.['__twreporter_story_telling_muted_controller']?.muted
     if (typeof _muted === 'boolean') {
       _setMuted(_muted)
     }
   })
   const setMuted = (_muted) => {
-    window['__story_telling_react_karaoke'] = {
+    window['__twreporter_story_telling_muted_controller'] = {
       muted: _muted,
     }
     _setMuted(_muted)
@@ -55,6 +56,9 @@ export function Hint({ className }) {
         {muted ? <span>開啟聲音</span> : <span>關閉聲音</span>}
         {muted ? <MuteIcon /> : <SoundIcon />}
       </Button>
+      <SeparationLineContainer>
+        <SeparationLine />
+      </SeparationLineContainer>
     </Container>
   )
 }
@@ -133,6 +137,11 @@ const HintText = styled.p`
   }
 `
 
+const SeparationLineContainer = styled.div`
+  width: 272px;
+  margin-top: 30px;
+`
+
 /**
  *  The following codes are WORKAROUND for Safari.
  *  Problem to workaround:
@@ -149,7 +158,6 @@ export const safariWorkaround = () => {
   const otherMediaElements = document.querySelectorAll(
     'audio[data-autoplay="true"][data-played="false"],video[data-autoplay="true"][data-played="false"]'
   )
-  console.log('otherMediaElements:', otherMediaElements)
   otherMediaElements.forEach(
     (
       /**
