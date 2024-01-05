@@ -6,7 +6,7 @@ import get from 'lodash/get.js'
 import map from 'lodash/map'
 import serialize from 'serialize-javascript'
 import { ServerStyleSheet } from 'styled-components'
-import { KidsKaraoke } from '@story-telling-reporter/react-karaoke'
+import { Karaoke } from '@story-telling-reporter/react-karaoke'
 import { KidsSubtitledAudio } from '@story-telling-reporter/react-subtitled-audio'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -95,7 +95,7 @@ export function buildEmbeddedCode(pkgName, data, webpackAssets) {
   let skipServerSideRendering = false
   switch (pkgName) {
     case 'react-karaoke':
-      Component = KidsKaraoke
+      Component = Karaoke
       break
     case 'react-subtitled-audio':
       Component = KidsSubtitledAudio
