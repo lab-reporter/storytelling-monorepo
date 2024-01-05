@@ -312,12 +312,19 @@ const QuoteBy = styled.div`
 const Container = styled.blockquote`
   /* clear default margin */
   margin: 0;
+  margin-left: auto;
+  margin-right: auto;
 
   * {
     box-sizing: border-box;
   }
 
-  width: 100%;
+  width: calc(100vw - 68px);
+
+  ${mediaQuery.small} {
+    max-width: 453px;
+  }
+
   ${mediaQuery.large} {
     width: 580px;
   }
@@ -326,11 +333,13 @@ const Container = styled.blockquote`
   align-items: flex-start;
   justify-content: center;
   gap: 8px;
+
+  ${AudioBt} {
+    flex-shrink: 0;
+  }
 `
 
 const QuoteContainer = styled.div`
-  width: calc(272 / 320 * 100%);
-
   ${mediaQuery.large} {
     width: 472px;
   }
