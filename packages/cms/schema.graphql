@@ -341,12 +341,11 @@ input PhotoCreateInput {
 type Karaoke {
   id: ID!
   name: String
+  webVtt: String
   quote: String
   audio: FileFieldOutput
-  imageFile: ImageFieldOutput
-  audioLink: String
-  imageLink: String
   muteHint: Boolean
+  theme: String
   embedCode: String
   hintEmbedCode: String
 }
@@ -361,10 +360,10 @@ input KaraokeWhereInput {
   NOT: [KaraokeWhereInput!]
   id: IDFilter
   name: StringFilter
+  webVtt: StringFilter
   quote: StringFilter
-  audioLink: StringFilter
-  imageLink: StringFilter
   muteHint: BooleanFilter
+  theme: StringNullableFilter
 }
 
 input BooleanFilter {
@@ -372,23 +371,51 @@ input BooleanFilter {
   not: BooleanFilter
 }
 
+input StringNullableFilter {
+  equals: String
+  in: [String!]
+  notIn: [String!]
+  lt: String
+  lte: String
+  gt: String
+  gte: String
+  contains: String
+  startsWith: String
+  endsWith: String
+  mode: QueryMode
+  not: NestedStringNullableFilter
+}
+
+input NestedStringNullableFilter {
+  equals: String
+  in: [String!]
+  notIn: [String!]
+  lt: String
+  lte: String
+  gt: String
+  gte: String
+  contains: String
+  startsWith: String
+  endsWith: String
+  not: NestedStringNullableFilter
+}
+
 input KaraokeOrderByInput {
   id: OrderDirection
   name: OrderDirection
+  webVtt: OrderDirection
   quote: OrderDirection
-  audioLink: OrderDirection
-  imageLink: OrderDirection
   muteHint: OrderDirection
+  theme: OrderDirection
 }
 
 input KaraokeUpdateInput {
   name: String
+  webVtt: String
   quote: String
   audio: FileFieldInput
-  imageFile: ImageFieldInput
-  audioLink: String
-  imageLink: String
   muteHint: Boolean
+  theme: String
 }
 
 input KaraokeUpdateArgs {
@@ -398,12 +425,11 @@ input KaraokeUpdateArgs {
 
 input KaraokeCreateInput {
   name: String
+  webVtt: String
   quote: String
   audio: FileFieldInput
-  imageFile: ImageFieldInput
-  audioLink: String
-  imageLink: String
   muteHint: Boolean
+  theme: String
 }
 
 type SubtitledAudio {
