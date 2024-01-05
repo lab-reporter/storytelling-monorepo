@@ -2,7 +2,7 @@
 import React from 'react' // eslint-disable-line
 import styled from 'styled-components'
 import { createRoot } from 'react-dom/client'
-import { KidsKaraoke } from '../src/index'
+import { KidsKaraoke, TwreporterKaraoke } from '../src/index'
 
 const reactRootId = 'root'
 const container = document.getElementById(reactRootId)
@@ -11,38 +11,19 @@ const root = createRoot(container)
 const mocks = [
   {
     audioUrls: ['./audio-twreporter-1.mp3'],
-    quoteArr: [
-      '演員，我覺得他就是一個生活的體驗者，',
-      '然後生命的實踐家；',
-      '期許自己啦，可以這麼做。',
-    ],
+    webVtt: `WEBVTT
+
+00:00:00.000 --> 00:00:04.500
+演員，我覺得他就是一個生活的體驗者,
+
+00:00:04.600 --> 00:00:07.500
+然後生命的實踐家;
+
+00:00:08.000 --> 00:00:11.000
+期許自己啦，可以這麼做。
+`,
     quoteBy:
       '──史賓塞伯爵（Charles Spencer, 9th Earl Spencer），黛安娜王妃（Diana, Princess of Wales）之弟',
-    imgSrc: '',
-  },
-  {
-    audioUrls: ['./audio-twreporter-2.mp3'],
-    quoteArr: [
-      '不可能讓海關知道我是去捐卵的，',
-      '這個是不行的，這也是仲介覺得不可以提的，',
-      '因為這個是不符合那個簽證嘛。',
-      '所以我就是當做去旅遊，的確也真的蠻像在旅遊的。',
-    ],
-    imgSrc: '',
-  },
-  {
-    audioUrls: ['./audio-twreporter-3.mp3'],
-    quoteArr: [
-      '我們不像香港，',
-      '這幾10年，我們完全沒有接受過社會運動的教育，',
-      '不知道怎麼走上街，怎麼整理我們的訴求，也完全沒有人會組織。',
-      '站在現場的很多都是平凡人，不敢跟著喊激進的口號，',
-      '會怕，不敢喊習近平，但只要有人喊了習近平，就會有很多人跟著喊下台。',
-      '人群中，也有很多完全不知道發生了什麼、不相信警察會如此暴力的路人。',
-      '在我說話的現在，每一個有可能發生抗議的位置，',
-      '都部署了超級多的警察，還會隨機查路人的手機，',
-      '所以我更不相信這些抗爭能帶來實際的結果，但是走出第一步是每個人都要做的事情。',
-    ],
     imgSrc: '',
   },
 ]
@@ -56,7 +37,7 @@ const MockContentBlock = styled.div`
 
 root.render(
   <div>
-    <KidsKaraoke hintOnly={true} />
+    <TwreporterKaraoke hintOnly={true} />
     <MockContentBlock />
     {mocks.map((mock, index) => {
       return (
@@ -67,11 +48,27 @@ root.render(
               justifyContent: 'center',
             }}
           >
+            <TwreporterKaraoke
+              key={index}
+              muteHint={index === 0}
+              audioUrls={mock.audioUrls}
+              webVtt={mock.webVtt}
+              imgSrc={mock.imgSrc}
+              quoteBy={mock.quoteBy}
+            />
+          </div>
+          <MockContentBlock />
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+            }}
+          >
             <KidsKaraoke
               key={index}
               muteHint={index === 0}
               audioUrls={mock.audioUrls}
-              quoteArr={mock.quoteArr}
+              webVtt={mock.webVtt}
               imgSrc={mock.imgSrc}
               quoteBy={mock.quoteBy}
             />
