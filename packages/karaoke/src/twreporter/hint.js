@@ -138,8 +138,12 @@ const HintText = styled.p`
 `
 
 const SeparationLineContainer = styled.div`
-  width: 272px;
+  width: 192px;
   margin-top: 30px;
+
+  ${mediaQuery.xLarge} {
+    272px;
+  }
 `
 
 /**

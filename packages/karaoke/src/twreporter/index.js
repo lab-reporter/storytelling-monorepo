@@ -315,7 +315,7 @@ const Container = styled.blockquote`
   margin-left: auto;
   margin-right: auto;
 
-  text-align: justify;
+  text-align: left;
 
   * {
     box-sizing: border-box;
