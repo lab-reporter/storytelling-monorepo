@@ -315,6 +315,8 @@ const Container = styled.blockquote`
   margin-left: auto;
   margin-right: auto;
 
+  text-align: justify;
+
   * {
     box-sizing: border-box;
   }
@@ -326,6 +328,10 @@ const Container = styled.blockquote`
   }
 
   ${mediaQuery.large} {
+    width: 480px;
+  }
+
+  ${mediaQuery.xLarge} {
     width: 580px;
   }
 
@@ -341,7 +347,7 @@ const Container = styled.blockquote`
 
 const QuoteContainer = styled.div`
   ${mediaQuery.large} {
-    width: 472px;
+    max-width: 472px;
   }
 `
 
