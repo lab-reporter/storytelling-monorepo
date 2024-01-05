@@ -1,5 +1,6 @@
 {
   "name": "@story-telling-reporter/cms",
+  "version": "1.0.0",
   "scripts": {
     "dev": "keystone dev",
     "start": "keystone start",
