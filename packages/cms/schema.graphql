@@ -343,6 +343,7 @@ type Karaoke {
   name: String
   webVtt: String
   quote: String
+  quoteBy: String
   audio: FileFieldOutput
   muteHint: Boolean
   theme: String
@@ -362,6 +363,7 @@ input KaraokeWhereInput {
   name: StringFilter
   webVtt: StringFilter
   quote: StringFilter
+  quoteBy: StringFilter
   muteHint: BooleanFilter
   theme: StringNullableFilter
 }
@@ -405,6 +407,7 @@ input KaraokeOrderByInput {
   name: OrderDirection
   webVtt: OrderDirection
   quote: OrderDirection
+  quoteBy: OrderDirection
   muteHint: OrderDirection
   theme: OrderDirection
 }
@@ -413,6 +416,7 @@ input KaraokeUpdateInput {
   name: String
   webVtt: String
   quote: String
+  quoteBy: String
   audio: FileFieldInput
   muteHint: Boolean
   theme: String
@@ -427,6 +431,7 @@ input KaraokeCreateInput {
   name: String
   webVtt: String
   quote: String
+  quoteBy: String
   audio: FileFieldInput
   muteHint: Boolean
   theme: String

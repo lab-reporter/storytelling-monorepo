@@ -31,7 +31,6 @@ const listConfigurations = list({
     }),
     quote: text({
       label: '引言',
-      validation: { isRequired: true },
       ui: {
         itemView: {
           fieldMode: 'hidden',
@@ -43,6 +42,9 @@ const listConfigurations = list({
           fieldMode: 'hidden',
         },
       },
+    }),
+    quoteBy: text({
+      label: '聲音來源',
     }),
     audio: file({
       storage: 'files',
@@ -78,6 +80,7 @@ const listConfigurations = list({
               componentTheme: item?.theme,
               audioUrls: [audioSrc],
               webVtt: item?.webVtt,
+              quoteBy: item?.quoteBy,
             },
             embedCodeWebpackAssets
           )

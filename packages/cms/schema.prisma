@@ -63,6 +63,7 @@ model Karaoke {
   name           String  @default("")
   webVtt         String  @default("WEBVTT\n00:00:00.000 --> 00:00:04.500\n演員，我覺得他就是一個生活的體驗者,\n\n00:00:04.600 --> 00:00:07.500\n然後生命的實踐家;\n\n00:00:08.000 --> 00:00:11.000\n期許自己啦，可以這麼做。\n")
   quote          String  @default("")
+  quoteBy        String  @default("")
   audio_filesize Int?
   audio_filename String?
   muteHint       Boolean @default(false)
