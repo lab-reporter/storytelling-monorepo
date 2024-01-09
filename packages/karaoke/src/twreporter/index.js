@@ -329,15 +329,18 @@ const Container = styled.blockquote`
 
   ${mediaQuery.large} {
     width: 480px;
+    padding-left: 24px;
+    padding-right: 32px;
   }
 
   ${mediaQuery.xLarge} {
     width: 580px;
+    padding-left: 24px;
+    padding-right: 32px;
   }
 
   display: flex;
   align-items: flex-start;
-  justify-content: center;
   gap: 8px;
 
   ${AudioBt} {
@@ -345,11 +348,7 @@ const Container = styled.blockquote`
   }
 `
 
-const QuoteContainer = styled.div`
-  ${mediaQuery.large} {
-    max-width: 472px;
-  }
-`
+const QuoteContainer = styled.div``
 
 function getTextArrayFromCues(cues) {
   if (!Array.isArray(cues)) {
