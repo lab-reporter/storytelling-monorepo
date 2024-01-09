@@ -6,7 +6,12 @@ import styled from 'styled-components'
  *  @param {string} [opts.className]
  *  @param {string[]} opts.textArr - quote text
  */
-export default function Quote({ className, textArr, currentCharIdx }) {
+export default function Quote({
+  className,
+  textArr,
+  currentCharIdx,
+  animationPlayState = 'running',
+}) {
   let charOffset = 0
   const charArrJsx = textArr.map((t) => {
     const chars = Array.from(t)
@@ -15,6 +20,7 @@ export default function Quote({ className, textArr, currentCharIdx }) {
         <Char
           key={`char_${cIndex}`}
           $toAnimate={cIndex + charOffset < currentCharIdx}
+          $animationPlayState={animationPlayState}
         >
           {char}
         </Char>
@@ -33,7 +39,7 @@ const Char = styled.span`
       color: #808080;
     }
 
-    70% {
+    50% {
       color: #c09662;
     }
 
@@ -59,7 +65,8 @@ const Char = styled.span`
         animation-name: colored;
         animation-fill-mode: both;
         animation-duration: 1s;
+        animation-play-state: ${props.$animationPlayState};
       `
-      : ''
+      : `animation-play-state: ${props.$animationPlayState}`
   }}
 `

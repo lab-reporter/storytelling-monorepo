@@ -278,7 +278,11 @@ export function Karaoke({
           }
         }}
       >
-        <Quote textArr={textArr} currentCharIdx={currentCharIdx} />
+        <Quote
+          textArr={textArr}
+          currentCharIdx={currentCharIdx}
+          animationPlayState={paused ? 'paused' : 'running'}
+        />
         {quoteBy ? <QuoteBy>{quoteBy}</QuoteBy> : null}
       </QuoteContainer>
     </Container>
