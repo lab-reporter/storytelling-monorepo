@@ -54,7 +54,7 @@ export function Hint({ className }) {
         }}
       >
         {muted ? <span>開啟聲音</span> : <span>關閉聲音</span>}
-        {muted ? <MuteIcon /> : <SoundIcon />}
+        {muted ? <SoundIcon /> : <MuteIcon />}
       </Button>
       <SeparationLineContainer>
         <SeparationLine />
