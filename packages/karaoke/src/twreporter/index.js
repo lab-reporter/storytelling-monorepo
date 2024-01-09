@@ -157,7 +157,7 @@ export function Karaoke({
   }, [inView, hasBeenPlayed])
 
   const audioBtJsx =
-    (hasBeenPlayed && paused) || ended ? (
+    !hasBeenPlayed || (hasBeenPlayed && paused) || ended ? (
       <AudioBt
         onClick={() => {
           const audio = audioRef.current
