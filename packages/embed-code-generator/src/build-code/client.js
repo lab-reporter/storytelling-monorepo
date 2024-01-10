@@ -46,7 +46,7 @@ if (window?.[namespace][`react-karaoke${pkgVersion}`]) {
   import(
     /* webpackChunkName: "react-karaoke" */ '@story-telling-reporter/react-karaoke'
   ).then(({ Karaoke }) => {
-    hydrate(namespace, `react-karaoke${pkgVersion}`, Karaoke)
+    render(namespace, `react-karaoke${pkgVersion}`, Karaoke)
   })
 }
 
