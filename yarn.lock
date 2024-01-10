@@ -4408,47 +4408,23 @@
     webpack "^5.72.1"
     webpack-cli "^4.9.2"
 
-"@story-telling-reporter/react-embed-code-generator@0.1.2-alpha.4":
-  version "0.1.2-alpha.4"
-  resolved "https://registry.yarnpkg.com/@story-telling-reporter/react-embed-code-generator/-/react-embed-code-generator-0.1.2-alpha.4.tgz#f01e2277343f253756b4d7b9a73fd726bc900b89"
-  integrity sha512-OCRejXDiXf9Q0QZF3MRzxwgp/rwLpFbsUiiu2oQYIoQfkJ0koywWpkSDAWgUiq1IHCXO+qzzLdkgP5EbahQY4g==
+"@story-telling-reporter/react-embed-code-generator@0.2.4-alpha.0":
+  version "0.2.4-alpha.0"
+  resolved "https://registry.yarnpkg.com/@story-telling-reporter/react-embed-code-generator/-/react-embed-code-generator-0.2.4-alpha.0.tgz#7b42f27a6b472ea71184ec7ad7dcd93f216a8c10"
+  integrity sha512-ymiAJHBV8WhVp88sZAwVrDZTDP6AhJtFSQK8KuKVxGvJ/gNN9dxS9UqdfuRhI2snlft4/jAaJbmiLod73eCwdw==
   dependencies:
     "@story-telling-reporter/react-dual-slides" "0.1.1"
-    "@story-telling-reporter/react-karaoke" "0.1.2-alpha.5"
-    "@story-telling-reporter/react-scrollable-video" "0.1.2-alpha.0"
-    "@story-telling-reporter/react-three-story-points" "0.1.1"
-    lodash "^4.17.21"
-    serialize-javascript "^6.0.0"
-
-"@story-telling-reporter/react-embed-code-generator@0.2.1-alpha.2":
-  version "0.2.1-alpha.2"
-  resolved "https://registry.yarnpkg.com/@story-telling-reporter/react-embed-code-generator/-/react-embed-code-generator-0.2.1-alpha.2.tgz#aa4fce1fdf9cc4d568d4e1d2235b7833fbf6fae9"
-  integrity sha512-XKmm92o+ll7tvQMil2LEiMrutMf8laRHlPxR2yuhONHzdoxGfUzC0AmAdahYNOOlxGQjW9evRrwsRDzGPP+i9Q==
-  dependencies:
-    "@story-telling-reporter/react-dual-slides" "0.1.1"
-    "@story-telling-reporter/react-karaoke" "0.2.0-alpha.3"
+    "@story-telling-reporter/react-karaoke" "0.2.3-alpha.0"
     "@story-telling-reporter/react-scrollable-video" "0.1.2-alpha.0"
     "@story-telling-reporter/react-subtitled-audio" "0.0.1"
     "@story-telling-reporter/react-three-story-points" "0.1.1"
     lodash "^4.17.21"
     serialize-javascript "^6.0.0"
 
-"@story-telling-reporter/react-karaoke@0.1.2-alpha.5":
-  version "0.1.2-alpha.5"
-  resolved "https://registry.yarnpkg.com/@story-telling-reporter/react-karaoke/-/react-karaoke-0.1.2-alpha.5.tgz#d0848ddd3b8d7b4dcfa1459d47f165b5deaa02d6"
-  integrity sha512-g6cSb15+vtzI0r5TSeaDogU3H5KuqQs5JbbzyoPqvytg/+fR4/VuYT6eM6tuQYsDf9SPMnsbMe/JejsnVBQE+g==
-  dependencies:
-    react "18.1.0"
-    react-dom "18.1.0"
-    react-intersection-observer "^9.3.5"
-    serialize-javascript "^6.0.0"
-    styled-components "5.3.5"
-    uuid "^8.3.2"
-
-"@story-telling-reporter/react-karaoke@0.2.0-alpha.3":
-  version "0.2.0-alpha.3"
-  resolved "https://registry.yarnpkg.com/@story-telling-reporter/react-karaoke/-/react-karaoke-0.2.0-alpha.3.tgz#082234afb94235669dcef396830dc8420791ab54"
-  integrity sha512-2iAed4R/6x3z47JRoZz06+U6xUVs4GrmXWUlZPzTnsbY3XTKo3iPK4OHThCKcq/T+BV/B8ofEscQDu9ANdV7fg==
+"@story-telling-reporter/react-karaoke@0.2.3-alpha.0":
+  version "0.2.3-alpha.0"
+  resolved "https://registry.yarnpkg.com/@story-telling-reporter/react-karaoke/-/react-karaoke-0.2.3-alpha.0.tgz#884c8e83f5ef1e7f3f154e9935e9a76de3149b2f"
+  integrity sha512-SAg03QmY4VCTYKDtDH/5uCtLnn97d5HWn9p7/8ZiIQ0jdEfx9Ir/T6Bypd+FfpjfgySaWUe+8yTLENZg6op8Hg==
   dependencies:
     react "18.1.0"
     react-dom "18.1.0"
