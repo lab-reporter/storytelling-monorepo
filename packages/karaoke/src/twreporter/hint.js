@@ -67,7 +67,30 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 16px;
+
+  margin-left: auto;
+  margin-right: auto;
+
+  /* mobile */
+  width: calc(100vw - 68px);
+
+  ${mediaQuery.tabletAbove} {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  ${mediaQuery.tabletOnly} {
+    width: 453px;
+  }
+
+  ${mediaQuery.desktopOnly} {
+    width: 480px;
+  }
+
+  ${mediaQuery.hd} {
+    width: 580px;
+  }
 `
 
 const Button = styled.div`
@@ -111,16 +134,25 @@ const Button = styled.div`
     }
   }
 
-  &.dark:hover {
-    background-color: #000;
-  }
+  /**
+   * prevent sticky hover effects on touch devices
+   * see: https://stackoverflow.com/questions/17233804/how-to-prevent-sticky-hover-effects-for-buttons-on-touch-devices
+   **/
+  @media (hover: hover) {
+    &.dark:hover {
+      background-color: #000;
+    }
 
-  &.light:hover {
-    background-color: #e2e2e2;
+    &.light:hover {
+      background-color: #e2e2e2;
+    }
   }
 `
 
 const HintText = styled.p`
+  /* clear default margin */
+  margin: 0;
+
   text-align: center;
 
   font-family: Noto Sans TC, Sans-Serif, serif;
@@ -129,20 +161,14 @@ const HintText = styled.p`
   line-height: 21px;
   letter-spacing: 0em;
   color: #808080;
-
-  white-space: nowrap;
-
-  ${mediaQuery.smallOnly} {
-    white-space: pre-wrap;
-  }
 `
 
 const SeparationLineContainer = styled.div`
   width: 192px;
-  margin-top: 30px;
+  margin-top: 24px;
 
-  ${mediaQuery.xLarge} {
-    272px;
+  ${mediaQuery.hd} {
+    width: 272px;
   }
 `
 

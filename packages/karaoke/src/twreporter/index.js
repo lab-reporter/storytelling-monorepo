@@ -325,19 +325,20 @@ const Container = styled.blockquote`
     box-sizing: border-box;
   }
 
+  /* mobile */
   width: calc(100vw - 68px);
 
-  ${mediaQuery.small} {
-    max-width: 453px;
+  ${mediaQuery.tabletOnly} {
+    width: 453px;
   }
 
-  ${mediaQuery.large} {
+  ${mediaQuery.desktopOnly} {
     width: 480px;
     padding-left: 24px;
     padding-right: 32px;
   }
 
-  ${mediaQuery.xLarge} {
+  ${mediaQuery.hd} {
     width: 580px;
     padding-left: 24px;
     padding-right: 32px;
