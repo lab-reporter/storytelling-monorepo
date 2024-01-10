@@ -18,7 +18,7 @@
     "@keystone-6/auth": "7.0.0",
     "@keystone-6/core": "5.2.0",
     "@story-telling-reporter/cms-core": "0.1.1",
-    "@story-telling-reporter/react-embed-code-generator": "0.2.4-alpha.1",
+    "@story-telling-reporter/react-embed-code-generator": "0.2.4-alpha.2",
     "@types/react-beautiful-dnd": "^13.1.4",
     "cors": "^2.8.5",
     "express": "^4.17.1",
