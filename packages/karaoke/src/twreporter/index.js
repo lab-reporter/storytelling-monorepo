@@ -32,7 +32,7 @@ export function Karaoke({
   const trackRef = useRef(null)
   const [muted, setMuted] = useMuted(true)
   const [containerRef, inView] = useInView({
-    rootMargin: '-40px 0% -50% 0%',
+    rootMargin: '-25% 0% -25% 0%',
     threshold: 0,
   })
   const [currentTime, setCurrentTime] = useState(0)
@@ -133,21 +133,23 @@ export function Karaoke({
     // in the viewport
     if (inView) {
       if (!hasBeenPlayed) {
-        const startPlayPromise = audio.play()
-        startPlayPromise
-          // play successfully
-          .then(() => {
-            console.log('[react-karaoke] audio plays successfully.')
-          })
-          // fail to play
-          .catch((error) => {
-            // browser prevent from playing audio before user interactions
-            console.log('[react-karaoke] unable to play audio')
-            console.log('[react-karaoke] error: ', error)
-          })
-        setHasBeenPlayed(true)
-        setPaused(false)
-        audio.setAttribute('data-played', true)
+        const playPromise = audio.play()
+        if (playPromise !== undefined) {
+          playPromise
+            // play successfully
+            .then(() => {
+              console.log('[react-karaoke] audio plays successfully.')
+              audio.setAttribute('data-played', true)
+              setHasBeenPlayed(true)
+              setPaused(false)
+            })
+            // fail to play
+            .catch((error) => {
+              // browser prevent from playing audio before user interactions
+              console.log('[react-karaoke] unable to play audio')
+              console.log('[react-karaoke] error: ', error)
+            })
+        }
       }
     } else {
       // leave the viewport
@@ -167,9 +169,23 @@ export function Karaoke({
               setCurrentTime(0)
               audio.currentTime = 0
             }
-            audio.play()
-            audio.setAttribute('data-played', true)
-            setPaused(false)
+            const playPromise = audio.play()
+            if (playPromise !== undefined) {
+              playPromise
+                // play successfully
+                .then(() => {
+                  console.log('[react-karaoke] audio plays successfully.')
+                  audio.setAttribute('data-played', true)
+                  setHasBeenPlayed(true)
+                  setPaused(false)
+                })
+                // fail to play
+                .catch((error) => {
+                  // browser prevent from playing audio before user interactions
+                  console.log('[react-karaoke] unable to play audio')
+                  console.log('[react-karaoke] error: ', error)
+                })
+            }
           }
         }}
       >
