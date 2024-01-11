@@ -327,6 +327,15 @@ const QuoteBy = styled.div`
   margin-top: 16px;
 
   color: #808080;
+
+  &::before {
+    content: '';
+    display: inline-block;
+    width: 48px;
+    border-top: 0.5px solid #808080;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
 `
 
 const Container = styled.blockquote`
