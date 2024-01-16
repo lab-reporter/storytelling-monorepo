@@ -30,7 +30,7 @@ export default function Quote({
     return rtn
   })
 
-  return <span className={className}>{charArrJsx}</span>
+  return <div className={className}>{charArrJsx}</div>
 }
 
 const Char = styled.span`
