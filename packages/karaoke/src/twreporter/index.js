@@ -378,7 +378,21 @@ const Container = styled.blockquote`
   }
 `
 
-const QuoteContainer = styled.div``
+const QuoteContainer = styled.div`
+  max-width: calc(272 / 320 * 100%);
+
+  ${mediaQuery.tabletOnly} {
+    max-width: 405px;
+  }
+
+  ${mediaQuery.desktopOnly} {
+    max-width: 376px;
+  }
+
+  ${mediaQuery.hd} {
+    max-width: 476px;
+  }
+`
 
 function getTextArrayFromCues(cues) {
   if (!Array.isArray(cues)) {
