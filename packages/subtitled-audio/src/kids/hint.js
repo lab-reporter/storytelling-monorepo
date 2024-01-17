@@ -37,8 +37,11 @@ const Button = styled.div`
   gap: 10px;
 
   > span {
-    font-size: 14px;
-    font-family: Noto Sans TC, Sans-Serif, serif;
+    /* clients should provide below fonts */
+    font-family: source-han-sans-traditional, Noto Sans TC, PingFang TC,
+      Apple LiGothic Medium, Roboto, Microsoft JhengHei, Lucida Grande,
+      Lucida Sans Unicode, sans-serif;
+    font-size: 12px;
     font-weight: 500;
     color: #666;
   }
@@ -49,9 +52,9 @@ const HintText = styled.p`
 
   font-family: Swei Marker Sans CJK TC, Noto Sans TC, Sans-Serif, serif;
   font-weight: 400;
-  font-size: 20px;
+  font-size: 16px;
   line-height: 1.5;
-  color: #000;
+  color: #666;
 
   white-space: nowrap;
 

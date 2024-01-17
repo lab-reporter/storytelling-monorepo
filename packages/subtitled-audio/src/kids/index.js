@@ -389,13 +389,15 @@ const SubtitleAndControls = styled.div`
 
 const Subtitle = styled.blockquote`
   /* clients should provide below fonts */
-  font-family: SweiMarkerSansCJKtc-Regular, Noto Sans TC, Sans-Serif, serif;
+  font-family: source-han-sans-traditional, Noto Sans TC, PingFang TC,
+    Apple LiGothic Medium, Roboto, Microsoft JhengHei, Lucida Grande,
+    Lucida Sans Unicode, sans-serif;
   letter-spacing: 1.5px;
-  font-size: 32px;
+  font-size: 16px;
   font-weight: 700;
   line-height: 1.5;
 
-  height: 144px;
+  height: 50px;
 
   margin-left: auto;
   margin-right: auto;
@@ -429,8 +431,7 @@ const Subtitle = styled.blockquote`
   }
 
   ${mediaQuery.smallOnly} {
-    font-size: 26px;
-    height: 240px;
+    height: 100px;
   }
 `
 
