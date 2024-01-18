@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react'
+import styled from '../styled-components.js'
 import {
   EditorState,
   RawDraftContentState, // eslint-disable-line
@@ -7,7 +8,7 @@ import {
 } from 'draft-js'
 import { AddCaptionIcon } from './styled.js'
 import { Drawer, DrawerController, DrawerProvider } from '@keystone-ui/modals'
-import { FieldLabel, TextInput } from '@keystone-ui/fields'
+import { FieldLabel, TextInput, Select } from '@keystone-ui/fields'
 import {
   RichTextEditor as KidsTextEditor,
   buttonNames as kidsButtonNames,
@@ -21,9 +22,14 @@ import {
 import { ThemeContext, themeEnum } from './themeContext.js'
 
 /**
+ *  @typedef {'left'|'center'|'right'} CaptionPosition
+ */
+
+/**
  *  @typedef {Object} CaptionState
  *  @property {number} startTime
  *  @property {RawDraftContentState} rawContentState
+ *  @property {CaptionPosition} position
  */
 
 /**
@@ -41,9 +47,7 @@ import { ThemeContext, themeEnum } from './themeContext.js'
  *  @param {boolean} props.isOpen
  *  @param {onConfirm} props.onConfirm
  *  @param {onCancel} props.onCancel
- *  @param {Object} props.inputValue
- *  @param {number} props.inputValue.startTime
- *  @param {EditorState} props.inputValue.rawContentState
+ *  @param {CaptionState} props.inputValue
  */
 export function CaptionInput({ isOpen, onConfirm, onCancel, inputValue }) {
   const theme = useContext(ThemeContext)
@@ -75,6 +79,7 @@ export function CaptionInput({ isOpen, onConfirm, onCancel, inputValue }) {
   const [inputValueState, setInputValueState] = useState({
     startTime: inputValue.startTime,
     editorState: EditorState.createWithContent(contentState, decorator),
+    position: inputValue.position,
   })
 
   return (
@@ -99,24 +104,54 @@ export function CaptionInput({ isOpen, onConfirm, onCancel, inputValue }) {
                   rawContentState: convertToRaw(
                     inputValueState.editorState.getCurrentContent()
                   ),
+                  position: inputValueState.position,
                 })
               },
             },
           }}
         >
+          <MarginTop />
           <FieldLabel>字幕出現秒數</FieldLabel>
           <TextInput
             onChange={(e) =>
               setInputValueState({
                 startTime: Number(e.target.value),
                 editorState: inputValueState.editorState,
+                position: inputValueState.position,
               })
             }
             placeholder="0"
             type="number"
             value={inputValueState.startTime.toString()}
-            style={{ marginBottom: '30px' }}
           />
+          <MarginTop />
+          <FieldLabel>字幕出現位置</FieldLabel>
+          <Select
+            isClearable
+            options={[
+              {
+                label: '置左',
+                value: 'left',
+              },
+              {
+                label: '置中',
+                value: 'center',
+              },
+              {
+                label: '置右',
+                value: 'right',
+              },
+            ]}
+            onChange={(newVal) =>
+              setInputValueState({
+                startTime: inputValue.startTime,
+                editorState: inputValueState.editorState,
+                position: newVal,
+              })
+            }
+            value={inputValueState.position}
+          />
+          <MarginTop />
           <FieldLabel>字幕內容</FieldLabel>
           <Editor
             disabledButtons={disabledButtons}
@@ -125,6 +160,7 @@ export function CaptionInput({ isOpen, onConfirm, onCancel, inputValue }) {
               setInputValueState({
                 startTime: inputValueState.startTime,
                 editorState,
+                position: inputValueState.position,
               })
             }}
           />
@@ -186,3 +222,7 @@ export function AddCaptionButton({ className, onChange, getVideoCurrentTime }) {
     </React.Fragment>
   )
 }
+
+const MarginTop = styled.div`
+  margin-top: 30px;
+`
