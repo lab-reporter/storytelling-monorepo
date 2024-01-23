@@ -94,6 +94,10 @@ export function ScrollableVideoV2({
   const videoRef = useRef(null)
   const duration = video.duration
 
+  // use gsap ScrollTrigger to check if
+  // Sections are in the viewport or not,
+  // and if the Sections are in the viewport,
+  // use the scroll progress to manipulate the video player.
   useGSAP(
     () => {
       const videoEle = videoRef.current
@@ -118,7 +122,7 @@ export function ScrollableVideoV2({
     { scope: scrollTriggerRef }
   )
 
-  // mute video
+  // mute video to enable video autoplay
   useEffect(() => {
     const video = videoRef.current
     if (!video) {
@@ -127,6 +131,12 @@ export function ScrollableVideoV2({
     video.muted = true
   }, [])
 
+  // In some edge cases,
+  // if the last section contains lots of paragraphs,
+  // it might overflow the its container.
+  // If the edge case happens, the following side effect
+  // will increase height of the container to not overflow
+  // the last section.
   useEffect(() => {
     const handleLastSectionOverflow = _.debounce(() => {
       const sections = scrollTriggerRef.current
