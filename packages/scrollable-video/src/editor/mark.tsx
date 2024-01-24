@@ -1,5 +1,6 @@
+import React from 'react'
 import { AlertDialog } from '@keystone-ui/modals'
-import { CaptionInput } from './button.js'
+import { CaptionInput, CaptionState } from './button.js'
 import { DeleteMarkIcon, EditMarkIcon, MarkIcon } from './styled.js'
 import { useState } from 'react'
 import styled from '../styled-components.js'
@@ -28,10 +29,6 @@ const modes = {
 }
 
 /**
- *  @typedef {import('./button.js').CaptionState} CaptionState
- */
-
-/**
  *  @callback OnCaptionMarkChange
  *  @param {CaptionState} captionState
  *  @returns {undefined}
@@ -43,7 +40,15 @@ const modes = {
  *  @param {CaptionState} opts.captionState
  *  @param {OnCaptionMarkChange} opts.onChange
  */
-export function CaptionMark({ className, captionState, onChange }) {
+export function CaptionMark({
+  className,
+  captionState,
+  onChange,
+}: {
+  className?: string
+  captionState: CaptionState
+  onChange: (arg0: CaptionState | null) => void
+}) {
   const [mode, setMode] = useState(modes.default)
 
   let iconsJsx = null
@@ -83,6 +88,7 @@ export function CaptionMark({ className, captionState, onChange }) {
   }
 
   const deleteAlertJsx = (
+    // @ts-ignore `children` should be optional
     <AlertDialog
       title="確認刪除"
       isOpen={mode === modes.delete}

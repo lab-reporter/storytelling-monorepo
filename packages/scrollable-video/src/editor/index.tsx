@@ -1,13 +1,10 @@
-import { AddCaptionButton } from './button.js'
+import { AddCaptionButton } from './button'
 import React, { useEffect, useState, useRef } from 'react'
-import styled from '../styled-components.js'
-import { CaptionMark } from './mark.js'
-import { PlayButton, PauseButton } from './styled.js'
-import { ThemeContext } from './themeContext.js'
-
-/**
- * @typedef {import('./button.js').CaptionState} CaptionState
- */
+import styled from 'styled-components'
+import { CaptionState } from './button'
+import { CaptionMark } from './mark'
+import { PlayButton, PauseButton } from './styled'
+import { ThemeContext, ThemeEnum } from './themeContext'
 
 const Container = styled.div`
   width: 100%;
@@ -59,7 +56,7 @@ const ProgressAndMarksBlock = styled.div`
   position: relative;
 `
 
-const MarkContainer = styled.div`
+const MarkContainer = styled.div<{ $left: string }>`
   position: absolute;
   top: 20px;
   left: ${(props) => props?.$left ?? '0px'};
@@ -72,29 +69,24 @@ const MarkContainer = styled.div`
 
 const defaultDuration = 10 // seconds
 
-/**
- *  @callback OnCaptionEditorChange
- *  @params {Object} opts
- *  @params {CaptionState[]} [opts.captions]
- *  @returns {void}
- */
-
-/**
- *  @param {Object} opts
- *  @param {Object} opts.video
- *  @param {{mediaType: string, src: string}[]} opts.video.sources
- *  @param {CaptionState[]} [opts.captions=[]]
- *  @param {'twreporter'|'kids'} [opts.theme]
- *  @param {OnCaptionEditorChange} opts.onChange
- */
 function CaptionEditor({
-  video: videoProp,
-  captions: _captions = [],
+  videoProp,
+  _captions = [],
   onChange,
-  theme = 'twreporter',
+  theme = ThemeEnum.TWREPORTER,
+}: {
+  videoProp: {
+    sources: {
+      mediaType: string
+      src: string
+    }[]
+  }
+  _captions: CaptionState[]
+  onChange: (arg0: { captions: CaptionState[] }) => void
+  theme: ThemeEnum
 }) {
-  const videoRef = useRef(null)
-  const progressRef = useRef(null)
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const progressRef = useRef<HTMLProgressElement>(null)
   const [duration, setDuration] = useState(defaultDuration)
   const [captions, setCaptions] = useState(_captions)
 
@@ -103,7 +95,9 @@ function CaptionEditor({
 
     const onLoadedMetadata = () => {
       console.log('onLoadedMetadata is triggered.')
-      setDuration(video.duration)
+      if (video?.duration) {
+        setDuration(video.duration)
+      }
     }
 
     if (video) {
@@ -126,10 +120,12 @@ function CaptionEditor({
     const progress = progressRef.current
     const handleTimeUpdate = () => {
       // For mobile browsers, ensure that the progress element's max attribute is set
-      if (!progress.getAttribute('max')) {
-        progress.setAttribute('max', video.duration)
+      if (!progress?.getAttribute('max') && video?.duration) {
+        progress?.setAttribute('max', video.duration.toString())
       }
-      progress.value = video.currentTime
+      if (progress && video?.currentTime) {
+        progress.value = video?.currentTime
+      }
     }
     if (video && progress) {
       video.addEventListener('timeupdate', handleTimeUpdate)
@@ -143,10 +139,12 @@ function CaptionEditor({
     const video = videoRef.current
     const progress = progressRef.current
 
-    const handleProgressBarClick = (e) => {
-      const offsetLeft = progress.getBoundingClientRect().x
-      const pos = (e.pageX - offsetLeft) / progress.offsetWidth
-      video.currentTime = pos * video.duration
+    const handleProgressBarClick = (e: MouseEvent) => {
+      if (progress && video) {
+        const offsetLeft = progress.getBoundingClientRect()?.x
+        const pos = (e.pageX - offsetLeft) / progress.offsetWidth
+        video.currentTime = pos * video.duration
+      }
     }
 
     if (video && progress) {
@@ -154,7 +152,7 @@ function CaptionEditor({
     }
 
     return () => {
-      video?.removeEventListener('click', handleProgressBarClick)
+      progress?.removeEventListener('click', handleProgressBarClick)
     }
   }, [])
 
@@ -192,7 +190,7 @@ function CaptionEditor({
     const left = (startTime / duration) * 100
 
     return (
-      <MarkContainer key={index} $left={`${left}%`}>
+      <MarkContainer key={index} $left={left.toString() + '%'}>
         <CaptionMark
           captionState={captionState}
           onChange={(changedCaptionState) => {
@@ -236,7 +234,7 @@ function CaptionEditor({
           <div onClick={onPauseButtonClick}>
             <AddCaptionButton
               getVideoCurrentTime={() => {
-                return videoRef?.current?.currentTime?.toFixed(2) || 0
+                return Number(videoRef?.current?.currentTime?.toFixed(2)) || 0
               }}
               onChange={(captionState) => {
                 const newCaptions = captions.concat(captionState)

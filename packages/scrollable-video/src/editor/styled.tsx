@@ -1,6 +1,11 @@
-import styled from '../styled-components.js'
+import React from 'react'
+import styled from 'styled-components'
 
-const Icon = styled.div`
+const Icon = styled.div<{
+  $bgImg?: string
+  $hoverBgImg?: string
+  $focusBgImg?: string
+}>`
   cursor: pointer;
   width: 50px;
   height: 50px;
@@ -12,7 +17,13 @@ const Icon = styled.div`
   }
 `
 
-export function PlayButton(props) {
+type IconProps = {
+  className?: string
+  onClick?: () => void
+  enabled?: boolean
+}
+
+export function PlayButton(props: IconProps) {
   return (
     <Icon
       className={props?.className}
@@ -24,7 +35,7 @@ export function PlayButton(props) {
   )
 }
 
-export function PauseButton(props) {
+export function PauseButton(props: IconProps) {
   return (
     <Icon
       className={props?.className}
@@ -36,7 +47,7 @@ export function PauseButton(props) {
   )
 }
 
-export function DeleteCaptionIcon(props) {
+export function DeleteCaptionIcon(props: IconProps) {
   const disableImg =
     'https://www.unpkg.com/@story-telling-reporter/react-scrollable-video/public/icons/delete.disable.svg'
   const enableImg =
@@ -51,7 +62,7 @@ export function DeleteCaptionIcon(props) {
   )
 }
 
-export function AddCaptionIcon(props) {
+export function AddCaptionIcon(props: IconProps) {
   return (
     <Icon
       className={props?.className}

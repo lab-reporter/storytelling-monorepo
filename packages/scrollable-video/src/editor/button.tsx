@@ -9,54 +9,51 @@ import {
 import { AddCaptionIcon } from './styled.js'
 import { Drawer, DrawerController, DrawerProvider } from '@keystone-ui/modals'
 import { FieldLabel, TextInput, Select } from '@keystone-ui/fields'
+
 import {
   RichTextEditor as KidsTextEditor,
   buttonNames as kidsButtonNames,
   decorator as kidsDecorator,
+  // @ts-ignore there is no type definition for this pkg
 } from '@kids-reporter/draft-editor'
 import {
   RichTextEditor as TwreporterTextEditor,
   buttonNames as twreporterButtonNames,
   decorator as twreporterDecorator,
+  // @ts-ignore there is no type definition for this pkg
 } from '@story-telling-reporter/draft-editor'
-import { ThemeContext, themeEnum } from './themeContext.js'
+import { ThemeContext, ThemeEnum } from './themeContext'
 
-/**
- *  @typedef {'left'|'center'|'right'} CaptionPosition
- */
+enum PositionEnum {
+  LEFT = 'left',
+  RIGHT = 'right',
+  CENTER = 'center',
+}
 
-/**
- *  @typedef {Object} CaptionState
- *  @property {number} startTime
- *  @property {RawDraftContentState} rawContentState
- *  @property {CaptionPosition} position
- */
+export type CaptionState = {
+  startTime: number
+  rawContentState: RawDraftContentState
+  position: PositionEnum
+}
 
-/**
- *  @callback onConfirm
- *  @param {CaptionState} props
- *  @returns {undefined}
- */
-
-/**
- *  @callback onCancel
- */
-
-/**
- *  @param {Object} props
- *  @param {boolean} props.isOpen
- *  @param {onConfirm} props.onConfirm
- *  @param {onCancel} props.onCancel
- *  @param {CaptionState} props.inputValue
- */
-export function CaptionInput({ isOpen, onConfirm, onCancel, inputValue }) {
+export function CaptionInput({
+  isOpen,
+  onConfirm,
+  onCancel,
+  inputValue,
+}: {
+  isOpen: boolean
+  onConfirm: (arg0: CaptionState) => void
+  onCancel: () => void
+  inputValue: CaptionState
+}) {
   const theme = useContext(ThemeContext)
   const Editor =
-    theme === themeEnum.kids ? KidsTextEditor : TwreporterTextEditor
+    theme === ThemeEnum.KIDS ? KidsTextEditor : TwreporterTextEditor
   const decorator =
-    theme === themeEnum.kids ? kidsDecorator : twreporterDecorator
+    theme === ThemeEnum?.KIDS ? kidsDecorator : twreporterDecorator
   const disabledButtons =
-    theme === themeEnum.kids
+    theme === ThemeEnum.KIDS
       ? [
           kidsButtonNames.code,
           kidsButtonNames.codeBlock,
@@ -82,11 +79,28 @@ export function CaptionInput({ isOpen, onConfirm, onCancel, inputValue }) {
     position: inputValue.position,
   })
 
+  const options = [
+    {
+      label: '置左',
+      value: PositionEnum.LEFT,
+    },
+    {
+      label: '置中',
+      value: PositionEnum.CENTER,
+    },
+    {
+      label: '置右',
+      value: PositionEnum.RIGHT,
+    },
+  ]
+
+  const selectedValue =
+    options.find((option) => option.value === inputValueState.position) ?? null
+
   return (
     <DrawerProvider>
       <DrawerController isOpen={isOpen}>
         <Drawer
-          style={{ position: 'relative' }}
           width="wide"
           title={`字幕設定`}
           actions={{
@@ -128,35 +142,24 @@ export function CaptionInput({ isOpen, onConfirm, onCancel, inputValue }) {
           <FieldLabel>字幕出現位置</FieldLabel>
           <Select
             isClearable
-            options={[
-              {
-                label: '置左',
-                value: 'left',
-              },
-              {
-                label: '置中',
-                value: 'center',
-              },
-              {
-                label: '置右',
-                value: 'right',
-              },
-            ]}
-            onChange={(newVal) =>
-              setInputValueState({
-                startTime: inputValue.startTime,
-                editorState: inputValueState.editorState,
-                position: newVal,
-              })
-            }
-            value={inputValueState.position}
+            options={options}
+            onChange={(option) => {
+              if (option) {
+                setInputValueState({
+                  startTime: inputValue.startTime,
+                  editorState: inputValueState.editorState,
+                  position: option.value as PositionEnum,
+                })
+              }
+            }}
+            value={selectedValue}
           />
           <MarginTop />
           <FieldLabel>字幕內容</FieldLabel>
           <Editor
             disabledButtons={disabledButtons}
             editorState={inputValueState.editorState}
-            onChange={(editorState) => {
+            onChange={(editorState: EditorState) => {
               setInputValueState({
                 startTime: inputValueState.startTime,
                 editorState,
@@ -181,14 +184,15 @@ export function CaptionInput({ isOpen, onConfirm, onCancel, inputValue }) {
  *  @returns {number} video.currentTime
  */
 
-/**
- *  @param {Object} props
- *  @param {string} [props.className]
- *  @param {CaptionState} [props.captionState]
- *  @param {onCaptionStateChange} props.onChange
- *  @param {getVideoCurrentTimeCallback} [props.getVideoCurrentTime]
- */
-export function AddCaptionButton({ className, onChange, getVideoCurrentTime }) {
+export function AddCaptionButton({
+  className,
+  onChange,
+  getVideoCurrentTime,
+}: {
+  className?: string
+  onChange: (arg0: CaptionState) => void
+  getVideoCurrentTime: () => number
+}) {
   const defaultStartTime = 0
   const [toShowInput, setToShowInput] = useState(false)
 
@@ -205,6 +209,7 @@ export function AddCaptionButton({ className, onChange, getVideoCurrentTime }) {
           }}
           isOpen={toShowInput}
           inputValue={{
+            position: PositionEnum.LEFT,
             startTime:
               typeof getVideoCurrentTime === 'function'
                 ? getVideoCurrentTime()

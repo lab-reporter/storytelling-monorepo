@@ -83,27 +83,38 @@ const BackgroundVideo = styled.div`
   }
 `
 
-/**
- *  @typedef {'right'|'left'|'center'} Alignment
- *  @typedef {'wide'|'narrow'} SectionWidth
- */
+enum SectionWidthEnum {
+  WIDE = 'wide',
+  NARROW = 'narrow',
+}
 
-/**
- *  @typedef {Object} ArticleSection
- *  @property {RawDraftContentState} rawContentState
- *  @property {number} startTime
- *  @property {Alignment} alignment
- *  @property {SectionWidth} width
- */
+enum SectionAlignmentEnum {
+  RIGHT = 'right',
+  LEFT = 'left',
+  CENTER = 'center',
+}
 
-/**
- *  @typedef {Object} VideoObj
- *  @property {number} duration
- *  @property {string} src
- *  @property {number} [frameRate]
- *  @property {string} [type]
- *  @property {boolean} [preload=true]
- */
+type ArticleSection = {
+  rawContentState: RawDraftContentState
+  startTime: number
+  alignment?: SectionAlignmentEnum
+  width?: SectionWidthEnum
+}
+
+type VideoObj = {
+  duration: number
+  src: string
+  type?: string
+  preload?: boolean
+}
+
+type ScrollableVideoProps = {
+  className?: string
+  sections: ArticleSection[]
+  video: VideoObj
+  darkMode?: boolean
+  secondsPer100vh?: number
+}
 
 /**
  *  @param {Object} props
@@ -119,12 +130,12 @@ export function ScrollableVideo({
   video,
   darkMode = false,
   secondsPer100vh = 1.5,
-}) {
-  const scrollTriggerInstance = useRef(null)
-  const scrollTriggerRef = useRef(null)
-  const lastSectionRef = useRef(null)
+}: ScrollableVideoProps) {
+  const scrollTriggerInstance = useRef<ScrollTrigger | null>(null)
+  const scrollTriggerRef = useRef<HTMLDivElement>(null)
+  const lastSectionRef = useRef<HTMLDivElement>(null)
   const [lastSectionOverflowHeight, setLastSectionOverflowHeight] = useState(0) // px
-  const videoRef = useRef(null)
+  const videoRef = useRef<HTMLVideoElement>(null)
   const duration = video.duration
 
   // use gsap ScrollTrigger to check if
@@ -144,8 +155,8 @@ export function ScrollableVideo({
           console.log('progress:', progress)
           console.log('time:', time)
           if (videoEle && !videoEle?.seeking) {
-            const time = (progress * duration).toFixed(3)
-            videoEle.currentTime = (progress * duration).toFixed(3)
+            const time = Number((progress * duration).toFixed(3))
+            videoEle.currentTime = time
             console.log('progress:', progress)
             console.log('time:', time)
           }
@@ -193,6 +204,7 @@ export function ScrollableVideo({
   const sectionsJsx = sections.map((section, idx) => {
     const startTime = section.startTime
     console.log('startTime:', startTime)
+    const top = `${(startTime / secondsPer100vh) * 100}vh`
     return (
       <Section
         data-section-narrow-width={section.width !== 'wide'}
@@ -201,7 +213,7 @@ export function ScrollableVideo({
         ref={idx === sections.length - 1 ? lastSectionRef : undefined}
         key={idx}
         style={{
-          top: `${(startTime / 1.5) * 100}vh`,
+          top,
         }}
       >
         <DraftRenderer
@@ -212,14 +224,17 @@ export function ScrollableVideo({
     )
   })
 
+  const preload =
+    typeof video.preload === 'boolean' ? `${video.preload}` : 'true'
+  const sectionsHeight = `${(duration / secondsPer100vh) * 100}vh`
+  const lastSectionHeight = `${lastSectionOverflowHeight}px`
+
   return (
     <Container className={className}>
       <BackgroundVideo>
         <video
           ref={videoRef}
-          preload={
-            typeof video.preload === 'boolean' ? `${video.preload}` : 'true'
-          }
+          preload={preload}
           data-twreporter-story-telling
           data-react-scrollable-video
           data-autoplay={true}
@@ -229,15 +244,10 @@ export function ScrollableVideo({
           <source src={video.src} type={video.type}></source>
         </video>
       </BackgroundVideo>
-      <Sections
-        ref={scrollTriggerRef}
-        style={{ height: `${(duration / secondsPer100vh) * 100}vh` }}
-      >
+      <Sections ref={scrollTriggerRef} style={{ height: sectionsHeight }}>
         {sectionsJsx}
       </Sections>
-      <LastSectionOverflowHeight
-        style={{ height: `${lastSectionOverflowHeight}px` }}
-      />
+      <LastSectionOverflowHeight style={{ height: lastSectionHeight }} />
     </Container>
   )
 }
