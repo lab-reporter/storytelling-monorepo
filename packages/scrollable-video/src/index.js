@@ -1,4 +1,4 @@
-import { ScrollableVideo } from './scrollable-video/index'
+import { ScrollableVideo } from './v2/index'
 import { CaptionEditor } from './editor/index'
 
 export { CaptionEditor, ScrollableVideo }
