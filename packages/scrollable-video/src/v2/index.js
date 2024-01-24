@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react'
+import debounce from 'lodash/debounce'
 import gsap from 'gsap'
 import styled from '../styled-components'
+import { DraftRenderer } from '../draft-renderer/index'
+import { RawDraftContentState } from 'draft-js' // eslint-disable-line
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useGSAP } from '@gsap/react'
-import { RawDraftContentState } from 'draft-js' // eslint-disable-line
-import debounce from 'lodash/debounce'
 
 const _ = {
   debounce,
@@ -169,7 +170,7 @@ export function ScrollableVideoV2({
           top: `${(startTime / 1.5) * 100}vh`,
         }}
       >
-        <div style={{ height: '100vh', backgroundColor: 'pink' }}></div>
+        <DraftRenderer rawContentState={section.rawContentState} />
       </Section>
     )
   })
