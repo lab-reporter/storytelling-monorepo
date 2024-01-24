@@ -3,6 +3,16 @@ import React from 'react'
 import styled from '../../styled-components'
 import { DefaultDraftBlockRenderMap } from 'draft-js'
 
+export const Blockquote = styled.blockquote`
+  width: 100%;
+  padding: 0 16px;
+  margin-bottom: 16px;
+
+  font-size: 16px;
+  line-height: 1.75;
+  color: #808080;
+`
+
 export const Paragraph = styled.div`
   width: 100%;
   margin-bottom: 16px;
@@ -67,6 +77,10 @@ const _blockRenderMap = Immutable.Map({
   atomic: {
     element: 'figure',
     wrapper: <Atomic />,
+  },
+  blockquote: {
+    element: 'blockquote',
+    wrapper: <Blockquote />,
   },
   'header-two': {
     element: 'h2',
