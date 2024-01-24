@@ -1,6 +1,6 @@
 import Immutable from 'immutable'
 import React from 'react'
-import styled from '../../styled-components'
+import styled from 'styled-components'
 import { DefaultDraftBlockRenderMap } from 'draft-js'
 
 export const Blockquote = styled.blockquote`
@@ -10,7 +10,7 @@ export const Blockquote = styled.blockquote`
 
   font-size: 16px;
   line-height: 1.75;
-  color: #808080;
+  color: ${({ theme }) => (theme.darkMode ? '#e2e2e2' : '#808080')};
 `
 
 export const Paragraph = styled.div`
@@ -20,8 +20,8 @@ export const Paragraph = styled.div`
   font-size: 16px;
   font-weight: 400;
   line-height: 1.75;
-  color: #404040;
   letter-spacing: 0.6px;
+  color: ${({ theme }) => (theme.darkMode ? '#fff' : '#404040')};
 `
 
 export const Heading = styled.div`
@@ -29,9 +29,9 @@ export const Heading = styled.div`
   margin-bottom: 16px;
 
   font-weight: 700;
-  color: #404040;
   letter-spacing: 0.4px;
   line-height: 1.25;
+  color: ${({ theme }) => (theme.darkMode ? '#fff' : '#404040')};
 
   h2 {
     font-size: 30px;
@@ -53,7 +53,7 @@ export const List = styled.ol`
   font-weight: 400;
   line-height: 1.75;
   letter-spacing: 0.6px;
-  color: #404040;
+  color: ${({ theme }) => (theme.darkMode ? '#fff' : '#404040')};
 
   > li {
     margin: 0 0 1em 0;

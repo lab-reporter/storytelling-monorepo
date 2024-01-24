@@ -13,6 +13,7 @@ const FigureCaption = styled.figcaption`
   font-weight: 400;
   line-height: 21px;
   color: #666;
+  color: ${({ theme }) => (theme.darkMode ? '#f1f1f1' : '#666')};
 
   /* clear browser default styles */
   margin: 8px 0 0 0;

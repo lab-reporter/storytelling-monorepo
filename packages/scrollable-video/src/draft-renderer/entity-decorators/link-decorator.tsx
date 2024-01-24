@@ -6,7 +6,7 @@ const LinkWrapper = styled.a`
   &:link,
   &:visited,
   &:active {
-    color: #9f7544;
+    color: ${({ theme }) => (theme.darkMode ? '#F0D5BE' : '#9f7544')};
     text-decoration: none;
   }
 `
