@@ -1,6 +1,6 @@
 import Immutable from 'immutable'
 import React from 'react'
-import styled from '../../styled-components'
+import styled from 'styled-components'
 import { DefaultDraftBlockRenderMap } from 'draft-js'
 import { Atomic, Paragraph, Heading, List } from './default'
 
