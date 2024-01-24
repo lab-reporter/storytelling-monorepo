@@ -8,10 +8,6 @@ const LinkWrapper = styled.a`
   &:active {
     color: #9f7544;
     text-decoration: none;
-    border-bottom: 1px solid #d8d8d8;
-  }
-  &:hover {
-    border-color: #9f7544;
   }
 `
 
