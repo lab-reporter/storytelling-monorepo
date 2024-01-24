@@ -5,6 +5,7 @@ import styled from '../styled-components'
 import { DraftRenderer } from '../draft-renderer/index'
 import { RawDraftContentState } from 'draft-js' // eslint-disable-line
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { mediaQuery } from '../utils/media-query'
 import { useGSAP } from '@gsap/react'
 
 const _ = {
@@ -23,16 +24,45 @@ const Sections = styled.div`
 
 const Section = styled.div`
   position: absolute;
+  padding: 32px 16px;
 
-  @media (min-width: 1024px) {
-    &[data-narrow-width='true'] {
-      width: 360px;
+  &[data-section-narrow-width='true'] {
+    max-width: 320px;
+  }
+
+  &[data-section-narrow-width='false'] {
+    width: 50%;
+    max-width: 720px;
+  }
+
+  &[data-section-dark-mode='false'] {
+    background-color: rgba(255, 255, 255, 0.5);
+  }
+
+  &[data-section-dark-mode='true'] {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  ${mediaQuery.mobileOnly} {
+    &[data-section-narrow-width='true'] {
+      width: 75%;
+    }
+
+    &[data-section-narrow-width='false'] {
+      width: 100%;
     }
   }
 
-  @media (max-width: 1023px) {
-    &[data-narrow-width='true'] {
-      width: calc(279 / 375 * 100%);
+  ${mediaQuery.tabletAbove} {
+    &[data-section-alignment='left'] {
+      left: 4vw;
+    }
+    &[data-section-alignment='right'] {
+      right: 4vw;
+    }
+    &[data-section-alignment='center'] {
+      left: 50%;
+      transform: translateX(-50%);
     }
   }
 `
@@ -80,12 +110,14 @@ const BackgroundVideo = styled.div`
  *  @param {string} [props.className]
  *  @param {ArticleSection[]} props.sections
  *  @param {VideoObj} props.video
+ *  @param {boolean} [darkMode=false]
  *  @param {number} [props.secondsPer100vh=1.5]
  */
 export function ScrollableVideoV2({
   className,
   sections,
   video,
+  darkMode = false,
   secondsPer100vh = 1.5,
 }) {
   const scrollTriggerInstance = useRef(null)
@@ -163,14 +195,19 @@ export function ScrollableVideoV2({
     console.log('startTime:', startTime)
     return (
       <Section
-        data-narrow-width
+        data-section-narrow-width={section.width !== 'wide'}
+        data-section-dark-mode={darkMode}
+        data-section-alignment={section.alignment ?? 'left'}
         ref={idx === sections.length - 1 ? lastSectionRef : undefined}
         key={idx}
         style={{
           top: `${(startTime / 1.5) * 100}vh`,
         }}
       >
-        <DraftRenderer rawContentState={section.rawContentState} />
+        <DraftRenderer
+          darkMode={darkMode}
+          rawContentState={section.rawContentState}
+        />
       </Section>
     )
   })
