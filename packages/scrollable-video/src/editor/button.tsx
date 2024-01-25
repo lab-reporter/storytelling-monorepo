@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import styled from '../styled-components.js'
 import {
   EditorState,
@@ -9,30 +9,12 @@ import {
 import { AddCaptionIcon } from './styled'
 import { Drawer, DrawerController, DrawerProvider } from '@keystone-ui/modals'
 import { FieldLabel, TextInput, Select } from '@keystone-ui/fields'
-
 import {
-  RichTextEditor as KidsTextEditor,
-  buttonNames as kidsButtonNames,
-  decorator as kidsDecorator,
-} from '@kids-reporter/draft-editor'
-import {
-  RichTextEditor as TwreporterTextEditor,
-  buttonNames as twreporterButtonNames,
-  decorator as twreporterDecorator,
+  RichTextEditor,
+  buttonNames,
+  decorator,
 } from '@story-telling-reporter/draft-editor'
-import { ThemeContext, ThemeEnum } from './themeContext'
-
-enum PositionEnum {
-  LEFT = 'left',
-  RIGHT = 'right',
-  CENTER = 'center',
-}
-
-export type CaptionState = {
-  startTime: number
-  rawContentState: RawDraftContentState
-  position: PositionEnum
-}
+import { CaptionState, AlignmentEnum } from './type'
 
 export function CaptionInput({
   isOpen,
@@ -45,55 +27,41 @@ export function CaptionInput({
   onCancel: () => void
   inputValue: CaptionState
 }) {
-  const theme = useContext(ThemeContext)
-  const Editor =
-    theme === ThemeEnum.KIDS ? KidsTextEditor : TwreporterTextEditor
-  const decorator =
-    theme === ThemeEnum?.KIDS ? kidsDecorator : twreporterDecorator
-  const disabledButtons =
-    theme === ThemeEnum.KIDS
-      ? [
-          kidsButtonNames.code,
-          kidsButtonNames.codeBlock,
-          kidsButtonNames.newsReading,
-        ]
-      : [
-          twreporterButtonNames.code,
-          twreporterButtonNames.codeBlock,
-          twreporterButtonNames.newsReading,
-          twreporterButtonNames.image,
-          twreporterButtonNames.slideshow,
-          twreporterButtonNames.blockquote,
-          twreporterButtonNames.divider,
-          twreporterButtonNames.infoBox,
-          twreporterButtonNames.h4,
-          twreporterButtonNames.h5,
-        ]
+  const disabledButtons = [
+    buttonNames.code,
+    buttonNames.codeBlock,
+    buttonNames.newsReading,
+    buttonNames.slideshow,
+    buttonNames.divider,
+    buttonNames.infoBox,
+    buttonNames.h4,
+    buttonNames.h5,
+  ]
 
   const contentState = convertFromRaw(inputValue.rawContentState)
   const [inputValueState, setInputValueState] = useState({
     startTime: inputValue.startTime,
     editorState: EditorState.createWithContent(contentState, decorator),
-    position: inputValue.position,
+    alignment: inputValue.alignment,
   })
 
   const options = [
     {
       label: '置左',
-      value: PositionEnum.LEFT,
+      value: AlignmentEnum.LEFT,
     },
     {
       label: '置中',
-      value: PositionEnum.CENTER,
+      value: AlignmentEnum.CENTER,
     },
     {
       label: '置右',
-      value: PositionEnum.RIGHT,
+      value: AlignmentEnum.RIGHT,
     },
   ]
 
   const selectedValue =
-    options.find((option) => option.value === inputValueState.position) ?? null
+    options.find((option) => option.value === inputValueState.alignment) ?? null
 
   return (
     <DrawerProvider>
@@ -116,7 +84,7 @@ export function CaptionInput({
                   rawContentState: convertToRaw(
                     inputValueState.editorState.getCurrentContent()
                   ),
-                  position: inputValueState.position,
+                  alignment: inputValueState.alignment,
                 })
               },
             },
@@ -129,7 +97,7 @@ export function CaptionInput({
               setInputValueState({
                 startTime: Number(e.target.value),
                 editorState: inputValueState.editorState,
-                position: inputValueState.position,
+                alignment: inputValueState.alignment,
               })
             }
             placeholder="0"
@@ -146,7 +114,7 @@ export function CaptionInput({
                 setInputValueState({
                   startTime: inputValue.startTime,
                   editorState: inputValueState.editorState,
-                  position: option.value as PositionEnum,
+                  alignment: option.value as AlignmentEnum,
                 })
               }
             }}
@@ -154,14 +122,14 @@ export function CaptionInput({
           />
           <MarginTop />
           <FieldLabel>字幕內容</FieldLabel>
-          <Editor
+          <RichTextEditor
             disabledButtons={disabledButtons}
             editorState={inputValueState.editorState}
             onChange={(editorState: EditorState) => {
               setInputValueState({
                 startTime: inputValueState.startTime,
                 editorState,
-                position: inputValueState.position,
+                alignment: inputValueState.alignment,
               })
             }}
           />
@@ -207,7 +175,7 @@ export function AddCaptionButton({
           }}
           isOpen={toShowInput}
           inputValue={{
-            position: PositionEnum.LEFT,
+            alignment: AlignmentEnum.LEFT,
             startTime:
               typeof getVideoCurrentTime === 'function'
                 ? getVideoCurrentTime()
