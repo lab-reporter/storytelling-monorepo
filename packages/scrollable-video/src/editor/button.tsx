@@ -6,7 +6,7 @@ import {
   convertToRaw,
   convertFromRaw,
 } from 'draft-js'
-import { AddCaptionIcon } from './styled.js'
+import { AddCaptionIcon } from './styled'
 import { Drawer, DrawerController, DrawerProvider } from '@keystone-ui/modals'
 import { FieldLabel, TextInput, Select } from '@keystone-ui/fields'
 

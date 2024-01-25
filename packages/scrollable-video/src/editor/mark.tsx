@@ -1,9 +1,9 @@
 import React from 'react'
 import { AlertDialog } from '@keystone-ui/modals'
-import { CaptionInput, CaptionState } from './button.js'
-import { DeleteMarkIcon, EditMarkIcon, MarkIcon } from './styled.js'
+import { CaptionInput, CaptionState } from './button'
+import { DeleteMarkIcon, EditMarkIcon, MarkIcon } from './styled'
 import { useState } from 'react'
-import styled from '../styled-components.js'
+import styled from 'styled-components'
 
 const Container = styled.div`
   position: relative;
