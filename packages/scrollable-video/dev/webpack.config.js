@@ -13,7 +13,7 @@ export default {
     path: path.resolve(__dirname, './dist'),
   },
   resolve: {
-    extensions: ['.js'],
+    extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
   },
   devServer: {
     hot: false,
@@ -26,7 +26,7 @@ export default {
   module: {
     rules: [
       {
-        test: /\.m?jsx?$/,
+        test: /\.(ts|tsx|js|jsx)$/,
         resolve: {
           fullySpecified: false,
         },
@@ -35,6 +35,7 @@ export default {
           loader: 'babel-loader',
           options: {
             presets: [
+              '@babel/preset-typescript',
               '@babel/preset-env',
               [
                 '@babel/preset-react',
