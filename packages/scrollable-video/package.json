@@ -27,16 +27,10 @@
     "@gsap/react": "^2.1.0",
     "@keystone-ui/fields": "^7.2.0",
     "@keystone-ui/modals": "^6.0.3",
-    "@kids-reporter/draft-editor": "^0.4.35",
-    "@kids-reporter/draft-renderer": "^0.4.36",
-    "@story-telling-reporter/draft-editor": "0.1.1",
-    "@story-telling-reporter/draft-renderer": "0.1.1",
+    "@story-telling-reporter/draft-editor": "0.1.2-alpha.1",
     "@twreporter/scrollable-video": "^1.0.4-beta.1",
     "gsap": "^3.12.5",
-    "lodash": "^4.17.15",
-    "prop-types": "^15.0.0",
-    "react-transition-group": "^4.4.1",
-    "whatwg-fetch": "^3.4.1"
+    "lodash": "^4.17.15"
   },
   "devDependencies": {
     "react": "18.1.0",
