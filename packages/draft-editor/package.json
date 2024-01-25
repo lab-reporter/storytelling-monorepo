@@ -23,7 +23,6 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@story-telling-reporter/draft-renderer": "0.1.2-alpha.0",
     "@twreporter/errors": "^1.1.2",
     "draft-js": "^0.11.7"
   },

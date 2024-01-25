@@ -16,8 +16,6 @@ import {
   BackgroundColorButton,
   customStylePrefix as bgColorPrefix,
 } from './buttons/bg-color'
-import { BlockquoteButton } from './buttons/blockquote'
-import { DividerButton } from './buttons/divider'
 import { EmbeddedCodeButton } from './buttons/embedded-code'
 import { EnlargeButton } from './buttons/enlarge'
 import {
@@ -26,18 +24,13 @@ import {
 } from './buttons/font-color'
 import { ImageButton } from './buttons/image'
 import { LinkButton } from './buttons/link'
-import { SlideshowButton } from './buttons/slideshow'
 import { ImageSelector } from './buttons/selector/image-selector'
-import { NewsReadingButton } from './buttons/news-reading'
 import { RichTextEditorProps } from './draft-editor.type'
 import { atomicBlockRenderer } from './block-renderer-fn'
-import {
-  blockRenderMap,
-  customStyleFn,
-  decorator,
-} from '@story-telling-reporter/draft-renderer'
 import { createAnnotationButton } from './buttons/annotation'
-import { createInfoBoxButton } from './buttons/info-box'
+import { decorator } from './entity-decorators/index'
+import { blockRenderMap } from './block-render-maps/index'
+import { customStyleFn } from './custom-style-fn'
 
 const buttonStyle = css<{
   isDisabled: boolean
@@ -101,10 +94,6 @@ const CustomButton = styled.div`
   ${buttonStyle}
 `
 
-const CustomBlockquoteButton = styled(BlockquoteButton)`
-  ${buttonStyle}
-`
-
 const CustomLinkButton = styled(LinkButton)`
   ${buttonStyle}
 `
@@ -118,15 +107,7 @@ const CustomImageButton = styled(ImageButton)`
   ${buttonStyle}
 `
 
-const CustomSlideshowButton = styled(SlideshowButton)`
-  ${buttonStyle}
-`
-
 const CustomEmbeddedCodeButton = styled(EmbeddedCodeButton)`
-  ${buttonStyle}
-`
-
-const CustomNewsReadingButton = styled(NewsReadingButton)`
   ${buttonStyle}
 `
 
@@ -135,10 +116,6 @@ const CustomBackgroundColorButton = styled(BackgroundColorButton)`
 `
 
 const CustomFontColorButton = styled(FontColorButton)`
-  ${buttonStyle}
-`
-
-const CustomDividerButton = styled(DividerButton)`
   ${buttonStyle}
 `
 
@@ -518,12 +495,6 @@ class RichTextEditor extends React.Component<RichTextEditorProps, State> {
                   this.setState({ readOnly: false })
                 }}
               ></CustomFontColorButton>
-              <CustomBlockquoteButton
-                isDisabled={disabledButtons.includes(buttonNames.blockquote)}
-                editorState={editorState}
-                onChange={this.onChange}
-                readOnly={this.state.readOnly}
-              />
               <CustomAnnotationButton
                 isDisabled={disabledButtons.includes(buttonNames.annotation)}
                 isActive={entityType === 'ANNOTATION'}
@@ -546,37 +517,12 @@ class RichTextEditor extends React.Component<RichTextEditorProps, State> {
                 readOnly={this.state.readOnly}
                 ImageSelector={ImageSelector}
               />
-              <CustomSlideshowButton
-                isDisabled={disabledButtons.includes(buttonNames.slideshow)}
-                editorState={editorState}
-                onChange={this.onChange}
-                readOnly={this.state.readOnly}
-                ImageSelector={ImageSelector}
-              />
-              <CustomInfoBoxButton
-                isDisabled={disabledButtons.includes(buttonNames.infoBox)}
-                editorState={editorState}
-                onChange={this.onChange}
-                readOnly={this.state.readOnly}
-              />
               <CustomEmbeddedCodeButton
                 isDisabled={disabledButtons.includes(buttonNames.embed)}
                 editorState={editorState}
                 onChange={this.onChange}
                 readOnly={this.state.readOnly}
               ></CustomEmbeddedCodeButton>
-              <CustomNewsReadingButton
-                isDisabled={disabledButtons.includes(buttonNames.newsReading)}
-                editorState={editorState}
-                onChange={this.onChange}
-                readOnly={this.state.readOnly}
-              ></CustomNewsReadingButton>
-              <CustomDividerButton
-                isDisabled={disabledButtons.includes(buttonNames.divider)}
-                editorState={editorState}
-                onChange={this.onChange}
-                readOnly={this.state.readOnly}
-              />
             </DraftEditorControlsWrapper>
           </DraftEditorControls>
           <TextEditorWrapper
@@ -587,6 +533,7 @@ class RichTextEditor extends React.Component<RichTextEditorProps, State> {
               }
             }}
           >
+            {/*@ts-ignore TODO: refactor `Editor` to function component */}
             <Editor
               blockRenderMap={blockRenderMap}
               blockRendererFn={this.blockRendererFn}
@@ -596,7 +543,7 @@ class RichTextEditor extends React.Component<RichTextEditorProps, State> {
               handleReturn={this.handleReturn}
               keyBindingFn={this.mapKeyToEditorCommand}
               onChange={this.onChange}
-              placeholder="Tell a story..."
+              placeholder=""
               ref={this.editorRef}
               spellCheck={true}
               readOnly={readOnly}
@@ -608,7 +555,7 @@ class RichTextEditor extends React.Component<RichTextEditorProps, State> {
   }
 }
 
-type StyleButtonProps = {
+type StyledButtonProps = {
   active: boolean
   label: string
   onToggle: (arg0: string) => void
@@ -618,25 +565,22 @@ type StyleButtonProps = {
   isDisabled: boolean
 }
 
-class StyleButton extends React.Component<StyleButtonProps> {
-  onToggle = (e: React.MouseEvent) => {
+function StyledButton(props: StyledButtonProps) {
+  const onToggle = (e: React.MouseEvent) => {
     e.preventDefault()
-    this.props.onToggle(this.props.style)
+    props.onToggle(props.style)
   }
-
-  render() {
-    return (
-      <CustomButton
-        isDisabled={this.props.isDisabled}
-        isActive={this.props.active}
-        onMouseDown={this.onToggle}
-        readOnly={this.props.readOnly}
-      >
-        {this.props.icon && <i className={this.props.icon}></i>}
-        <span>{!this.props.icon ? this.props.label : ''}</span>
-      </CustomButton>
-    )
-  }
+  return (
+    <CustomButton
+      isDisabled={props.isDisabled}
+      isActive={props.active}
+      onMouseDown={onToggle}
+      readOnly={props.readOnly}
+    >
+      {props.icon && <i className={props.icon}></i>}
+      <span>{!props.icon ? props.label : ''}</span>
+    </CustomButton>
+  )
 }
 
 type StyleControlsProps = {
@@ -653,7 +597,7 @@ const blockStyles = [
   { label: 'H5', style: 'header-five', icon: '' },
   { label: 'UL', style: 'unordered-list-item', icon: 'fas fa-list-ul' },
   { label: 'OL', style: 'ordered-list-item', icon: 'fas fa-list-ol' },
-  { label: 'Code Block', style: 'code-block', icon: 'fas fa-code' },
+  { label: 'Quote', style: 'blockquote', icon: 'fas fa-quote-left' },
 ]
 
 const BlockStyleControls = (props: StyleControlsProps) => {
@@ -666,7 +610,7 @@ const BlockStyleControls = (props: StyleControlsProps) => {
   return (
     <React.Fragment>
       {blockStyles.map((type) => (
-        <StyleButton
+        <StyledButton
           isDisabled={disabledButtons.includes(type.style)}
           key={type.label}
           active={type.style === blockType}
@@ -693,7 +637,7 @@ const InlineStyleControls = (props: StyleControlsProps) => {
   return (
     <React.Fragment>
       {inlineStyles.map((type) => (
-        <StyleButton
+        <StyledButton
           isDisabled={props.disabledButtons.includes(type.style.toLowerCase())}
           key={type.label}
           active={currentStyle.has(type.style)}
@@ -714,15 +658,6 @@ const AnnotationButton = createAnnotationButton({
 })
 
 const CustomAnnotationButton = styled(AnnotationButton)`
-  ${buttonStyle}
-`
-
-const InfoBoxButton = createInfoBoxButton({
-  InnerEditor: RichTextEditor,
-  decorator,
-})
-
-const CustomInfoBoxButton = styled(InfoBoxButton)`
   ${buttonStyle}
 `
 

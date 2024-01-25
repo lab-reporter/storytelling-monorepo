@@ -23,9 +23,5 @@ export default {
   annotation: 'annotation',
   embed: 'embed',
   image: 'image',
-  infoBox: 'info-box',
   link: 'link',
-  slideshow: 'slideshow',
-  newsReading: 'news-reading',
-  divider: 'divider',
 }
