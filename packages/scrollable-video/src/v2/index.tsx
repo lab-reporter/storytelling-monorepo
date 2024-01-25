@@ -83,22 +83,22 @@ const BackgroundVideo = styled.div`
   }
 `
 
-enum SectionWidthEnum {
+export enum WidthEnum {
   WIDE = 'wide',
   NARROW = 'narrow',
 }
 
-enum SectionAlignmentEnum {
+export enum AlignmentEnum {
   RIGHT = 'right',
   LEFT = 'left',
   CENTER = 'center',
 }
 
-type ArticleSection = {
+export type CaptionState = {
   rawContentState: RawDraftContentState
   startTime: number
-  alignment?: SectionAlignmentEnum
-  width?: SectionWidthEnum
+  alignment?: AlignmentEnum
+  width?: WidthEnum
 }
 
 type VideoObj = {
@@ -110,7 +110,7 @@ type VideoObj = {
 
 type ScrollableVideoProps = {
   className?: string
-  sections: ArticleSection[]
+  captions: CaptionState[]
   video: VideoObj
   darkMode?: boolean
   secondsPer100vh?: number
@@ -119,14 +119,14 @@ type ScrollableVideoProps = {
 /**
  *  @param {Object} props
  *  @param {string} [props.className]
- *  @param {ArticleSection[]} props.sections
+ *  @param {CaptionState[]} props.captions
  *  @param {VideoObj} props.video
  *  @param {boolean} [darkMode=false]
  *  @param {number} [props.secondsPer100vh=1.5]
  */
 export function ScrollableVideo({
   className,
-  sections,
+  captions,
   video,
   darkMode = false,
   secondsPer100vh = 1.5,
@@ -201,16 +201,16 @@ export function ScrollableVideo({
     }
   }, [])
 
-  const sectionsJsx = sections.map((section, idx) => {
-    const startTime = section.startTime
+  const sectionsJsx = captions.map((caption, idx) => {
+    const startTime = caption.startTime
     console.log('startTime:', startTime)
     const top = `${(startTime / secondsPer100vh) * 100}vh`
     return (
       <Section
-        data-section-narrow-width={section.width !== 'wide'}
+        data-section-narrow-width={caption.width !== 'wide'}
         data-section-dark-mode={darkMode}
-        data-section-alignment={section.alignment ?? 'left'}
-        ref={idx === sections.length - 1 ? lastSectionRef : undefined}
+        data-section-alignment={caption.alignment ?? 'left'}
+        ref={idx === captions.length - 1 ? lastSectionRef : undefined}
         key={idx}
         style={{
           top,
@@ -218,7 +218,7 @@ export function ScrollableVideo({
       >
         <DraftRenderer
           darkMode={darkMode}
-          rawContentState={section.rawContentState}
+          rawContentState={caption.rawContentState}
         />
       </Section>
     )
