@@ -3,6 +3,7 @@ const buildTarget = process.env.BUILD_TARGET || 'esmodule' // another value coul
 
 export default {
   presets: [
+    '@babel/preset-typescript',
     [
       '@babel/preset-env',
       {
