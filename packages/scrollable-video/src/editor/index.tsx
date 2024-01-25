@@ -1,7 +1,7 @@
 import { AddCaptionButton } from './button'
 import React, { useEffect, useState, useRef } from 'react'
 import styled from 'styled-components'
-import { CaptionState } from './button'
+import { CaptionState } from './type'
 import { CaptionMark } from './mark'
 import { PlayButton, PauseButton } from './styled'
 
@@ -69,18 +69,16 @@ const MarkContainer = styled.div<{ $left: string }>`
 const defaultDuration = 10 // seconds
 
 function CaptionEditor({
-  videoProp,
-  _captions = [],
+  videoObj,
+  captions: _captions = [],
   onChange,
 }: {
-  videoProp: {
-    sources: {
-      mediaType: string
-      src: string
-    }[]
+  videoObj: {
+    src: string
+    type?: string
   }
-  _captions: CaptionState[]
-  onChange: (arg0: { captions: CaptionState[] }) => void
+  captions: CaptionState[]
+  onChange: (arg0: { captions?: CaptionState[]; duration?: number }) => void
 }) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const progressRef = useRef<HTMLProgressElement>(null)
@@ -94,12 +92,18 @@ function CaptionEditor({
       console.log('onLoadedMetadata is triggered.')
       if (video?.duration) {
         setDuration(video.duration)
+        onChange({
+          duration: video.duration,
+        })
       }
     }
 
     if (video) {
       if (video.readyState > 0) {
         setDuration(video.duration)
+        onChange({
+          duration: video.duration,
+        })
         return
       }
 
@@ -167,14 +171,6 @@ function CaptionEditor({
     }
   }
 
-  if (!Array.isArray(videoProp?.sources)) {
-    return null
-  }
-
-  const sourcesJsx = videoProp.sources.map((source, index) => {
-    return <source key={index} src={source.src} type={source.mediaType} />
-  })
-
   const marksJsx = captions.map((captionState, index) => {
     let startTime = captionState.startTime
 
@@ -213,7 +209,7 @@ function CaptionEditor({
   return (
     <Container>
       <video id="video" preload="metadata" ref={videoRef}>
-        {sourcesJsx}
+        <source src={videoObj.src} type={videoObj.type} />
       </video>
       <Controls id="video-controls">
         <ProgressAndMarksBlock>
