@@ -23,6 +23,10 @@ export const Paragraph = styled.div`
   line-height: 1.75;
   letter-spacing: 0.6px;
   color: ${({ theme }) => (theme.darkMode ? '#fff' : '#404040')};
+
+  > div[data-block='true'] {
+    margin-bottom: 16px;
+  }
 `
 
 export const Heading = styled.div`
