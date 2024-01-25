@@ -3,7 +3,6 @@
   "workspaces": [
     "packages/core",
     "packages/draft-editor",
-    "packages/draft-renderer",
     "packages/cms",
     "packages/karaoke",
     "packages/dual-slides",
