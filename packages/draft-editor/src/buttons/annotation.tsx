@@ -12,15 +12,14 @@ import { RichTextEditorProps } from '../draft-editor.type'
 const disabledButtons = [
   buttonNames.h2,
   buttonNames.h3,
+  buttonNames.h4,
+  buttonNames.h5,
   buttonNames.code,
   buttonNames.codeBlock,
   buttonNames.blockquote,
   buttonNames.annotation,
   buttonNames.embed,
   buttonNames.image,
-  buttonNames.infoBox,
-  buttonNames.slideshow,
-  buttonNames.newsReading,
 ]
 
 type AnnotationButtonProps = {
