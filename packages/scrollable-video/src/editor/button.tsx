@@ -14,13 +14,11 @@ import {
   RichTextEditor as KidsTextEditor,
   buttonNames as kidsButtonNames,
   decorator as kidsDecorator,
-  // @ts-ignore there is no type definition for this pkg
 } from '@kids-reporter/draft-editor'
 import {
   RichTextEditor as TwreporterTextEditor,
   buttonNames as twreporterButtonNames,
   decorator as twreporterDecorator,
-  // @ts-ignore there is no type definition for this pkg
 } from '@story-telling-reporter/draft-editor'
 import { ThemeContext, ThemeEnum } from './themeContext'
 
