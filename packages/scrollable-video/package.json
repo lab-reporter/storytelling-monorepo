@@ -31,6 +31,7 @@
     "@kids-reporter/draft-renderer": "^0.4.36",
     "@story-telling-reporter/draft-editor": "0.1.1",
     "@story-telling-reporter/draft-renderer": "0.1.1",
+    "@twreporter/scrollable-video": "^1.0.4-beta.1",
     "gsap": "^3.12.5",
     "lodash": "^4.17.15",
     "prop-types": "^15.0.0",
