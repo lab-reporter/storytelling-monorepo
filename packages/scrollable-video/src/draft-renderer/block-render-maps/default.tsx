@@ -2,6 +2,7 @@ import Immutable from 'immutable'
 import React from 'react'
 import styled from 'styled-components'
 import { DefaultDraftBlockRenderMap } from 'draft-js'
+import { mediaQuery } from '../../utils/media-query'
 
 export const Blockquote = styled.blockquote`
   width: 100%;
@@ -39,6 +40,15 @@ export const Heading = styled.div`
 
   h3 {
     font-size: 24px;
+  }
+
+  ${mediaQuery.mobileOnly} {
+    h2 {
+      font-size: 26px;
+    }
+    h3 {
+      font-size: 22px;
+    }
   }
 `
 
