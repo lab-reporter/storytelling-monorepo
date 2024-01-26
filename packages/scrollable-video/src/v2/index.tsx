@@ -26,15 +26,6 @@ const Section = styled.div`
   position: absolute;
   padding: 32px 16px;
 
-  &[data-section-narrow-width='true'] {
-    max-width: 320px;
-  }
-
-  &[data-section-narrow-width='false'] {
-    width: 50%;
-    max-width: 720px;
-  }
-
   &[data-section-dark-mode='false'] {
     background-color: rgba(255, 255, 255, 0.5);
   }
@@ -45,15 +36,26 @@ const Section = styled.div`
 
   ${mediaQuery.mobileOnly} {
     &[data-section-narrow-width='true'] {
-      width: 75%;
+      width: 75vw;
+      left: 50%;
+      transform: translateX(-50%);
     }
 
     &[data-section-narrow-width='false'] {
-      width: 100%;
+      width: 100vw;
     }
   }
 
   ${mediaQuery.tabletAbove} {
+    &[data-section-narrow-width='true'] {
+      width: 320px;
+    }
+
+    &[data-section-narrow-width='false'] {
+      width: 46vw;
+      max-width: 720px;
+    }
+
     &[data-section-alignment='left'] {
       left: 4vw;
     }
