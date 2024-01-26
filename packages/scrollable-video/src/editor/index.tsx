@@ -16,6 +16,10 @@ const Container = styled.div`
   }
 `
 
+const Duration = styled.div`
+  color: #666;
+`
+
 const Controls = styled.div`
   display: flex;
   justify-content: flex-start;
@@ -83,6 +87,7 @@ function CaptionEditor({
   const videoRef = useRef<HTMLVideoElement>(null)
   const progressRef = useRef<HTMLProgressElement>(null)
   const [duration, setDuration] = useState(defaultDuration)
+  const [currentTime, setCurrentTime] = useState(0)
   const [captions, setCaptions] = useState(_captions)
 
   useEffect(() => {
@@ -125,7 +130,8 @@ function CaptionEditor({
         progress?.setAttribute('max', video.duration.toString())
       }
       if (progress && video?.currentTime) {
-        progress.value = video?.currentTime
+        progress.value = video.currentTime
+        setCurrentTime(video.currentTime)
       }
     }
     if (video && progress) {
@@ -221,7 +227,7 @@ function CaptionEditor({
         <div onClick={onPauseButtonClick}>
           <AddCaptionButton
             getVideoCurrentTime={() => {
-              return Number(videoRef?.current?.currentTime?.toFixed(2)) || 0
+              return Number(currentTime.toFixed(2)) || 0
             }}
             onChange={(captionState) => {
               const newCaptions = captions.concat(captionState)
@@ -231,6 +237,9 @@ function CaptionEditor({
             }}
           />
         </div>
+        <Duration>
+          {currentTime.toFixed(2)}/{duration.toFixed(2)}
+        </Duration>
       </Controls>
     </Container>
   )
