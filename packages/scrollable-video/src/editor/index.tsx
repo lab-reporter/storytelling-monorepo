@@ -1,9 +1,10 @@
-import { AddCaptionButton } from './button'
 import React, { useEffect, useState, useRef } from 'react'
 import styled from 'styled-components'
-import { CaptionState } from './type'
+import { AddCaptionButton } from './button'
 import { CaptionMark } from './mark'
+import { CaptionState } from './type'
 import { PlayButton, PauseButton } from './styled'
+import * as Slider from '@radix-ui/react-slider'
 
 const Container = styled.div`
   width: 100%;
@@ -28,23 +29,33 @@ const Controls = styled.div`
   gap: 5px;
 `
 
-const Progress = styled.progress`
-  width: 100%;
-  border: none;
-  height: 10px;
-
-  &::-webkit-progress-bar {
-    background-color: #cdcdcd;
-    border-radius: 10px;
+const ProgressBlock = styled.div`
+  .slider__root {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 10px;
+    width: 100%;
   }
 
-  &::-webkit-progress-value {
+  .slider__track {
+    position: relative;
+    flex-grow: 1;
+    background-color: #cdcdcd;
+    height: 10px;
+  }
+
+  .slider__range {
+    position: absolute;
     background-color: #666;
-    border-radius: 10px;
+    height: 10px;
   }
 
-  &::-moz-progress-bar {
-    background-color: #cdcdcd;
+  .slider__thumb {
+    display: block;
+    width: 10px;
+    height: 10px;
+    background-color: #666;
     border-radius: 10px;
   }
 `
@@ -85,7 +96,6 @@ function CaptionEditor({
   onChange: (arg0: { captions?: CaptionState[]; duration?: number }) => void
 }) {
   const videoRef = useRef<HTMLVideoElement>(null)
-  const progressRef = useRef<HTMLProgressElement>(null)
   const [duration, setDuration] = useState(defaultDuration)
   const [currentTime, setCurrentTime] = useState(0)
   const [captions, setCaptions] = useState(_captions)
@@ -123,43 +133,17 @@ function CaptionEditor({
 
   useEffect(() => {
     const video = videoRef.current
-    const progress = progressRef.current
     const handleTimeUpdate = () => {
       // For mobile browsers, ensure that the progress element's max attribute is set
-      if (!progress?.getAttribute('max') && video?.duration) {
-        progress?.setAttribute('max', video.duration.toString())
-      }
-      if (progress && video?.currentTime) {
-        progress.value = video.currentTime
+      if (video?.currentTime) {
         setCurrentTime(video.currentTime)
       }
     }
-    if (video && progress) {
+    if (video) {
       video.addEventListener('timeupdate', handleTimeUpdate)
     }
     return () => {
       video?.removeEventListener('timeupdate', handleTimeUpdate)
-    }
-  }, [])
-
-  useEffect(() => {
-    const video = videoRef.current
-    const progress = progressRef.current
-
-    const handleProgressBarClick = (e: MouseEvent) => {
-      if (progress && video) {
-        const offsetLeft = progress.getBoundingClientRect()?.x
-        const pos = (e.pageX - offsetLeft) / progress.offsetWidth
-        video.currentTime = pos * video.duration
-      }
-    }
-
-    if (video && progress) {
-      progress.addEventListener('click', handleProgressBarClick)
-    }
-
-    return () => {
-      progress?.removeEventListener('click', handleProgressBarClick)
     }
   }, [])
 
@@ -220,7 +204,25 @@ function CaptionEditor({
       <Controls id="video-controls">
         <ProgressAndMarksBlock>
           {marksJsx}
-          <Progress id="progress" value="0" max={duration} ref={progressRef} />
+          <ProgressBlock>
+            <Slider.Root
+              className="slider__root"
+              value={[currentTime]}
+              max={duration}
+              step={duration / 100}
+              onValueChange={(value) => {
+                if (videoRef.current) {
+                  videoRef.current.currentTime = value[0]
+                }
+                setCurrentTime(value[0])
+              }}
+            >
+              <Slider.Track className="slider__track">
+                <Slider.Range className="slider__range" />
+              </Slider.Track>
+              <Slider.Thumb className="slider__thumb" />
+            </Slider.Root>
+          </ProgressBlock>
         </ProgressAndMarksBlock>
         <PlayButton onClick={onPlayButtonClick}></PlayButton>
         <PauseButton onClick={onPauseButtonClick}></PauseButton>
