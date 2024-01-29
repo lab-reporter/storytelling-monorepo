@@ -8,6 +8,8 @@ export default {
   // custom inline styles
   backgroundColor: 'background-color',
   fontColor: 'font-color',
+  textAlignRight: 'text-align-right',
+  textAlignCenter: 'text-align-center',
 
   // block styles
   h2: 'header-two',

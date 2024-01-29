@@ -2,6 +2,17 @@ import Immutable from 'immutable'
 import React from 'react'
 import styled from 'styled-components'
 import { DefaultDraftBlockRenderMap } from 'draft-js'
+import { TextAlignCssNameEnum } from '../block-style-fn'
+
+const textAlignCss = `
+  .${TextAlignCssNameEnum.CENTER} {
+    text-align: center;
+  }
+
+  .${TextAlignCssNameEnum.RIGHT} {
+    text-align: right;
+  }
+`
 
 export const Blockquote = styled.blockquote`
   width: 100%;
@@ -26,6 +37,8 @@ export const Paragraph = styled.div`
   > div[data-block='true'] {
     margin-bottom: 16px;
   }
+
+  ${textAlignCss}
 `
 
 export const Heading = styled.div`
@@ -44,6 +57,8 @@ export const Heading = styled.div`
   h3 {
     font-size: 24px;
   }
+
+  ${textAlignCss}
 `
 
 export const List = styled.ol`

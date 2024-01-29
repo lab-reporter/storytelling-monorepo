@@ -26,10 +26,17 @@ import { ImageButton } from './buttons/image'
 import { LinkButton } from './buttons/link'
 import { ImageSelector } from './buttons/selector/image-selector'
 import { RichTextEditorProps } from './draft-editor.type'
+import {
+  TextAlignEnum,
+  TextAlignRightButton as _TextAlignRightButton,
+  TextAlignCenterButton as _TextAlignCenterButton,
+  getTextAlignOfSelectionBlocks,
+} from './buttons/text-align'
 import { atomicBlockRenderer } from './block-renderer-fn'
 import { createAnnotationButton } from './buttons/annotation'
 import { decorator } from './entity-decorators/index'
 import { blockRenderMap } from './block-render-maps/index'
+import { blockStyleFn } from './block-style-fn'
 import { customStyleFn } from './custom-style-fn'
 
 const buttonStyle = css<{
@@ -116,6 +123,14 @@ const CustomBackgroundColorButton = styled(BackgroundColorButton)`
 `
 
 const CustomFontColorButton = styled(FontColorButton)`
+  ${buttonStyle}
+`
+
+const TextAlignRightButton = styled(_TextAlignRightButton)`
+  ${buttonStyle}
+`
+
+const TextAlignCenterButton = styled(_TextAlignCenterButton)`
   ${buttonStyle}
 `
 
@@ -399,6 +414,8 @@ class RichTextEditor extends React.Component<RichTextEditorProps, State> {
     const { isEnlarged, readOnly } = this.state
 
     const entityType = this.getEntityType(editorState)
+    const textAlignOfSelectionBlocks =
+      getTextAlignOfSelectionBlocks(editorState)
 
     return (
       <DraftEditorContainer isEnlarged={isEnlarged}>
@@ -430,6 +447,24 @@ class RichTextEditor extends React.Component<RichTextEditorProps, State> {
                 disabledButtons={disabledButtons}
                 editorState={editorState}
                 onToggle={this.toggleInlineStyle}
+                readOnly={this.state.readOnly}
+              />
+              <TextAlignCenterButton
+                isDisabled={disabledButtons.includes(
+                  buttonNames.textAlignCenter
+                )}
+                isActive={textAlignOfSelectionBlocks === TextAlignEnum.CENTER}
+                editorState={editorState}
+                onChange={this.onChange}
+                readOnly={this.state.readOnly}
+              />
+              <TextAlignRightButton
+                isDisabled={disabledButtons.includes(
+                  buttonNames.textAlignRight
+                )}
+                isActive={textAlignOfSelectionBlocks === TextAlignEnum.RIGHT}
+                editorState={editorState}
+                onChange={this.onChange}
                 readOnly={this.state.readOnly}
               />
               <EnlargeButtonWrapper>
@@ -537,6 +572,7 @@ class RichTextEditor extends React.Component<RichTextEditorProps, State> {
             <Editor
               blockRenderMap={blockRenderMap}
               blockRendererFn={this.blockRendererFn}
+              blockStyleFn={blockStyleFn}
               customStyleFn={customStyleFn}
               editorState={editorState}
               handleKeyCommand={this.handleKeyCommand}
