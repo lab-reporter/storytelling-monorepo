@@ -1,3 +1,3 @@
-import { type CaptionState, AlignmentEnum } from '../v2/index'
+import { type CaptionState, AlignmentEnum, WidthEnum } from '../v2/index'
 
-export { type CaptionState, AlignmentEnum }
+export { type CaptionState, AlignmentEnum, WidthEnum }

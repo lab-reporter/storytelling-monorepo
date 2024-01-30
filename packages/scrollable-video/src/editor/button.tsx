@@ -14,7 +14,44 @@ import {
   buttonNames,
   decorator,
 } from '@story-telling-reporter/draft-editor'
-import { CaptionState, AlignmentEnum } from './type'
+import { AlignmentEnum, CaptionState, WidthEnum } from './type'
+
+const disabledButtons = [
+  buttonNames.code,
+  buttonNames.codeBlock,
+  buttonNames.newsReading,
+  buttonNames.slideshow,
+  buttonNames.divider,
+  buttonNames.infoBox,
+  buttonNames.h4,
+  buttonNames.h5,
+]
+
+const alignmentOptions = [
+  {
+    label: '置左',
+    value: AlignmentEnum.LEFT,
+  },
+  {
+    label: '置中',
+    value: AlignmentEnum.CENTER,
+  },
+  {
+    label: '置右',
+    value: AlignmentEnum.RIGHT,
+  },
+]
+
+const widthOptions = [
+  {
+    label: '窄版',
+    value: WidthEnum.NARROW,
+  },
+  {
+    label: '寬版',
+    value: WidthEnum.WIDE,
+  },
+]
 
 export function CaptionInput({
   isOpen,
@@ -27,41 +64,22 @@ export function CaptionInput({
   onCancel: () => void
   inputValue: CaptionState
 }) {
-  const disabledButtons = [
-    buttonNames.code,
-    buttonNames.codeBlock,
-    buttonNames.newsReading,
-    buttonNames.slideshow,
-    buttonNames.divider,
-    buttonNames.infoBox,
-    buttonNames.h4,
-    buttonNames.h5,
-  ]
-
   const contentState = convertFromRaw(inputValue.rawContentState)
   const [inputValueState, setInputValueState] = useState({
     startTime: inputValue.startTime,
     editorState: EditorState.createWithContent(contentState, decorator),
     alignment: inputValue.alignment,
+    width: inputValue.width,
   })
 
-  const options = [
-    {
-      label: '置左',
-      value: AlignmentEnum.LEFT,
-    },
-    {
-      label: '置中',
-      value: AlignmentEnum.CENTER,
-    },
-    {
-      label: '置右',
-      value: AlignmentEnum.RIGHT,
-    },
-  ]
+  const selectedAlignmentValue =
+    alignmentOptions.find(
+      (option) => option.value === inputValueState.alignment
+    ) ?? null
 
-  const selectedValue =
-    options.find((option) => option.value === inputValueState.alignment) ?? null
+  const selectedWidthValue =
+    widthOptions.find((option) => option.value === inputValueState.width) ??
+    null
 
   return (
     <DrawerProvider>
@@ -85,6 +103,7 @@ export function CaptionInput({
                     inputValueState.editorState.getCurrentContent()
                   ),
                   alignment: inputValueState.alignment,
+                  width: inputValueState.width,
                 })
               },
             },
@@ -94,10 +113,10 @@ export function CaptionInput({
           <FieldLabel>字幕出現秒數</FieldLabel>
           <TextInput
             onChange={(e) =>
-              setInputValueState({
-                startTime: Number(e.target.value),
-                editorState: inputValueState.editorState,
-                alignment: inputValueState.alignment,
+              setInputValueState((prevState) => {
+                return Object.assign({}, prevState, {
+                  startTime: Number(e.target.value),
+                })
               })
             }
             placeholder="0"
@@ -108,17 +127,33 @@ export function CaptionInput({
           <FieldLabel>字幕出現位置</FieldLabel>
           <Select
             isClearable
-            options={options}
+            options={alignmentOptions}
             onChange={(option) => {
               if (option) {
-                setInputValueState({
-                  startTime: inputValue.startTime,
-                  editorState: inputValueState.editorState,
-                  alignment: option.value as AlignmentEnum,
+                setInputValueState((prevState) => {
+                  return Object.assign({}, prevState, {
+                    alignment: option.value,
+                  })
                 })
               }
             }}
-            value={selectedValue}
+            value={selectedAlignmentValue}
+          />
+          <MarginTop />
+          <FieldLabel>字幕寬度</FieldLabel>
+          <Select
+            isClearable
+            options={widthOptions}
+            onChange={(option) => {
+              if (option) {
+                setInputValueState((prevState) => {
+                  return Object.assign({}, prevState, {
+                    width: option.value,
+                  })
+                })
+              }
+            }}
+            value={selectedWidthValue}
           />
           <MarginTop />
           <FieldLabel>字幕內容</FieldLabel>
@@ -126,10 +161,10 @@ export function CaptionInput({
             disabledButtons={disabledButtons}
             editorState={inputValueState.editorState}
             onChange={(editorState: EditorState) => {
-              setInputValueState({
-                startTime: inputValueState.startTime,
-                editorState,
-                alignment: inputValueState.alignment,
+              setInputValueState((prevState) => {
+                return Object.assign({}, prevState, {
+                  editorState,
+                })
               })
             }}
           />
