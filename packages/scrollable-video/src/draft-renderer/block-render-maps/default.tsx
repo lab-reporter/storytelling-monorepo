@@ -4,7 +4,17 @@ import styled from 'styled-components'
 import { DefaultDraftBlockRenderMap } from 'draft-js'
 import { mediaQuery } from '../../utils/media-query'
 
-export const Blockquote = styled.blockquote`
+const textAlignCss = `
+  .text-align-center {
+    text-align: center;
+  }
+
+  .text-align-right {
+    text-align: right;
+  }
+`
+
+export const Blockquote = styled.div`
   width: 100%;
   padding: 0 16px;
   margin-bottom: 16px;
@@ -12,6 +22,11 @@ export const Blockquote = styled.blockquote`
   font-size: 16px;
   line-height: 1.75;
   color: ${({ theme }) => (theme.darkMode ? '#e2e2e2' : '#808080')};
+
+  /* clear default margin */
+  blockquote {
+    margin: 0;
+  }
 `
 
 export const Paragraph = styled.div`
@@ -27,6 +42,8 @@ export const Paragraph = styled.div`
   > div[data-block='true'] {
     margin-bottom: 16px;
   }
+
+  ${textAlignCss}
 `
 
 export const Heading = styled.div`
@@ -54,6 +71,8 @@ export const Heading = styled.div`
       font-size: 22px;
     }
   }
+
+  ${textAlignCss}
 `
 
 export const List = styled.ol`

@@ -1,5 +1,6 @@
 import React from 'react'
 import { blockRenderMap } from './block-render-maps/index'
+import { blockStyleFn } from './block-style-fn'
 import {
   Editor,
   EditorState,
@@ -38,6 +39,7 @@ export function DraftRenderer({
         editorState={editorState}
         blockRenderMap={blockRenderMap}
         blockRendererFn={blockRendererFn}
+        blockStyleFn={blockStyleFn}
         customStyleFn={customStyleFn}
         readOnly
         // eslint-disable-next-line @typescript-eslint/no-empty-function
