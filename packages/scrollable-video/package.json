@@ -1,6 +1,6 @@
 {
   "name": "@story-telling-reporter/react-scrollable-video",
-  "version": "0.1.2-alpha.1",
+  "version": "0.1.2-alpha.2",
   "description": "",
   "main": "lib/cjs/index.js",
   "module": "lib/esm/index.js",
@@ -27,7 +27,8 @@
     "@gsap/react": "^2.1.0",
     "@keystone-ui/fields": "^7.2.0",
     "@keystone-ui/modals": "^6.0.3",
-    "@story-telling-reporter/draft-editor": "0.1.2-alpha.1",
+    "@radix-ui/react-slider": "^1.1.2",
+    "@story-telling-reporter/draft-editor": "0.1.2-alpha.3",
     "@twreporter/scrollable-video": "^1.0.4-beta.1",
     "gsap": "^3.12.5",
     "lodash": "^4.17.15"
