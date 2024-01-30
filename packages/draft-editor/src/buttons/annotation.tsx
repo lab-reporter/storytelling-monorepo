@@ -48,9 +48,9 @@ export function createAnnotationButton({
 
     const promptForAnnotation = (e: React.MouseEvent<HTMLDivElement>) => {
       e.preventDefault()
-      props.onEditStart()
       const selection = editorStateOfOuterEditor.getSelection()
       if (!selection.isCollapsed()) {
+        props.onEditStart()
         setToShowInput(true)
       }
     }

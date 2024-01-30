@@ -26,9 +26,9 @@ export function LinkButton(props: {
 
   const promptForLink = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault()
-    props.onEditStart()
     const selection = editorState.getSelection()
     if (!selection.isCollapsed()) {
+      props.onEditStart()
       setToShowUrlInput(true)
     }
   }

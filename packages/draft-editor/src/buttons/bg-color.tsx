@@ -28,9 +28,9 @@ export function BackgroundColorButton(props: BackgroundColorButtonProps) {
 
   const promptForColor = (e: React.MouseEvent) => {
     e.preventDefault()
-    props.onEditStart()
     const selection = editorState.getSelection()
     if (!selection.isCollapsed()) {
+      props.onEditStart()
       setToShowColorInput(true)
     }
   }
