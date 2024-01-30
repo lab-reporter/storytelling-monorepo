@@ -1,8 +1,8 @@
 import React, { useState } from 'react' // eslint-disable-line
 import styled from 'styled-components'
 import { CaptionEditor } from '../src/editor/index'
+import { ScrollableVideo } from '../src/v2/index'
 import { createRoot } from 'react-dom/client'
-import ScrollableVideo from '../src/scrollable-video/index'
 
 const reactRootId = 'root'
 const container = document.getElementById(reactRootId)
@@ -10,42 +10,43 @@ const root = createRoot(container)
 
 const Block = styled.div`
   width: 100%;
-  max-width: 1000px;
   margin-left: auto;
   margin-right: auto;
 `
 
-function Root() {
+function Demo() {
   const [captions, setCaptions] = useState([])
+  const [duration, setDuration] = useState(0)
 
   return (
     <>
       <CaptionEditor
-        video={{
-          sources: [
-            {
-              src: './static/2020091916-tnrail-01-1440.mp4',
-              mediaType: 'video/mp4',
-            },
-          ],
+        videoObj={{
+          src: './static/2020091916-tnrail-01-1440.mp4',
+          type: 'video/mp4',
         }}
-        onChange={(editorState) => {
-          setCaptions(editorState.captions)
+        onChange={({ duration, captions }) => {
+          if (captions) {
+            setCaptions(captions)
+          }
+          if (duration) {
+            setDuration(duration)
+          }
         }}
       />
-      <div style={{ marginBottom: '50vh' }}></div>
       {captions.length > 0 ? (
-        <ScrollableVideo
-          captions={captions}
-          video={{
-            sources: [
-              {
-                type: 'video/mp4',
-                src: './static/2020091916-tnrail-01-1440.mp4',
-              },
-            ],
-          }}
-        />
+        <>
+          <div style={{ marginBottom: '50vh' }}></div>
+          <ScrollableVideo
+            captions={captions}
+            video={{
+              duration,
+              src: './static/2020091916-tnrail-01-1440.mp4',
+              type: 'video/mp4',
+              preload: true,
+            }}
+          />
+        </>
       ) : null}
     </>
   )
@@ -53,6 +54,6 @@ function Root() {
 
 root.render(
   <Block>
-    <Root />
+    <Demo />
   </Block>
 )
