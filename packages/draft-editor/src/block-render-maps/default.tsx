@@ -14,7 +14,7 @@ const textAlignCss = `
   }
 `
 
-export const Blockquote = styled.blockquote`
+export const Blockquote = styled.div`
   width: 100%;
   padding: 0 16px;
   margin-bottom: 16px;
@@ -22,6 +22,11 @@ export const Blockquote = styled.blockquote`
   font-size: 16px;
   line-height: 1.75;
   color: ${({ theme }) => (theme.darkMode ? '#e2e2e2' : '#808080')};
+
+  /* clear default margin */
+  blockquote {
+    margin: 0;
+  }
 `
 
 export const Paragraph = styled.div`
