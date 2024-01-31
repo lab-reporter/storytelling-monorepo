@@ -110,7 +110,7 @@ type VideoObj = {
   preload?: boolean
 }
 
-type ScrollableVideoProps = {
+export type ScrollableVideoProps = {
   className?: string
   captions: CaptionState[]
   video: VideoObj
@@ -118,14 +118,6 @@ type ScrollableVideoProps = {
   secondsPer100vh?: number
 }
 
-/**
- *  @param {Object} props
- *  @param {string} [props.className]
- *  @param {CaptionState[]} props.captions
- *  @param {VideoObj} props.video
- *  @param {boolean} [darkMode=false]
- *  @param {number} [props.secondsPer100vh=1.5]
- */
 export function ScrollableVideo({
   className,
   captions,
