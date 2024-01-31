@@ -11,15 +11,11 @@ import {
 
 const embedCodeWebpackAssets = embedCodeGen.loadWebpackAssets()
 
-type VideoType = {
-  sources: {
-    src: string
-    mediaType: string
-  }[]
-}
-
 type EditorState = {
-  video: VideoType
+  videoObj: {
+    src: string
+    type: string
+  }
   captions: any[]
 }
 
@@ -41,19 +37,16 @@ const listConfigurations = list({
     editorState: json({
       label: '編輯字幕',
       defaultValue: {
+        duration: 0,
         captions: [],
-        video: {
-          sources: [
-            {
-              mediaType: 'video/mp4',
-              src: '',
-            },
-          ],
+        videoObj: {
+          src: '',
+          type: 'video/mp4',
         },
       },
       ui: {
         // A module path that is resolved from where `keystone start` is run
-        views: './lists/views/scrollable-video-editor',
+        views: './lists/views/scrollable-video-editor/index',
         createView: {
           fieldMode: 'hidden',
         },
@@ -68,25 +61,18 @@ const listConfigurations = list({
           const captions = editorState?.captions || []
           const videoUrl = item?.videoUrl as string
           const mobileVideoUrl = item?.mobileVideoUrl as string
-          const video: VideoType = {
-            sources: [],
+          const videoObj = {
+            src: '',
           }
           if (videoUrl) {
-            video.sources.push({
-              src: videoUrl,
-              mediaType: 'video/mp4',
-            })
-          }
-          if (mobileVideoUrl) {
-            video.sources.push({
-              src: mobileVideoUrl,
-              mediaType: 'video/mp4',
-            })
+            videoObj.src = videoUrl
+          } else if (mobileVideoUrl) {
+            videoObj.src = mobileVideoUrl
           }
           const code = embedCodeGen.buildEmbeddedCode(
             'react-scrollable-video',
             {
-              video,
+              videoObj,
               captions,
             },
             embedCodeWebpackAssets
@@ -119,16 +105,11 @@ const listConfigurations = list({
   access: () => true,
   hooks: {
     resolveInput: ({ inputData, item, resolvedData }) => {
-      const videoUrl = inputData?.videoUrl
+      const videoUrl = inputData?.videoUrl || inputData?.mobileVideoUrl
       if (videoUrl) {
         const editorState = Object.assign({}, item?.editorState, {
-          video: {
-            sources: [
-              {
-                mediaType: 'video/mp4',
-                src: inputData.videoUrl,
-              },
-            ],
+          videoObj: {
+            src: inputData.videoUrl,
           },
         })
         resolvedData.editorState = editorState
