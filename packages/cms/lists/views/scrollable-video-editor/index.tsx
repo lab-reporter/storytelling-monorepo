@@ -2,7 +2,8 @@ import React from 'react'
 import { FieldProps } from '@keystone-6/core/types'
 import { FieldContainer, FieldLabel } from '@keystone-ui/fields'
 import { controller } from '@keystone-6/core/fields/types/json/views'
-import { CaptionEditor } from '@story-telling-reporter/react-scrollable-video'
+import { CaptionEditor } from './editor'
+import { CaptionState } from './type'
 
 export const Field = ({
   field,
@@ -15,13 +16,20 @@ export const Field = ({
     <FieldContainer>
       <FieldLabel>{field.label}</FieldLabel>
       <CaptionEditor
-        video={editorState?.video}
+        videoObj={editorState?.videoObj}
         captions={editorState?.captions}
-        // @ts-ignore @story-telling-reporter/react-scrollable-video lacks of type definition
-        onChange={(state) => {
-          const newEditorState = {
-            video: editorState.video,
-            captions: state.captions,
+        onChange={(state: { duration?: number; captions?: CaptionState[] }) => {
+          const newEditorState = {}
+          if (state.duration) {
+            Object.assign(newEditorState, editorState, {
+              duration: state.duration,
+            })
+          }
+
+          if (state.captions) {
+            Object.assign(newEditorState, editorState, {
+              captions: state.captions,
+            })
           }
 
           if (typeof onFieldChange === 'function') {
