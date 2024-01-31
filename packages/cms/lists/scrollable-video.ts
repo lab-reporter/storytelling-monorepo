@@ -1,21 +1,13 @@
 // @ts-ignore: no definition
 import embedCodeGen from '@story-telling-reporter/react-embed-code-generator'
 import { list, graphql } from '@keystone-6/core'
-import {
-  // checkbox,
-  // relationship,
-  text,
-  json,
-  virtual,
-} from '@keystone-6/core/fields'
+import { select, text, json, virtual } from '@keystone-6/core/fields'
 
 const embedCodeWebpackAssets = embedCodeGen.loadWebpackAssets()
 
 type EditorState = {
-  videoObj: {
-    src: string
-    type: string
-  }
+  videoSrc: string
+  videoDuration: number
   captions: any[]
 }
 
@@ -25,24 +17,21 @@ const listConfigurations = list({
       label: 'Scorllable Video 名稱',
       validation: { isRequired: true },
     }),
-    videoUrl: text({
+    videoSrc: text({
       label: '桌機版影片檔案 URL',
       validation: {
         isRequired: true,
       },
     }),
-    mobileVideoUrl: text({
+    mobileVideoSrc: text({
       label: '手機版影片檔案 URL',
     }),
     editorState: json({
       label: '編輯字幕',
       defaultValue: {
-        duration: 0,
         captions: [],
-        videoObj: {
-          src: '',
-          type: 'video/mp4',
-        },
+        videoSrc: '',
+        videoDuration: 0,
       },
       ui: {
         // A module path that is resolved from where `keystone start` is run
@@ -52,28 +41,36 @@ const listConfigurations = list({
         },
       },
     }),
+    theme: select({
+      label: '主題色',
+      options: [
+        {
+          label: 'Dark Mode',
+          value: 'dark_mode',
+        },
+        {
+          label: 'Light Mode',
+          value: 'light_mode',
+        },
+      ],
+      defaultValue: 'light_mode',
+    }),
     embedCode: virtual({
       label: 'embed code',
       field: graphql.field({
         type: graphql.String,
         resolve: async (item: Record<string, unknown>): Promise<string> => {
           const editorState = item?.editorState as EditorState
-          const captions = editorState?.captions || []
-          const videoUrl = item?.videoUrl as string
-          const mobileVideoUrl = item?.mobileVideoUrl as string
-          const videoObj = {
-            src: '',
-          }
-          if (videoUrl) {
-            videoObj.src = videoUrl
-          } else if (mobileVideoUrl) {
-            videoObj.src = mobileVideoUrl
-          }
+          const darkMode = item?.theme === 'dark_mode'
           const code = embedCodeGen.buildEmbeddedCode(
             'react-scrollable-video',
             {
-              videoObj,
-              captions,
+              video: {
+                src: editorState.videoSrc,
+                duration: editorState.videoDuration,
+              },
+              captions: editorState.captions,
+              darkMode,
             },
             embedCodeWebpackAssets
           )
@@ -105,12 +102,10 @@ const listConfigurations = list({
   access: () => true,
   hooks: {
     resolveInput: ({ inputData, item, resolvedData }) => {
-      const videoUrl = inputData?.videoUrl || inputData?.mobileVideoUrl
-      if (videoUrl) {
+      const videoSrc = inputData?.videoSrc || inputData?.mobileVideoSrc
+      if (videoSrc) {
         const editorState = Object.assign({}, item?.editorState, {
-          videoObj: {
-            src: inputData.videoUrl,
-          },
+          videoSrc,
         })
         resolvedData.editorState = editorState
       }

@@ -590,9 +590,10 @@ input DualSlideCreateInput {
 type ScrollableVideo {
   id: ID!
   name: String
-  videoUrl: String
-  mobileVideoUrl: String
+  videoSrc: String
+  mobileVideoSrc: String
   editorState: JSON
+  theme: String
   embedCode: String
 }
 
@@ -606,22 +607,25 @@ input ScrollableVideoWhereInput {
   NOT: [ScrollableVideoWhereInput!]
   id: IDFilter
   name: StringFilter
-  videoUrl: StringFilter
-  mobileVideoUrl: StringFilter
+  videoSrc: StringFilter
+  mobileVideoSrc: StringFilter
+  theme: StringNullableFilter
 }
 
 input ScrollableVideoOrderByInput {
   id: OrderDirection
   name: OrderDirection
-  videoUrl: OrderDirection
-  mobileVideoUrl: OrderDirection
+  videoSrc: OrderDirection
+  mobileVideoSrc: OrderDirection
+  theme: OrderDirection
 }
 
 input ScrollableVideoUpdateInput {
   name: String
-  videoUrl: String
-  mobileVideoUrl: String
+  videoSrc: String
+  mobileVideoSrc: String
   editorState: JSON
+  theme: String
 }
 
 input ScrollableVideoUpdateArgs {
@@ -631,9 +635,10 @@ input ScrollableVideoUpdateArgs {
 
 input ScrollableVideoCreateInput {
   name: String
-  videoUrl: String
-  mobileVideoUrl: String
+  videoSrc: String
+  mobileVideoSrc: String
   editorState: JSON
+  theme: String
 }
 
 """
