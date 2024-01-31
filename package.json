@@ -9,7 +9,8 @@
     "packages/three-story-points",
     "packages/scrollable-video",
     "packages/embed-code-generator",
-    "packages/subtitled-audio"
+    "packages/subtitled-audio",
+    "packages/scrollable-video"
   ],
   "scripts": {
     "prepare": "husky install"
