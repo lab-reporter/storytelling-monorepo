@@ -1,37 +1,7 @@
 export default {
   video: {
-    sources: [
-      {
-        type: 'video/mp4',
-        src: 'http://localhost:8080/mocks/scrollable-video/2020092015-tnrail-01-1280.mp4',
-        width: 1280,
-        height: 720,
-      },
-      {
-        type: 'video/mp4',
-        src: 'http://localhost:8080/mocks/scrollable-video/2020091916-tnrail-01-1440.mp4',
-        width: 1440,
-        height: 810,
-      },
-      {
-        type: 'video/mp4',
-        src: 'http://localhost:8080/mocks/scrollable-video/2020092015-tnrail-01-land-1920.mp4',
-        width: 1920,
-        height: 1080,
-      },
-      {
-        type: 'video/mp4',
-        src: 'http://localhost:8080/mocks/scrollable-video/2020091916-tnrail-01-port-720.mp4',
-        width: 720,
-        height: 1080,
-      },
-      {
-        type: 'video/mp4',
-        src: 'http://localhost:8080/mocks/scrollable-video/2020091916-tnrail-01-port-960.mp4',
-        width: 960,
-        height: 1440,
-      },
-    ],
+    duration: 8.03,
+    src: 'http://localhost:8080/mocks/scrollable-video/2020091916-tnrail-01-1440.mp4',
   },
   captions: [
     {
