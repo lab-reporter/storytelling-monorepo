@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled from '../../styled-components'
 import { ContentBlock, ContentState } from 'draft-js'
 
 const LinkWrapper = styled.a`

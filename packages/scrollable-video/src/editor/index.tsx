@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react'
-import styled from 'styled-components'
+import styled from '../styled-components'
 import { AddCaptionButton } from './button'
 import { CaptionMark } from './mark'
 import { CaptionState } from './type'

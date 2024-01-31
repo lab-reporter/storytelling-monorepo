@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import styled from '../styled-components.js'
+import styled from '../styled-components'
 import {
   EditorState,
   RawDraftContentState, // eslint-disable-line

@@ -7,7 +7,7 @@ import {
   RawDraftContentState,
   convertFromRaw,
 } from 'draft-js'
-import { ThemeProvider } from 'styled-components'
+import { ThemeProvider } from '../styled-components'
 import { atomicBlockRenderer } from './block-renderer-fn'
 import { customStyleFn } from './custom-style-fn'
 import { decorator } from './entity-decorators/index'
