@@ -16,19 +16,25 @@ export const Field = ({
     <FieldContainer>
       <FieldLabel>{field.label}</FieldLabel>
       <CaptionEditor
-        videoObj={editorState?.videoObj}
+        videoSrc={editorState?.videoSrc}
         captions={editorState?.captions}
-        onChange={(state: { duration?: number; captions?: CaptionState[] }) => {
+        onChange={({
+          videoDuration,
+          captions,
+        }: {
+          videoDuration?: number
+          captions?: CaptionState[]
+        }) => {
           const newEditorState = {}
-          if (state.duration) {
+          if (videoDuration) {
             Object.assign(newEditorState, editorState, {
-              duration: state.duration,
+              videoDuration,
             })
           }
 
-          if (state.captions) {
+          if (captions) {
             Object.assign(newEditorState, editorState, {
-              captions: state.captions,
+              captions,
             })
           }
 

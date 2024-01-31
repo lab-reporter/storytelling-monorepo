@@ -84,16 +84,16 @@ const MarkContainer = styled.div<{ $left: string }>`
 const defaultDuration = 10 // seconds
 
 function CaptionEditor({
-  videoObj,
+  videoSrc,
   captions: _captions = [],
   onChange,
 }: {
-  videoObj: {
-    src: string
-    type?: string
-  }
+  videoSrc: string
   captions: CaptionState[]
-  onChange: (arg0: { captions?: CaptionState[]; duration?: number }) => void
+  onChange: (arg0: {
+    captions?: CaptionState[]
+    videoDuration?: number
+  }) => void
 }) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [duration, setDuration] = useState(defaultDuration)
@@ -108,7 +108,7 @@ function CaptionEditor({
       if (video?.duration) {
         setDuration(video.duration)
         onChange({
-          duration: video.duration,
+          videoDuration: video.duration,
         })
       }
     }
@@ -117,7 +117,7 @@ function CaptionEditor({
       if (video.readyState > 0) {
         setDuration(video.duration)
         onChange({
-          duration: video.duration,
+          videoDuration: video.duration,
         })
         return
       }
@@ -199,7 +199,7 @@ function CaptionEditor({
   return (
     <Container>
       <video id="video" preload="metadata" ref={videoRef}>
-        <source src={videoObj.src} type={videoObj.type} />
+        <source src={videoSrc} />
       </video>
       <Controls id="video-controls">
         <ProgressAndMarksBlock>
