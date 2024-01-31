@@ -201,6 +201,7 @@ export function ScrollableVideo({
     const top = `${(startTime / secondsPer100vh) * 100}vh`
     return (
       <Section
+        className="scrollable-video-section"
         data-section-narrow-width={caption.width !== 'wide'}
         data-section-dark-mode={darkMode}
         data-section-alignment={caption.alignment ?? 'left'}

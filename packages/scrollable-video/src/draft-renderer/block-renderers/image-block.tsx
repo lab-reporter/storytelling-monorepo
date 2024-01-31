@@ -9,9 +9,9 @@ const Figure = styled.figure`
 `
 
 const FigureCaption = styled.figcaption`
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 400;
-  line-height: 21px;
+  line-height: 150%;
   color: #666;
   color: ${({ theme }) => (theme.darkMode ? '#f1f1f1' : '#666')};
 
@@ -61,7 +61,11 @@ export function ImageBlock({ className = '', data }: ImageBlockProps) {
         srcSet={imgSrcSetArr.join(',')}
         sizes="(min-width: 768px) 700px, 75vw"
       />
-      {desc && <FigureCaption>{desc}</FigureCaption>}
+      {desc && (
+        <FigureCaption className="scrollable-video draft-image-desc">
+          {desc}
+        </FigureCaption>
+      )}
     </Figure>
   )
 

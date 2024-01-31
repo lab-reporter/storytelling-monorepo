@@ -81,16 +81,17 @@ function AnnotationBlock(props: {
   return (
     <React.Fragment>
       <AnnotationWrapper
+        className="scrollable-video annotation-wrapper"
         onClick={(e) => {
           e.preventDefault()
           setShowContent(!showContent)
         }}
       >
-        <span>{annotated}</span>
-        <ArrowIcon $showContent={showContent} />
+        <span className="annotation-title">{annotated}</span>
+        <ArrowIcon className="arrow" $showContent={showContent} />
       </AnnotationWrapper>
       {showContent ? (
-        <AnnotationBody>
+        <AnnotationBody className="annotation-body">
           <Editor
             editorState={editorState}
             blockRenderMap={annotationBlockRenderMap}

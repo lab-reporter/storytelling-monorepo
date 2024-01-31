@@ -113,15 +113,15 @@ const _blockRenderMap = Immutable.Map({
   },
   blockquote: {
     element: 'blockquote',
-    wrapper: <Blockquote />,
+    wrapper: <Blockquote className="scrollable-video draft-blockquote" />,
   },
   'header-two': {
     element: 'h2',
-    wrapper: <Heading />,
+    wrapper: <Heading className="scrollable-video draft-header-two" />,
   },
   'header-three': {
     element: 'h3',
-    wrapper: <Heading />,
+    wrapper: <Heading className="scrollable-video draft-header-three" />,
   },
   'ordered-list-item': {
     element: 'li',
@@ -133,7 +133,7 @@ const _blockRenderMap = Immutable.Map({
   },
   unstyled: {
     element: 'div',
-    wrapper: <Paragraph />,
+    wrapper: <Paragraph className="scrollable-video draft-paragraph" />,
   },
 })
 
