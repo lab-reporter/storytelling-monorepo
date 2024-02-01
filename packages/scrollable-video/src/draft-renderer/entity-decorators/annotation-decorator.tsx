@@ -13,12 +13,14 @@ import { decorator } from '../entity-decorators/index'
 const AnnotationWrapper = styled.span`
   display: inline-block;
   cursor: pointer;
-  color: #9f7544;
+  color: ${({ theme }) => (theme.darkMode ? '#F0D5BE' : '#9F7544')};
 `
 
 const AnnotationBody = styled.div`
   border-top: 2px solid #c09662;
-  background-color: #fff;
+  background-color: rgba(255, 255, 255, 0.5);
+  background-color: ${({ theme }) =>
+    theme.darkMode ? 'rgba(0, 0, 0, 0.5)' : 'rgba(255, 255, 255, 0.5)'};
   margin-bottom: 10px;
   padding: 25px 11px;
 `
@@ -27,8 +29,8 @@ const ArrowIcon = styled.span<{ $showContent: boolean }>`
   margin-left: 3px;
   display: inline-block;
   vertical-align: middle;
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
   border-width: 1px;
   border-style: solid;
@@ -36,7 +38,8 @@ const ArrowIcon = styled.span<{ $showContent: boolean }>`
   top: -1px;
 
   &::before {
-    background-color: #9f7544;
+    background-color: ${({ theme }) =>
+      theme.darkMode ? '#F0D5BE' : '#9F7544'};
     content: '';
     width: 2px;
     height: 6.5px;
@@ -50,7 +53,8 @@ const ArrowIcon = styled.span<{ $showContent: boolean }>`
   }
 
   &::after {
-    background-color: #9f7544;
+    background-color: ${({ theme }) =>
+      theme.darkMode ? '#F0D5BE' : '#9F7544'};
     content: '';
     width: 2px;
     height: 6.5px;

@@ -9,7 +9,7 @@ const HeadingForAnnotation = styled(Heading)`
 `
 
 const ListForAnnotation = styled(List)`
-  color: #4a4a4a;
+  color: ${({ theme }) => (theme.darkMode ? '#fff' : '#404040')};
 
   h4 {
     font-size: 20px;
@@ -18,8 +18,9 @@ const ListForAnnotation = styled(List)`
 `
 
 const ParagraphForAnnotation = styled(Paragraph)`
+  color: ${({ theme }) => (theme.darkMode ? '#fff' : '#404040')};
+
   margin-bottom: 10px;
-  color: #4a4a4a;
   letter-spacing: 0.5px;
 `
 
