@@ -28,7 +28,6 @@
     "@keystone-ui/fields": "^7.2.0",
     "@keystone-ui/modals": "^6.0.3",
     "@radix-ui/react-slider": "^1.1.2",
-    "@story-telling-reporter/draft-editor": "0.1.2-alpha.3",
     "@twreporter/scrollable-video": "^1.0.4-beta.1",
     "gsap": "^3.12.5",
     "lodash": "^4.17.15"
