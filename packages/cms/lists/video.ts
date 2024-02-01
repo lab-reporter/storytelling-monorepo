@@ -33,6 +33,14 @@ const listConfigurations = list({
       },
     }),
   },
+  ui: {
+    label: 'Video（影片）',
+    labelField: 'name',
+    listView: {
+      initialColumns: ['name', 'description'],
+      pageSize: 50,
+    },
+  },
 
   access: {
     operation: {
