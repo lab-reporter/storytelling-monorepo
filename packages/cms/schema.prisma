@@ -79,27 +79,6 @@ model SubtitledAudio {
   hintText       String  @default("本文有金句聲音元件，\n聽聽作者想和14歲的自己說什麼？")
 }
 
-model ThreeStoryPoint {
-  id                    Int     @id @default(autoincrement())
-  name                  String  @default("")
-  model_filesize        Int?
-  model_filename        String?
-  desktopModel_filesize Int?
-  desktopModel_filename String?
-  lightModel_filesize   Int?
-  lightModel_filename   String?
-  captions              Json?   @default("[]")
-  audios                Json?   @default("[{\"urls\":[],\"preload\":\"auto\"}]")
-  cameraRig             Json?   @default("{\"pois\":[]}")
-  debugMode             Boolean @default(false)
-}
-
-model DualSlide {
-  id     Int    @id @default(autoincrement())
-  name   String @default("")
-  slides Json?  @default("[{\"content\":[\"\"],\"imgSrc\":\"\"}]")
-}
-
 model ScrollableVideo {
   id             Int     @id @default(autoincrement())
   name           String  @default("")

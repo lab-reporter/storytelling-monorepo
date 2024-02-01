@@ -486,107 +486,6 @@ input SubtitledAudioCreateInput {
   hintText: String
 }
 
-type ThreeStoryPoint {
-  id: ID!
-  name: String
-  model: FileFieldOutput
-  desktopModel: FileFieldOutput
-  lightModel: FileFieldOutput
-  captions: JSON
-  audios: JSON
-  cameraRig: JSON
-  debugMode: Boolean
-  camerHelper: JSON
-  embedCode: String
-  preview: JSON
-}
-
-input ThreeStoryPointWhereUniqueInput {
-  id: ID
-}
-
-input ThreeStoryPointWhereInput {
-  AND: [ThreeStoryPointWhereInput!]
-  OR: [ThreeStoryPointWhereInput!]
-  NOT: [ThreeStoryPointWhereInput!]
-  id: IDFilter
-  name: StringFilter
-  debugMode: BooleanFilter
-}
-
-input ThreeStoryPointOrderByInput {
-  id: OrderDirection
-  name: OrderDirection
-  debugMode: OrderDirection
-}
-
-input ThreeStoryPointUpdateInput {
-  name: String
-  model: FileFieldInput
-  desktopModel: FileFieldInput
-  lightModel: FileFieldInput
-  captions: JSON
-  audios: JSON
-  cameraRig: JSON
-  debugMode: Boolean
-}
-
-input ThreeStoryPointUpdateArgs {
-  where: ThreeStoryPointWhereUniqueInput!
-  data: ThreeStoryPointUpdateInput!
-}
-
-input ThreeStoryPointCreateInput {
-  name: String
-  model: FileFieldInput
-  desktopModel: FileFieldInput
-  lightModel: FileFieldInput
-  captions: JSON
-  audios: JSON
-  cameraRig: JSON
-  debugMode: Boolean
-}
-
-type DualSlide {
-  id: ID!
-  name: String
-  slides: JSON
-  embedCode: String
-  preview: JSON
-}
-
-input DualSlideWhereUniqueInput {
-  id: ID
-}
-
-input DualSlideWhereInput {
-  AND: [DualSlideWhereInput!]
-  OR: [DualSlideWhereInput!]
-  NOT: [DualSlideWhereInput!]
-  id: IDFilter
-  name: StringFilter
-}
-
-input DualSlideOrderByInput {
-  id: OrderDirection
-  name: OrderDirection
-}
-
-input DualSlideUpdateInput {
-  name: String
-  slides: JSON
-}
-
-input DualSlideUpdateArgs {
-  where: DualSlideWhereUniqueInput!
-  data: DualSlideUpdateInput!
-}
-
-input DualSlideCreateInput {
-  name: String
-  slides: JSON
-}
-
 type ScrollableVideo {
   id: ID!
   name: String
@@ -684,18 +583,6 @@ type Mutation {
   updateSubtitledAudios(data: [SubtitledAudioUpdateArgs!]!): [SubtitledAudio]
   deleteSubtitledAudio(where: SubtitledAudioWhereUniqueInput!): SubtitledAudio
   deleteSubtitledAudios(where: [SubtitledAudioWhereUniqueInput!]!): [SubtitledAudio]
-  createThreeStoryPoint(data: ThreeStoryPointCreateInput!): ThreeStoryPoint
-  createThreeStoryPoints(data: [ThreeStoryPointCreateInput!]!): [ThreeStoryPoint]
-  updateThreeStoryPoint(where: ThreeStoryPointWhereUniqueInput!, data: ThreeStoryPointUpdateInput!): ThreeStoryPoint
-  updateThreeStoryPoints(data: [ThreeStoryPointUpdateArgs!]!): [ThreeStoryPoint]
-  deleteThreeStoryPoint(where: ThreeStoryPointWhereUniqueInput!): ThreeStoryPoint
-  deleteThreeStoryPoints(where: [ThreeStoryPointWhereUniqueInput!]!): [ThreeStoryPoint]
-  createDualSlide(data: DualSlideCreateInput!): DualSlide
-  createDualSlides(data: [DualSlideCreateInput!]!): [DualSlide]
-  updateDualSlide(where: DualSlideWhereUniqueInput!, data: DualSlideUpdateInput!): DualSlide
-  updateDualSlides(data: [DualSlideUpdateArgs!]!): [DualSlide]
-  deleteDualSlide(where: DualSlideWhereUniqueInput!): DualSlide
-  deleteDualSlides(where: [DualSlideWhereUniqueInput!]!): [DualSlide]
   createScrollableVideo(data: ScrollableVideoCreateInput!): ScrollableVideo
   createScrollableVideos(data: [ScrollableVideoCreateInput!]!): [ScrollableVideo]
   updateScrollableVideo(where: ScrollableVideoWhereUniqueInput!, data: ScrollableVideoUpdateInput!): ScrollableVideo
@@ -744,12 +631,6 @@ type Query {
   subtitledAudios(where: SubtitledAudioWhereInput! = {}, orderBy: [SubtitledAudioOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubtitledAudioWhereUniqueInput): [SubtitledAudio!]
   subtitledAudio(where: SubtitledAudioWhereUniqueInput!): SubtitledAudio
   subtitledAudiosCount(where: SubtitledAudioWhereInput! = {}): Int
-  threeStoryPoints(where: ThreeStoryPointWhereInput! = {}, orderBy: [ThreeStoryPointOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ThreeStoryPointWhereUniqueInput): [ThreeStoryPoint!]
-  threeStoryPoint(where: ThreeStoryPointWhereUniqueInput!): ThreeStoryPoint
-  threeStoryPointsCount(where: ThreeStoryPointWhereInput! = {}): Int
-  dualSlides(where: DualSlideWhereInput! = {}, orderBy: [DualSlideOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: DualSlideWhereUniqueInput): [DualSlide!]
-  dualSlide(where: DualSlideWhereUniqueInput!): DualSlide
-  dualSlidesCount(where: DualSlideWhereInput! = {}): Int
   scrollableVideos(where: ScrollableVideoWhereInput! = {}, orderBy: [ScrollableVideoOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ScrollableVideoWhereUniqueInput): [ScrollableVideo!]
   scrollableVideo(where: ScrollableVideoWhereUniqueInput!): ScrollableVideo
   scrollableVideosCount(where: ScrollableVideoWhereInput! = {}): Int
