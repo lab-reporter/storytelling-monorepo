@@ -108,6 +108,8 @@ type VideoObj = {
   src: string
   type?: string
   preload?: boolean
+  mobileSrc: string
+  mobileType?: string
 }
 
 export type ScrollableVideoProps = {
@@ -128,8 +130,9 @@ export function ScrollableVideo({
   const scrollTriggerInstance = useRef<ScrollTrigger | null>(null)
   const scrollTriggerRef = useRef<HTMLDivElement>(null)
   const lastSectionRef = useRef<HTMLDivElement>(null)
-  const [lastSectionOverflowHeight, setLastSectionOverflowHeight] = useState(0) // px
   const videoRef = useRef<HTMLVideoElement>(null)
+  const [lastSectionOverflowHeight, setLastSectionOverflowHeight] = useState(0) // px
+  const [pickedVideoSource, setPickedVideoSource] = useState('')
   const duration = video.duration
 
   // use gsap ScrollTrigger to check if
@@ -145,20 +148,45 @@ export function ScrollableVideo({
         start: 'top 50%',
         end: 'bottom 50%',
         onUpdate: ({ progress }) => {
-          const time = (progress * duration).toFixed(3)
-          console.log('progress:', progress)
-          console.log('time:', time)
           if (videoEle && !videoEle?.seeking) {
             const time = Number((progress * duration).toFixed(3))
             videoEle.currentTime = time
-            console.log('progress:', progress)
-            console.log('time:', time)
           }
         },
       })
     },
     { scope: scrollTriggerRef }
   )
+
+  // pick video.src according to viewport width
+  useEffect(() => {
+    const pickVideoSource = () => {
+      const viewportWidth = window.innerWidth
+
+      if (viewportWidth >= 768 && video?.src) {
+        return video.src
+      } else if (viewportWidth < 768 && video?.mobileSrc) {
+        return video.mobileSrc
+      } else if (video?.src) {
+        return video.src
+      }
+
+      return video.mobileSrc
+    }
+
+    const handleResize = _.debounce(() => {
+      const videoSource = pickVideoSource()
+      setPickedVideoSource(videoSource)
+    }, 300)
+
+    setPickedVideoSource(pickVideoSource())
+
+    window.addEventListener('resize', handleResize)
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [])
 
   // mute video to enable video autoplay
   useEffect(() => {
@@ -167,7 +195,7 @@ export function ScrollableVideo({
       return
     }
     video.muted = true
-  }, [])
+  }, [pickedVideoSource])
 
   // In some edge cases,
   // if the last section contains lots of paragraphs,
@@ -197,7 +225,6 @@ export function ScrollableVideo({
 
   const sectionsJsx = captions.map((caption, idx) => {
     const startTime = caption.startTime
-    console.log('startTime:', startTime)
     const top = `${(startTime / secondsPer100vh) * 100}vh`
     const classNames = `scrollable-video section section-${idx}`
     return (
@@ -236,9 +263,8 @@ export function ScrollableVideo({
           data-autoplay={true}
           data-played={false}
           playsInline
-        >
-          <source src={video.src} type={video.type}></source>
-        </video>
+          src={pickedVideoSource}
+        />
       </BackgroundVideo>
       <Sections
         ref={scrollTriggerRef}
