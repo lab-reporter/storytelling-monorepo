@@ -89,6 +89,38 @@ const listConfigurations = list({
         },
       },
     }),
+    preview: virtual({
+      field: graphql.field({
+        type: graphql.JSON,
+        resolve(item: Record<string, unknown>): Record<string, string> {
+          return {
+            href: `/demo/scrollable-videos/${item.id}`,
+            label: '捲動式影片預覽',
+            buttonLabel: 'Preview',
+          }
+        },
+      }),
+      ui: {
+        // A module path that is resolved from where `keystone start` is run
+        views: './lists/views/link-button',
+        createView: {
+          fieldMode: 'hidden',
+        },
+        itemView: {
+          fieldPosition: 'sidebar',
+        },
+        listView: {
+          fieldMode: 'hidden',
+        },
+      },
+      graphql: {
+        omit: {
+          read: true,
+          create: true,
+          update: true,
+        },
+      },
+    }),
   },
   ui: {
     listView: {
