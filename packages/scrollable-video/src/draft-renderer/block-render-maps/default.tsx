@@ -51,7 +51,6 @@ export const Heading = styled.div`
   margin-bottom: 16px;
 
   font-weight: 700;
-  letter-spacing: 0.4px;
   line-height: 1.25;
   color: ${({ theme }) => (theme.darkMode ? '#fff' : '#404040')};
 

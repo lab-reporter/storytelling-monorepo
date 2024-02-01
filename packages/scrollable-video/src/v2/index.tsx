@@ -24,7 +24,7 @@ const Sections = styled.div`
 
 const Section = styled.div`
   position: absolute;
-  padding: 32px 16px;
+  padding: 24px 16px;
 
   &[data-section-dark-mode='false'] {
     background-color: rgba(255, 255, 255, 0.5);

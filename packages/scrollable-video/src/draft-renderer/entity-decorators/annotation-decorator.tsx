@@ -18,11 +18,10 @@ const AnnotationWrapper = styled.span`
 
 const AnnotationBody = styled.div`
   border-top: 2px solid #c09662;
-  background-color: rgba(255, 255, 255, 0.5);
   background-color: ${({ theme }) =>
     theme.darkMode ? 'rgba(0, 0, 0, 0.5)' : 'rgba(255, 255, 255, 0.5)'};
-  margin-bottom: 10px;
-  padding: 25px 11px;
+  margin-bottom: 8px;
+  padding: 24px 16px;
 `
 
 const ArrowIcon = styled.span<{ $showContent: boolean }>`

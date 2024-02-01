@@ -2,11 +2,7 @@ import Immutable from 'immutable'
 import React from 'react'
 import styled from '../../styled-components'
 import { DefaultDraftBlockRenderMap } from 'draft-js'
-import { Atomic, Paragraph, Heading, List } from './default'
-
-const HeadingForAnnotation = styled(Heading)`
-  margin-bottom: 20px;
-`
+import { Atomic, Paragraph, List } from './default'
 
 const ListForAnnotation = styled(List)`
   color: ${({ theme }) => (theme.darkMode ? '#fff' : '#404040')};
@@ -28,10 +24,6 @@ const _blockRenderMapForAnnotation = Immutable.Map({
   atomic: {
     element: 'figure',
     wrapper: <Atomic />,
-  },
-  'header-four': {
-    element: 'h4',
-    wrapper: <HeadingForAnnotation />,
   },
   'ordered-list-item': {
     element: 'li',
