@@ -115,7 +115,6 @@ const listConfigurations = list({
       },
       graphql: {
         omit: {
-          read: true,
           create: true,
           update: true,
         },

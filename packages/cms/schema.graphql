@@ -595,6 +595,7 @@ type ScrollableVideo {
   editorState: JSON
   theme: String
   embedCode: String
+  preview: JSON
 }
 
 input ScrollableVideoWhereUniqueInput {
