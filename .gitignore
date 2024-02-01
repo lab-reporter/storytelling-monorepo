@@ -51,4 +51,5 @@ packages/**/lib
 packages/**/dist
 
 # user generated local files 
-packages/cms/public/*
+packages/cms/public/images
+packages/cms/public/files
