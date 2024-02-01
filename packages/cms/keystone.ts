@@ -112,8 +112,8 @@ export default withAuth(
         )
 
         app.use(
-          '/static-files',
-          express.static(path.resolve(process.cwd(), './public/static-files'))
+          '/static',
+          express.static(path.resolve(process.cwd(), './static'))
         )
 
         app.get(
