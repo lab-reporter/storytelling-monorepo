@@ -199,9 +199,10 @@ export function ScrollableVideo({
     const startTime = caption.startTime
     console.log('startTime:', startTime)
     const top = `${(startTime / secondsPer100vh) * 100}vh`
+    const classNames = `scrollable-video section section-${idx}`
     return (
       <Section
-        className="scrollable-video-section"
+        className={classNames}
         data-section-narrow-width={caption.width !== 'wide'}
         data-section-dark-mode={darkMode}
         data-section-alignment={caption.alignment ?? 'left'}
@@ -239,7 +240,11 @@ export function ScrollableVideo({
           <source src={video.src} type={video.type}></source>
         </video>
       </BackgroundVideo>
-      <Sections ref={scrollTriggerRef} style={{ height: sectionsHeight }}>
+      <Sections
+        ref={scrollTriggerRef}
+        style={{ height: sectionsHeight }}
+        className="scrollable-video sections"
+      >
         {sectionsJsx}
       </Sections>
       <LastSectionOverflowHeight style={{ height: lastSectionHeight }} />
