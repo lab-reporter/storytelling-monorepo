@@ -111,6 +111,11 @@ export default withAuth(
           express.static(path.resolve(process.cwd(), './public/three'))
         )
 
+        app.use(
+          '/static-files',
+          express.static(path.resolve(process.cwd(), './public/static-files'))
+        )
+
         app.get(
           '/demo/scrollable-videos/:id',
           authenticationMw,
