@@ -1,7 +1,7 @@
 // @ts-ignore: no definition
 import embedCodeGen from '@story-telling-reporter/react-embed-code-generator'
 import { list, graphql } from '@keystone-6/core'
-import { select, text, json, virtual } from '@keystone-6/core/fields'
+import { float, select, text, json, virtual } from '@keystone-6/core/fields'
 
 const embedCodeWebpackAssets = embedCodeGen.loadWebpackAssets()
 
@@ -55,6 +55,13 @@ const listConfigurations = list({
       ],
       defaultValue: 'light_mode',
     }),
+    secondsPer100vh: float({
+      label: '每滑一個視窗的高度對應影片多少秒鐘',
+      defaultValue: 1.5,
+      validation: {
+        isRequired: true,
+      },
+    }),
     embedCode: virtual({
       label: 'embed code',
       field: graphql.field({
@@ -71,6 +78,7 @@ const listConfigurations = list({
               },
               captions: editorState.captions,
               darkMode,
+              secondsPer100vh: item?.secondsPer100vh,
             },
             embedCodeWebpackAssets
           )

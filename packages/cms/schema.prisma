@@ -80,10 +80,11 @@ model SubtitledAudio {
 }
 
 model ScrollableVideo {
-  id             Int     @id @default(autoincrement())
-  name           String  @default("")
-  videoSrc       String  @default("")
-  mobileVideoSrc String  @default("")
-  editorState    Json?   @default("{\"captions\":[],\"videoSrc\":\"\",\"videoDuration\":0}")
-  theme          String? @default("light_mode")
+  id              Int     @id @default(autoincrement())
+  name            String  @default("")
+  videoSrc        String  @default("")
+  mobileVideoSrc  String  @default("")
+  editorState     Json?   @default("{\"captions\":[],\"videoSrc\":\"\",\"videoDuration\":0}")
+  theme           String? @default("light_mode")
+  secondsPer100vh Float   @default(1.5)
 }
