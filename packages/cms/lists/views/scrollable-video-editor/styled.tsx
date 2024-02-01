@@ -28,9 +28,9 @@ export function PlayButton(props: IconProps) {
     <Icon
       className={props?.className}
       onClick={props?.onClick}
-      $bgImg="/static-files/icons/play.svg"
-      $hoverBgImg="/static-files/icons/play.hover.svg"
-      $focusBgImg="/static-files/icons/play.hover.svg"
+      $bgImg="/static/icons/play.svg"
+      $hoverBgImg="/static/icons/play.hover.svg"
+      $focusBgImg="/static/icons/play.hover.svg"
     />
   )
 }
@@ -40,16 +40,16 @@ export function PauseButton(props: IconProps) {
     <Icon
       className={props?.className}
       onClick={props?.onClick}
-      $bgImg="/static-files/icons/pause.svg"
-      $hoverBgImg="/static-files/icons/pause.hover.svg"
-      $focusBgImg="/static-files/icons/pause.hover.svg"
+      $bgImg="/static/icons/pause.svg"
+      $hoverBgImg="/static/icons/pause.hover.svg"
+      $focusBgImg="/static/icons/pause.hover.svg"
     />
   )
 }
 
 export function DeleteCaptionIcon(props: IconProps) {
-  const disableImg = '/static-files/icons/delete.disable.svg'
-  const enableImg = '/static-files/icons/delete.enable.svg'
+  const disableImg = '/static/icons/delete.disable.svg'
+  const enableImg = '/static/icons/delete.enable.svg'
   return (
     <Icon
       className={props?.className}
@@ -65,8 +65,8 @@ export function AddCaptionIcon(props: IconProps) {
     <Icon
       className={props?.className}
       onClick={props?.onClick}
-      $bgImg="/static-files/icons/add-caption.svg"
-      $hoverBgImg="/static-files/icons/add-caption.hover.svg"
+      $bgImg="/static/icons/add-caption.svg"
+      $hoverBgImg="/static/icons/add-caption.hover.svg"
     />
   )
 }
@@ -76,14 +76,14 @@ export const MarkIcon = styled.div`
   width: 25px;
   height: 50px;
 
-  background-image: url(/static-files/icons/mark.svg);
+  background-image: url(/static/icons/mark.svg);
 `
 
 export const EditMarkIcon = styled(MarkIcon)`
-  background-image: url(/static-files/icons/edit-mark.svg);
+  background-image: url(/static/icons/edit-mark.svg);
 `
 
 export const DeleteMarkIcon = styled(MarkIcon)`
   height: 25px;
-  background-image: url(/static-files/icons/delete-mark.svg);
+  background-image: url(/static/icons/delete-mark.svg);
 `
