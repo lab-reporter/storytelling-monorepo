@@ -73,7 +73,8 @@ const listConfigurations = list({
             'react-scrollable-video',
             {
               video: {
-                src: editorState.videoSrc,
+                src: item?.videoSrc,
+                mobileSrc: item?.mobileVideoSrc,
                 duration: editorState.videoDuration,
               },
               captions: editorState.captions,
@@ -141,7 +142,7 @@ const listConfigurations = list({
   access: () => true,
   hooks: {
     resolveInput: ({ inputData, item, resolvedData }) => {
-      const videoSrc = inputData?.videoSrc || inputData?.mobileVideoSrc
+      const videoSrc = inputData?.videoSrc
       if (videoSrc) {
         const editorState = Object.assign({}, item?.editorState, {
           videoSrc,
