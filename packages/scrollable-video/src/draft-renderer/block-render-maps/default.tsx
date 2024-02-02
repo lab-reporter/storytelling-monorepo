@@ -77,8 +77,6 @@ export const Heading = styled.div`
 export const List = styled.ol`
   width: 100%;
   margin: 0 0 16px 3em;
-  margin-block-start: 0;
-  margin-block-end: 0;
   padding: 0;
 
   font-size: 16px;
