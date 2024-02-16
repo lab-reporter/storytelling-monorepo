@@ -2,14 +2,21 @@
 import embedCodeGen from '@story-telling-reporter/react-embed-code-generator'
 import { list, graphql } from '@keystone-6/core'
 import { float, select, text, json, virtual } from '@keystone-6/core/fields'
+import { CaptionState } from './views/scrollable-video-editor/type'
+import { customAlphabet } from 'nanoid'
+import CleanCss from 'clean-css'
+
+const nanoid = customAlphabet('abcdefghijklmnopq', 10)
 
 const embedCodeWebpackAssets = embedCodeGen.loadWebpackAssets()
 
 type EditorState = {
   videoSrc: string
   videoDuration: number
-  captions: any[]
+  captions: CaptionState[]
 }
+
+const cssSelector = '.scrollable-video.section'
 
 const listConfigurations = list({
   fields: {
@@ -62,6 +69,50 @@ const listConfigurations = list({
         isRequired: true,
       },
     }),
+    customCss: text({
+      label: '客製化 CSS',
+      defaultValue: `
+/* 覆寫所有區塊預設的 css */
+${cssSelector} {
+  /* 例如：background-color: pink; */
+}
+
+/* 覆寫所有區塊內圖說預設的 css */
+${cssSelector} draft-image-desc {
+}
+
+/* 覆寫所有區塊內抽言預設的 css */
+${cssSelector} .draft-blockquote {
+}
+
+/* 覆寫所有區塊內 H2 預設的 css */
+${cssSelector} .draft-header-two {
+}
+
+/* 覆寫所有區塊內 H3 預設的 css */
+${cssSelector} .draft-header-three {
+}
+
+/* 覆寫所有區塊內內文預設的 css */
+${cssSelector} .draft-paragraph {
+}
+
+/* 覆寫所有區塊內超連結預設的 css */
+${cssSelector} .draft-link {
+}
+
+/* 覆寫所有區塊內 annotation 預設的 css */
+${cssSelector} .annotation-wrapper {
+}
+${cssSelector} .annotation-title {
+}
+${cssSelector} .annotation-body {
+}
+      `,
+      ui: {
+        displayMode: 'textarea',
+      },
+    }),
     embedCode: virtual({
       label: 'embed code',
       field: graphql.field({
@@ -69,6 +120,7 @@ const listConfigurations = list({
         resolve: async (item: Record<string, unknown>): Promise<string> => {
           const editorState = item?.editorState as EditorState
           const darkMode = item?.theme === 'dark_mode'
+          const captions = editorState.captions
           const code = embedCodeGen.buildEmbeddedCode(
             'react-scrollable-video',
             {
@@ -77,14 +129,35 @@ const listConfigurations = list({
                 mobileSrc: item?.mobileVideoSrc,
                 duration: editorState.videoDuration,
               },
-              captions: editorState.captions,
+              captions: captions,
               darkMode,
               secondsPer100vh: item?.secondsPer100vh,
             },
             embedCodeWebpackAssets
           )
 
-          return code
+          const wrapperDivId = nanoid(5)
+          let initialCustomCss = (item.customCss as string) ?? ''
+
+          // To avoid css class names collision, add random unique id into css selector
+          initialCustomCss = initialCustomCss.replaceAll(
+            cssSelector,
+            `#${wrapperDivId} ${cssSelector}`
+          )
+
+          let allCustomCss = captions.reduce((css, captionState) => {
+            if (captionState.customCss) {
+              return css + captionState.customCss
+            }
+            return css
+          }, initialCustomCss)
+
+          if (typeof allCustomCss === 'string') {
+            // minify css
+            allCustomCss = new CleanCss().minify(allCustomCss).styles
+          }
+
+          return `<style>${allCustomCss}</style><div id="${wrapperDivId}">${code}</div>`
         },
       }),
       ui: {

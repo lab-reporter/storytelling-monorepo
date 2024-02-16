@@ -8,13 +8,16 @@ import {
 } from 'draft-js'
 import { AddCaptionIcon } from './styled'
 import { Drawer, DrawerController, DrawerProvider } from '@keystone-ui/modals'
-import { FieldLabel, TextInput, Select } from '@keystone-ui/fields'
+import { FieldLabel, Select, TextArea, TextInput } from '@keystone-ui/fields'
 import {
   RichTextEditor,
   buttonNames,
   decorator,
 } from '@story-telling-reporter/draft-editor'
 import { AlignmentEnum, CaptionState, WidthEnum } from './type'
+import { customAlphabet } from 'nanoid'
+
+const nanoid = customAlphabet('abcdefghiklmnopq', 10)
 
 const disabledButtons = [
   buttonNames.code,
@@ -66,10 +69,12 @@ export function CaptionInput({
 }) {
   const contentState = convertFromRaw(inputValue.rawContentState)
   const [inputValueState, setInputValueState] = useState({
+    id: inputValue.id,
     startTime: inputValue.startTime,
     editorState: EditorState.createWithContent(contentState, decorator),
     alignment: inputValue.alignment,
     width: inputValue.width,
+    customCss: inputValue.customCss,
   })
 
   const selectedAlignmentValue =
@@ -98,6 +103,7 @@ export function CaptionInput({
               label: 'Confirm',
               action: () => {
                 onConfirm({
+                  id: inputValueState.id,
                   startTime: inputValueState.startTime,
                   rawContentState: convertToRaw(
                     inputValueState.editorState.getCurrentContent()
@@ -168,22 +174,24 @@ export function CaptionInput({
               })
             }}
           />
+          <MarginTop />
+          <FieldLabel>客製化 CSS</FieldLabel>
+          <TextArea
+            onChange={(e) =>
+              setInputValueState((prevState) => {
+                return Object.assign({}, prevState, {
+                  customCss: e.target.value,
+                })
+              })
+            }
+            type="text"
+            value={inputValueState.customCss}
+          />
         </Drawer>
       </DrawerController>
     </DrawerProvider>
   )
 }
-
-/**
- *  @callback onCaptionStateChange
- *  @param {CaptionState} captionState
- *  @returns {undefined}
- */
-
-/**
- *  @callback getVideoCurrentTimeCallback
- *  @returns {number} video.currentTime
- */
 
 export function AddCaptionButton({
   className,
@@ -194,8 +202,51 @@ export function AddCaptionButton({
   onChange: (arg0: CaptionState) => void
   getVideoCurrentTime: () => number
 }) {
-  const defaultStartTime = 0
   const [toShowInput, setToShowInput] = useState(false)
+  const startTime = getVideoCurrentTime()
+  const captionId = nanoid(5)
+  const rawContentState = {
+    blocks: [],
+    entityMap: {},
+  }
+  const customCss = `
+  /* 覆寫此區塊預設的 css */
+  #${captionId} {
+    /* 例如：background-color: pink; */
+  }
+
+  /* 覆寫此區塊內圖說預設的 css */
+  #${captionId} draft-image-desc {
+  }
+
+  /* 覆寫此區塊內抽言預設的 css */
+  #${captionId} .draft-blockquote {
+  }
+
+  /* 覆寫此區塊內 H2 預設的 css */
+  #${captionId} .draft-header-two {
+  }
+
+  /* 覆寫此區塊內 H3 預設的 css */
+  #${captionId} .draft-header-three {
+  }
+
+  /* 覆寫此區塊內內文預設的 css */
+  #${captionId} .draft-paragraph {
+  }
+
+  /* 覆寫此區塊內超連結預設的 css */
+  #${captionId} .draft-link {
+  }
+
+  /* 覆寫此區塊內 annotation 預設的 css */
+  #${captionId} .annotation-wrapper {
+  }
+  #${captionId} .annotation-title {
+  }
+  #${captionId} .annotation-body {
+  }
+`
 
   return (
     <React.Fragment>
@@ -210,12 +261,12 @@ export function AddCaptionButton({
           }}
           isOpen={toShowInput}
           inputValue={{
+            id: captionId,
             alignment: AlignmentEnum.LEFT,
-            startTime:
-              typeof getVideoCurrentTime === 'function'
-                ? getVideoCurrentTime()
-                : defaultStartTime,
-            rawContentState: { blocks: [], entityMap: {} },
+            width: WidthEnum.NARROW,
+            startTime: startTime,
+            customCss,
+            rawContentState,
           }}
         />
       )}

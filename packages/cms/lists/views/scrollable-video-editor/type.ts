@@ -12,8 +12,10 @@ export enum AlignmentEnum {
 }
 
 export type CaptionState = {
+  id?: string
   rawContentState: RawDraftContentState
   startTime: number
   alignment?: AlignmentEnum
   width?: WidthEnum
+  customCss?: string
 }
