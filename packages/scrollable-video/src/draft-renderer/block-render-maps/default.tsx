@@ -122,11 +122,11 @@ const _blockRenderMap = Immutable.Map({
   },
   'ordered-list-item': {
     element: 'li',
-    wrapper: <List />,
+    wrapper: <List className="scrollable-video draft-ordered-list" />,
   },
   'unordered-list-item': {
     element: 'li',
-    wrapper: <List as="ul" />,
+    wrapper: <List className="scrollable-video draft-unordered-list" as="ul" />,
   },
   unstyled: {
     element: 'div',

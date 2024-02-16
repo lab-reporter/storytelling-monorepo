@@ -97,6 +97,7 @@ export enum AlignmentEnum {
 }
 
 export type CaptionState = {
+  id?: string
   rawContentState: RawDraftContentState
   startTime: number
   alignment?: AlignmentEnum
@@ -226,10 +227,10 @@ export function ScrollableVideo({
   const sectionsJsx = captions.map((caption, idx) => {
     const startTime = caption.startTime
     const top = `${(startTime / secondsPer100vh) * 100}vh`
-    const classNames = `scrollable-video section section-${idx}`
+    const sectionId = caption.id ? `section-${caption.id}` : undefined
     return (
       <Section
-        className={classNames}
+        id={sectionId}
         data-section-narrow-width={caption.width !== 'wide'}
         data-section-dark-mode={darkMode}
         data-section-alignment={caption.alignment ?? 'left'}
