@@ -87,4 +87,5 @@ model ScrollableVideo {
   editorState     Json?   @default("{\"captions\":[],\"videoSrc\":\"\",\"videoDuration\":0}")
   theme           String? @default("light_mode")
   secondsPer100vh Float   @default(1.5)
+  customCss       String  @default("\n/* 覆寫所有區塊預設的 css */\n.scrollable-video.section {\n  /* 例如：background-color: pink; */\n}\n\n/* 覆寫所有區塊內圖說預設的 css */\n.scrollable-video.section draft-image-desc {\n}\n\n/* 覆寫所有區塊內抽言預設的 css */\n.scrollable-video.section .draft-blockquote {\n}\n\n/* 覆寫所有區塊內 H2 預設的 css */\n.scrollable-video.section .draft-header-two {\n}\n\n/* 覆寫所有區塊內 H3 預設的 css */\n.scrollable-video.section .draft-header-three {\n}\n\n/* 覆寫所有區塊內內文預設的 css */\n.scrollable-video.section .draft-paragraph {\n}\n\n/* 覆寫所有區塊內超連結預設的 css */\n.scrollable-video.section .draft-link {\n}\n\n/* 覆寫所有區塊內 annotation 預設的 css */\n.scrollable-video.section .annotation-wrapper {\n}\n.scrollable-video.section .annotation-title {\n}\n.scrollable-video.section .annotation-body {\n}\n      ")
 }
