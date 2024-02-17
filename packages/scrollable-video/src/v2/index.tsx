@@ -85,6 +85,20 @@ const BackgroundVideo = styled.div`
   }
 `
 
+const DebugPanel = styled.div`
+  position: absolute;
+  top: 50px;
+  right: 50px;
+
+  &.darkMode {
+    color: white;
+  }
+
+  &.lightMode {
+    color: black;
+  }
+`
+
 export enum WidthEnum {
   WIDE = 'wide',
   NARROW = 'narrow',
@@ -134,7 +148,9 @@ export function ScrollableVideo({
   const videoRef = useRef<HTMLVideoElement>(null)
   const [lastSectionOverflowHeight, setLastSectionOverflowHeight] = useState(0) // px
   const [pickedVideoSource, setPickedVideoSource] = useState('')
+  const [debugMode, setDebugMode] = useState(false)
   const duration = video.duration
+  const [debugState, setDebugState] = useState({ currentTime: 0 })
 
   // use gsap ScrollTrigger to check if
   // Sections are in the viewport or not,
@@ -144,19 +160,38 @@ export function ScrollableVideo({
     () => {
       const videoEle = videoRef.current
 
+      if (scrollTriggerInstance.current) {
+        // kill old instance to avoid getting stale dependencies
+        scrollTriggerInstance.current.kill()
+      }
+
       scrollTriggerInstance.current = ScrollTrigger.create({
+        markers: debugMode,
         trigger: scrollTriggerRef.current,
         start: 'top 50%',
         end: 'bottom 50%',
-        onUpdate: ({ progress }) => {
+        onUpdate: ({ progress }: { progress: number }) => {
           if (videoEle && !videoEle?.seeking) {
-            const time = Number((progress * duration).toFixed(3))
+            const time = Number((progress * duration).toFixed(2))
             videoEle.currentTime = time
+            if (debugMode) {
+              setDebugState((prevState) => {
+                return Object.assign({}, prevState, {
+                  currentTime: time,
+                })
+              })
+            }
           }
         },
       })
+
+      return () => {
+        if (scrollTriggerInstance.current) {
+          scrollTriggerInstance.current.kill()
+        }
+      }
     },
-    { scope: scrollTriggerRef }
+    { scope: scrollTriggerRef, dependencies: [debugMode] }
   )
 
   // pick video.src according to viewport width
@@ -224,6 +259,14 @@ export function ScrollableVideo({
     }
   }, [])
 
+  // use query param to enable debugMode
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search)
+    if (searchParams.has('debug')) {
+      setDebugMode(true)
+    }
+  }, [])
+
   const sectionsJsx = captions.map((caption, idx) => {
     const startTime = caption.startTime
     const top = `${(startTime / secondsPer100vh) * 100}vh`
@@ -266,6 +309,11 @@ export function ScrollableVideo({
           playsInline
           src={pickedVideoSource}
         />
+        {debugMode && (
+          <DebugPanel className={darkMode ? 'darkMode' : 'lightMode'}>
+            {debugState.currentTime}/{duration}
+          </DebugPanel>
+        )}
       </BackgroundVideo>
       <Sections
         ref={scrollTriggerRef}
