@@ -16,7 +16,7 @@ yarn run db-migrate
 if [ "$HTTP2_ENABLED" = "true" ]
 then
   echo "Try to run HTTP2 reverse proxy server and Keystone server."
-  # PORT=$KEYSTONE_SERVER_PORT yarn start &
+  PORT=$KEYSTONE_SERVER_PORT yarn start &
 
   isServerRunning=`lsof -Pi :$KEYSTONE_SERVER_PORT -sTCP:LISTEN -t`
   while [ -z "$isServerRunning" ]
