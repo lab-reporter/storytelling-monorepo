@@ -23,5 +23,5 @@ server.on('request', (req, res) => {
 })
 
 server.listen(reverseProxyPort, () => {
-  console.log('server is listening on ' + reverseProxyPort)
+  console.log('HTTP2 reverse proxy server is listening on ' + reverseProxyPort)
 });

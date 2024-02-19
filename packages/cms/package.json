@@ -5,6 +5,7 @@
     "dev": "keystone dev",
     "start": "keystone start",
     "db-migrate": "keystone prisma migrate deploy",
+    "start-http2-proxy-server": "node http2-proxy-server",
     "build": "keystone build",
     "postinstall": "SKIP_BUILD_DEPS=\"$SKIP_BUILD_DEPS\" make postinstall"
   },
@@ -26,6 +27,7 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "http-proxy-middleware": "^2.0.3",
+    "http2-proxy": "^5.0.53",
     "nanoid": "^3.0.0",
     "patch-package": "^6.4.7",
     "react-beautiful-dnd": "^13.1.1"
