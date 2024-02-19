@@ -8,6 +8,7 @@ RUN set -e; \
     wget \
     gnupg2 \
     tini \
+    lsof \
     openssl \
     lsb-release; \
     gcsFuseRepo=gcsfuse-`lsb_release -c -s`; \
