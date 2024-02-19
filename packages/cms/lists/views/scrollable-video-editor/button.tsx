@@ -110,6 +110,7 @@ export function CaptionInput({
                   ),
                   alignment: inputValueState.alignment,
                   width: inputValueState.width,
+                  customCss: inputValueState.customCss,
                 })
               },
             },
