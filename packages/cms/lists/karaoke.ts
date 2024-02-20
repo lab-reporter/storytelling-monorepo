@@ -72,7 +72,7 @@ const listConfigurations = list({
       field: graphql.field({
         type: graphql.String,
         resolve: async (item: Record<string, unknown>): Promise<string> => {
-          const audioSrc = `${config.googleCloudStorage.origin}/files/${item?.audio_filename}`
+          const audioSrc = `${config.gcs.urlPrefix}/files/${item?.audio_filename}`
 
           const code = embedCodeGen.buildEmbeddedCode(
             'react-karaoke',

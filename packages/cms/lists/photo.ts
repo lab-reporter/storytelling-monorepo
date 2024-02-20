@@ -1,12 +1,6 @@
 import config from '../config'
 import { list, graphql } from '@keystone-6/core'
-import {
-  image,
-  text,
-  virtual,
-  timestamp,
-  relationship,
-} from '@keystone-6/core/fields'
+import { image, text, virtual, timestamp } from '@keystone-6/core/fields'
 import {
   allowAllRoles,
   allowRoles,
@@ -82,12 +76,12 @@ const listConfigurations = list({
             rtn[target] =
               // TODO: adjust urls after resizing images function is ready
               // `${config.googleCloudStorage.origin}/images/${filename}-${target}${extension}`
-              `${config.googleCloudStorage.origin}/images/${filename}${extension}`
+              `${config.gcs.urlPrefix}/images/${filename}${extension}`
           })
 
           rtn[
             'original'
-          ] = `${config.googleCloudStorage.origin}/images/${filename}${extension}`
+          ] = `${config.gcs.urlPrefix}/images/${filename}${extension}`
           return Object.assign(empty, rtn)
         },
       }),

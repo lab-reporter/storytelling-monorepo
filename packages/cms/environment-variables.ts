@@ -7,7 +7,7 @@ const {
   DATABASE_URL,
   SESSION_SECRET,
   SESSION_MAX_AGE,
-  GCS_ORIGIN,
+  GCS_URL_PREFIX,
   FILES_BASE_URL,
   FILES_STORAGE_PATH,
   IMAGES_BASE_URL,
@@ -46,7 +46,8 @@ export default {
       DATABASE_PROVIDER === 'sqlite'
         ? DatabaseProvider.Sqlite
         : DatabaseProvider.Postgres,
-    url: DATABASE_URL || 'postgres://user:password@localhost:5432/story-telling',
+    url:
+      DATABASE_URL || 'postgres://user:password@localhost:5432/story-telling',
   },
   session: {
     secret:
@@ -57,7 +58,7 @@ export default {
       60 * 60 * 24 * 1, // 1 days
   },
   gcs: {
-    origin: GCS_ORIGIN || 'http://localhost:3000',
+    urlPrefix: GCS_URL_PREFIX || 'http://localhost:3000',
   },
   files: {
     baseUrl: FILES_BASE_URL || '/files',
