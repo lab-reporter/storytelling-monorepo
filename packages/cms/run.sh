@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-# set -eo pipefail
 
 # Create mount directory for service
 mkdir -p $MNT_DIR
