@@ -116,6 +116,14 @@ export function CaptionInput({
             },
           }}
         >
+          {
+            // The following phony `<input>` is used to prevent the following `<TextInput>` or `<Select>` from
+            // hijacking the users' cursors.
+            // For example, if editor click link button in the Draft editor, when she finishes the link editing,
+            // the cursor focus will be hijacked by the first input, which is the `<TextInput>` right below.
+            // Therefore, we add a phony `<input hidden disabled>` before `<TextInput>` to avoid cursor hijacking.
+          }
+          <input hidden disabled />
           <MarginTop />
           <FieldLabel>字幕出現秒數</FieldLabel>
           <TextInput
