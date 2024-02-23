@@ -28,8 +28,8 @@ const ArrowIcon = styled.span<{ $showContent: boolean }>`
   margin-left: 3px;
   display: inline-block;
   vertical-align: middle;
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   border-width: 1px;
   border-style: solid;
