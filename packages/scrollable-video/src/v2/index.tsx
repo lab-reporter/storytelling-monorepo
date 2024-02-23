@@ -35,14 +35,16 @@ const Section = styled.div`
   }
 
   ${mediaQuery.mobileOnly} {
+    left: 50%;
+    transform: translateX(-50%);
+
     &[data-section-narrow-width='true'] {
       width: 75vw;
-      left: 50%;
-      transform: translateX(-50%);
     }
 
     &[data-section-narrow-width='false'] {
       width: 100vw;
+      max-width: 720px;
     }
   }
 
