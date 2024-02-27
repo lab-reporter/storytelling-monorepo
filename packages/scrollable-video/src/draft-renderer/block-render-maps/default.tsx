@@ -19,6 +19,10 @@ export const Blockquote = styled.div`
   padding: 0 16px;
   margin-bottom: 16px;
 
+  &:last-child {
+    margin-bottom: 0px;
+  }
+
   font-size: 16px;
   line-height: 1.75;
   color: ${({ theme }) => (theme.darkMode ? '#e2e2e2' : '#808080')};
@@ -32,6 +36,9 @@ export const Blockquote = styled.div`
 export const Paragraph = styled.div`
   width: 100%;
   margin-bottom: 16px;
+  &:last-child {
+    margin-bottom: 0px;
+  }
 
   font-size: 16px;
   font-weight: 400;
@@ -39,7 +46,7 @@ export const Paragraph = styled.div`
   letter-spacing: 0.6px;
   color: ${({ theme }) => (theme.darkMode ? '#fff' : '#404040')};
 
-  > div[data-block='true'] {
+  > div[data-block='true']:not(:last-child) {
     margin-bottom: 16px;
   }
 
@@ -49,6 +56,9 @@ export const Paragraph = styled.div`
 export const Heading = styled.div`
   width: 100%;
   margin-bottom: 16px;
+  &:last-child {
+    margin-bottom: 0px;
+  }
 
   font-weight: 700;
   line-height: 1.25;
@@ -56,10 +66,14 @@ export const Heading = styled.div`
 
   h2 {
     font-size: 30px;
+    /* clear default styles */
+    margin: 0;
   }
 
   h3 {
     font-size: 24px;
+    /* clear default styles */
+    margin: 0;
   }
 
   ${mediaQuery.mobileOnly} {
