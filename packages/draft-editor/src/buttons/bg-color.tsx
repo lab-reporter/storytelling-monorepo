@@ -20,11 +20,12 @@ type BackgroundColorButtonProps = {
   onEditFinish: () => void
 }
 
+const defaultHex = '#C0966266'
+
 export function BackgroundColorButton(props: BackgroundColorButtonProps) {
   const { isActive, editorState, onChange } = props
-
   const [toShowColorInput, setToShowColorInput] = useState(false)
-  const [colorValue, setColorValue] = useState('')
+  const [colorValue, setColorValue] = useState(defaultHex)
 
   const promptForColor = (e: React.MouseEvent) => {
     e.preventDefault()
@@ -65,7 +66,7 @@ export function BackgroundColorButton(props: BackgroundColorButtonProps) {
     onChange(EditorState.push(editorState, contentState, 'change-inline-style'))
 
     setToShowColorInput(false)
-    setColorValue('')
+    setColorValue(defaultHex)
     props.onEditFinish()
   }
 
@@ -102,7 +103,7 @@ export function BackgroundColorButton(props: BackgroundColorButtonProps) {
       )
     }
     setToShowColorInput(false)
-    setColorValue('')
+    setColorValue(defaultHex)
     props.onEditFinish()
   }
 
