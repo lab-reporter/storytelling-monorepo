@@ -25,7 +25,8 @@ const AnnotationBody = styled.div`
 `
 
 const ArrowIcon = styled.span<{ $showContent: boolean }>`
-  margin-left: 3px;
+  margin-left: 2px;
+  margin-right: 2px;
   display: inline-block;
   vertical-align: middle;
   width: 18px;
