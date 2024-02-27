@@ -90,8 +90,11 @@ export const Heading = styled.div`
 
 export const List = styled.ol`
   width: 100%;
-  margin: 0 0 16px 3em;
-  padding: 0;
+  margin: 0 0 16px 0;
+  &:last-child {
+    margin-bottom: 0px;
+  }
+  padding: 0 0 0 3em;
 
   font-size: 16px;
   font-weight: 400;
