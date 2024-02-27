@@ -94,7 +94,7 @@ export const List = styled.ol`
   &:last-child {
     margin-bottom: 0px;
   }
-  padding: 0 0 0 3em;
+  padding: 0 0 0 24px;
 
   font-size: 16px;
   font-weight: 400;
@@ -103,11 +103,9 @@ export const List = styled.ol`
   color: ${({ theme }) => (theme.darkMode ? '#fff' : '#404040')};
 
   > li {
-    margin: 0 0 1em 0;
+    /* clear default styles */
+    margin: 0;
     padding: 0;
-    &:last-child {
-      margin-bottom: 0;
-    }
   }
 `
 
