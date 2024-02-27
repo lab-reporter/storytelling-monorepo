@@ -116,6 +116,10 @@ export const Atomic = styled.div`
   }
 
   margin-bottom: 16px;
+
+  &:last-child {
+    margin-bottom: 0px;
+  }
 `
 
 const _blockRenderMap = Immutable.Map({
