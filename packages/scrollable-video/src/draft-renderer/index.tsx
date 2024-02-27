@@ -26,6 +26,13 @@ export function DraftRenderer({
   darkMode,
   rawContentState,
 }: DraftRendererProps) {
+  const emptyBlockRemoved = rawContentState.blocks.filter((b) => {
+    if (b.type === 'unstyled' && b.text === '') {
+      return false
+    }
+    return true
+  })
+  rawContentState.blocks = emptyBlockRemoved
   const contentState = convertFromRaw(rawContentState)
   const editorState = EditorState.createWithContent(contentState, decorator)
 
