@@ -134,12 +134,27 @@ export default withAuth(
                 .send(`ScrollableVideo ${itemId} is not found`)
             }
 
-            res.send(
-              `<html><head><meta name="viewport" content="width=device-width, initial-scale=1"><style> * { box-sizing: border-box; } body { margin:0; padding:50vh 0;} </style></head><body>${item?.embedCode}</body></html>`
-            )
+            res.send(renderScrollableVideoHtml(item?.embedCode))
           }
         )
       },
     },
   })
 )
+
+const renderScrollableVideoHtml = (html: string) => {
+  return `
+<html>
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style> * { box-sizing: border-box; } body { margin:0; padding:50vh 0; font-family: 'Roboto', 'Noto Sans TC', sans-serif } </style>
+</head>
+<body>
+  ${html}
+</body>
+</html>
+`
+}
