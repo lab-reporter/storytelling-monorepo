@@ -37,11 +37,7 @@ function Link(props: {
 }) {
   const { url } = props.contentState.getEntity(props.entityKey).getData()
   return (
-    <LinkWrapper
-      href={url}
-      target="_blank"
-      className="scrollable-video draft-link"
-    >
+    <LinkWrapper href={url} target="_blank" className="draft-link">
       {props.children}
     </LinkWrapper>
   )

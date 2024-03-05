@@ -85,7 +85,7 @@ function AnnotationBlock(props: {
   return (
     <React.Fragment>
       <AnnotationWrapper
-        className="scrollable-video annotation-wrapper"
+        className="annotation-wrapper"
         onClick={(e) => {
           e.preventDefault()
           setShowContent(!showContent)

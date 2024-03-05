@@ -61,9 +61,7 @@ export function ImageBlock({ className = '', data }: ImageBlockProps) {
         sizes="(min-width: 768px) 700px, 75vw"
       />
       {desc && (
-        <FigureCaption className="scrollable-video draft-image-desc">
-          {desc}
-        </FigureCaption>
+        <FigureCaption className="draft-image-desc">{desc}</FigureCaption>
       )}
     </Figure>
   )

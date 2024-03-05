@@ -129,27 +129,27 @@ const _blockRenderMap = Immutable.Map({
   },
   blockquote: {
     element: 'blockquote',
-    wrapper: <Blockquote className="scrollable-video draft-blockquote" />,
+    wrapper: <Blockquote className="draft-blockquote" />,
   },
   'header-two': {
     element: 'h2',
-    wrapper: <Heading className="scrollable-video draft-header-two" />,
+    wrapper: <Heading className="draft-header-two" />,
   },
   'header-three': {
     element: 'h3',
-    wrapper: <Heading className="scrollable-video draft-header-three" />,
+    wrapper: <Heading className="draft-header-three" />,
   },
   'ordered-list-item': {
     element: 'li',
-    wrapper: <List className="scrollable-video draft-ordered-list" />,
+    wrapper: <List className="draft-ordered-list" />,
   },
   'unordered-list-item': {
     element: 'li',
-    wrapper: <List className="scrollable-video draft-unordered-list" as="ul" />,
+    wrapper: <List className="draft-unordered-list" as="ul" />,
   },
   unstyled: {
     element: 'div',
-    wrapper: <Paragraph className="scrollable-video draft-paragraph" />,
+    wrapper: <Paragraph className="draft-paragraph" />,
   },
 })
 

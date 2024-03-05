@@ -315,6 +315,7 @@ export function ScrollableVideo({
     return (
       <Section
         id={sectionId}
+        className="section"
         data-section-narrow-width={caption.width !== 'wide'}
         data-section-dark-mode={darkMode}
         data-section-alignment={caption.alignment ?? 'left'}
@@ -365,7 +366,7 @@ export function ScrollableVideo({
       <Sections
         ref={scrollTriggerRef}
         style={{ height: sectionsHeight }}
-        className="scrollable-video sections"
+        className="sections"
       >
         {sectionsJsx}
       </Sections>
