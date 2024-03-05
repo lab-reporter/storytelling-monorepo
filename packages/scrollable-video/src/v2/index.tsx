@@ -16,6 +16,7 @@ gsap.registerPlugin(ScrollTrigger)
 
 const Container = styled.div`
   background-color: #e2e2e2;
+  width: 100vw;
 `
 
 const Sections = styled.div`
