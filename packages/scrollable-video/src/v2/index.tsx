@@ -75,8 +75,6 @@ const BackgroundVideo = styled.div`
   width: 100vw;
   height: 100vh;
 
-  background-color: lightblue;
-
   position: sticky;
   top: 0;
 
@@ -226,13 +224,53 @@ export function ScrollableVideo({
     }
   }, [])
 
-  // mute video to enable video autoplay
+  // In order to play video by `play()` method, we need to follow browser video autoplay policy.
+  // For autoplay policy information, see https://developer.mozilla.org/en-US/docs/Web/Media/Autoplay_guide.
+  //
+  // The video is allowed to autoplay or `play()` by JavaScript only if at least one of the following
+  // is true.
+  // 1. The video is muted or its volume is set to 0
+  // 2. The user has interacted with the webpage (by clicking, tapping, etc.)
+  //
+  // Since the scrollable video is designed to be muted,
+  // we set video element to `muted=true` manually to make `play()` method work well.
+  //
+  // The reason we don't add `muted={true}` in `<Video>` component is because
+  // React does not support `muted` props yet. For related issue, see https://github.com/facebook/react/issues/10389.
   useEffect(() => {
     const video = videoRef.current
     if (!video) {
       return
     }
+    // mute video to enable `video.play()`
     video.muted = true
+
+    const fixCornerCaseOnIOS = () => {
+      // `play()` here is to clear play button when iOS is under the low battery mode.
+      const startPlayPromise = video.play()
+      if (startPlayPromise !== undefined) {
+        startPlayPromise
+          // play successfully
+          .then(() => {
+            console.log('[react-scrollable-video] video plays successfully.')
+            video.setAttribute('data-played', 'true')
+            // `pause()` video after `play()` successfully
+            video.pause()
+          })
+          // fail to play
+          .catch((error) => {
+            // browser prevent from playing audio before user interactions
+            console.log('[react-scrollable-video] unable to play video')
+            console.log('[react-scrollable-video] error: ', error)
+          })
+      }
+      window.removeEventListener('touchstart', fixCornerCaseOnIOS)
+    }
+    window.addEventListener('touchstart', fixCornerCaseOnIOS)
+
+    return () => {
+      window.removeEventListener('touchstart', fixCornerCaseOnIOS)
+    }
   }, [pickedVideoSource])
 
   // In some edge cases,
@@ -301,6 +339,7 @@ export function ScrollableVideo({
   return (
     <Container className={className}>
       <BackgroundVideo>
+        {/* `autoPlay` needs to be specified to fix video not showing on the iPhone Safari */}
         <video
           ref={videoRef}
           preload={preload}
@@ -309,6 +348,7 @@ export function ScrollableVideo({
           data-autoplay={true}
           data-played={false}
           playsInline
+          autoPlay
           src={pickedVideoSource}
         />
         {debugMode && (
