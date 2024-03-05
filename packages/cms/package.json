@@ -20,7 +20,7 @@
     "@keystone-6/core": "5.2.0",
     "@story-telling-reporter/cms-core": "0.1.1",
     "@story-telling-reporter/draft-editor": "^0.1.2-alpha.4",
-    "@story-telling-reporter/react-embed-code-generator": "0.2.9-alpha.13",
+    "@story-telling-reporter/react-embed-code-generator": "0.2.9-alpha.14",
     "@types/clean-css": "^4.2.11",
     "@types/react-beautiful-dnd": "^13.1.4",
     "clean-css": "^5.3.3",
