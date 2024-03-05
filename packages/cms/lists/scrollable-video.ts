@@ -72,6 +72,31 @@ const listConfigurations = list({
     customCss: text({
       label: '客製化 CSS',
       defaultValue: `
+/* 將捲動式影片向左移動，撐滿文章頁 */
+@media (max-width: 767px) {
+  .scrollable-video.container {
+    margin-left: -3.4vw;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .scrollable-video.container {
+    margin-left: calc((100vw - 512px)/2 * -1);
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1439px) {
+  .scrollable-video.container {
+    margin-left: calc((100vw - 550px)/2 * -1);
+  }
+}
+
+@media (min-width: 1440px) {
+  .scrollable-video.container {
+    margin-left: calc((100vw - 730px)/2 * -1);
+  }
+}
+
 /* 覆寫所有區塊預設的 css */
 ${cssSelector} {
   /* 例如：background-color: pink; */
