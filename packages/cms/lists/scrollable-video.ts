@@ -5,6 +5,8 @@ import { float, select, text, json, virtual } from '@keystone-6/core/fields'
 import { CaptionState } from './views/scrollable-video-editor/type'
 import { customAlphabet } from 'nanoid'
 import CleanCss from 'clean-css'
+import postcss from 'postcss'
+import postcssNesting from 'postcss-nesting'
 
 const nanoid = customAlphabet('abcdefghijklmnopq', 10)
 
@@ -15,8 +17,6 @@ type EditorState = {
   videoDuration: number
   captions: CaptionState[]
 }
-
-const cssSelector = '.scrollable-video.section'
 
 const listConfigurations = list({
   fields: {
@@ -72,66 +72,69 @@ const listConfigurations = list({
     customCss: text({
       label: '客製化 CSS',
       defaultValue: `
-/* 將捲動式影片向左移動，撐滿文章頁 */
-@media (max-width: 767px) {
-  .scrollable-video.container {
-    margin-left: -3.4vw;
+.scrollable-video {
+  /* 將捲動式影片向左移動，撐滿文章頁 */
+  @media (max-width: 767px) {
+    &.container {
+      margin-left: -3.4vw;
+    }
   }
-}
 
-@media (min-width: 768px) and (max-width: 1023px) {
-  .scrollable-video.container {
-    margin-left: calc((100vw - 512px)/2 * -1);
+  @media (min-width: 768px) and (max-width: 1023px) {
+    &.container {
+      margin-left: calc((100vw - 512px)/2 * -1);
+    }
   }
-}
 
-@media (min-width: 1024px) and (max-width: 1439px) {
-  .scrollable-video.container {
-    margin-left: calc((100vw - 550px)/2 * -1);
+  @media (min-width: 1024px) and (max-width: 1439px) {
+    &.container {
+      margin-left: calc((100vw - 550px)/2 * -1);
+    }
   }
-}
 
-@media (min-width: 1440px) {
-  .scrollable-video.container {
-    margin-left: calc((100vw - 730px)/2 * -1);
+  @media (min-width: 1440px) {
+    &.container {
+      margin-left: calc((100vw - 730px)/2 * -1);
+    }
   }
-}
 
-/* 覆寫所有區塊預設的 css */
-${cssSelector} {
-  /* 例如：background-color: pink; */
-}
+  /* 覆寫所有區塊預設的 css */
+  .section {
+    /* 例如：background-color: pink; */
 
-/* 覆寫所有區塊內圖說預設的 css */
-${cssSelector} draft-image-desc {
-}
+    /* 覆寫所有區塊內圖說預設的 css */
+    .draft-image-desc {
+    }
 
-/* 覆寫所有區塊內抽言預設的 css */
-${cssSelector} .draft-blockquote {
-}
+    /* 覆寫所有區塊內抽言預設的 css */
+    .draft-blockquote {
+    }
 
-/* 覆寫所有區塊內 H2 預設的 css */
-${cssSelector} .draft-header-two {
-}
+    /* 覆寫所有區塊內 H2 預設的 css */
+    .draft-header-two {
+    }
 
-/* 覆寫所有區塊內 H3 預設的 css */
-${cssSelector} .draft-header-three {
-}
+    /* 覆寫所有區塊內 H3 預設的 css */
+    .draft-header-three {
+    }
 
-/* 覆寫所有區塊內內文預設的 css */
-${cssSelector} .draft-paragraph {
-}
+    /* 覆寫所有區塊內內文預設的 css */
+    .draft-paragraph {
+    }
 
-/* 覆寫所有區塊內超連結預設的 css */
-${cssSelector} .draft-link {
-}
+    /* 覆寫所有區塊內超連結預設的 css */
+    .draft-link {
+    }
 
-/* 覆寫所有區塊內 annotation 預設的 css */
-${cssSelector} .annotation-wrapper {
-}
-${cssSelector} .annotation-title {
-}
-${cssSelector} .annotation-body {
+    /* 覆寫所有區塊內 annotation 預設的 css */
+    .annotation-wrapper {
+    }
+    .annotation-title {
+    }
+    .annotation-body {
+    }
+  }
+
 }
       `,
       ui: {
@@ -162,27 +165,31 @@ ${cssSelector} .annotation-body {
           )
 
           const wrapperDivId = nanoid(5)
-          let initialCustomCss = (item.customCss as string) ?? ''
+          const initialCustomCss = (item.customCss as string) ?? ''
 
-          // To avoid css class names collision, add random unique id into css selector
-          initialCustomCss = initialCustomCss.replaceAll(
-            cssSelector,
-            `#${wrapperDivId} ${cssSelector}`
-          )
-
-          let allCustomCss = captions.reduce((css, captionState) => {
+          let css = captions.reduce((_css, captionState) => {
             if (captionState.customCss) {
-              return css + captionState.customCss
+              return _css + captionState.customCss
             }
-            return css
+            return _css
           }, initialCustomCss)
 
-          if (typeof allCustomCss === 'string') {
-            // minify css
-            allCustomCss = new CleanCss().minify(allCustomCss).styles
+          if (typeof css === 'string') {
+            const nestedCss = `#${wrapperDivId} { ${css} }`
+            try {
+              // parse nested css into plain css
+              const result = await postcss([postcssNesting()]).process(
+                nestedCss,
+                { from: undefined }
+              )
+              // minify css
+              css = new CleanCss().minify(result.css).styles
+            } catch (err) {
+              console.log('Custom css cannot be parsed: ', err)
+            }
           }
 
-          return `<style>${allCustomCss}</style><div id="${wrapperDivId}">${code}</div>`
+          return `<style>${css}</style><div id="${wrapperDivId}">${code}</div>`
         },
       }),
       ui: {

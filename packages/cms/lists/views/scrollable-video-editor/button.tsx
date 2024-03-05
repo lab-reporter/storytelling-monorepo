@@ -220,40 +220,40 @@ export function AddCaptionButton({
   }
   const customCss = `
   /* 覆寫此區塊預設的 css */
-  #${captionId} {
+  #section-${captionId} {
     /* 例如：background-color: pink; */
-  }
 
-  /* 覆寫此區塊內圖說預設的 css */
-  #${captionId} draft-image-desc {
-  }
+    /* 覆寫此區塊內圖說預設的 css */
+    .draft-image-desc {
+    }
 
-  /* 覆寫此區塊內抽言預設的 css */
-  #${captionId} .draft-blockquote {
-  }
+    /* 覆寫此區塊內抽言預設的 css */
+    .draft-blockquote {
+    }
 
-  /* 覆寫此區塊內 H2 預設的 css */
-  #${captionId} .draft-header-two {
-  }
+    /* 覆寫此區塊內 H2 預設的 css */
+    .draft-header-two {
+    }
 
-  /* 覆寫此區塊內 H3 預設的 css */
-  #${captionId} .draft-header-three {
-  }
+    /* 覆寫此區塊內 H3 預設的 css */
+    .draft-header-three {
+    }
 
-  /* 覆寫此區塊內內文預設的 css */
-  #${captionId} .draft-paragraph {
-  }
+    /* 覆寫此區塊內內文預設的 css */
+    .draft-paragraph {
+    }
 
-  /* 覆寫此區塊內超連結預設的 css */
-  #${captionId} .draft-link {
-  }
+    /* 覆寫此區塊內超連結預設的 css */
+    .draft-link {
+    }
 
-  /* 覆寫此區塊內 annotation 預設的 css */
-  #${captionId} .annotation-wrapper {
-  }
-  #${captionId} .annotation-title {
-  }
-  #${captionId} .annotation-body {
+    /* 覆寫此區塊內 annotation 預設的 css */
+    .annotation-wrapper {
+    }
+    .annotation-title {
+    }
+    .annotation-body {
+    }
   }
 `
 
