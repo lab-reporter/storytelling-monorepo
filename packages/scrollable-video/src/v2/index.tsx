@@ -339,7 +339,6 @@ export function ScrollableVideo({
   return (
     <Container className={className}>
       <BackgroundVideo>
-        {/* `autoPlay` needs to be specified to fix video not showing on the iPhone Safari */}
         <video
           ref={videoRef}
           preload={preload}
@@ -348,7 +347,6 @@ export function ScrollableVideo({
           data-autoplay={true}
           data-played={false}
           playsInline
-          autoPlay
           src={pickedVideoSource}
         />
         {debugMode && (
