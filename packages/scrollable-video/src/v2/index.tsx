@@ -337,7 +337,13 @@ export function ScrollableVideo({
   const lastSectionHeight = `${lastSectionOverflowHeight}px`
 
   return (
-    <Container className={className}>
+    <Container
+      className={
+        className
+          ? className + ' scrollable-video container'
+          : 'scrollable-video container'
+      }
+    >
       <BackgroundVideo>
         <video
           ref={videoRef}
