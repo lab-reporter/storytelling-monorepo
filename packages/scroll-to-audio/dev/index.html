@@ -20,12 +20,19 @@
         width: 100vw;
         height: 50px;
         background-color: pink;
+
+        @media (min-width: 1024px) {
+          & {
+            display: none;
+          }
+        }
       }
+
     </style>
   </head>
   <body>
     <div id="root" ></div>
-    <div id="scroll-to-audio-mute-button" class="tool-bar">
+    <div id="mobile-tool-bar" class="tool-bar">
     </div>
   </body>
 </html>

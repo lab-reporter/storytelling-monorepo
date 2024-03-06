@@ -6,13 +6,21 @@ import { MuteIcon, SoundIcon } from './icons'
 import { useInView } from 'react-intersection-observer'
 import { useMuted } from './hooks'
 
+enum ThemeEnum {
+  TWREPORTER = 'twreporter',
+  KIDS = 'kids',
+  ID_SELECTOR = 'id-selector',
+}
+
 export function ScrollToAudio({
   id = 'scroll-to-audio-id',
   audioUrls,
   className,
   preload = 'auto',
   hintOnly = false,
+  bottomEntryOnly = false,
   idForHintContainer = 'muted-controller-hint-id',
+  theme = ThemeEnum.TWREPORTER,
   idForMuteButton = '',
 }: {
   id: string
@@ -20,8 +28,10 @@ export function ScrollToAudio({
   className?: string
   preload?: string
   hintOnly?: boolean
+  bottomEntryOnly?: boolean
   idForHintContainer?: string
-  idForMuteButton?: string
+  theme?: string
+  idForMuteButton?: string // enabled when theme === `ThemeEnum.ID_SELECTOR`
 }) {
   const audioRef = useRef<HTMLVideoElement>(null)
   const [muted, setMuted] = useMuted(true)
@@ -160,6 +170,12 @@ export function ScrollToAudio({
     return <Hint id={idForHintContainer} />
   }
 
+  const bottomEntryId = id + '-bottom-entry-point'
+
+  if (bottomEntryOnly) {
+    return <div id={bottomEntryId}></div>
+  }
+
   const onMuteButtonClick = () => {
     const nextMuted = !muted
     setMuted(nextMuted)
@@ -176,22 +192,45 @@ export function ScrollToAudio({
   let bottomEntryPlaceholder = null
 
   if (mounted) {
-    bottomEntryPlaceholder = document.getElementById(`${id}-bottom-entry-point`)
+    bottomEntryPlaceholder = document.getElementById(bottomEntryId)
 
-    const buttonContainer = document.getElementById(idForMuteButton)
-    if (buttonContainer) {
-      buttonJsx = createPortal(
-        <MuteButton $hide={hideMuteButton} onClick={onMuteButtonClick}>
-          {muted ? <MuteIcon /> : <SoundIcon />}
-        </MuteButton>,
-        buttonContainer
-      )
-    } else {
-      buttonJsx = (
-        <FixedMuteButton $hide={hideMuteButton} onClick={onMuteButtonClick}>
-          {muted ? <MuteIcon /> : <SoundIcon />}
-        </FixedMuteButton>
-      )
+    switch (theme) {
+      case ThemeEnum.ID_SELECTOR: {
+        const buttonContainer = document.getElementById(idForMuteButton)
+        if (buttonContainer) {
+          buttonJsx = createPortal(
+            <MuteButton $hide={hideMuteButton} onClick={onMuteButtonClick}>
+              {muted ? <MuteIcon /> : <SoundIcon />}
+            </MuteButton>,
+            buttonContainer
+          )
+        }
+        break
+      }
+      case ThemeEnum.TWREPORTER:
+      default: {
+        const mobileToolBarDiv = document.getElementById('mobile-tool-bar')
+        let mobileButtonJsx = null
+        if (mobileToolBarDiv) {
+          mobileButtonJsx = createPortal(
+            <MuteButton $hide={hideMuteButton} onClick={onMuteButtonClick}>
+              {muted ? <MuteIcon /> : <SoundIcon />}
+            </MuteButton>,
+            mobileToolBarDiv
+          )
+        }
+        const fixedButtonJsx = (
+          <FixedMuteButton $hide={hideMuteButton} onClick={onMuteButtonClick}>
+            {muted ? <MuteIcon /> : <SoundIcon />}
+          </FixedMuteButton>
+        )
+        buttonJsx = (
+          <>
+            <DesktopOnly>{fixedButtonJsx}</DesktopOnly>
+            {mobileButtonJsx || fixedButtonJsx}
+          </>
+        )
+      }
     }
   }
 
@@ -241,7 +280,7 @@ export function ScrollToAudio({
           <BottomEntryContainer
             data-twreporter-story-telling
             data-react-scroll-to-audio
-            data-id={`${id}-bottom-entry-point`}
+            data-id={bottomEntryId}
             data-bottom-entry
             ref={bottomEntryPointRef}
           />,
@@ -291,6 +330,13 @@ const MuteButton = styled.div<{ $hide: boolean }>`
 
 const FixedMuteButton = styled(MuteButton)`
   position: fixed;
-  bototm: 16px;
+  bottom: 16px;
   top: auto;
+`
+
+const DesktopOnly = styled.div`
+  display: none;
+  @media (min-width: 1024px) {
+    display: block;
+  }
 `

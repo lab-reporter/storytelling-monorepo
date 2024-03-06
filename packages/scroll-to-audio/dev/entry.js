@@ -31,6 +31,7 @@ root.render(
     <MockContentBlock />
     <EmbedCodeBlock>
       <ScrollToAudio
+        theme="twreporter"
         audioUrls={mock.audioUrls}
         idForMuteButton="scroll-to-audio-mute-button"
       />
