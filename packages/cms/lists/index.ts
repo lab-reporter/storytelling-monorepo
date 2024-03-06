@@ -7,6 +7,7 @@ import SubtitledAudio from './subtitled-audio'
 // import ThreeStoryPoints from './three-story-points'
 // import DualSlides from './dual-slides'
 import ScrollableVideo from './scrollable-video'
+import ScrollToAudio from './scroll-to-audio'
 // import Helper from './helper'
 
 export const listDefinition = {
@@ -19,4 +20,5 @@ export const listDefinition = {
   //ThreeStoryPoint: ThreeStoryPoints,
   //DualSlide: DualSlides,
   ScrollableVideo,
+  ScrollToAudio,
 }

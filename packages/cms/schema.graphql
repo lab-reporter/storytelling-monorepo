@@ -562,6 +562,47 @@ input ScrollableVideoCreateInput {
   customCss: String
 }
 
+type ScrollToAudio {
+  id: ID!
+  name: String
+  audio: FileFieldOutput
+  startEmbedCode: String
+  endEmbedCode: String
+  hintEmbedCode: String
+}
+
+input ScrollToAudioWhereUniqueInput {
+  id: ID
+}
+
+input ScrollToAudioWhereInput {
+  AND: [ScrollToAudioWhereInput!]
+  OR: [ScrollToAudioWhereInput!]
+  NOT: [ScrollToAudioWhereInput!]
+  id: IDFilter
+  name: StringFilter
+}
+
+input ScrollToAudioOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+}
+
+input ScrollToAudioUpdateInput {
+  name: String
+  audio: FileFieldInput
+}
+
+input ScrollToAudioUpdateArgs {
+  where: ScrollToAudioWhereUniqueInput!
+  data: ScrollToAudioUpdateInput!
+}
+
+input ScrollToAudioCreateInput {
+  name: String
+  audio: FileFieldInput
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -610,6 +651,12 @@ type Mutation {
   updateScrollableVideos(data: [ScrollableVideoUpdateArgs!]!): [ScrollableVideo]
   deleteScrollableVideo(where: ScrollableVideoWhereUniqueInput!): ScrollableVideo
   deleteScrollableVideos(where: [ScrollableVideoWhereUniqueInput!]!): [ScrollableVideo]
+  createScrollToAudio(data: ScrollToAudioCreateInput!): ScrollToAudio
+  createScrollToAudios(data: [ScrollToAudioCreateInput!]!): [ScrollToAudio]
+  updateScrollToAudio(where: ScrollToAudioWhereUniqueInput!, data: ScrollToAudioUpdateInput!): ScrollToAudio
+  updateScrollToAudios(data: [ScrollToAudioUpdateArgs!]!): [ScrollToAudio]
+  deleteScrollToAudio(where: ScrollToAudioWhereUniqueInput!): ScrollToAudio
+  deleteScrollToAudios(where: [ScrollToAudioWhereUniqueInput!]!): [ScrollToAudio]
   endSession: Boolean!
   authenticateUserWithPassword(email: String!, password: String!): UserAuthenticationWithPasswordResult
   createInitialUser(data: CreateInitialUserInput!): UserAuthenticationWithPasswordSuccess!
@@ -655,6 +702,9 @@ type Query {
   scrollableVideos(where: ScrollableVideoWhereInput! = {}, orderBy: [ScrollableVideoOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ScrollableVideoWhereUniqueInput): [ScrollableVideo!]
   scrollableVideo(where: ScrollableVideoWhereUniqueInput!): ScrollableVideo
   scrollableVideosCount(where: ScrollableVideoWhereInput! = {}): Int
+  scrollToAudios(where: ScrollToAudioWhereInput! = {}, orderBy: [ScrollToAudioOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ScrollToAudioWhereUniqueInput): [ScrollToAudio!]
+  scrollToAudio(where: ScrollToAudioWhereUniqueInput!): ScrollToAudio
+  scrollToAudiosCount(where: ScrollToAudioWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
 }
