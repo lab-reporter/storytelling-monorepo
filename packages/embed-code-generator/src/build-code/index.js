@@ -8,6 +8,7 @@ import serialize from 'serialize-javascript'
 import { ServerStyleSheet } from 'styled-components'
 import { Karaoke } from '@story-telling-reporter/react-karaoke'
 import { KidsSubtitledAudio } from '@story-telling-reporter/react-subtitled-audio'
+import { ScrollToAudio } from '@story-telling-reporter/react-scroll-to-audio'
 import { v4 as uuidv4 } from 'uuid'
 
 const _ = {
@@ -68,6 +69,15 @@ export function buildScrollableVideoEmbedCode(data, webpackAssets) {
 }
 
 /**
+ *  @param {Object} data
+ *  @param {WebpackAssets} webpackAssets
+ *  @returns string
+ */
+export function buildScrollToAudioEmbedCode(data, webpackAssets) {
+  return buildEmbeddedCode('react-scroll-to-audio', data, webpackAssets)
+}
+
+/**
  *
  * @export
  * @param {('react-karaoke'|
@@ -108,6 +118,9 @@ export function buildEmbeddedCode(pkgName, data, webpackAssets) {
       break
     case 'react-scrollable-video':
       skipServerSideRendering = true
+      break
+    case 'react-scroll-to-audio':
+      Component = ScrollToAudio
       break
     default:
       throw new Error(`pkgName ${pkgName} is not supported`)

@@ -58,6 +58,14 @@ if (window?.[namespace][`react-subtitled-audio${pkgVersion}`]) {
   })
 }
 
+if (window?.[namespace][`react-scroll-to-audio${pkgVersion}`]) {
+  import(
+    /* webpackChunkName: "react-scroll-to-audio" */ '@story-telling-reporter/react-scroll-to-audio'
+  ).then(({ ScrollToAudio }) => {
+    hydrate(namespace, `react-scroll-to-audio${pkgVersion}`, ScrollToAudio)
+  })
+}
+
 if (window?.[namespace][`react-three-story-points${pkgVersion}`]) {
   import(
     /* webpackChunkName: "react-three-story-points" */ '@story-telling-reporter/react-three-story-points'

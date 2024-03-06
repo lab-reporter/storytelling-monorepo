@@ -66,6 +66,11 @@ const pkgOptions = [
     name: '捲動式影片 2.0',
     value: 'react-scrollable-video',
   },
+  {
+    id: 'react-scroll-to-audio',
+    name: '捲到式聲音',
+    value: 'react-scroll-to-audio',
+  },
 ]
 
 const scriptUrlOptios = [
