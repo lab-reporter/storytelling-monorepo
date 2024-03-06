@@ -84,7 +84,8 @@ export function buildScrollToAudioEmbedCode(data, webpackAssets) {
  * 'react-three-story-points' |
  * 'react-dual-slides' |
  * 'react-scrollable-video' |
- * 'react-subtitled-audio' } pkgName
+ * 'react-subtitled-audio' |
+ * 'react-scroll-to-audio' } pkgName
  * @param {Object} data - Data for react component
  * @param {Object} webpackAssets - webpack bundles and chunks
  * @param {string[]} webpackAssets.entrypoints - webpack bundles
