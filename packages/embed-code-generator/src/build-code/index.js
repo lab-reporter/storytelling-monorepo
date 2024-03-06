@@ -74,6 +74,9 @@ export function buildScrollableVideoEmbedCode(data, webpackAssets) {
  *  @returns string
  */
 export function buildScrollToAudioEmbedCode(data, webpackAssets) {
+  if (data?.bottomEntryOnly) {
+    return `<div id="${data?.id}"></div>`
+  }
   return buildEmbeddedCode('react-scroll-to-audio', data, webpackAssets)
 }
 
