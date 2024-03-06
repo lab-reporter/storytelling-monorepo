@@ -10,7 +10,8 @@
     "packages/scrollable-video",
     "packages/embed-code-generator",
     "packages/subtitled-audio",
-    "packages/scrollable-video"
+    "packages/scrollable-video",
+    "packages/scroll-to-audio"
   ],
   "scripts": {
     "prepare": "husky install"
