@@ -343,19 +343,17 @@ const MuteButtonWithMobileToolBar = styled(MuteButton)<{ $hide: boolean }>`
   /* 40px is button height, 16px is the margin between mute button and mobile tool bar */
   top: calc(-40px - 16px);
 
-  /* aligned center with mobile tool bar */
-  /* 20px is half width of mute button */
-  left: calc(50% - 20px);
+  /* push mute button to the right edge of viewport */
+  /* 40px is the width of mute button */
+  /* 16px is the margin between mute button and the right edge of viewport */
+  /* 50% is the half width of mobile tool bar */
+  /* 50vw is the half width of viewport */
+  left: calc(50vw + 50% - 40px - 16px);
 
   ${(props) => {
-    /* push mute button to the right edge of the viewport */
-    /* 20px is half width of mute button */
-    /* 16px is the margin between mute button and right edge of viewport */
-    const translateX = 'translateX(calc(50vw - 20px - 16px))'
-
     return props?.$hide
-      ? `transform: ${translateX} translateY(calc((40px + 16px) * 2));` // slide out the viewport
-      : `transform: ${translateX} translateY(0);`
+      ? `transform: translateY(calc((40px + 16px) * 2));` // slide out the viewport
+      : `transform: translateY(0);`
   }}
   transition: transform 300ms ease-in-out;
 `
