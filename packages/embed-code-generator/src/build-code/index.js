@@ -28,8 +28,17 @@ const _ = {
  *  @param {WebpackAssets} webpackAssets
  *  @returns string
  */
-export function buildDualSlidesEmbedCode(data, webpackAssets) {
-  return buildEmbeddedCode('react-dual-slides', data, webpackAssets)
+export function buildDualSlidesEmbedCode(
+  data,
+  webpackAssets,
+  componentHtmlOnly = false
+) {
+  return buildEmbeddedCode(
+    'react-dual-slides',
+    data,
+    webpackAssets,
+    componentHtmlOnly
+  )
 }
 
 /**
@@ -37,8 +46,17 @@ export function buildDualSlidesEmbedCode(data, webpackAssets) {
  *  @param {WebpackAssets} webpackAssets
  *  @returns string
  */
-export function buildThreeStoryPointsEmbedCode(data, webpackAssets) {
-  return buildEmbeddedCode('react-three-story-points', data, webpackAssets)
+export function buildThreeStoryPointsEmbedCode(
+  data,
+  webpackAssets,
+  componentHtmlOnly = false
+) {
+  return buildEmbeddedCode(
+    'react-three-story-points',
+    data,
+    webpackAssets,
+    componentHtmlOnly
+  )
 }
 
 /**
@@ -46,8 +64,17 @@ export function buildThreeStoryPointsEmbedCode(data, webpackAssets) {
  *  @param {WebpackAssets} webpackAssets
  *  @returns string
  */
-export function buildKaraokeEmbedCode(data, webpackAssets) {
-  return buildEmbeddedCode('react-karaoke', data, webpackAssets)
+export function buildKaraokeEmbedCode(
+  data,
+  webpackAssets,
+  componentHtmlOnly = false
+) {
+  return buildEmbeddedCode(
+    'react-karaoke',
+    data,
+    webpackAssets,
+    componentHtmlOnly
+  )
 }
 
 /**
@@ -55,8 +82,17 @@ export function buildKaraokeEmbedCode(data, webpackAssets) {
  *  @param {WebpackAssets} webpackAssets
  *  @returns string
  */
-export function buildSubtitledAudioEmbedCode(data, webpackAssets) {
-  return buildEmbeddedCode('react-subtitled-audio', data, webpackAssets)
+export function buildSubtitledAudioEmbedCode(
+  data,
+  webpackAssets,
+  componentHtmlOnly = false
+) {
+  return buildEmbeddedCode(
+    'react-subtitled-audio',
+    data,
+    webpackAssets,
+    componentHtmlOnly
+  )
 }
 
 /**
@@ -64,20 +100,36 @@ export function buildSubtitledAudioEmbedCode(data, webpackAssets) {
  *  @param {WebpackAssets} webpackAssets
  *  @returns string
  */
-export function buildScrollableVideoEmbedCode(data, webpackAssets) {
-  return buildEmbeddedCode('react-scrollable-video', data, webpackAssets)
+export function buildScrollableVideoEmbedCode(
+  data,
+  webpackAssets,
+  componentHtmlOnly = false
+) {
+  return buildEmbeddedCode(
+    'react-scrollable-video',
+    data,
+    webpackAssets,
+    componentHtmlOnly
+  )
 }
 
 /**
  *  @param {Object} data
  *  @param {WebpackAssets} webpackAssets
+ *  @param {booelean} [componentHtmlOnly=false]
  *  @returns string
  */
-export function buildScrollToAudioEmbedCode(data, webpackAssets) {
-  if (data?.bottomEntryOnly) {
-    return `<div id="${data?.id}"></div>`
-  }
-  return buildEmbeddedCode('react-scroll-to-audio', data, webpackAssets)
+export function buildScrollToAudioEmbedCode(
+  data,
+  webpackAssets,
+  componentHtmlOnly = false
+) {
+  return buildEmbeddedCode(
+    'react-scroll-to-audio',
+    data,
+    webpackAssets,
+    componentHtmlOnly
+  )
 }
 
 /**
@@ -93,9 +145,15 @@ export function buildScrollToAudioEmbedCode(data, webpackAssets) {
  * @param {Object} webpackAssets - webpack bundles and chunks
  * @param {string[]} webpackAssets.entrypoints - webpack bundles
  * @param {string} webpackAssets.version - webpack bundles version
+ * @param {boolean} [componentHtmlOnly=false]
  * @returns {string} embedded code
  */
-export function buildEmbeddedCode(pkgName, data, webpackAssets) {
+export function buildEmbeddedCode(
+  pkgName,
+  data,
+  webpackAssets,
+  componentHtmlOnly = false
+) {
   // use uuid to avoid duplication id
   const uuid = uuidv4()
   const dataWithUuid = {
@@ -137,16 +195,16 @@ export function buildEmbeddedCode(pkgName, data, webpackAssets) {
     const sheet = new ServerStyleSheet()
     try {
       jsx = ReactDOMServer.renderToStaticMarkup(
-        sheet.collectStyles(
-          <div id={uuid}>
-            <Component {...data} />
-          </div>
-        )
+        sheet.collectStyles(<Component {...data} />)
       )
       styleTags = sheet.getStyleTags()
     } finally {
       sheet.seal()
     }
+  }
+
+  if (componentHtmlOnly) {
+    return `${styleTags} ${jsx}`
   }
 
   return `
@@ -169,7 +227,9 @@ export function buildEmbeddedCode(pkgName, data, webpackAssets) {
         }
       })()
     </script>
-    ${jsx}
+    <div id="${uuid}">
+      ${jsx}
+    </div>
     ${_.map(bundles, (bundle) => {
       return `<script type="text/javascript" defer crossorigin src="${bundle}"></script>`
     }).join('')}
