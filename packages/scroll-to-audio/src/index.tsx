@@ -219,10 +219,15 @@ export function ScrollToAudio({
             mobileToolBarDiv
           )
         }
-        const fixedButtonJsx = (
+
+        // Add fixed button onto body element to avoid
+        // [containing block](https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block#identifying_the_containing_block)
+        // changed.
+        const fixedButtonJsx = createPortal(
           <FixedMuteButton $hide={hideMuteButton} onClick={onMuteButtonClick}>
             {muted ? <MuteIcon /> : <SoundIcon />}
-          </FixedMuteButton>
+          </FixedMuteButton>,
+          document.body
         )
         buttonJsx = (
           <>
