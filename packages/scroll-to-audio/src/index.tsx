@@ -199,7 +199,10 @@ export function ScrollToAudio({
         const buttonContainer = document.getElementById(idForMuteButton)
         if (buttonContainer) {
           buttonJsx = createPortal(
-            <MuteButton $hide={hideMuteButton} onClick={onMuteButtonClick}>
+            <MuteButton
+              className="scroll-to-audio-muted-button"
+              onClick={onMuteButtonClick}
+            >
               {muted ? <MuteIcon /> : <SoundIcon />}
             </MuteButton>,
             buttonContainer
@@ -210,33 +213,39 @@ export function ScrollToAudio({
       case ThemeEnum.TWREPORTER:
       default: {
         const mobileToolBarDiv = document.getElementById('mobile-tool-bar')
-        let mobileButtonJsx = null
-        if (mobileToolBarDiv) {
-          mobileButtonJsx = createPortal(
-            <MuteButton $hide={hideMuteButton} onClick={onMuteButtonClick}>
+
+        const mobileButtonJsx = createPortal(
+          <MobileOnly>
+            <MuteButtonWithMobileToolBar
+              className="scroll-to-audio-muted-button"
+              $hide={hideMuteButton}
+              onClick={onMuteButtonClick}
+            >
               {muted ? <MuteIcon /> : <SoundIcon />}
-            </MuteButton>,
-            mobileToolBarDiv
-          )
-        }
+            </MuteButtonWithMobileToolBar>
+          </MobileOnly>,
+          mobileToolBarDiv || document.body
+        )
 
         // Add fixed button onto body element to avoid
         // [containing block](https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block#identifying_the_containing_block)
         // changed.
         const fixedButtonJsx = createPortal(
-          <FixedMuteButton
-            className="scroll-to-audio-muted-button"
-            $hide={hideMuteButton}
-            onClick={onMuteButtonClick}
-          >
-            {muted ? <MuteIcon /> : <SoundIcon />}
-          </FixedMuteButton>,
+          <DesktopOnly>
+            <FixedMuteButton
+              className="scroll-to-audio-muted-button"
+              $hide={hideMuteButton}
+              onClick={onMuteButtonClick}
+            >
+              {muted ? <MuteIcon /> : <SoundIcon />}
+            </FixedMuteButton>
+          </DesktopOnly>,
           document.body
         )
         buttonJsx = (
           <>
-            <DesktopOnly>{fixedButtonJsx}</DesktopOnly>
-            {mobileButtonJsx || fixedButtonJsx}
+            {fixedButtonJsx}
+            {mobileButtonJsx}
           </>
         )
       }
@@ -308,23 +317,13 @@ const BottomEntryContainer = styled.div`
   min-height: 10px;
 `
 
-const MuteButton = styled.div<{ $hide: boolean }>`
+const MuteButton = styled.div`
   height: 40px;
   width: 40px;
   border-radius: 100%;
   background-color: #00000040;
   display: flex;
   cursor: pointer;
-
-  position: absolute;
-  right: 16px;
-  top: calc(-40px - 16px);
-  ${(props) => {
-    return props?.$hide
-      ? 'transform: translateY(calc((40px + 16px) * 2));'
-      : 'transform: translateY(0);'
-  }}
-  transition: transform 300ms ease-in-out;
 
   > svg {
     width: 20px;
@@ -335,13 +334,51 @@ const MuteButton = styled.div<{ $hide: boolean }>`
 
   &:hover {
     background-color: #00000080;
+  }
 `
 
-const FixedMuteButton = styled(MuteButton)`
+const MuteButtonWithMobileToolBar = styled(MuteButton)<{ $hide: boolean }>`
+  position: absolute;
+  /* above the mobile tool bar */
+  /* 40px is button height, 16px is the margin between mute button and mobile tool bar */
+  top: calc(-40px - 16px);
+
+  /* aligned center with mobile tool bar */
+  /* 20px is half width of mute button */
+  left: calc(50% - 20px);
+
+  ${(props) => {
+    /* push mute button to the right edge of the viewport */
+    /* 20px is half width of mute button */
+    /* 16px is the margin between mute button and right edge of viewport */
+    const translateX = 'translateX(calc(50vw - 20px - 16px))'
+
+    return props?.$hide
+      ? `transform: ${translateX} translateY(calc((40px + 16px) * 2));` // slide out the viewport
+      : `transform: ${translateX} translateY(0);`
+  }}
+  transition: transform 300ms ease-in-out;
+`
+
+const FixedMuteButton = styled(MuteButton)<{ $hide: boolean }>`
   position: fixed;
   bottom: 16px;
-  top: auto;
+  right: 16px;
   z-index: 800;
+
+  ${(props) => {
+    return props?.$hide
+      ? 'transform: translateY(calc((40px + 16px) * 2));' // slide out the viewport
+      : 'transform: translateY(0);'
+  }}
+  transition: transform 300ms ease-in-out;
+`
+
+const MobileOnly = styled.div`
+  display: none;
+  @media (max-width: 1023px) {
+    display: block;
+  }
 `
 
 const DesktopOnly = styled.div`
