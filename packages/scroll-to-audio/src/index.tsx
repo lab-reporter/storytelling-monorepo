@@ -224,7 +224,11 @@ export function ScrollToAudio({
         // [containing block](https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block#identifying_the_containing_block)
         // changed.
         const fixedButtonJsx = createPortal(
-          <FixedMuteButton $hide={hideMuteButton} onClick={onMuteButtonClick}>
+          <FixedMuteButton
+            className="scroll-to-audio-muted-button"
+            $hide={hideMuteButton}
+            onClick={onMuteButtonClick}
+          >
             {muted ? <MuteIcon /> : <SoundIcon />}
           </FixedMuteButton>,
           document.body
@@ -337,6 +341,7 @@ const FixedMuteButton = styled(MuteButton)`
   position: fixed;
   bottom: 16px;
   top: auto;
+  z-index: 800;
 `
 
 const DesktopOnly = styled.div`
