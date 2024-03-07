@@ -352,7 +352,7 @@ const MuteButtonWithMobileToolBar = styled(MuteButton)<{ $hide: boolean }>`
 
   ${(props) => {
     return props?.$hide
-      ? `transform: translateY(calc((40px + 16px) * 2));` // slide out the viewport
+      ? `transform: translateY(150px);` // slide out the viewport
       : `transform: translateY(0);`
   }}
   transition: transform 300ms ease-in-out;
