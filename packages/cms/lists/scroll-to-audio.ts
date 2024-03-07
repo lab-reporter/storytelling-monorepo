@@ -47,12 +47,14 @@ const listConfigurations = list({
       field: graphql.field({
         type: graphql.String,
         resolve: async (item: Record<string, unknown>): Promise<string> => {
+          const componentHtmlOnly = true
           const code = embedCodeGen.buildScrollToAudioEmbedCode(
             {
               id: 'scroll-to-audio-' + item.id,
               bottomEntryOnly: true,
             },
-            embedCodeWebpackAssets
+            embedCodeWebpackAssets,
+            componentHtmlOnly
           )
           return code
         },
