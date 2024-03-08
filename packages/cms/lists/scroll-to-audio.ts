@@ -1,7 +1,5 @@
 import config from '../config'
-// @ts-ignore: no definition
 import embedCodeGen from '@story-telling-reporter/react-embed-code-generator'
-// @ts-ignore: no definition
 import { list, graphql } from '@keystone-6/core'
 import { text, file, virtual } from '@keystone-6/core/fields'
 

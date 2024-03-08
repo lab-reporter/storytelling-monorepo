@@ -131,6 +131,7 @@ type Audio {
   id: ID!
   name: String
   file: FileFieldOutput
+  url: String
   description: String
   createdAt: DateTime
   updatedAt: DateTime
@@ -197,6 +198,7 @@ type Video {
   id: ID!
   name: String
   file: FileFieldOutput
+  url: String
   coverPhoto: Photo
   description: String
   createdAt: DateTime

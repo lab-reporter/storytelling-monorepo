@@ -1,5 +1,12 @@
-import { list } from '@keystone-6/core'
-import { timestamp, text, file, relationship } from '@keystone-6/core/fields'
+import config from '../config'
+import { graphql, list } from '@keystone-6/core'
+import {
+  timestamp,
+  text,
+  file,
+  relationship,
+  virtual,
+} from '@keystone-6/core/fields'
 import {
   allowAllRoles,
   allowRoles,
@@ -15,6 +22,15 @@ const listConfigurations = list({
     file: file({
       label: '檔案',
       storage: 'files',
+    }),
+    url: virtual({
+      label: '影片網址',
+      field: graphql.field({
+        type: graphql.String,
+        resolve: (item: Record<string, unknown>): string => {
+          return `${config.gcs.urlPrefix}/files/${item?.file_filename}`
+        },
+      }),
     }),
     coverPhoto: relationship({
       label: '首圖',
@@ -37,7 +53,7 @@ const listConfigurations = list({
     label: 'Video（影片）',
     labelField: 'name',
     listView: {
-      initialColumns: ['name', 'description'],
+      initialColumns: ['name', 'url'],
       pageSize: 50,
     },
   },
