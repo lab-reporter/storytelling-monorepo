@@ -567,7 +567,7 @@ input ScrollableVideoCreateInput {
 type ScrollToAudio {
   id: ID!
   name: String
-  audio: FileFieldOutput
+  audioSrc: String
   startEmbedCode: String
   endEmbedCode: String
   hintEmbedCode: String
@@ -583,16 +583,18 @@ input ScrollToAudioWhereInput {
   NOT: [ScrollToAudioWhereInput!]
   id: IDFilter
   name: StringFilter
+  audioSrc: StringFilter
 }
 
 input ScrollToAudioOrderByInput {
   id: OrderDirection
   name: OrderDirection
+  audioSrc: OrderDirection
 }
 
 input ScrollToAudioUpdateInput {
   name: String
-  audio: FileFieldInput
+  audioSrc: String
 }
 
 input ScrollToAudioUpdateArgs {
@@ -602,7 +604,7 @@ input ScrollToAudioUpdateArgs {
 
 input ScrollToAudioCreateInput {
   name: String
-  audio: FileFieldInput
+  audioSrc: String
 }
 
 """

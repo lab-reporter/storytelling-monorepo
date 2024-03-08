@@ -1,7 +1,6 @@
-import config from '../config'
 import embedCodeGen from '@story-telling-reporter/react-embed-code-generator'
 import { list, graphql } from '@keystone-6/core'
-import { text, file, virtual } from '@keystone-6/core/fields'
+import { text, virtual } from '@keystone-6/core/fields'
 
 const embedCodeWebpackAssets = embedCodeGen.loadWebpackAssets()
 
@@ -11,15 +10,18 @@ const listConfigurations = list({
       label: '捲到式聲音名稱',
       validation: { isRequired: true },
     }),
-    audio: file({
-      storage: 'files',
+    audioSrc: text({
+      label: '聲音檔案 URL',
+      validation: {
+        isRequired: true,
+      },
     }),
     startEmbedCode: virtual({
       label: '起始 embed code',
       field: graphql.field({
         type: graphql.String,
         resolve: async (item: Record<string, unknown>): Promise<string> => {
-          const audioSrc = `${config.gcs.urlPrefix}/files/${item?.audio_filename}`
+          const audioSrc = item.audioSrc
 
           const code = embedCodeGen.buildScrollToAudioEmbedCode(
             {
