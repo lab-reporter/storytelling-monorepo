@@ -50,8 +50,8 @@ export function ScrollToAudio({
   useEffect(() => {
     setMounted(true)
 
-    const audio = audioRef.current
-    if (!audio) {
+    const audioElement = audioRef.current
+    if (!audioElement) {
       return
     }
 
@@ -63,13 +63,13 @@ export function ScrollToAudio({
           mutation.type === 'attributes' &&
           mutation?.attributeName === 'data-muted'
         ) {
-          const dataMuted = audio?.getAttribute('data-muted')
+          const dataMuted = audioElement?.getAttribute('data-muted')
           setMuted(dataMuted === 'true')
         }
       })
     })
 
-    observer.observe(audio, { attributes: true })
+    observer.observe(audioElement, { attributes: true })
 
     return () => {
       observer.disconnect()
@@ -78,11 +78,11 @@ export function ScrollToAudio({
 
   // set audio muted attribute according to browser muted state
   useEffect(() => {
-    const audio = audioRef.current
-    if (!audio) {
+    const audioElement = audioRef.current
+    if (!audioElement) {
       return
     }
-    audio.muted = muted
+    audioElement.muted = muted
   }, [muted])
 
   // play/pause audio when `ScrollToAudio` is entering/leaving the viewport
@@ -139,30 +139,21 @@ export function ScrollToAudio({
   }, [bottomEntryPointInView, bottomEntry])
 
   useEffect(() => {
-    const audio = audioRef.current
-    if (!audio) {
+    const audioElement = audioRef.current
+    if (!audioElement) {
       return
     }
 
     if (paused) {
-      audio.pause()
-      console.log('[react-scroll-to-audio] audio paused.')
+      const targetVolume = 0
+      const duration = 2000 // 2 seconds
+      console.log('[react-scroll-to-audio] audio fades out.')
+      fadeOut(audioElement, targetVolume, duration)
     } else {
-      const startPlayPromise = audio.play()
-      if (startPlayPromise !== undefined) {
-        startPlayPromise
-          // play successfully
-          .then(() => {
-            console.log('[react-scroll-to-audio] audio plays successfully.')
-            audio.setAttribute('data-played', 'true')
-          })
-          // fail to play
-          .catch((error) => {
-            // browser prevent from playing audio before user interactions
-            console.log('[react-scroll-to-audio] unable to play audio')
-            console.log('[react-scroll-to-audio] error: ', error)
-          })
-      }
+      const targetVolume = 1
+      const duration = 2000 // 2 seconds
+      console.log('[react-scroll-to-audio] audio fades in.')
+      fadeIn(audioElement, targetVolume, duration)
     }
   }, [paused])
 
@@ -385,3 +376,64 @@ const DesktopOnly = styled.div`
     display: block;
   }
 `
+
+function fadeOut(
+  audioElement: HTMLVideoElement,
+  targetVolume: number,
+  duration: number
+) {
+  // make sure volume is between 0 to 1
+  targetVolume = Math.max(0, Math.min(1, targetVolume))
+  // decrease volume step by step
+  const volumeDecreaseStep =
+    (audioElement.volume - targetVolume) / (duration / 100)
+  const interval = setInterval(() => {
+    if (audioElement.volume > targetVolume + volumeDecreaseStep) {
+      audioElement.volume -= volumeDecreaseStep
+    } else {
+      // decrease to the target volume
+      audioElement.volume = targetVolume
+      audioElement.pause()
+      console.log('[react-scroll-to-audio] audio paused.')
+      clearInterval(interval)
+    }
+  }, 100)
+}
+
+function fadeIn(
+  audioElement: HTMLVideoElement,
+  targetVolume: number,
+  duration: number
+) {
+  // make sure volume is between 0 to 1
+  targetVolume = Math.max(0, Math.min(1, targetVolume))
+  // increase volume step by step
+  const volumeIncreaseStep = targetVolume / (duration / 100)
+  audioElement.volume = 0 // start audio with 0 volume
+
+  // play the audio
+  const startPlayPromise = audioElement.play()
+  if (startPlayPromise !== undefined) {
+    startPlayPromise
+      // play successfully
+      .then(() => {
+        console.log('[react-scroll-to-audio] audio plays successfully.')
+        audioElement.setAttribute('data-played', 'true')
+        const interval = setInterval(() => {
+          if (audioElement.volume < targetVolume - volumeIncreaseStep) {
+            audioElement.volume += volumeIncreaseStep
+          } else {
+            // increase to the target volume
+            audioElement.volume = targetVolume
+            clearInterval(interval)
+          }
+        }, 100)
+      })
+      // fail to play
+      .catch((error) => {
+        // browser prevent from playing audio before user interactions
+        console.log('[react-scroll-to-audio] unable to play audio')
+        console.log('[react-scroll-to-audio] error: ', error)
+      })
+  }
+}
