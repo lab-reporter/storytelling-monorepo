@@ -101,17 +101,19 @@ export function CaptionMark({
 
   return (
     <Container className={className}>
-      <CaptionInput
-        onConfirm={(captionState) => {
-          onChange(captionState)
-          setMode(modes.default)
-        }}
-        onCancel={() => {
-          setMode(modes.default)
-        }}
-        isOpen={mode === modes.edit}
-        inputValue={captionState}
-      />
+      {mode === modes.edit && (
+        <CaptionInput
+          onConfirm={(captionState) => {
+            onChange(captionState)
+            setMode(modes.default)
+          }}
+          onCancel={() => {
+            setMode(modes.default)
+          }}
+          isOpen={true}
+          inputValue={captionState}
+        />
+      )}
       {deleteAlertJsx}
       {iconsJsx}
     </Container>
