@@ -11,13 +11,15 @@ import { annotationBlockRenderMap } from '../block-render-maps/index'
 import { decorator } from '../entity-decorators/index'
 
 const AnnotationWrapper = styled.span`
-  display: inline-block;
+  display: inline;
   cursor: pointer;
   color: ${({ theme }) => (theme.darkMode ? '#F0D5BE' : '#9F7544')};
 `
 
 const AnnotationBody = styled.div`
-  border-top: 2px solid #c09662;
+  border-style: solid;
+  border-color: #c09662;
+  border-width: 2px 0;
   background-color: ${({ theme }) =>
     theme.darkMode ? 'rgba(0, 0, 0, 0.5)' : 'rgba(255, 255, 255, 0.5)'};
   margin-bottom: 8px;
