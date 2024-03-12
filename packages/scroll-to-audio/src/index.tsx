@@ -128,9 +128,7 @@ export function ScrollToAudio({
         bottomEntryY > 0 + rootMargin
       ) {
         setHideMuteButton(false)
-        if (!muted) {
-          setPaused(false)
-        }
+        setPaused(false)
       }
     }, 50)
     window.addEventListener('scroll', handleScroll)
@@ -235,7 +233,6 @@ export function ScrollToAudio({
   const onMuteButtonClick = () => {
     const nextMuted = !muted
     setMuted(nextMuted)
-    setPaused(false)
 
     const hintContainer = document.getElementById(idForHintContainer)
     if (hintContainer) {
