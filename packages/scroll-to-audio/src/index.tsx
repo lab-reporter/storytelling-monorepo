@@ -3,8 +3,13 @@ import { createPortal } from 'react-dom'
 import styled from './styled-components'
 import { Hint } from './hint'
 import { MuteIcon, SoundIcon } from './icons'
-import { useInView } from 'react-intersection-observer'
+// import { useInView } from 'react-intersection-observer'
 import { useMuted } from './hooks'
+import debounce from 'lodash/debounce'
+
+const _ = {
+  debounce,
+}
 
 enum ThemeEnum {
   TWREPORTER = 'twreporter',
@@ -35,14 +40,16 @@ export function ScrollToAudio({
 }) {
   const audioRef = useRef<HTMLVideoElement>(null)
   const [muted, setMuted] = useMuted(true)
-  const [topEntryPointRef, topEntryPointInView, topEntry] = useInView({
-    rootMargin: '-25% 0% -50% 0%',
-    threshold: 0,
-  })
-  const [bottomEntryPointRef, bottomEntryPointInView, bottomEntry] = useInView({
-    rootMargin: '-50% 0% 0% 0%',
-    threshold: 0,
-  })
+  const topEntryPointRef = useRef<HTMLDivElement>(null)
+  const bottomEntryPointRef = useRef<HTMLDivElement>(null)
+  //const [topEntryPointRef, topEntryPointInView, topEntry] = useInView({
+  //  rootMargin: '-25% 0% -50% 0%',
+  //  threshold: 0,
+  //})
+  //const [bottomEntryPointRef, bottomEntryPointInView, bottomEntry] = useInView({
+  //  rootMargin: '-50% 0% 0% 0%',
+  //  threshold: 0,
+  //})
   const [paused, setPaused] = useState(true)
   const [mounted, setMounted] = useState(false)
   const [hideMuteButton, setHideMuteButton] = useState(true) // hide mute button initially
@@ -76,6 +83,63 @@ export function ScrollToAudio({
     }
   }, [])
 
+  useEffect(() => {
+    const handleScroll = _.debounce(() => {
+      const topEntryElement = topEntryPointRef.current
+      const bottomEntryElement = bottomEntryPointRef.current
+      if (!topEntryElement) {
+        return
+      }
+
+      const viewportHeight = window.innerHeight
+      const rootMargin = Math.ceil(viewportHeight * 0.25)
+      const topEntryY = topEntryElement.getBoundingClientRect().y
+
+      // top entry point is below viewport
+      // which means element is outside viewport bottom
+      if (topEntryY > viewportHeight - rootMargin) {
+        setHideMuteButton(true)
+        setPaused(true)
+        return
+      }
+
+      let bottomEntryY = 0
+      // bottom entry point is not existed
+      // give it a default value: top entry + 100vh
+      if (!bottomEntryElement) {
+        bottomEntryY = topEntryY + viewportHeight
+      } else {
+        bottomEntryY = bottomEntryElement.getBoundingClientRect().y
+      }
+
+      // bottom entry point is above viewport top,
+      // which means element is outside viewport
+      if (bottomEntryY < 0 + rootMargin) {
+        setHideMuteButton(true)
+        setPaused(true)
+      }
+
+      // top entry point is in the viewport or above viewport bottom
+      // AND
+      // bottom entry point is in the viewport or below viewport top
+      // which means element is inside viewport
+      if (
+        topEntryY < viewportHeight - rootMargin &&
+        bottomEntryY > 0 + rootMargin
+      ) {
+        setHideMuteButton(false)
+        if (!muted) {
+          setPaused(false)
+        }
+      }
+    }, 50)
+    window.addEventListener('scroll', handleScroll)
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [topEntryPointRef.current, bottomEntryPointRef.current])
+
   // set audio muted attribute according to browser muted state
   useEffect(() => {
     const audioElement = audioRef.current
@@ -85,58 +149,59 @@ export function ScrollToAudio({
     audioElement.muted = muted
   }, [muted])
 
-  // play/pause audio when `ScrollToAudio` is entering/leaving the viewport
-  useEffect(() => {
-    // in the viewport
-    if (topEntryPointInView) {
-      setHideMuteButton(false)
+  //// play/pause audio when `ScrollToAudio` is entering/leaving the viewport
+  //useEffect(() => {
+  //  console.log(topEntry)
+  //  // in the viewport
+  //  if (topEntryPointInView) {
+  //    setHideMuteButton(false)
 
-      if (!muted) {
-        setPaused(false)
-      }
-      return
-    }
+  //    if (!muted) {
+  //      setPaused(false)
+  //    }
+  //    return
+  //  }
 
-    if (!topEntry) {
-      return
-    }
+  //  if (!topEntry) {
+  //    return
+  //  }
 
-    // User scrolls up and leaves the viewport
-    const rootBoundsY = topEntry.rootBounds?.y
-    if (
-      typeof rootBoundsY === 'number' &&
-      topEntry.boundingClientRect.y > rootBoundsY
-    ) {
-      setHideMuteButton(true)
-      setPaused(true)
-    }
-  }, [muted, topEntryPointInView, topEntry])
+  //  // User scrolls up and leaves the viewport
+  //  const rootBoundsY = topEntry.rootBounds?.y
+  //  if (
+  //    typeof rootBoundsY === 'number' &&
+  //    topEntry.boundingClientRect.y > rootBoundsY
+  //  ) {
+  //    setHideMuteButton(true)
+  //    setPaused(true)
+  //  }
+  //}, [muted, topEntryPointInView, topEntry])
 
-  // play/pause audio when `ScrollToAudio` is entering/leaving the viewport
-  useEffect(() => {
-    // bottom entry point in the viewport
-    if (bottomEntryPointInView) {
-      setHideMuteButton(false)
-      if (!muted) {
-        setPaused(false)
-      }
-      return
-    }
+  //// play/pause audio when `ScrollToAudio` is entering/leaving the viewport
+  //useEffect(() => {
+  //  // bottom entry point in the viewport
+  //  if (bottomEntryPointInView) {
+  //    setHideMuteButton(false)
+  //    if (!muted) {
+  //      setPaused(false)
+  //    }
+  //    return
+  //  }
 
-    if (!bottomEntry) {
-      return
-    }
+  //  if (!bottomEntry) {
+  //    return
+  //  }
 
-    // User scrolls down and leaves the viewport
-    const rootBoundsY = bottomEntry.rootBounds?.y
-    if (
-      typeof rootBoundsY === 'number' &&
-      bottomEntry.boundingClientRect.y < rootBoundsY
-    ) {
-      setPaused(true)
-      setHideMuteButton(true)
-    }
-  }, [bottomEntryPointInView, bottomEntry])
+  //  // User scrolls down and leaves the viewport
+  //  const rootBoundsY = bottomEntry.rootBounds?.y
+  //  if (
+  //    typeof rootBoundsY === 'number' &&
+  //    bottomEntry.boundingClientRect.y < rootBoundsY
+  //  ) {
+  //    setPaused(true)
+  //    setHideMuteButton(true)
+  //  }
+  //}, [bottomEntryPointInView, bottomEntry])
 
   useEffect(() => {
     const audioElement = audioRef.current
