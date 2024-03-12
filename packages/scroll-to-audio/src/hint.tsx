@@ -49,9 +49,6 @@ export function Hint({ className, id }: { className?: string; id: string }) {
       <Button
         className={muted ? 'dark' : 'light'}
         onClick={() => {
-          if (muted) {
-            safariWorkaround()
-          }
           const otherMediaElements = document.querySelectorAll(
             'audio[data-muted],video[data-muted]'
           )
@@ -179,38 +176,3 @@ const SeparationLineContainer = styled.div`
     width: 272px;
   }
 `
-
-/**
- *  The following codes are WORKAROUND for Safari.
- *  Problem to workaround:
- *  In Safari, we still encounter `audio.play()` Promise rejection
- *  even users have had interactions. The interactions, in our case, will be button clicking.
- *
- *  Therefore, the following logics find all Karaoke `audio` elements which has NOT been played before,
- *  and try to `audio.play()` them.
- *  Since this event is triggered by user clicking,
- *  `audio.play()` will be successful without Promise rejection.
- *  After this event finishes, Safari browser won't block `audio.play()` anymore.
- */
-export const safariWorkaround = () => {
-  const otherMediaElements: NodeListOf<HTMLMediaElement> =
-    document.querySelectorAll(
-      'audio[data-autoplay="true"][data-played="false"],video[data-autoplay="true"][data-played="false"]'
-    )
-  otherMediaElements.forEach((media) => {
-    media.muted = true
-    const playAttempt = media.play()
-    if (playAttempt) {
-      playAttempt
-        // play successfully
-        .then(() => {
-          // pause audio immediately
-          media.pause()
-        })
-        // fail to play
-        .catch(() => {
-          // do nothing
-        })
-    }
-  })
-}
