@@ -266,19 +266,35 @@ export function ScrollToAudio({
       case ThemeEnum.TWREPORTER:
       default: {
         const mobileToolBarDiv = document.getElementById('mobile-tool-bar')
+        let mobileButtonJsx = null
 
-        const mobileButtonJsx = createPortal(
-          <MobileOnly>
-            <MuteButtonWithMobileToolBar
-              className="scroll-to-audio-muted-button"
-              $hide={hideMuteButton}
-              onClick={onMuteButtonClick}
-            >
-              {muted ? <MuteIcon /> : <SoundIcon />}
-            </MuteButtonWithMobileToolBar>
-          </MobileOnly>,
-          mobileToolBarDiv || document.body
-        )
+        if (mobileToolBarDiv) {
+          mobileButtonJsx = createPortal(
+            <MobileOnly>
+              <MuteButtonWithMobileToolBar
+                className="scroll-to-audio-muted-button"
+                $hide={hideMuteButton}
+                onClick={onMuteButtonClick}
+              >
+                {muted ? <MuteIcon /> : <SoundIcon />}
+              </MuteButtonWithMobileToolBar>
+            </MobileOnly>,
+            mobileToolBarDiv
+          )
+        } else {
+          mobileButtonJsx = createPortal(
+            <MobileOnly>
+              <FixedMuteButton
+                className="scroll-to-audio-muted-button"
+                $hide={hideMuteButton}
+                onClick={onMuteButtonClick}
+              >
+                {muted ? <MuteIcon /> : <SoundIcon />}
+              </FixedMuteButton>
+            </MobileOnly>,
+            document.body
+          )
+        }
 
         // Add fixed button onto body element to avoid
         // [containing block](https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block#identifying_the_containing_block)
