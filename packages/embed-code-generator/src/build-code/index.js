@@ -8,7 +8,6 @@ import serialize from 'serialize-javascript'
 import { ServerStyleSheet } from 'styled-components'
 import { Karaoke } from '@story-telling-reporter/react-karaoke'
 import { KidsSubtitledAudio } from '@story-telling-reporter/react-subtitled-audio'
-import { ScrollToAudio } from '@story-telling-reporter/react-scroll-to-audio'
 import { v4 as uuidv4 } from 'uuid'
 
 const _ = {
@@ -182,7 +181,7 @@ export function buildEmbeddedCode(
       skipServerSideRendering = true
       break
     case 'react-scroll-to-audio':
-      Component = ScrollToAudio
+      skipServerSideRendering = true
       break
     default:
       throw new Error(`pkgName ${pkgName} is not supported`)

@@ -62,7 +62,7 @@ if (window?.[namespace][`react-scroll-to-audio${pkgVersion}`]) {
   import(
     /* webpackChunkName: "react-scroll-to-audio" */ '@story-telling-reporter/react-scroll-to-audio'
   ).then(({ ScrollToAudio }) => {
-    hydrate(namespace, `react-scroll-to-audio${pkgVersion}`, ScrollToAudio)
+    render(namespace, `react-scroll-to-audio${pkgVersion}`, ScrollToAudio)
   })
 }
 
