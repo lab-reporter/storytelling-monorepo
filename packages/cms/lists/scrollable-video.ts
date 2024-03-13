@@ -198,31 +198,7 @@ const listConfigurations = list({
             }
           }
 
-          const keystoneDidId = nanoid(5)
-          const scriptForKeystone = `<script>
-  const host = document.location.host;
-  if (host === 'keystone-editor.twreporter.org' || host === 'staging-keystone-editor.twreporter.org') {
-    const embedCodeContainer = document.getElementById('${wrapperDivId}');
-    if (embedCodeContainer) {
-      embedCodeContainer.style.display = 'none';
-    }
-
-    const ele = document.getElementById('${keystoneDidId}');
-    ele.style.display="block";
-  }
-</script>`
-
-          const htmlForKeystone = `<style>
-  .only-for-keystone-editor {
-    display: none;
-    background-color: rgba(0,0,0,0.5);
-    color: white;
-    padding: 30px;
-  }
-</style>
-<div id="${keystoneDidId}" class="only-for-keystone-editor">捲動式影片元件：${item.name}（編輯模式，不載入影片）</div>`
-
-          return `${htmlForKeystone}${scriptForKeystone}<style>${css}</style><div id="${wrapperDivId}">${code}</div>`
+          return `<style>${css}</style><div id="${wrapperDivId}">${code}</div>`
         },
       }),
       ui: {
