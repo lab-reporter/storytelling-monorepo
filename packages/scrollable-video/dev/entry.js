@@ -1,6 +1,6 @@
 import React, { useState } from 'react' // eslint-disable-line
 import styled from 'styled-components'
-import { ScrollableVideo } from '../src/v2/index'
+import { ScrollableVideoForKeystoneEditorCMS } from '../src/index'
 import { createRoot } from 'react-dom/client'
 
 const reactRootId = 'root'
@@ -334,7 +334,8 @@ function Demo() {
   return (
     <>
       <div style={{ marginBottom: '50vh' }}></div>
-      <ScrollableVideo
+      <ScrollableVideoForKeystoneEditorCMS
+        name="test"
         darkMode={mocks.darkMode}
         captions={mocks.captions}
         video={mocks.video}
