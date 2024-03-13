@@ -188,7 +188,7 @@ export function buildEmbeddedCode(
       throw new Error(`pkgName ${pkgName} is not supported`)
   }
 
-  let jsx = `<div id="${uuid}"></div>`
+  let jsx = ''
   let styleTags = ''
 
   if (!skipServerSideRendering) {
