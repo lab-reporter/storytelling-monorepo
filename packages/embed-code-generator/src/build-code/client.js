@@ -84,8 +84,12 @@ if (window?.[namespace][`react-dual-slides${pkgVersion}`]) {
 
 if (window?.[namespace][`react-scrollable-video${pkgVersion}`]) {
   import(
-    /* webpackChunkName: "react-scrollable-video" */ '@story-telling-reporter/react-scrollable-video/lib/esm/v2/index'
-  ).then(({ ScrollableVideo }) => {
-    render(namespace, `react-scrollable-video${pkgVersion}`, ScrollableVideo)
+    /* webpackChunkName: "react-scrollable-video" */ '@story-telling-reporter/react-scrollable-video/lib/esm/index'
+  ).then(({ ScrollableVideoForKeystoneEditorCMS }) => {
+    render(
+      namespace,
+      `react-scrollable-video${pkgVersion}`,
+      ScrollableVideoForKeystoneEditorCMS
+    )
   })
 }
