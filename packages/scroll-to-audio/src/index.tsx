@@ -78,8 +78,17 @@ export function ScrollToAudio({
 
     observer.observe(audioElement, { attributes: true })
 
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') {
+        setMuted(true)
+      }
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+
     return () => {
       observer.disconnect()
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
     }
   }, [])
 
