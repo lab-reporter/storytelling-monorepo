@@ -8,10 +8,6 @@ const reactRootId = 'root'
 const container = document.getElementById(reactRootId)
 const root = createRoot(container)
 
-const mock = {
-  audioUrls: ['./audio.mp3'],
-}
-
 const MockContentBlock = styled.div`
   height: 200vh;
   background-color: pink;
@@ -32,12 +28,18 @@ root.render(
     <EmbedCodeBlock>
       <ScrollToAudio
         theme="twreporter"
-        audioUrls={mock.audioUrls}
-        idForMuteButton="scroll-to-audio-mute-button"
+        id="scroll-to-audio-1"
+        audioUrls={['./audio-1.mp3']}
       />
     </EmbedCodeBlock>
     <MockContentBlock />
-    <div id="scroll-to-audio-id-bottom-entry-point" />
+    <div id="scroll-to-audio-1-bottom-entry-point" />
+    <ScrollToAudio
+      theme="twreporter"
+      id="scroll-to-audio-2"
+      audioUrls={['./audio-2.mp3']}
+    />
     <MockContentBlock />
+    <div id="scroll-to-audio-2-bottom-entry-point" />
   </div>
 )
