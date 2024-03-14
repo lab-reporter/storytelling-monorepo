@@ -143,6 +143,10 @@ export function ScrollableVideo({
   darkMode = false,
   secondsPer100vh = 1.5,
 }: ScrollableVideoProps) {
+  const [windowObject, setWindowObject] = useState({
+    innerWidth: 0,
+    innerHeight: 0,
+  })
   const scrollTriggerInstance = useRef<ScrollTrigger | null>(null)
   const scrollTriggerRef = useRef<HTMLDivElement>(null)
   const lastSectionRef = useRef<HTMLDivElement>(null)
@@ -192,7 +196,7 @@ export function ScrollableVideo({
         }
       }
     },
-    { scope: scrollTriggerRef, dependencies: [debugMode] }
+    { scope: scrollTriggerRef, dependencies: [debugMode, windowObject] }
   )
 
   // In order to play video by `play()` method, we need to follow browser video autoplay policy.
@@ -284,6 +288,13 @@ export function ScrollableVideo({
       setPickedVideoSource(videoSource)
 
       handleLastSectionOverflow()
+
+      if (window.innerWidth !== windowObject.innerWidth) {
+        setWindowObject({
+          innerWidth: window.innerWidth,
+          innerHeight: window.innerHeight,
+        })
+      }
     }, 300)
 
     handleResize()
@@ -292,7 +303,7 @@ export function ScrollableVideo({
     return () => {
       window.removeEventListener('resize', handleResize)
     }
-  }, [])
+  }, [windowObject])
 
   // use query param to enable debugMode
   useEffect(() => {
@@ -302,9 +313,14 @@ export function ScrollableVideo({
     }
   }, [])
 
+  if (windowObject.innerWidth === 0) {
+    return null
+  }
+
   const sectionsJsx = captions.map((caption, idx) => {
     const startTime = caption.startTime
-    const top = `${(startTime / secondsPer100vh) * 100}vh`
+    const _top = Math.round((startTime / secondsPer100vh) * 100) / 100
+    const top = `${_top * windowObject.innerHeight}px`
     const sectionId = caption.id ? `section-${caption.id}` : undefined
     return (
       <Section
@@ -329,7 +345,8 @@ export function ScrollableVideo({
 
   const preload =
     typeof video.preload === 'boolean' ? `${video.preload}` : 'true'
-  const sectionsHeight = `${(duration / secondsPer100vh) * 100}vh`
+  const _sectionsHeight = Math.round((duration / secondsPer100vh) * 100) / 100
+  const sectionsHeight = `${_sectionsHeight * windowObject.innerHeight}px`
   const lastSectionHeight = `${lastSectionOverflowHeight}px`
 
   return (
@@ -353,7 +370,14 @@ export function ScrollableVideo({
         />
         {debugMode && (
           <DebugPanel className={darkMode ? 'darkMode' : 'lightMode'}>
-            {debugState.currentTime}/{duration}
+            duration: {debugState.currentTime}/{duration}
+            <br />
+            sectionsHeight: {sectionsHeight}
+            <br />
+            width: {windowObject?.innerWidth}
+            <br />
+            height: {windowObject.innerHeight}
+            <br />
           </DebugPanel>
         )}
       </BackgroundVideo>
