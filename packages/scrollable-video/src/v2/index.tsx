@@ -195,36 +195,6 @@ export function ScrollableVideo({
     { scope: scrollTriggerRef, dependencies: [debugMode] }
   )
 
-  // pick video.src according to viewport width
-  useEffect(() => {
-    const pickVideoSource = () => {
-      const viewportWidth = window.innerWidth
-
-      if (viewportWidth >= 768 && video?.src) {
-        return video.src
-      } else if (viewportWidth < 768 && video?.mobileSrc) {
-        return video.mobileSrc
-      } else if (video?.src) {
-        return video.src
-      }
-
-      return video.mobileSrc
-    }
-
-    const handleResize = _.debounce(() => {
-      const videoSource = pickVideoSource()
-      setPickedVideoSource(videoSource)
-    }, 300)
-
-    setPickedVideoSource(pickVideoSource())
-
-    window.addEventListener('resize', handleResize)
-
-    return () => {
-      window.removeEventListener('resize', handleResize)
-    }
-  }, [])
-
   // In order to play video by `play()` method, we need to follow browser video autoplay policy.
   // For autoplay policy information, see https://developer.mozilla.org/en-US/docs/Web/Media/Autoplay_guide.
   //
@@ -274,14 +244,29 @@ export function ScrollableVideo({
     }
   }, [pickedVideoSource])
 
-  // In some edge cases,
-  // if the last section contains lots of paragraphs,
-  // it might overflow the its container.
-  // If the edge case happens, the following side effect
-  // will increase height of the container to not overflow
-  // the last section.
   useEffect(() => {
-    const handleLastSectionOverflow = _.debounce(() => {
+    // pick video.src according to viewport width
+    const pickVideoSource = () => {
+      const viewportWidth = window.innerWidth
+
+      if (viewportWidth >= 768 && video?.src) {
+        return video.src
+      } else if (viewportWidth < 768 && video?.mobileSrc) {
+        return video.mobileSrc
+      } else if (video?.src) {
+        return video.src
+      }
+
+      return video.mobileSrc
+    }
+
+    // In some edge cases,
+    // if the last section contains lots of paragraphs,
+    // it might overflow the its container.
+    // If the edge case happens, the following side effect
+    // will increase height of the container to not overflow
+    // the last section.
+    const handleLastSectionOverflow = () => {
       const sections = scrollTriggerRef.current
       const lastSection = lastSectionRef.current
       if (sections && lastSection) {
@@ -292,11 +277,20 @@ export function ScrollableVideo({
           setLastSectionOverflowHeight(overflowHeight)
         }
       }
+    }
+
+    const handleResize = _.debounce(() => {
+      const videoSource = pickVideoSource()
+      setPickedVideoSource(videoSource)
+
+      handleLastSectionOverflow()
     }, 300)
-    handleLastSectionOverflow()
-    window.addEventListener('resize', handleLastSectionOverflow)
+
+    handleResize()
+
+    window.addEventListener('resize', handleResize)
     return () => {
-      window.removeEventListener('resize', handleLastSectionOverflow)
+      window.removeEventListener('resize', handleResize)
     }
   }, [])
 
