@@ -243,11 +243,21 @@ export function ScrollToAudio({
     const nextMuted = !muted
     setMuted(nextMuted)
 
+    // sync muted state with `Hint`
     const hintContainer = document.getElementById(idForHintContainer)
     if (hintContainer) {
       // Tell `Hint` component to sync the `muted` state.
       hintContainer.setAttribute('data-muted', nextMuted.toString())
     }
+
+    // sync muted state with other components, such as
+    // other `ScrollToAudio`, `Karaoke` components etc.
+    const otherMediaElements = document.querySelectorAll(
+      'audio[data-muted],video[data-muted]'
+    )
+    otherMediaElements.forEach((ele) => {
+      ele.setAttribute('data-muted', nextMuted.toString())
+    })
   }
 
   let buttonJsx = null
