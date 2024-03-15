@@ -8,6 +8,10 @@ import serialize from 'serialize-javascript'
 import { ServerStyleSheet } from 'styled-components'
 import { Karaoke } from '@story-telling-reporter/react-karaoke'
 import { KidsSubtitledAudio } from '@story-telling-reporter/react-subtitled-audio'
+import {
+  Hint,
+  buildBottomEntryPointStaticMarkup,
+} from '@story-telling-reporter/react-scroll-to-audio'
 import { v4 as uuidv4 } from 'uuid'
 
 const _ = {
@@ -27,17 +31,8 @@ const _ = {
  *  @param {WebpackAssets} webpackAssets
  *  @returns string
  */
-export function buildDualSlidesEmbedCode(
-  data,
-  webpackAssets,
-  componentHtmlOnly = false
-) {
-  return buildEmbeddedCode(
-    'react-dual-slides',
-    data,
-    webpackAssets,
-    componentHtmlOnly
-  )
+export function buildDualSlidesEmbedCode(data, webpackAssets) {
+  return buildEmbedCode('react-dual-slides', data, webpackAssets)
 }
 
 /**
@@ -45,17 +40,8 @@ export function buildDualSlidesEmbedCode(
  *  @param {WebpackAssets} webpackAssets
  *  @returns string
  */
-export function buildThreeStoryPointsEmbedCode(
-  data,
-  webpackAssets,
-  componentHtmlOnly = false
-) {
-  return buildEmbeddedCode(
-    'react-three-story-points',
-    data,
-    webpackAssets,
-    componentHtmlOnly
-  )
+export function buildThreeStoryPointsEmbedCode(data, webpackAssets) {
+  return buildEmbedCode('react-three-story-points', data, webpackAssets)
 }
 
 /**
@@ -63,17 +49,8 @@ export function buildThreeStoryPointsEmbedCode(
  *  @param {WebpackAssets} webpackAssets
  *  @returns string
  */
-export function buildKaraokeEmbedCode(
-  data,
-  webpackAssets,
-  componentHtmlOnly = false
-) {
-  return buildEmbeddedCode(
-    'react-karaoke',
-    data,
-    webpackAssets,
-    componentHtmlOnly
-  )
+export function buildKaraokeEmbedCode(data, webpackAssets) {
+  return buildEmbedCode('react-karaoke', data, webpackAssets)
 }
 
 /**
@@ -81,17 +58,8 @@ export function buildKaraokeEmbedCode(
  *  @param {WebpackAssets} webpackAssets
  *  @returns string
  */
-export function buildSubtitledAudioEmbedCode(
-  data,
-  webpackAssets,
-  componentHtmlOnly = false
-) {
-  return buildEmbeddedCode(
-    'react-subtitled-audio',
-    data,
-    webpackAssets,
-    componentHtmlOnly
-  )
+export function buildSubtitledAudioEmbedCode(data, webpackAssets) {
+  return buildEmbedCode('react-subtitled-audio', data, webpackAssets)
 }
 
 /**
@@ -99,36 +67,34 @@ export function buildSubtitledAudioEmbedCode(
  *  @param {WebpackAssets} webpackAssets
  *  @returns string
  */
-export function buildScrollableVideoEmbedCode(
-  data,
-  webpackAssets,
-  componentHtmlOnly = false
-) {
-  return buildEmbeddedCode(
-    'react-scrollable-video',
-    data,
-    webpackAssets,
-    componentHtmlOnly
-  )
+export function buildScrollableVideoEmbedCode(data, webpackAssets) {
+  return buildEmbedCode('react-scrollable-video', data, webpackAssets)
 }
 
 /**
  *  @param {Object} data
  *  @param {WebpackAssets} webpackAssets
- *  @param {booelean} [componentHtmlOnly=false]
+ *  @param {boolean} [bottomEntryPointOnly=false]
  *  @returns string
  */
 export function buildScrollToAudioEmbedCode(
   data,
   webpackAssets,
-  componentHtmlOnly = false
+  bottomEntryPointOnly = false
 ) {
-  return buildEmbeddedCode(
-    'react-scroll-to-audio',
-    data,
-    webpackAssets,
-    componentHtmlOnly
-  )
+  if (bottomEntryPointOnly) {
+    return buildBottomEntryPointStaticMarkup(data?.id)
+  }
+  return buildEmbedCode('react-scroll-to-audio', data, webpackAssets)
+}
+
+/**
+ *  @param {Object} data
+ *  @param {WebpackAssets} webpackAssets
+ *  @returns string
+ */
+export function buildMutedHintEmbedCode(data, webpackAssets) {
+  return buildEmbedCode('react-muted-hint', data, webpackAssets)
 }
 
 /**
@@ -139,20 +105,16 @@ export function buildScrollToAudioEmbedCode(
  * 'react-dual-slides' |
  * 'react-scrollable-video' |
  * 'react-subtitled-audio' |
- * 'react-scroll-to-audio' } pkgName
+ * 'react-scroll-to-audio' |
+ * 'react-muted-hint'
+ * } pkgName
  * @param {Object} data - Data for react component
  * @param {Object} webpackAssets - webpack bundles and chunks
  * @param {string[]} webpackAssets.entrypoints - webpack bundles
  * @param {string} webpackAssets.version - webpack bundles version
- * @param {boolean} [componentHtmlOnly=false]
  * @returns {string} embedded code
  */
-export function buildEmbeddedCode(
-  pkgName,
-  data,
-  webpackAssets,
-  componentHtmlOnly = false
-) {
+export function buildEmbedCode(pkgName, data, webpackAssets) {
   // use uuid to avoid duplication id
   const uuid = uuidv4()
   const dataWithUuid = {
@@ -183,6 +145,9 @@ export function buildEmbeddedCode(
     case 'react-scroll-to-audio':
       skipServerSideRendering = true
       break
+    case 'react-muted-hint':
+      Component = Hint
+      break
     default:
       throw new Error(`pkgName ${pkgName} is not supported`)
   }
@@ -200,10 +165,6 @@ export function buildEmbeddedCode(
     } finally {
       sheet.seal()
     }
-  }
-
-  if (componentHtmlOnly) {
-    return `${styleTags} ${jsx}`
   }
 
   return `

@@ -93,3 +93,12 @@ if (window?.[namespace][`react-scrollable-video${pkgVersion}`]) {
     )
   })
 }
+
+if (window?.[namespace][`react-muted-hint${pkgVersion}`]) {
+  import(
+    // @TODO import react-ui-toolkit instead
+    /* webpackChunkName: "react-scroll-to-audio" */ '@story-telling-reporter/react-scroll-to-audio'
+  ).then(({ Hint }) => {
+    render(namespace, `react-muted-hint${pkgVersion}`, Hint)
+  })
+}
