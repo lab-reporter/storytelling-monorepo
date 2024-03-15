@@ -3,6 +3,7 @@ import { list, graphql } from '@keystone-6/core'
 import { text, virtual } from '@keystone-6/core/fields'
 
 const embedCodeWebpackAssets = embedCodeGen.loadWebpackAssets()
+const hintId = 'muted-hint-id'
 
 const listConfigurations = list({
   fields: {
@@ -22,17 +23,20 @@ const listConfigurations = list({
         type: graphql.String,
         resolve: async (item: Record<string, unknown>): Promise<string> => {
           const audioSrc = item.audioSrc
+          const bottomEntryPointOnly = false
 
           const code = embedCodeGen.buildScrollToAudioEmbedCode(
             {
               id: 'scroll-to-audio-' + item.id,
               theme: 'twreporter',
               audioUrls: [audioSrc],
+              idForHintContainer: hintId,
             },
-            embedCodeWebpackAssets
+            embedCodeWebpackAssets,
+            bottomEntryPointOnly
           )
 
-          return code
+          return `<!-- 捲到式聲音：${item.name} 起始點 -->` + code
         },
       }),
       ui: {
@@ -47,16 +51,15 @@ const listConfigurations = list({
       field: graphql.field({
         type: graphql.String,
         resolve: async (item: Record<string, unknown>): Promise<string> => {
-          const componentHtmlOnly = true
+          const bottomEntryPointOnly = true
           const code = embedCodeGen.buildScrollToAudioEmbedCode(
             {
               id: 'scroll-to-audio-' + item.id,
-              bottomEntryOnly: true,
             },
             embedCodeWebpackAssets,
-            componentHtmlOnly
+            bottomEntryPointOnly
           )
-          return code
+          return `<!-- 捲到式聲音：${item.name} 結束點 -` + code
         },
       }),
       ui: {
@@ -71,12 +74,15 @@ const listConfigurations = list({
       field: graphql.field({
         type: graphql.String,
         resolve: async (): Promise<string> => {
-          return embedCodeGen.buildScrollToAudioEmbedCode(
+          const code = embedCodeGen.buildEmbedCode(
+            'react-muted-hint',
             {
-              hintOnly: true,
+              id: hintId,
             },
             embedCodeWebpackAssets
           )
+
+          return `<!-- 開頭聲音提示 -->` + code
         },
       }),
       ui: {
