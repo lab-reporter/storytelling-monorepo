@@ -1,4 +1,3 @@
-// @ts-ignore: no definition
 import embedCodeGen from '@story-telling-reporter/react-embed-code-generator'
 import { list, graphql } from '@keystone-6/core'
 import { float, select, text, json, virtual } from '@keystone-6/core/fields'
@@ -158,7 +157,7 @@ const listConfigurations = list({
           const editorState = item?.editorState as EditorState
           const darkMode = item?.theme === 'dark_mode'
           const captions = editorState.captions
-          const code = embedCodeGen.buildEmbeddedCode(
+          const code = embedCodeGen.buildEmbedCode(
             'react-scrollable-video',
             {
               video: {
@@ -198,7 +197,7 @@ const listConfigurations = list({
             }
           }
 
-          return `<style>${css}</style><div id="${wrapperDivId}">${code}</div>`
+          return `<!-- 捲動式影片：${item.name} --><style>${css}</style><div id="${wrapperDivId}">${code}</div>`
         },
       }),
       ui: {

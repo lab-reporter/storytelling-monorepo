@@ -74,7 +74,7 @@ const listConfigurations = list({
         resolve: async (item: Record<string, unknown>): Promise<string> => {
           const audioSrc = `${config.gcs.urlPrefix}/files/${item?.audio_filename}`
 
-          const code = embedCodeGen.buildEmbeddedCode(
+          const code = embedCodeGen.buildEmbedCode(
             'react-karaoke',
             {
               componentTheme: item?.theme,
@@ -85,7 +85,7 @@ const listConfigurations = list({
             embedCodeWebpackAssets
           )
 
-          return code
+          return `<!-- 聲音金句卡拉OK版：${item.name} -->` + code
         },
       }),
       ui: {
@@ -102,12 +102,15 @@ const listConfigurations = list({
         resolve: async (item: Record<string, unknown>): Promise<string> => {
           const muteHint = item?.muteHint
           if (muteHint) {
-            return embedCodeGen.buildEmbeddedCode(
-              'react-karaoke',
-              {
-                hintOnly: true,
-              },
-              embedCodeWebpackAssets
+            return (
+              `<!--  開頭聲音提示 -->` +
+              embedCodeGen.buildEmbedCode(
+                'react-karaoke',
+                {
+                  hintOnly: true,
+                },
+                embedCodeWebpackAssets
+              )
             )
           }
 
