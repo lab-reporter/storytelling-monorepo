@@ -17,14 +17,12 @@ enum ThemeEnum {
   ID_SELECTOR = 'id-selector',
 }
 
-export function ScrollToAudio({
+function ScrollToAudio({
   id = 'scroll-to-audio-id',
   audioUrls,
   className,
   preload = 'auto',
-  hintOnly = false,
-  bottomEntryOnly = false,
-  idForHintContainer = 'muted-controller-hint-id',
+  idForHintContainer = 'muted-hint-id',
   theme = ThemeEnum.TWREPORTER,
   idForMuteButton = '',
 }: {
@@ -32,7 +30,6 @@ export function ScrollToAudio({
   audioUrls: string[]
   className?: string
   preload?: string
-  hintOnly?: boolean
   bottomEntryOnly?: boolean
   idForHintContainer?: string
   theme?: string
@@ -238,16 +235,6 @@ export function ScrollToAudio({
     }
   }, [paused])
 
-  if (hintOnly) {
-    return <Hint id={idForHintContainer} />
-  }
-
-  const bottomEntryId = id + '-bottom-entry-point'
-
-  if (bottomEntryOnly) {
-    return <div id={bottomEntryId}></div>
-  }
-
   const onMuteButtonClick = () => {
     const nextMuted = !muted
     setMuted(nextMuted)
@@ -269,6 +256,7 @@ export function ScrollToAudio({
     })
   }
 
+  const bottomEntryId = id + '-bottom-entry-point'
   let buttonJsx = null
   let bottomEntryPlaceholder = null
 
@@ -405,6 +393,18 @@ export function ScrollToAudio({
     </>
   )
 }
+
+function buildBottomEntryPointStaticMarkup({
+  id = 'scroll-to-audio-id',
+}: {
+  id: string
+}) {
+  const bottomEntryId = id + '-bottom-entry-point'
+
+  return `<div id="${bottomEntryId}"></div>`
+}
+
+export { Hint, ScrollToAudio, buildBottomEntryPointStaticMarkup }
 
 const TopEntryContainer = styled.div`
   min-height: 10px;
