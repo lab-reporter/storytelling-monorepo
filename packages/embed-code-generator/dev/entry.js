@@ -1,4 +1,4 @@
-import { buildEmbeddedCode } from '../src/build-code/index.js'
+import { buildEmbedCode } from '../src/build-code/index.js'
 import mocks from './mocks/index.js'
 import React, { useRef, useState } from 'react' // eslint-disable-line
 import styled from 'styled-components'
@@ -94,13 +94,9 @@ function Panel() {
   let embedCode = ''
   if (selectedPkg) {
     if (selectedScriptUrl === 'localhost') {
-      embedCode = buildEmbeddedCode(selectedPkg, mockData, webpackAssets)
+      embedCode = buildEmbedCode(selectedPkg, mockData, webpackAssets)
     } else if (selectedScriptUrl === 'cdn') {
-      embedCode = ecg.buildEmbeddedCode(
-        selectedPkg,
-        mockData,
-        ecg.webpackAssets
-      )
+      embedCode = ecg.buildEmbedCode(selectedPkg, mockData, ecg.webpackAssets)
     }
   }
 
