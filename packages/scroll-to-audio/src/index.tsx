@@ -1,11 +1,12 @@
-import React/* eslint-disable-line */, { createRef, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import styled from './styled-components'
-import { Hint } from './hint'
 import { MuteIcon, SoundIcon } from './icons'
 // import { useInView } from 'react-intersection-observer'
-import { useMuted } from './hooks'
 import debounce from 'lodash/debounce'
+import { hooks, twreporter } from '@story-telling-reporter/react-ui-toolkit'
+
+const { Hint } = twreporter
 
 const _ = {
   debounce,
@@ -36,7 +37,7 @@ function ScrollToAudio({
   idForMuteButton?: string // enabled when theme === `ThemeEnum.ID_SELECTOR`
 }) {
   const audioRef = useRef<HTMLVideoElement>(null)
-  const [muted, setMuted] = useMuted(true)
+  const [muted, setMuted] = hooks.useMuted(true)
   const topEntryPointRef = useRef<HTMLDivElement>(null)
   const bottomEntryPointRef = useRef<HTMLDivElement>(null)
   //const [topEntryPointRef, topEntryPointInView, topEntry] = useInView({

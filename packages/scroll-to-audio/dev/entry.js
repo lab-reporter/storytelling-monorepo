@@ -2,7 +2,7 @@
 import React from 'react' // eslint-disable-line
 import styled from 'styled-components'
 import { createRoot } from 'react-dom/client'
-import { ScrollToAudio } from '../src/index'
+import { Hint, ScrollToAudio } from '../src/index'
 
 const reactRootId = 'root'
 const container = document.getElementById(reactRootId)
@@ -23,13 +23,14 @@ const EmbedCodeBlock = styled.div`
 
 root.render(
   <div>
-    <ScrollToAudio hintOnly />
+    <Hint id="muted-hint-id" />
     <MockContentBlock />
     <EmbedCodeBlock>
       <ScrollToAudio
         theme="twreporter"
         id="scroll-to-audio-1"
         audioUrls={['./audio-1.mp3']}
+        idForHintContainer="muted-hint-id"
       />
     </EmbedCodeBlock>
     <MockContentBlock />

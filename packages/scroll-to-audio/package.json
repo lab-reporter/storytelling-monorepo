@@ -19,12 +19,14 @@
   },
   "keywords": [
     "react",
-    "readr",
+    "twreporter",
+    "scroll",
     "audio",
     "autoplay"
   ],
   "license": "MIT",
   "dependencies": {
+    "@story-telling-reporter/react-ui-toolkit": "0.0.1-alpha.0",
     "lodash": "^4.17.21",
     "react": "18.1.0",
     "react-dom": "18.1.0",
