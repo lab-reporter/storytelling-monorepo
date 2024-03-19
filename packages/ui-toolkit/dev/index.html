@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@reader-media/react-questionnaire</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      } 
+      body {
+        margin-left: auto;
+        margin-right: auto;
+        background-color: #fff;
+      }
+
+      #root {
+        transform: translate(0, 0);
+      }
+
+      .tool-bar {
+        position: fixed;
+        bottom: 0;
+        width: 100vw;
+        height: 50px;
+        background-color: pink;
+
+        @media (min-width: 1024px) {
+          & {
+            display: none;
+          }
+        }
+      }
+
+    </style>
+  </head>
+  <body>
+    <div id="root" ></div>
+    <div id="mobile-tool-bar" class="tool-bar">
+    </div>
+  </body>
+</html>
+
