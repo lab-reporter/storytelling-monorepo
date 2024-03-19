@@ -22,7 +22,6 @@ function ScrollToAudio({
   audioUrls,
   className,
   preload = 'auto',
-  idForHintContainer = 'muted-hint-id',
   theme = ThemeEnum.TWREPORTER,
   idForMuteButton = '',
 }: {
@@ -31,12 +30,11 @@ function ScrollToAudio({
   className?: string
   preload?: string
   bottomEntryOnly?: boolean
-  idForHintContainer?: string
   theme?: string
   idForMuteButton?: string // enabled when theme === `ThemeEnum.ID_SELECTOR`
 }) {
   const audioRef = useRef<HTMLAudioElement>(null)
-  const [muted, setMuted] = hooks.useMuted(true)
+  const [muted, setMuted] = hooks.useMuted(true, audioRef)
   const topEntryPointRef = useRef<HTMLDivElement>(null)
   const bottomEntryPointRef = useRef<HTMLDivElement>(null)
 
@@ -46,40 +44,6 @@ function ScrollToAudio({
 
   useEffect(() => {
     setMounted(true)
-
-    const audioElement = audioRef.current
-    if (!audioElement) {
-      return
-    }
-
-    // Subscribe `data-muted` attribute changes,
-    // and sync audio `muted` state with `data-muted` attribute.
-    const observer = new MutationObserver((mutaions) => {
-      mutaions.forEach((mutation) => {
-        if (
-          mutation.type === 'attributes' &&
-          mutation?.attributeName === 'data-muted'
-        ) {
-          const dataMuted = audioElement?.getAttribute('data-muted')
-          setMuted(dataMuted === 'true')
-        }
-      })
-    })
-
-    observer.observe(audioElement, { attributes: true })
-
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === 'hidden') {
-        setMuted(true)
-      }
-    }
-
-    document.addEventListener('visibilitychange', handleVisibilityChange)
-
-    return () => {
-      observer.disconnect()
-      document.removeEventListener('visibilitychange', handleVisibilityChange)
-    }
   }, [])
 
   useEffect(() => {
@@ -177,22 +141,6 @@ function ScrollToAudio({
   const onMuteButtonClick = () => {
     const nextMuted = !muted
     setMuted(nextMuted)
-
-    // sync muted state with `Hint`
-    const hintContainer = document.getElementById(idForHintContainer)
-    if (hintContainer) {
-      // Tell `Hint` component to sync the `muted` state.
-      hintContainer.setAttribute('data-muted', nextMuted.toString())
-    }
-
-    // sync muted state with other components, such as
-    // other `ScrollToAudio`, `Karaoke` components etc.
-    const otherMediaElements = document.querySelectorAll(
-      'audio[data-muted],video[data-muted]'
-    )
-    otherMediaElements.forEach((ele) => {
-      ele.setAttribute('data-muted', nextMuted.toString())
-    })
   }
 
   const bottomEntryId = id + '-bottom-entry-point'
@@ -282,6 +230,7 @@ function ScrollToAudio({
       preload={preload}
       data-played={false}
       data-paused={paused}
+      data-twreporter-story-telling
       data-muted={muted}
       style={{ display: 'none' }}
       playsInline
