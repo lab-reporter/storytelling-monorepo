@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import styled from './styled-components'
 import { MuteIcon, SoundIcon } from './icons'
-// import { useInView } from 'react-intersection-observer'
 import debounce from 'lodash/debounce'
 import { hooks, twreporter } from '@story-telling-reporter/react-ui-toolkit'
 
@@ -36,18 +35,11 @@ function ScrollToAudio({
   theme?: string
   idForMuteButton?: string // enabled when theme === `ThemeEnum.ID_SELECTOR`
 }) {
-  const audioRef = useRef<HTMLVideoElement>(null)
+  const audioRef = useRef<HTMLAudioElement>(null)
   const [muted, setMuted] = hooks.useMuted(true)
   const topEntryPointRef = useRef<HTMLDivElement>(null)
   const bottomEntryPointRef = useRef<HTMLDivElement>(null)
-  //const [topEntryPointRef, topEntryPointInView, topEntry] = useInView({
-  //  rootMargin: '-25% 0% -50% 0%',
-  //  threshold: 0,
-  //})
-  //const [bottomEntryPointRef, bottomEntryPointInView, bottomEntry] = useInView({
-  //  rootMargin: '-50% 0% 0% 0%',
-  //  threshold: 0,
-  //})
+
   const [paused, setPaused] = useState(true)
   const [mounted, setMounted] = useState(false)
   const [hideMuteButton, setHideMuteButton] = useState(true) // hide mute button initially
@@ -153,60 +145,6 @@ function ScrollToAudio({
     }
     audioElement.muted = muted
   }, [muted])
-
-  //// play/pause audio when `ScrollToAudio` is entering/leaving the viewport
-  //useEffect(() => {
-  //  console.log(topEntry)
-  //  // in the viewport
-  //  if (topEntryPointInView) {
-  //    setHideMuteButton(false)
-
-  //    if (!muted) {
-  //      setPaused(false)
-  //    }
-  //    return
-  //  }
-
-  //  if (!topEntry) {
-  //    return
-  //  }
-
-  //  // User scrolls up and leaves the viewport
-  //  const rootBoundsY = topEntry.rootBounds?.y
-  //  if (
-  //    typeof rootBoundsY === 'number' &&
-  //    topEntry.boundingClientRect.y > rootBoundsY
-  //  ) {
-  //    setHideMuteButton(true)
-  //    setPaused(true)
-  //  }
-  //}, [muted, topEntryPointInView, topEntry])
-
-  //// play/pause audio when `ScrollToAudio` is entering/leaving the viewport
-  //useEffect(() => {
-  //  // bottom entry point in the viewport
-  //  if (bottomEntryPointInView) {
-  //    setHideMuteButton(false)
-  //    if (!muted) {
-  //      setPaused(false)
-  //    }
-  //    return
-  //  }
-
-  //  if (!bottomEntry) {
-  //    return
-  //  }
-
-  //  // User scrolls down and leaves the viewport
-  //  const rootBoundsY = bottomEntry.rootBounds?.y
-  //  if (
-  //    typeof rootBoundsY === 'number' &&
-  //    bottomEntry.boundingClientRect.y < rootBoundsY
-  //  ) {
-  //    setPaused(true)
-  //    setHideMuteButton(true)
-  //  }
-  //}, [bottomEntryPointInView, bottomEntry])
 
   useEffect(() => {
     const audioElement = audioRef.current
@@ -339,21 +277,9 @@ function ScrollToAudio({
   }
 
   const audioJsx = (
-    /**
-     *  Using `<video>` tag, instead of `<audio>` tag, is a workaround.
-     *
-     *  Even though we set `audio.muted=true` before auto playing audio,
-     *  it still may encounter error to autoplay audio.
-     *  The error message is 'error:  DOMException: play() failed because the user didn't interact with the document first. https://goo.gl/xX8pDD'.
-     *  It seems that Chrome does not follow the autoplay policy which is designed by Google itself.
-     *  The autoplay policy says that if we want to autoplay, and then we need to make audio muted.
-     *  But, in our case, setting `audio.muted=true` is not working at all.
-     *  However, audio can be autoplayed by setting `video.muted=true` instead.
-     */
-    <video
+    <audio
       ref={audioRef}
       preload={preload}
-      data-autoplay={true}
       data-played={false}
       data-paused={paused}
       data-muted={muted}
@@ -364,7 +290,7 @@ function ScrollToAudio({
       {audioUrls.map((url, index) => (
         <source key={`audio_source_${index}`} src={url}></source>
       ))}
-    </video>
+    </audio>
   )
 
   return (
