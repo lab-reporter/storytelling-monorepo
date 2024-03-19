@@ -1,10 +1,12 @@
 import React/* eslint-disable-line */, { useEffect, useMemo, useRef, useState } from 'react'
 import Quote from './quote'
 import styled from 'styled-components'
-import { Hint, safariWorkaround, useMuted } from './hint'
 import { LogoIcon, MuteIcon, PlayIcon, SoundIcon } from './icons'
 import { mediaQuery } from './utils/media-query'
 import { useInView } from 'react-intersection-observer'
+import { hooks, kids } from '@story-telling-reporter/react-ui-toolkit'
+
+const { Hint } = kids
 
 /**
  *  @typedef {Object} KaraokeProps
@@ -31,7 +33,7 @@ export function Karaoke({
 }) {
   const audioRef = useRef(null)
   const trackRef = useRef(null)
-  const [muted, setMuted] = useMuted(true)
+  const [muted, setMuted] = hooks.useMuted(true)
   const [containerRef, inView] = useInView({
     rootMargin: '-25% 0% -25% 0%',
     threshold: 0,
@@ -190,8 +192,6 @@ export function Karaoke({
             }
             audio.setAttribute('data-played', true)
           }
-
-          safariWorkaround()
         }}
       >
         {muted ? <MuteIcon /> : <SoundIcon />}

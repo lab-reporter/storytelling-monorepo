@@ -1,10 +1,12 @@
 import React/* eslint-disable-line */, { useEffect, useMemo, useRef, useState } from 'react'
 import Quote from './quote'
 import styled from 'styled-components'
-import { Hint, safariWorkaround, useMuted } from './hint'
 import { MuteIcon, PlayIcon, SoundIcon } from './icons'
 import { mediaQuery } from './utils/media-query'
 import { useInView } from 'react-intersection-observer'
+import { hooks, twreporter } from '@story-telling-reporter/react-ui-toolkit'
+
+const { Hint } = twreporter
 
 /**
  *  @typedef {Object} KaraokeProps
@@ -30,7 +32,7 @@ export function Karaoke({
 }) {
   const audioRef = useRef(null)
   const trackRef = useRef(null)
-  const [muted, setMuted] = useMuted(true)
+  const [muted, setMuted] = hooks.useMuted(true)
   const [containerRef, inView] = useInView({
     rootMargin: '-25% 0% -25% 0%',
     threshold: 0,
@@ -205,8 +207,6 @@ export function Karaoke({
             }
             audio.setAttribute('data-played', true)
           }
-
-          safariWorkaround()
         }}
       >
         {muted ? <MuteIcon /> : <SoundIcon />}
@@ -238,26 +238,16 @@ export function Karaoke({
     <Container className={className} ref={containerRef}>
       {audioBtJsx}
       {/**
-       *  There are two reasons to use `<video>` tag, instead of `<audio>` tag, for workaround.
-       *
-       *  1. <audio> elements can't have subtitles or captions associated with them in the same way that <video> elements can.
+       *  The reason we  use `<video>` tag, instead of `<audio>` tag, for workaround is because
+       *  <audio> elements can't have subtitles or captions associated with them in the same way that <video> elements can.
        *  See [WebVTT and Audio](https://www.iandevlin.com/blog/2015/12/html5/webvtt-and-audio/) by Ian Devlin
        *  for some useful information and workarounds.
-       *
-       *  2. Even though we set `audio.muted=true` before auto playing audio,
-       *  it still may encounter error to autoplay audio.
-       *  The error message is 'error:  DOMException: play() failed because the user didn't interact with the document first. https://goo.gl/xX8pDD'.
-       *  It seems that Chrome does not follow the autoplay policy which is designed by Google itself.
-       *  The autoplay policy says that if we want to autoplay, and then we need to make audio muted.
-       *  But, in our case, setting `audio.muted=true` is not working at all.
-       *  However, audio can be autoplayed by setting `video.muted=true` instead.
        */}
       <video
         ref={audioRef}
         preload={preload}
         data-twreporter-story-telling
         data-react-karaoke
-        data-autoplay={true}
         data-played={false}
         playsInline
         style={{ display: 'none' }}
