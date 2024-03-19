@@ -11,7 +11,8 @@
     "packages/embed-code-generator",
     "packages/subtitled-audio",
     "packages/scrollable-video",
-    "packages/scroll-to-audio"
+    "packages/scroll-to-audio",
+    "packages/ui-toolkit"
   ],
   "scripts": {
     "prepare": "husky install"
