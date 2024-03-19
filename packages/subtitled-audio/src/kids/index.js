@@ -265,7 +265,7 @@ export function SubtitledAudio({
       preload={preload}
       data-twreporter-story-telling
       data-react-subtitled-audio
-      data-muted={true}
+      data-muted={muted}
       data-played={false}
       style={{ display: 'none' }}
       playsInline

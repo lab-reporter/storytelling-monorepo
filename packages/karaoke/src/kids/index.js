@@ -233,7 +233,7 @@ export function Karaoke({
             preload={preload}
             data-twreporter-story-telling
             data-react-karaoke
-            data-muted={true}
+            data-muted={muted}
             data-played={false}
             playsInline
             style={{ display: 'none' }}
