@@ -96,9 +96,8 @@ export function useMuted(
 
   // Sync muted state with other story telling elements.
   useEffect(() => {
-    const mutedStr = muted.toString()
     const otherMediaElements = document.querySelectorAll(
-      `[data-twreporter-story-telling]:not([data-muted="${mutedStr}"])`
+      `[data-twreporter-story-telling][data-muted="${(!muted).toString()}"]`
     )
     otherMediaElements.forEach((ele) => {
       console.log(
