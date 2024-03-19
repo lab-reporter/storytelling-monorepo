@@ -61,13 +61,10 @@ const hintText = '本文有金句聲音元件，\n聽聽作者想和14歲的自�
 
 root.render(
   <div>
+    <KidsSubtitledAudio hintText={hintText} hintOnly />
     <MockContentBlock />
     <EmbedCodeBlock>
-      <KidsSubtitledAudio
-        audioUrls={mock.audioUrls}
-        webVtt={mock.webVtt}
-        hintText={hintText}
-      />
+      <KidsSubtitledAudio audioUrls={mock.audioUrls} webVtt={mock.webVtt} />
     </EmbedCodeBlock>
     <MockContentBlock />
   </div>

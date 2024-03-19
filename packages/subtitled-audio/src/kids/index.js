@@ -1,11 +1,12 @@
 import React/* eslint-disable-line */, { createRef, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
-import { Hint } from './hint'
 import { LogoIcon, MuteIcon, SoundIcon, PlayIcon, PauseIcon } from './icons'
 import { TransitionGroup, CSSTransition } from 'react-transition-group'
 import { mediaQuery } from './utils/media-query'
 import { useInView } from 'react-intersection-observer'
-import { useMuted } from './hooks'
+import { hooks, kids } from '@story-telling-reporter/react-ui-toolkit'
+
+const { Hint } = kids
 
 /**
  *  @typedef {Object} SubtitledAduioProps
@@ -33,7 +34,7 @@ export function SubtitledAudio({
   // const hasBeenInViewRef = useRef(false)
   const audioRef = useRef(null)
   const trackRef = useRef(null)
-  const [muted, setMuted] = useMuted(true)
+  const [muted, setMuted] = hooks.useMuted(true, audioRef)
   const [bodyRef, inView] = useInView({
     rootMargin: hintText ? '-25% 0% -50% 0%' : '-25% 0% -25% 0%',
     threshold: 0,
@@ -244,8 +245,6 @@ export function SubtitledAudio({
           }
           audio.setAttribute('data-played', true)
         }
-
-        safariWorkaround()
       }}
     >
       {paused ? <PlayIcon /> : <PauseIcon />}
@@ -266,7 +265,7 @@ export function SubtitledAudio({
       preload={preload}
       data-twreporter-story-telling
       data-react-subtitled-audio
-      data-autoplay={true}
+      data-muted={true}
       data-played={false}
       style={{ display: 'none' }}
       playsInline
@@ -280,24 +279,7 @@ export function SubtitledAudio({
 
   return (
     <Container className={className}>
-      {hintText && (
-        <Hint
-          text={hintText}
-          muted={muted}
-          onClick={() => {
-            const audio = audioRef.current
-            if (audio) {
-              if (muted) {
-                audio.muted = false
-                setMuted(false)
-              } else {
-                audio.muted = true
-                setMuted(true)
-              }
-            }
-          }}
-        />
-      )}
+      {hintText && <Hint text={hintText} />}
       <PaddingTop />
       <Body ref={bodyRef}>
         <Logo />
@@ -496,46 +478,3 @@ const Controls = styled.div`
     margin-top: 20px;
   }
 `
-
-/**
- *  The following codes are WORKAROUND for Safari.
- *  Problem to workaround:
- *  In Safari, we still encounter `audio.play()` Promise rejection
- *  even users have had interactions. The interactions, in our case, will be button clicking.
- *
- *  Therefore, the following logics find all Karaoke `audio` elements which has NOT been played before,
- *  and try to `audio.play()` them.
- *  Since this event is triggered by user clicking,
- *  `audio.play()` will be successful without Promise rejection.
- *  After this event finishes, Safari browser won't block `audio.play()` anymore.
- */
-const safariWorkaround = () => {
-  const otherMediaElements = document.querySelectorAll(
-    'audio[data-autoplay=true][data-played=false],video[data-autoplay=true][data-played=false]'
-  )
-  console.log('otherMediaElements:', otherMediaElements)
-  otherMediaElements.forEach(
-    (
-      /**
-       *  @type HTMLMediaElement
-       */
-      media
-    ) => {
-      media.muted = true
-      const playAttempt = media.play()
-      if (playAttempt) {
-        playAttempt
-          // play successfully
-          .then(() => {
-            // pause media immediately
-            media.pause()
-            media.setAttribute('data-played', true)
-          })
-          // fail to play
-          .catch(() => {
-            // do nothing
-          })
-      }
-    }
-  )
-}

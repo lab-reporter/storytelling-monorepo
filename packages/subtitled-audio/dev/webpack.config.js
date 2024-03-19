@@ -22,6 +22,9 @@ module.exports = {
     rules: [
       {
         test: /\.jsx?$/,
+        resolve: {
+          fullySpecified: false,
+        },
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
