@@ -33,7 +33,7 @@ export function Karaoke({
 }) {
   const audioRef = useRef(null)
   const trackRef = useRef(null)
-  const [muted, setMuted] = hooks.useMuted(true)
+  const [muted, setMuted] = hooks.useMuted(true, audioRef)
   const [containerRef, inView] = useInView({
     rootMargin: '-25% 0% -25% 0%',
     threshold: 0,
@@ -62,7 +62,7 @@ export function Karaoke({
       const cuesList = event.target?.track?.cues || []
 
       if (cues.length !== cuesList.length) {
-        console.log("[react-subtitled-audio] track's cues list: ", cuesList)
+        console.log("[react-karaoke] track's cues list: ", cuesList)
         const trackCues = []
         for (const cue of cuesList) {
           trackCues.push(cue)
@@ -74,10 +74,7 @@ export function Karaoke({
     const handleCueChange = (event) => {
       const activeCue = event.target?.track?.activeCues?.[0]
       if (activeCue) {
-        console.log(
-          '[react-subtitled-audio] cue changed. active cue: ',
-          activeCue
-        )
+        console.log('[react-karaoke] cue changed. active cue: ', activeCue)
         setActiveCue(activeCue)
       }
     }
@@ -226,26 +223,17 @@ export function Karaoke({
         <QuoteContainer className={className} ref={containerRef}>
           <Logo />
           {/**
-           *  There are two reasons to use `<video>` tag, instead of `<audio>` tag, for workaround.
-           *
-           *  1. <audio> elements can't have subtitles or captions associated with them in the same way that <video> elements can.
+           *  The reason we  use `<video>` tag, instead of `<audio>` tag, for workaround is because
+           *  <audio> elements can't have subtitles or captions associated with them in the same way that <video> elements can.
            *  See [WebVTT and Audio](https://www.iandevlin.com/blog/2015/12/html5/webvtt-and-audio/) by Ian Devlin
            *  for some useful information and workarounds.
-           *
-           *  2. Even though we set `audio.muted=true` before auto playing audio,
-           *  it still may encounter error to autoplay audio.
-           *  The error message is 'error:  DOMException: play() failed because the user didn't interact with the document first. https://goo.gl/xX8pDD'.
-           *  It seems that Chrome does not follow the autoplay policy which is designed by Google itself.
-           *  The autoplay policy says that if we want to autoplay, and then we need to make audio muted.
-           *  But, in our case, setting `audio.muted=true` is not working at all.
-           *  However, audio can be autoplayed by setting `video.muted=true` instead.
            */}
           <video
             ref={audioRef}
             preload={preload}
             data-twreporter-story-telling
             data-react-karaoke
-            data-autoplay={true}
+            data-muted={true}
             data-played={false}
             playsInline
             style={{ display: 'none' }}

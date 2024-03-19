@@ -32,7 +32,7 @@ export function Karaoke({
 }) {
   const audioRef = useRef(null)
   const trackRef = useRef(null)
-  const [muted, setMuted] = hooks.useMuted(true)
+  const [muted, setMuted] = hooks.useMuted(true, audioRef)
   const [containerRef, inView] = useInView({
     rootMargin: '-25% 0% -25% 0%',
     threshold: 0,
@@ -61,7 +61,7 @@ export function Karaoke({
       const cuesList = event.target?.track?.cues || []
 
       if (cues.length !== cuesList.length) {
-        console.log("[react-subtitled-audio] track's cues list: ", cuesList)
+        console.log("[react-karaoke] track's cues list: ", cuesList)
         const trackCues = []
         for (const cue of cuesList) {
           trackCues.push(cue)
@@ -73,10 +73,7 @@ export function Karaoke({
     const handleCueChange = (event) => {
       const activeCue = event.target?.track?.activeCues?.[0]
       if (activeCue) {
-        console.log(
-          '[react-subtitled-audio] cue changed. active cue: ',
-          activeCue
-        )
+        console.log('[react-karaoke] cue changed. active cue: ', activeCue)
         setActiveCue(activeCue)
       }
     }
@@ -248,6 +245,7 @@ export function Karaoke({
         preload={preload}
         data-twreporter-story-telling
         data-react-karaoke
+        data-muted={muted}
         data-played={false}
         playsInline
         style={{ display: 'none' }}
