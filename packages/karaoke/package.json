@@ -24,7 +24,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@story-telling-reporter/react-ui-toolkit": "^0.0.1-alpha.2",
+    "@story-telling-reporter/react-ui-toolkit": "^0.0.1-alpha.3",
     "react": "18.1.0",
     "react-dom": "18.1.0",
     "react-intersection-observer": "^9.3.5",
