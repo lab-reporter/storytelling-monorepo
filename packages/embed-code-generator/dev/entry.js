@@ -1,16 +1,20 @@
-import { buildEmbedCode } from '../src/build-code/index.js'
+import {
+  buildKaraokeEmbedCode,
+  buildScrollToAudioEmbedCode,
+  buildScrollableVideoEmbedCode,
+} from '../src/build-code/index.js'
+import { pkgNames } from '../src/build-code/constants'
 import mocks from './mocks/index.js'
 import React, { useRef, useState } from 'react' // eslint-disable-line
 import styled from 'styled-components'
-import webpackAssets from '../dist/webpack-assets.json'
 import { createRoot } from 'react-dom/client'
-import ecgWebpackAssets from '@story-telling-reporter/react-embed-code-generator/dist/webpack-assets.json'
-import { buildEmbeddedCode as ecgBuildEmbeddedCode } from '@story-telling-reporter/react-embed-code-generator/lib/build-code/index.js'
+//import ecgManifest from '@story-telling-reporter/react-embed-code-generator/dist/manifest.json'
+//import { buildEmbeddedCode as ecgBuildEmbeddedCode } from '@story-telling-reporter/react-embed-code-generator/lib/build-code/index.js'
 
-const ecg = {
-  webpackAssets: ecgWebpackAssets,
-  buildEmbeddedCode: ecgBuildEmbeddedCode,
-}
+//const ecg = {
+//  manifest: ecgManifest,
+//  buildEmbeddedCode: ecgBuildEmbeddedCode,
+//}
 
 const reactRootId = 'root'
 const container = document.getElementById(reactRootId)
@@ -47,30 +51,25 @@ const TextBlock = styled.textarea`
 
 const pkgOptions = [
   {
-    id: 'react-karaoke',
-    name: 'Karaoke',
-    value: 'react-karaoke',
+    id: pkgNames.karaoke,
+    name: '聲音金句Karaoke版',
+    value: pkgNames.karaoke,
   },
   {
-    id: 'react-dual-slides',
-    name: 'Dual Slides',
-    value: 'react-dual-slides',
-  },
-  {
-    id: 'react-three-story-points',
-    name: 'Three Story Points',
-    value: 'react-three-story-points',
-  },
-  {
-    id: 'react-scrollable-video',
+    id: pkgNames.scrollableVideo,
     name: '捲動式影片 2.0',
-    value: 'react-scrollable-video',
+    value: pkgNames.scrollableVideo,
   },
   {
-    id: 'react-scroll-to-audio',
+    id: pkgNames.scrollToAudio,
     name: '捲到式聲音',
-    value: 'react-scroll-to-audio',
+    value: pkgNames.scrollToAudio,
   },
+  //{
+  //  id: 'subtitled-audio',
+  //  name: '聲音金句字幕版',
+  //  value: 'subtitled-audio',
+  //},
 ]
 
 const scriptUrlOptios = [
@@ -79,11 +78,11 @@ const scriptUrlOptios = [
     name: 'localhost',
     value: 'localhost',
   },
-  {
-    id: 'cdn',
-    name: 'cdn（unkpkg.com）',
-    value: 'cdn',
-  },
+  //{
+  //  id: 'cdn',
+  //  name: 'cdn（unkpkg.com）',
+  //  value: 'cdn',
+  //},
 ]
 
 function Panel() {
@@ -94,10 +93,26 @@ function Panel() {
   let embedCode = ''
   if (selectedPkg) {
     if (selectedScriptUrl === 'localhost') {
-      embedCode = buildEmbedCode(selectedPkg, mockData, webpackAssets)
-    } else if (selectedScriptUrl === 'cdn') {
-      embedCode = ecg.buildEmbedCode(selectedPkg, mockData, ecg.webpackAssets)
+      switch (selectedPkg) {
+        case pkgNames.karaoke: {
+          embedCode = buildKaraokeEmbedCode(mockData)
+          break
+        }
+        case pkgNames.scrollableVideo: {
+          embedCode = buildScrollableVideoEmbedCode(mockData)
+          break
+        }
+        case pkgNames.scrollToAudio: {
+          embedCode = buildScrollToAudioEmbedCode(mockData)
+          break
+        }
+        default:
+          break
+      }
     }
+    //else if (selectedScriptUrl === 'cdn') {
+    //  embedCode = ecg.buildEmbedCode(selectedPkg, mockData, ecg.manifest)
+    //}
   }
 
   return (

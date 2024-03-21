@@ -28,10 +28,10 @@
   "license": "MIT",
   "dependencies": {
     "@story-telling-reporter/react-dual-slides": "0.1.1",
-    "@story-telling-reporter/react-karaoke": "^0.2.7",
-    "@story-telling-reporter/react-scroll-to-audio": "^1.0.0",
+    "@story-telling-reporter/react-karaoke": "^0.3.0",
+    "@story-telling-reporter/react-scroll-to-audio": "^2.0.0",
     "@story-telling-reporter/react-scrollable-video": "^1.0.0",
-    "@story-telling-reporter/react-subtitled-audio": "^1.0.1",
+    "@story-telling-reporter/react-subtitled-audio": "^1.1.0",
     "@story-telling-reporter/react-three-story-points": "0.1.1",
     "lodash": "^4.17.21",
     "serialize-javascript": "^6.0.0"

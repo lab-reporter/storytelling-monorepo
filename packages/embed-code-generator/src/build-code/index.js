@@ -1,120 +1,65 @@
-/* eslint no-console: 0 */
-import DualSlides from '@story-telling-reporter/react-dual-slides'
 import React from 'react' // eslint-disable-line
 import ReactDOMServer from 'react-dom/server'
-import get from 'lodash/get.js'
-import map from 'lodash/map'
 import serialize from 'serialize-javascript'
 import { ServerStyleSheet } from 'styled-components'
 import { Karaoke } from '@story-telling-reporter/react-karaoke'
 import { KidsSubtitledAudio } from '@story-telling-reporter/react-subtitled-audio'
-import {
-  Hint,
-  buildBottomEntryPointStaticMarkup,
-} from '@story-telling-reporter/react-scroll-to-audio'
+import { buildBottomEntryPointStaticMarkup } from '@story-telling-reporter/react-scroll-to-audio'
 import { v4 as uuidv4 } from 'uuid'
+import { pkgNames } from './constants'
 
-const _ = {
-  get,
-  map,
-}
-
-/**
- *  @typedef {Object} WebpackAssets
- *  @property {string[]} entrypoints - webpack bundles
- *  @property {string} version - webpack bundles version
- *
- */
-
-/**
- *  @param {import('@story-telling-reporter/react-dual-slides').DualSlidesProps} data
- *  @param {WebpackAssets} webpackAssets
- *  @returns string
- */
-export function buildDualSlidesEmbedCode(data, webpackAssets) {
-  return buildEmbedCode('react-dual-slides', data, webpackAssets)
-}
-
-/**
- *  @param {import('@story-telling-reporter/react-three-story-points').ThreeStoryPointsProps} data
- *  @param {WebpackAssets} webpackAssets
- *  @returns string
- */
-export function buildThreeStoryPointsEmbedCode(data, webpackAssets) {
-  return buildEmbedCode('react-three-story-points', data, webpackAssets)
-}
+// manifest.json is generated after `make build` or `make dev`
+import manifest from '../../dist/manifest.json'
 
 /**
  *  @param {import('@story-telling-reporter/react-karaoke').KaraokeProps} data
- *  @param {WebpackAssets} webpackAssets
  *  @returns string
  */
-export function buildKaraokeEmbedCode(data, webpackAssets) {
-  return buildEmbedCode('react-karaoke', data, webpackAssets)
+export function buildKaraokeEmbedCode(data) {
+  return buildEmbedCode(data, pkgNames.karaoke, Karaoke)
 }
 
 /**
- *  @param {import('@story-telling-reporter/react-subtitled-audio').SubtitledAduioProps} data
- *  @param {WebpackAssets} webpackAssets
+ *  @param {import('@story-telling-reporter/react-subtitled-audio').SubtitledAudioProps} data
  *  @returns string
  */
-export function buildSubtitledAudioEmbedCode(data, webpackAssets) {
-  return buildEmbedCode('react-subtitled-audio', data, webpackAssets)
-}
-
-/**
- *  @param {Object} data
- *  @param {WebpackAssets} webpackAssets
- *  @returns string
- */
-export function buildScrollableVideoEmbedCode(data, webpackAssets) {
-  return buildEmbedCode('react-scrollable-video', data, webpackAssets)
+export function buildSubtitledAudioEmbedCode(data) {
+  return buildEmbedCode(data, pkgNames.subtitledAudio, KidsSubtitledAudio)
 }
 
 /**
  *  @param {Object} data
- *  @param {WebpackAssets} webpackAssets
+ *  @returns string
+ */
+export function buildScrollableVideoEmbedCode(data) {
+  return buildEmbedCode(data, pkgNames.scrollableVideo, null)
+}
+
+/**
+ *  @param {Object} data
+ *  @param {string} [data.id]
  *  @param {boolean} [bottomEntryPointOnly=false]
  *  @returns string
  */
 export function buildScrollToAudioEmbedCode(
   data,
-  webpackAssets,
   bottomEntryPointOnly = false
 ) {
   if (bottomEntryPointOnly) {
-    return buildBottomEntryPointStaticMarkup(data?.id)
+    return buildBottomEntryPointStaticMarkup({ id: data?.id })
   }
-  return buildEmbedCode('react-scroll-to-audio', data, webpackAssets)
-}
-
-/**
- *  @param {Object} data
- *  @param {WebpackAssets} webpackAssets
- *  @returns string
- */
-export function buildMutedHintEmbedCode(data, webpackAssets) {
-  return buildEmbedCode('react-muted-hint', data, webpackAssets)
+  return buildEmbedCode(data, pkgNames.scrollToAudio, null)
 }
 
 /**
  *
  * @export
- * @param {('react-karaoke'|
- * 'react-three-story-points' |
- * 'react-dual-slides' |
- * 'react-scrollable-video' |
- * 'react-subtitled-audio' |
- * 'react-scroll-to-audio' |
- * 'react-muted-hint'
- * } pkgName
  * @param {Object} data - Data for react component
- * @param {Object} webpackAssets - webpack bundles and chunks
- * @param {string[]} webpackAssets.entrypoints - webpack bundles
- * @param {string} webpackAssets.version - webpack bundles version
+ * @param {string} pkgName - values specified in `pkgNames`
+ * @param {Function|null} Component
  * @returns {string} embedded code
  */
-export function buildEmbedCode(pkgName, data, webpackAssets) {
+export function buildEmbedCode(data, pkgName, Component) {
   // use uuid to avoid duplication id
   const uuid = uuidv4()
   const dataWithUuid = {
@@ -122,40 +67,10 @@ export function buildEmbedCode(pkgName, data, webpackAssets) {
     uuid,
   }
 
-  const { entrypoints: bundles } = webpackAssets
-
-  let Component = null
-  let skipServerSideRendering = false
-  switch (pkgName) {
-    case 'react-karaoke':
-      Component = Karaoke
-      break
-    case 'react-subtitled-audio':
-      Component = KidsSubtitledAudio
-      break
-    case 'react-dual-slides':
-      Component = DualSlides
-      break
-    case 'react-three-story-points':
-      skipServerSideRendering = true
-      break
-    case 'react-scrollable-video':
-      skipServerSideRendering = true
-      break
-    case 'react-scroll-to-audio':
-      skipServerSideRendering = true
-      break
-    case 'react-muted-hint':
-      Component = Hint
-      break
-    default:
-      throw new Error(`pkgName ${pkgName} is not supported`)
-  }
-
   let jsx = ''
   let styleTags = ''
 
-  if (!skipServerSideRendering) {
+  if (Component) {
     const sheet = new ServerStyleSheet()
     try {
       jsx = ReactDOMServer.renderToStaticMarkup(
@@ -171,8 +86,10 @@ export function buildEmbedCode(pkgName, data, webpackAssets) {
     ${styleTags}
     <script>
       (function() {
-        var namespace = '@story-telling-reporter';
-        var pkg = '${pkgName}@${webpackAssets.version}';
+        var namespace = '@story-telling-reporter/react-embed-code-generator@${
+          manifest.version
+        }';
+        var pkg = '${pkgName}';
         if (typeof window != 'undefined') {
           if (!window.hasOwnProperty(namespace)) {
             window[namespace] = {};
@@ -190,8 +107,8 @@ export function buildEmbedCode(pkgName, data, webpackAssets) {
     <div id="${uuid}">
       ${jsx}
     </div>
-    ${_.map(bundles, (bundle) => {
-      return `<script type="text/javascript" defer crossorigin src="${bundle}"></script>`
-    }).join('')}
+    <script type="text/javascript" defer crossorigin src="${
+      manifest?.[pkgName]
+    }"></script>
   `
 }

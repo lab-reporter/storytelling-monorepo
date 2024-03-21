@@ -17,32 +17,21 @@ const publicPath = isProduction
   ? `https://unpkg.com/${pkg.name}@${pkg.version}/dist/`
   : `http://localhost:${port}/dist/`
 
-function WebpackAssetPlugin() {}
+const distDir = './dist'
+const manifestFileName = 'manifest.json'
 
-WebpackAssetPlugin.prototype.apply = function(compiler) {
-  const distDir = './dist'
+function AfterManifestPlugin() {}
 
-  compiler.hooks.emit.tap('WebpackAssetPlugin', function(compilation) {
-    const chunks = compilation.chunks.forEach((chunk) => {
-      return `${publicPath}${chunk.name}.js`
-    })
-    const entryChunks = compilation.entrypoints
-      .get('main')
-      .chunks.map((chunk) => {
-        return `${publicPath}${chunk.name}.js`
-      })
+AfterManifestPlugin.prototype.apply = function(compiler) {
 
-    webpackAssets.chunks = chunks
-    webpackAssets.entrypoints = entryChunks
-    webpackAssets.version = pkg.version
-
-    if (!fs.existsSync(distDir)) {
-      fs.mkdirSync(distDir)
-    }
+  compiler.hooks.afterEmit.tap('AfterManifestPlugin', function(compilation) {
+    const manifestFilePath = path.resolve(distDir, manifestFileName)
+    const manifest = require(path.resolve(distDir, manifestFileName))
+    manifest.version = pkg.version
 
     fs.writeFileSync(
-      path.resolve(__dirname, `${distDir}/webpack-assets.json`),
-      JSON.stringify(webpackAssets)
+      manifestFilePath,
+      JSON.stringify(manifest)
     )
   })
 }
@@ -50,12 +39,16 @@ WebpackAssetPlugin.prototype.apply = function(compiler) {
 const webpackConfig = {
   mode: isProduction ? 'production' : 'development',
   entry: {
-    main: path.resolve(__dirname, './src/build-code/client.js'),
+    // @TODO import `pkgNames` from './src/build-codes/constants.js'
+    karaoke: {import: './src/build-code/karaoke.js'},
+    'scrollable-video': { import: './src/build-code/scrollable-video.js' },
+    'scroll-to-audio': { import: './src/build-code/scroll-to-audio.js' },
+    'subtitled-audio': { import: './src/build-code/subtitled-audio.js' },
   },
   output: {
     filename: '[name].js',
-    path: path.resolve(__dirname, './dist/'),
-    library: '@story-telling-reporter/react-embed-code',
+    path: path.resolve(__dirname, distDir),
+    library: '@story-telling-reporter/react-embed-code-generator',
     libraryTarget: 'umd',
     publicPath,
   },
@@ -159,8 +152,9 @@ const webpackConfig = {
     }),
     new WebpackManifestPlugin({
       useEntryKeys: true,
+      fileName: manifestFileName,
     }),
-    new WebpackAssetPlugin(),
+    new AfterManifestPlugin(),
     // new BundleAnalyzerPlugin(),
   ],
 }

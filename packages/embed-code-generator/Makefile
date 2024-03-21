@@ -4,13 +4,13 @@ help:
 	@echo "$(P) make build - Transpile jsx, es6 and above to es5 files, and build webpack bundles"
 
 dev: clean
-	@echo "$(P) Build dev webpack chunks, bundles and webpack-assets.json"
+	@echo "$(P) Build dev webpack chunks, bundles and manifest.json"
 	NODE_ENV=development yarn webpack --config webpack.config.js
 	@echo "$(P) Start webpack dev server"
 	NODE_ENV=development yarn webpack serve -c dev/webpack.config.js
 
 build-dist: 
-	@echo "$(P) Build webpack chunks, bundles and webpack-assets.json"
+	@echo "$(P) Build webpack chunks, bundles and manifest.json"
 	NODE_ENV=production yarn webpack --config webpack.config.js
 
 build-lib:

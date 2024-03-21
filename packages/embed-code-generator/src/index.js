@@ -1,12 +1,21 @@
-import path from 'path'
 import {
   buildEmbedCode,
   buildKaraokeEmbedCode,
   buildScrollToAudioEmbedCode,
   buildScrollableVideoEmbedCode,
   buildSubtitledAudioEmbedCode,
-  buildMutedHintEmbedCode,
-} from './build-code'
+} from './build-code/index'
+
+import { pkgNames } from './build-code/constants'
+
+export {
+  buildEmbedCode,
+  buildKaraokeEmbedCode,
+  buildScrollToAudioEmbedCode,
+  buildScrollableVideoEmbedCode,
+  buildSubtitledAudioEmbedCode,
+  pkgNames,
+}
 
 export default {
   buildEmbedCode,
@@ -14,8 +23,5 @@ export default {
   buildScrollToAudioEmbedCode,
   buildScrollableVideoEmbedCode,
   buildSubtitledAudioEmbedCode,
-  buildMutedHintEmbedCode,
-  loadWebpackAssets: () => {
-    return require(path.resolve(__dirname, '../dist/webpack-assets.json'))
-  },
+  pkgNames,
 }
