@@ -1,11 +1,7 @@
 import config from '../config'
-// @ts-ignore: no definition
-import embedCodeGen from '@story-telling-reporter/react-embed-code-generator'
-// @ts-ignore: no definition
+import { buildSubtitledAudioEmbedCode } from '@story-telling-reporter/react-embed-code-generator'
 import { list, graphql } from '@keystone-6/core'
 import { text, file, virtual } from '@keystone-6/core/fields'
-
-const embedCodeWebpackAssets = embedCodeGen.loadWebpackAssets()
 
 const listConfigurations = list({
   fields: {
@@ -44,15 +40,11 @@ const listConfigurations = list({
         resolve: async (item: Record<string, unknown>): Promise<string> => {
           const audioSrc = `${config.gcs.urlPrefix}/files/${item?.audio_filename}`
 
-          const code = embedCodeGen.buildEmbedCode(
-            'react-subtitled-audio',
-            {
-              audioUrls: [audioSrc],
-              webVtt: item?.webVtt,
-              hintText: item?.hintText,
-            },
-            embedCodeWebpackAssets
-          )
+          const code = buildSubtitledAudioEmbedCode({
+            audioUrls: [audioSrc],
+            webVtt: item?.webVtt,
+            hintText: item?.hintText,
+          })
 
           return `<!-- 聲音金句字幕版： ${item.name} -->` + code
         },

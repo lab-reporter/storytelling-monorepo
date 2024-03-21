@@ -1,4 +1,4 @@
-import embedCodeGen from '@story-telling-reporter/react-embed-code-generator'
+import { buildScrollableVideoEmbedCode } from '@story-telling-reporter/react-embed-code-generator'
 import { list, graphql } from '@keystone-6/core'
 import { float, select, text, json, virtual } from '@keystone-6/core/fields'
 import { CaptionState } from './views/scrollable-video-editor/type'
@@ -8,8 +8,6 @@ import postcss from 'postcss'
 import postcssNesting from 'postcss-nesting'
 
 const nanoid = customAlphabet('abcdefghijklmnopq', 10)
-
-const embedCodeWebpackAssets = embedCodeGen.loadWebpackAssets()
 
 type EditorState = {
   videoSrc: string
@@ -157,20 +155,16 @@ const listConfigurations = list({
           const editorState = item?.editorState as EditorState
           const darkMode = item?.theme === 'dark_mode'
           const captions = editorState.captions
-          const code = embedCodeGen.buildEmbedCode(
-            'react-scrollable-video',
-            {
-              video: {
-                src: item?.videoSrc,
-                mobileSrc: item?.mobileVideoSrc,
-                duration: editorState.videoDuration,
-              },
-              captions: captions,
-              darkMode,
-              secondsPer100vh: item?.secondsPer100vh,
+          const code = buildScrollableVideoEmbedCode({
+            video: {
+              src: item?.videoSrc,
+              mobileSrc: item?.mobileVideoSrc,
+              duration: editorState.videoDuration,
             },
-            embedCodeWebpackAssets
-          )
+            captions: captions,
+            darkMode,
+            secondsPer100vh: item?.secondsPer100vh,
+          })
 
           const wrapperDivId = nanoid(5)
           const initialCustomCss = (item.customCss as string) ?? ''

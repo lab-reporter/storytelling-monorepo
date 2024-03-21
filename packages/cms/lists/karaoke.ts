@@ -1,11 +1,7 @@
 import config from '../config'
-// @ts-ignore: no definition
-import embedCodeGen from '@story-telling-reporter/react-embed-code-generator'
-// @ts-ignore: no definition
+import { buildKaraokeEmbedCode } from '@story-telling-reporter/react-embed-code-generator'
 import { list, graphql } from '@keystone-6/core'
 import { checkbox, text, file, virtual, select } from '@keystone-6/core/fields'
-
-const embedCodeWebpackAssets = embedCodeGen.loadWebpackAssets()
 
 const listConfigurations = list({
   fields: {
@@ -74,16 +70,12 @@ const listConfigurations = list({
         resolve: async (item: Record<string, unknown>): Promise<string> => {
           const audioSrc = `${config.gcs.urlPrefix}/files/${item?.audio_filename}`
 
-          const code = embedCodeGen.buildEmbedCode(
-            'react-karaoke',
-            {
-              componentTheme: item?.theme,
-              audioUrls: [audioSrc],
-              webVtt: item?.webVtt,
-              quoteBy: item?.quoteBy,
-            },
-            embedCodeWebpackAssets
-          )
+          const code = buildKaraokeEmbedCode({
+            componentTheme: item?.theme,
+            audioUrls: [audioSrc],
+            webVtt: item?.webVtt,
+            quoteBy: item?.quoteBy,
+          })
 
           return `<!-- 聲音金句卡拉OK版：${item.name} -->` + code
         },
@@ -104,13 +96,9 @@ const listConfigurations = list({
           if (muteHint) {
             return (
               `<!--  開頭聲音提示 -->` +
-              embedCodeGen.buildEmbedCode(
-                'react-karaoke',
-                {
-                  hintOnly: true,
-                },
-                embedCodeWebpackAssets
-              )
+              buildKaraokeEmbedCode({
+                hintOnly: true,
+              })
             )
           }
 
