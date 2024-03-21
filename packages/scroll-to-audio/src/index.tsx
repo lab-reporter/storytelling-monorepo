@@ -24,6 +24,8 @@ function ScrollToAudio({
   preload = 'auto',
   theme = ThemeEnum.TWREPORTER,
   idForMuteButton = '',
+  hintOnly = false,
+  hintId,
 }: {
   id: string
   audioUrls: string[]
@@ -32,6 +34,8 @@ function ScrollToAudio({
   bottomEntryOnly?: boolean
   theme?: string
   idForMuteButton?: string // enabled when theme === `ThemeEnum.ID_SELECTOR`
+  hintOnly?: boolean
+  hintId?: string
 }) {
   const audioRef = useRef<HTMLAudioElement>(null)
   const [muted, setMuted] = hooks.useMuted(true, audioRef)
@@ -224,6 +228,10 @@ function ScrollToAudio({
     }
   }
 
+  if (hintOnly) {
+    return <Hint id={hintId} />
+  }
+
   const audioJsx = (
     <audio
       ref={audioRef}
@@ -280,7 +288,7 @@ function buildBottomEntryPointStaticMarkup({
   return `<div id="${bottomEntryId}"></div>`
 }
 
-export { Hint, ScrollToAudio, buildBottomEntryPointStaticMarkup }
+export { ScrollToAudio, buildBottomEntryPointStaticMarkup }
 
 const TopEntryContainer = styled.div`
   min-height: 10px;
