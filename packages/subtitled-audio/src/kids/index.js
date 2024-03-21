@@ -9,7 +9,7 @@ import { hooks, kids } from '@story-telling-reporter/react-ui-toolkit'
 const { Hint } = kids
 
 /**
- *  @typedef {Object} SubtitledAduioProps
+ *  @typedef {Object} SubtitledAudioProps
  *  @property {string[]} audioUrls
  *  @property {string} webVtt - subtitles in WebVTT format
  *  @property {string} [className]
@@ -20,7 +20,7 @@ const { Hint } = kids
  */
 
 /**
- *  @param {SubtitledAduioProps} props
+ *  @param {SubtitledAudioProps} props
  */
 export function SubtitledAudio({
   audioUrls,

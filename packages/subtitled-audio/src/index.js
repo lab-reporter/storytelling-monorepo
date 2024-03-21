@@ -1,7 +1,7 @@
 import { SubtitledAudio as KidsSubtitledAudio } from './kids/index'
 
 /**
- *  @typedef {import('./kids/index').SubtitledAduioProps} SubtitledAduioProps
+ *  @typedef {import('./kids/index').SubtitledAudioProps} SubtitledAudioProps
  */
 
 export { KidsSubtitledAudio }
