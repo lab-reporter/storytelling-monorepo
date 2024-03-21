@@ -15,8 +15,9 @@ const { Hint } = kids
  *  @property {string} [className]
  *  @property {string} [preload='auto'] - 'auto', 'none' or 'metadata'. `preload` attribute of `audio` tag.
  *  @property {string} [quoteBy]
- *  @property {boolean} [hint=false] - render `Karaoke` along with `Hint` component
+ *  @property {string} [hintText=''] - render `SubtitledAudio` along with `Hint` component
  *  @property {boolean} [hintOnly=false] - render `Hint` component only, without `Karaoke`
+ *  @property {string} [hintId]
  */
 
 /**
@@ -28,7 +29,8 @@ export function Karaoke({
   className,
   preload = 'auto',
   quoteBy,
-  hint = false,
+  hintText = '',
+  hintId,
   hintOnly = false,
 }) {
   const audioRef = useRef(null)
@@ -213,12 +215,12 @@ export function Karaoke({
   }
 
   if (hintOnly) {
-    return <Hint />
+    return <Hint id={hintId} text={hintText} />
   }
 
   return (
     <>
-      {hint && <Hint />}
+      {hintText && <Hint id={hintId} text={hintText} />}
       <OuterBox>
         <QuoteContainer className={className} ref={containerRef}>
           <Logo />

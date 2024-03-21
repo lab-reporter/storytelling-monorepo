@@ -15,8 +15,8 @@ const { Hint } = twreporter
  *  @property {string} [className]
  *  @property {string} [preload='auto'] - 'auto', 'none' or 'metadata'. `preload` attribute of `audio` tag.
  *  @property {string} [quoteBy]
- *  @property {boolean} [hint=false] - render `Karaoke` along with `Hint` component
  *  @property {boolean} [hintOnly=false] - render `Hint` component only, without `Karaoke`
+ *  @property {string} [hintId] - for `Hint` component to add as id attribute
  */
 
 /**
@@ -29,6 +29,7 @@ export function Karaoke({
   preload = 'auto',
   quoteBy,
   hintOnly = false,
+  hintId,
 }) {
   const audioRef = useRef(null)
   const trackRef = useRef(null)
@@ -228,7 +229,7 @@ export function Karaoke({
   }
 
   if (hintOnly) {
-    return <Hint />
+    return <Hint id={hintId} />
   }
 
   return (

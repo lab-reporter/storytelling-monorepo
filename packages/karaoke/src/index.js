@@ -12,12 +12,11 @@ export default {
 /**
  *  @typedef {import('./kids/index.js').KaraokeProps} KidsProps
  *  @typedef {import('./twreporter/index.js').KaraokeProps} TwreporterProps
+ *  @typedef {(KidsProps|TwreporterProps) & {componentTheme: string}} KaraokeProps
  */
 
 /**
- *  @param {Object} props
- *  @param {string} props.componentTheme - 'kids' or 'twreporter'
- *  @param {...(KidsProps|TwreporterProps)} ...restProps
+ *  @param {KaraokeProps} props
  *  @returns {React.ReactNode}
  */
 function Karaoke({ componentTheme, ...restProps }) {
