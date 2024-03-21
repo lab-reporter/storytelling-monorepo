@@ -15,6 +15,7 @@ const { Hint } = kids
  *  @property {string} [className]
  *  @property {string} [preload='auto'] - 'auto', 'none' or 'metadata'. `preload` attribute of `audio` tag.
  *  @property {string} [hintText=''] - render `SubtitledAudio` along with `Hint` component
+ *  @property {string} [hintId] - render `SubtitledAudio` along with `Hint` component
  *  @property {boolean} [hintOnly=false] - render `Hint` component only, without `SubtitledAudio`
  */
 
@@ -27,6 +28,7 @@ export function SubtitledAudio({
   className,
   preload = 'auto',
   hintText = '',
+  hintId,
   hintOnly = false,
 }) {
   const firstCueTextRef = useRef('')
@@ -252,7 +254,7 @@ export function SubtitledAudio({
   )
 
   if (hintOnly) {
-    return <Hint text={hintText} />
+    return <Hint text={hintText} id={hintId} />
   }
 
   const audioJsx = (
@@ -279,7 +281,7 @@ export function SubtitledAudio({
 
   return (
     <Container className={className}>
-      {hintText && <Hint text={hintText} />}
+      {hintText && <Hint text={hintText} id={hintId} />}
       <PaddingTop />
       <Body ref={bodyRef}>
         <Logo />

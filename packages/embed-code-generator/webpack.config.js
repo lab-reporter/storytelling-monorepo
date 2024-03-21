@@ -5,6 +5,7 @@ const path = require('path')
 const pkg = require('./package.json')
 const webpack = require('webpack')
 const port = process.env.PORT || 8080
+const { WebpackManifestPlugin } = require('webpack-manifest-plugin')
 
 const webpackAssets = {
   chunks: [],
@@ -155,6 +156,9 @@ const webpackConfig = {
     new webpack.EnvironmentPlugin({
       NODE_ENV: process.env.NODE_ENV,
       EMBED_CODE_GENERATOR_VERSION: pkg.version,
+    }),
+    new WebpackManifestPlugin({
+      useEntryKeys: true,
     }),
     new WebpackAssetPlugin(),
     // new BundleAnalyzerPlugin(),
