@@ -56,7 +56,7 @@ const listConfigurations = list({
             },
             bottomEntryPointOnly
           )
-          return `<!-- 捲到式聲音：${item.name} 結束點 -` + code
+          return `<!-- 捲到式聲音：${item.name} 結束點 -->` + code
         },
       }),
       ui: {
