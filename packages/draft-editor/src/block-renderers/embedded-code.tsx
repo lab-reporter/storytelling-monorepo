@@ -5,7 +5,7 @@ import {
   EmbeddedCodeInput,
   EmbeddedCodeInputValue,
 } from '../buttons/embedded-code'
-import { EditButton, EditableBlock as _EditableBlock } from './styled'
+import { EditableBlock as _EditableBlock } from './styled'
 import { TextArea } from '@keystone-ui/fields'
 
 function EmbeddedCode({
@@ -68,20 +68,13 @@ export function EditableEmbeddedCode(
         onConfirm={onInputChange}
         inputValue={data}
       />
-      <EditableBlock>
-        <StyledEmbeddedCode embeddedCode={data?.embeddedCode} />
-        <EditButton
-          onClick={() => {
-            // call `onEditStart` prop as we are trying to update the blockquote entity
-            onEditStart()
-            // open `BlockquoteInput`
-            setIsInputOpen(true)
-          }}
-        >
-          <i className="fa-solid fa-pen"></i>
-          <span>Modify</span>
-        </EditButton>
-      </EditableBlock>
+      <EditableBlock
+        component={<StyledEmbeddedCode embeddedCode={data?.embeddedCode} />}
+        onClick={() => {
+          onEditStart()
+          setIsInputOpen(true)
+        }}
+      />
     </React.Fragment>
   )
 }

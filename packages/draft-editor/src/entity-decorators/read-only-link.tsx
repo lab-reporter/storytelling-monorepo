@@ -1,6 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
-import { ContentBlock, ContentState } from 'draft-js'
+import { ContentState } from 'draft-js'
+import { Entity } from '../constants'
+import { findEntitiesByType } from './utils'
 
 const LinkWrapper = styled.a`
   &:link,
@@ -11,22 +13,8 @@ const LinkWrapper = styled.a`
   }
 `
 
-function findLinkEntities(
-  contentBlock: ContentBlock,
-  callback: (start: number, end: number) => void,
-  contentState: ContentState
-) {
-  contentBlock.findEntityRanges((character) => {
-    const entityKey = character.getEntity()
-    return (
-      entityKey !== null &&
-      contentState.getEntity(entityKey).getType() === 'LINK'
-    )
-  }, callback)
-}
-
-export const linkDecorator = {
-  strategy: findLinkEntities,
+export const readOnlyLinkDecorator = {
+  strategy: findEntitiesByType(Entity.Link),
   component: Link,
 }
 

@@ -1,14 +1,16 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import {
-  ContentBlock,
+  CompositeDecorator,
   ContentState,
   Editor,
   EditorState,
   convertFromRaw,
 } from 'draft-js'
 import { annotationBlockRenderMap } from '../block-render-maps/index'
-import { decorator } from '../entity-decorators/index'
+import { readOnlyLinkDecorator } from '../entity-decorators/read-only-link'
+import { Entity } from '../constants'
+import { findEntitiesByType } from './utils'
 
 const AnnotationWrapper = styled.span`
   display: inline;
@@ -78,7 +80,10 @@ function AnnotationBlock(props: {
     .getData()
 
   const contentState = convertFromRaw(rawContentState)
-  const editorState = EditorState.createWithContent(contentState, decorator)
+  const editorState = EditorState.createWithContent(
+    contentState,
+    new CompositeDecorator([readOnlyLinkDecorator])
+  )
 
   return (
     <React.Fragment>
@@ -106,21 +111,7 @@ function AnnotationBlock(props: {
   )
 }
 
-function findAnnotationEntities(
-  contentBlock: ContentBlock,
-  callback: (start: number, end: number) => void,
-  contentState: ContentState
-) {
-  contentBlock.findEntityRanges((character) => {
-    const entityKey = character.getEntity()
-    return (
-      entityKey !== null &&
-      contentState.getEntity(entityKey).getType() === 'ANNOTATION'
-    )
-  }, callback)
-}
-
-export const annotationDecorator = {
-  strategy: findAnnotationEntities,
+export const readOnlyAnnotationDecorator = {
+  strategy: findEntitiesByType(Entity.Annotation),
   component: AnnotationBlock,
 }
