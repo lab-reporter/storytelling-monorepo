@@ -163,6 +163,10 @@ export function ScrollableVideo({
   // use the scroll progress to manipulate the video player.
   useGSAP(
     () => {
+      if (!scrollTriggerRef.current) {
+        return
+      }
+
       const videoEle = videoRef.current
 
       if (scrollTriggerInstance.current) {
