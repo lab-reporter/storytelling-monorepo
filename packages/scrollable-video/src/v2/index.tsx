@@ -134,6 +134,7 @@ export type ScrollableVideoProps = {
   video: VideoObj
   darkMode?: boolean
   secondsPer100vh?: number
+  scrollerRef?: React.RefObject<HTMLElement>
 }
 
 export function ScrollableVideo({
@@ -142,6 +143,7 @@ export function ScrollableVideo({
   video,
   darkMode = false,
   secondsPer100vh = 1.5,
+  scrollerRef,
 }: ScrollableVideoProps) {
   const [windowObject, setWindowObject] = useState({
     innerWidth: 0,
@@ -179,6 +181,7 @@ export function ScrollableVideo({
         trigger: scrollTriggerRef.current,
         start: 'top bottom',
         end: 'bottom 50%',
+        scroller: scrollerRef?.current || window,
         onUpdate: ({ progress }: { progress: number }) => {
           if (videoEle && !videoEle?.seeking) {
             const time = Number((progress * duration).toFixed(2))
@@ -200,7 +203,10 @@ export function ScrollableVideo({
         }
       }
     },
-    { scope: scrollTriggerRef, dependencies: [debugMode, windowObject] }
+    {
+      scope: scrollTriggerRef,
+      dependencies: [debugMode, windowObject, scrollerRef],
+    }
   )
 
   // In order to play video by `play()` method, we need to follow browser video autoplay policy.
