@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
 import debounce from 'lodash/debounce'
-import gsap from 'gsap'
+import { gsap } from 'gsap/dist/gsap'
 import styled from '../styled-components'
 import { DraftRenderer } from '../draft-renderer/index'
 import { RawDraftContentState } from 'draft-js' // eslint-disable-line
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { ScrollTrigger } from 'gsap/dist/ScrollTrigger'
 import { mediaQuery } from '../utils/media-query'
 import { useGSAP } from '@gsap/react'
 
