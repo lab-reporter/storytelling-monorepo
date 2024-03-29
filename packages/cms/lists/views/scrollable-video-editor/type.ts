@@ -11,7 +11,12 @@ export enum AlignmentEnum {
   CENTER = 'center',
 }
 
-export type CaptionState = {
+export enum ThemeEnum {
+  DARK_MODE = 'dark_mode',
+  LIGHT_MODE = 'light_mode',
+}
+
+export type CaptionProp = {
   id: string
   rawContentState: RawDraftContentState
   startTime: number
@@ -19,3 +24,14 @@ export type CaptionState = {
   width?: WidthEnum
   customCss?: string
 }
+
+export type ConfigProp = {
+  theme: ThemeEnum
+  secondsPer100vh: number
+}
+
+export type ScrollableVideoProp = {
+  captions: CaptionProp[]
+  videoSrc: string
+  videoDuration: number
+} & ConfigProp

@@ -14,7 +14,13 @@ import {
   buttonNames,
   decorator,
 } from '@story-telling-reporter/draft-editor'
-import { AlignmentEnum, CaptionState, WidthEnum } from './type'
+import {
+  AlignmentEnum,
+  CaptionProp,
+  ConfigProp,
+  WidthEnum,
+  ThemeEnum,
+} from './type'
 import { customAlphabet } from 'nanoid'
 
 const nanoid = customAlphabet('abcdefghiklmnopq', 10)
@@ -63,9 +69,9 @@ export function CaptionInput({
   inputValue,
 }: {
   isOpen: boolean
-  onConfirm: (arg0: CaptionState) => void
+  onConfirm: (arg0: CaptionProp) => void
   onCancel: () => void
-  inputValue: CaptionState
+  inputValue: CaptionProp
 }) {
   const contentState = convertFromRaw(inputValue.rawContentState)
   const [inputValueState, setInputValueState] = useState({
@@ -102,16 +108,13 @@ export function CaptionInput({
             confirm: {
               label: 'Confirm',
               action: () => {
-                onConfirm({
-                  id: inputValueState.id,
-                  startTime: inputValueState.startTime,
-                  rawContentState: convertToRaw(
-                    inputValueState.editorState.getCurrentContent()
-                  ),
-                  alignment: inputValueState.alignment,
-                  width: inputValueState.width,
-                  customCss: inputValueState.customCss,
-                })
+                onConfirm(
+                  Object.assign({}, inputValueState, {
+                    rawContentState: convertToRaw(
+                      inputValueState.editorState.getCurrentContent()
+                    ),
+                  })
+                )
               },
             },
           }}
@@ -200,7 +203,7 @@ export function AddCaptionButton({
   getVideoCurrentTime,
 }: {
   className?: string
-  onChange: (arg0: CaptionState) => void
+  onChange: (arg0: CaptionProp) => void
   getVideoCurrentTime: () => number
 }) {
   const [toShowInput, setToShowInput] = useState(false)
@@ -278,6 +281,63 @@ export function AddCaptionButton({
         }}
       />
     </React.Fragment>
+  )
+}
+
+const themeOptions = [
+  {
+    label: 'Light Mode',
+    value: ThemeEnum.LIGHT_MODE,
+  },
+  {
+    label: 'Dark Mode',
+    value: ThemeEnum.DARK_MODE,
+  },
+]
+
+export function ConfigInput({
+  inputValue,
+  onChange,
+}: {
+  inputValue: ConfigProp
+  onChange: (arg: ConfigProp) => void
+}) {
+  const selectedThemeValue =
+    themeOptions.find((option) => option.value === inputValue.theme) ?? null
+
+  return (
+    <>
+      <MarginTop />
+      <FieldLabel>主題色</FieldLabel>
+      <Select
+        isClearable
+        options={themeOptions}
+        onChange={(option) => {
+          if (option) {
+            onChange(
+              Object.assign({}, inputValue, {
+                theme: option.value,
+              })
+            )
+          }
+        }}
+        value={selectedThemeValue}
+      />
+      <MarginTop />
+      <FieldLabel>每滑一個視窗的高度對應影片多少秒鐘</FieldLabel>
+      <TextInput
+        onChange={(e) =>
+          onChange(
+            Object.assign({}, inputValue, {
+              secondsPer100vh: Number(e.target.value),
+            })
+          )
+        }
+        placeholder="0"
+        type="number"
+        value={inputValue?.secondsPer100vh?.toString()}
+      />
+    </>
   )
 }
 

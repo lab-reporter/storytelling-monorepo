@@ -1,10 +1,10 @@
 import * as Slider from '@radix-ui/react-slider'
 import React, { useEffect, useState, useRef } from 'react'
 import styled from 'styled-components'
-import { AddCaptionButton, CaptionInput } from './button'
+import { AddCaptionButton, CaptionInput, ConfigInput } from './input'
 import { AlertDialog } from '@keystone-ui/modals'
 import { CaptionMark } from './mark'
-import { CaptionState } from './type'
+import { ScrollableVideoProp } from './type'
 import { PlayButton, PauseButton } from './styled'
 import { ScrollableVideo } from '@story-telling-reporter/react-scrollable-video'
 
@@ -91,23 +91,17 @@ enum BehaviorAction {
 
 const defaultDuration = 10 // seconds
 
-function CaptionEditor({
-  videoSrc,
-  captions: _captions = [],
+function ScrollableVideoEditor({
   onChange,
-}: {
-  videoSrc: string
-  captions: CaptionState[]
-  onChange: (arg0: {
-    captions?: CaptionState[]
-    videoDuration?: number
-  }) => void
+  ...svProp
+}: ScrollableVideoProp & {
+  onChange: (arg: ScrollableVideoProp) => void
 }) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const scrollerRef = useRef<HTMLDivElement>(null)
   const [duration, setDuration] = useState(defaultDuration)
   const [currentTime, setCurrentTime] = useState(0)
-  const [captions, setCaptions] = useState(_captions)
+  const [captions, setCaptions] = useState(svProp.captions)
   const [fullScreen, setFullScreen] = useState(false)
   const [userBehaviorState, setUserBehaviorState] = useState({
     action: BehaviorAction.Nothing,
@@ -121,18 +115,22 @@ function CaptionEditor({
       console.log('onLoadedMetadata is triggered.')
       if (video?.duration) {
         setDuration(video.duration)
-        onChange({
-          videoDuration: video.duration,
-        })
+        onChange(
+          Object.assign({}, svProp, {
+            videoDuration: video.duration,
+          })
+        )
       }
     }
 
     if (video) {
       if (video.readyState > 0) {
         setDuration(video.duration)
-        onChange({
-          videoDuration: video.duration,
-        })
+        onChange(
+          Object.assign({}, svProp, {
+            videoDuration: video.duration,
+          })
+        )
         return
       }
 
@@ -175,8 +173,8 @@ function CaptionEditor({
     }
   }
 
-  const marksJsx = captions.map((captionState, index) => {
-    let startTime = captionState.startTime
+  const marksJsx = captions.map((caption, index) => {
+    let startTime = caption.startTime
 
     if (startTime < 0) {
       startTime = 0
@@ -211,11 +209,11 @@ function CaptionEditor({
     userBehaviorState.action === BehaviorAction.Edit ? (
       <CaptionInput
         isOpen={true}
-        onConfirm={(captionState) => {
+        onConfirm={(caption) => {
           const newCaptions = [...captions]
-          newCaptions[userBehaviorState.captionIdx] = captionState
+          newCaptions[userBehaviorState.captionIdx] = caption
           setCaptions(newCaptions)
-          onChange({ captions: newCaptions })
+          onChange(Object.assign({}, svProp, { captions: newCaptions }))
 
           setUserBehaviorState({
             action: BehaviorAction.Nothing,
@@ -253,7 +251,7 @@ function CaptionEditor({
             const newCaptions = [...captions]
             newCaptions.splice(userBehaviorState.captionIdx, 1)
             setCaptions(newCaptions)
-            onChange({ captions: newCaptions })
+            onChange(Object.assign({}, svProp, { captions: newCaptions }))
 
             setUserBehaviorState({
               action: BehaviorAction.Nothing,
@@ -286,8 +284,10 @@ function CaptionEditor({
           captions={captions}
           video={{
             duration,
-            src: videoSrc,
+            src: svProp.videoSrc,
           }}
+          theme={svProp.theme}
+          secondsPer100vh={svProp.secondsPer100vh}
         />
         <CloseButton
           $hide={!fullScreen}
@@ -302,7 +302,7 @@ function CaptionEditor({
       {deleteAlertJsx}
       <Container>
         <video id="video" preload="metadata" ref={videoRef}>
-          <source src={videoSrc} />
+          <source src={svProp.videoSrc} />
         </video>
         <Controls id="video-controls">
           <ProgressAndMarksBlock>
@@ -334,11 +334,11 @@ function CaptionEditor({
               getVideoCurrentTime={() => {
                 return Number(currentTime.toFixed(2)) || 0
               }}
-              onChange={(captionState) => {
-                const newCaptions = captions.concat(captionState)
+              onChange={(caption) => {
+                const newCaptions = captions.concat(caption)
                 setCaptions(newCaptions)
 
-                onChange({ captions: newCaptions })
+                onChange(Object.assign({}, svProp, { captions: newCaptions }))
               }}
             />
           </div>
@@ -355,6 +355,15 @@ function CaptionEditor({
           </Duration>
         </Controls>
       </Container>
+      <ConfigInput
+        inputValue={{
+          theme: svProp.theme,
+          secondsPer100vh: svProp.secondsPer100vh,
+        }}
+        onChange={(newConfigProp) => {
+          onChange(Object.assign({}, svProp, newConfigProp))
+        }}
+      />
     </>
   )
 }
@@ -385,6 +394,6 @@ const CloseButton = styled.div<{ $hide: boolean }>`
   }
 `
 
-export { CaptionEditor }
+export { ScrollableVideoEditor }
 
-export default CaptionEditor
+export default ScrollableVideoEditor
