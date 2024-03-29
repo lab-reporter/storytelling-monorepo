@@ -1,19 +1,16 @@
 import { buildScrollableVideoEmbedCode } from '@story-telling-reporter/react-embed-code-generator'
 import { list, graphql } from '@keystone-6/core'
-import { float, select, text, json, virtual } from '@keystone-6/core/fields'
-import { CaptionState } from './views/scrollable-video-editor/type'
+import { text, json, virtual } from '@keystone-6/core/fields'
+import {
+  ScrollableVideoProp,
+  ThemeEnum,
+} from './views/scrollable-video-editor/type'
 import { customAlphabet } from 'nanoid'
 import CleanCss from 'clean-css'
 import postcss from 'postcss'
 import postcssNesting from 'postcss-nesting'
 
 const nanoid = customAlphabet('abcdefghijklmnopq', 10)
-
-type EditorState = {
-  videoSrc: string
-  videoDuration: number
-  captions: CaptionState[]
-}
 
 const listConfigurations = list({
   fields: {
@@ -36,6 +33,8 @@ const listConfigurations = list({
         captions: [],
         videoSrc: '',
         videoDuration: 0,
+        theme: ThemeEnum.LIGHT_MODE,
+        secondsPer100vh: 1.5,
       },
       ui: {
         // A module path that is resolved from where `keystone start` is run
@@ -43,27 +42,6 @@ const listConfigurations = list({
         createView: {
           fieldMode: 'hidden',
         },
-      },
-    }),
-    theme: select({
-      label: '主題色',
-      options: [
-        {
-          label: 'Dark Mode',
-          value: 'dark_mode',
-        },
-        {
-          label: 'Light Mode',
-          value: 'light_mode',
-        },
-      ],
-      defaultValue: 'light_mode',
-    }),
-    secondsPer100vh: float({
-      label: '每滑一個視窗的高度對應影片多少秒鐘',
-      defaultValue: 1.5,
-      validation: {
-        isRequired: true,
       },
     }),
     customCss: text({
@@ -152,8 +130,7 @@ const listConfigurations = list({
       field: graphql.field({
         type: graphql.String,
         resolve: async (item: Record<string, unknown>): Promise<string> => {
-          const editorState = item?.editorState as EditorState
-          const darkMode = item?.theme === 'dark_mode'
+          const editorState = item?.editorState as ScrollableVideoProp
           const captions = editorState.captions
           const code = buildScrollableVideoEmbedCode({
             video: {
@@ -161,17 +138,17 @@ const listConfigurations = list({
               mobileSrc: item?.mobileVideoSrc,
               duration: editorState.videoDuration,
             },
-            captions: captions,
-            darkMode,
-            secondsPer100vh: item?.secondsPer100vh,
+            captions,
+            darkMode: editorState.theme === ThemeEnum.DARK_MODE,
+            secondsPer100vh: editorState.secondsPer100vh,
           })
 
           const wrapperDivId = nanoid(5)
           const initialCustomCss = (item.customCss as string) ?? ''
 
-          let css = captions.reduce((_css, captionState) => {
-            if (captionState.customCss) {
-              return _css + captionState.customCss
+          let css = captions.reduce((_css, caption) => {
+            if (caption.customCss) {
+              return _css + caption.customCss
             }
             return _css
           }, initialCustomCss)
