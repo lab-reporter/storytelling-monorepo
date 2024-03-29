@@ -1,10 +1,12 @@
+import * as Slider from '@radix-ui/react-slider'
 import React, { useEffect, useState, useRef } from 'react'
 import styled from 'styled-components'
-import { AddCaptionButton } from './button'
+import { AddCaptionButton, CaptionInput } from './button'
+import { AlertDialog } from '@keystone-ui/modals'
 import { CaptionMark } from './mark'
 import { CaptionState } from './type'
 import { PlayButton, PauseButton } from './styled'
-import * as Slider from '@radix-ui/react-slider'
+import { ScrollableVideo } from '@story-telling-reporter/react-scrollable-video'
 
 const Container = styled.div`
   width: 100%;
@@ -81,6 +83,12 @@ const MarkContainer = styled.div<{ $left: string }>`
   }
 `
 
+enum BehaviorAction {
+  Edit = 'edit',
+  Remove = 'remove',
+  Nothing = 'nothing',
+}
+
 const defaultDuration = 10 // seconds
 
 function CaptionEditor({
@@ -96,9 +104,15 @@ function CaptionEditor({
   }) => void
 }) {
   const videoRef = useRef<HTMLVideoElement>(null)
+  const scrollerRef = useRef<HTMLDivElement>(null)
   const [duration, setDuration] = useState(defaultDuration)
   const [currentTime, setCurrentTime] = useState(0)
   const [captions, setCaptions] = useState(_captions)
+  const [fullScreen, setFullScreen] = useState(false)
+  const [userBehaviorState, setUserBehaviorState] = useState({
+    action: BehaviorAction.Nothing,
+    captionIdx: -1,
+  })
 
   useEffect(() => {
     const video = videoRef.current
@@ -175,77 +189,201 @@ function CaptionEditor({
     return (
       <MarkContainer key={index} $left={left.toString() + '%'}>
         <CaptionMark
-          captionState={captionState}
-          onChange={(changedCaptionState) => {
-            const newCaptions = [...captions]
-            if (changedCaptionState === null) {
-              newCaptions.splice(index, 1)
-              setCaptions(newCaptions)
-
-              onChange({ captions: newCaptions })
-              return
-            }
-            newCaptions[index] = changedCaptionState
-
-            setCaptions(newCaptions)
-
-            onChange({ captions: newCaptions })
+          captionIdx={index}
+          onEdit={(captionIdx: number) => {
+            setUserBehaviorState({
+              action: BehaviorAction.Edit,
+              captionIdx,
+            })
+          }}
+          onRemove={(captionIdx: number) => {
+            setUserBehaviorState({
+              action: BehaviorAction.Remove,
+              captionIdx,
+            })
           }}
         />
       </MarkContainer>
     )
   })
 
-  return (
-    <Container>
-      <video id="video" preload="metadata" ref={videoRef}>
-        <source src={videoSrc} />
-      </video>
-      <Controls id="video-controls">
-        <ProgressAndMarksBlock>
-          {marksJsx}
-          <ProgressBlock>
-            <Slider.Root
-              className="slider__root"
-              value={[currentTime]}
-              max={duration}
-              step={duration / 100}
-              onValueChange={(value) => {
-                if (videoRef.current) {
-                  videoRef.current.currentTime = value[0]
-                }
-                setCurrentTime(value[0])
-              }}
-            >
-              <Slider.Track className="slider__track">
-                <Slider.Range className="slider__range" />
-              </Slider.Track>
-              <Slider.Thumb className="slider__thumb" />
-            </Slider.Root>
-          </ProgressBlock>
-        </ProgressAndMarksBlock>
-        <PlayButton onClick={onPlayButtonClick}></PlayButton>
-        <PauseButton onClick={onPauseButtonClick}></PauseButton>
-        <div onClick={onPauseButtonClick}>
-          <AddCaptionButton
-            getVideoCurrentTime={() => {
-              return Number(currentTime.toFixed(2)) || 0
-            }}
-            onChange={(captionState) => {
-              const newCaptions = captions.concat(captionState)
-              setCaptions(newCaptions)
+  const editJsx =
+    userBehaviorState.action === BehaviorAction.Edit ? (
+      <CaptionInput
+        isOpen={true}
+        onConfirm={(captionState) => {
+          const newCaptions = [...captions]
+          newCaptions[userBehaviorState.captionIdx] = captionState
+          setCaptions(newCaptions)
+          onChange({ captions: newCaptions })
 
-              onChange({ captions: newCaptions })
+          setUserBehaviorState({
+            action: BehaviorAction.Nothing,
+            captionIdx: -1,
+          })
+        }}
+        onCancel={() => {
+          setUserBehaviorState({
+            action: BehaviorAction.Nothing,
+            captionIdx: -1,
+          })
+        }}
+        inputValue={captions[userBehaviorState.captionIdx]}
+      />
+    ) : null
+
+  const deleteAlertJsx = (
+    // @ts-ignore `children` should be optional
+    <AlertDialog
+      title="確認刪除"
+      isOpen={userBehaviorState.action === BehaviorAction.Remove}
+      actions={{
+        cancel: {
+          label: 'Cancel',
+          action: () => {
+            setUserBehaviorState({
+              action: BehaviorAction.Nothing,
+              captionIdx: -1,
+            })
+          },
+        },
+        confirm: {
+          label: 'Confirm',
+          action: () => {
+            const newCaptions = [...captions]
+            newCaptions.splice(userBehaviorState.captionIdx, 1)
+            setCaptions(newCaptions)
+            onChange({ captions: newCaptions })
+
+            setUserBehaviorState({
+              action: BehaviorAction.Nothing,
+              captionIdx: -1,
+            })
+          },
+        },
+      }}
+    ></AlertDialog>
+  )
+
+  return (
+    <>
+      <FullScreen ref={scrollerRef} $hide={!fullScreen}>
+        <ScrollableVideo
+          readOnly={false}
+          onEdit={(captionIdx: number) => {
+            setUserBehaviorState({
+              action: BehaviorAction.Edit,
+              captionIdx,
+            })
+          }}
+          onRemove={(captionIdx: number) => {
+            setUserBehaviorState({
+              action: BehaviorAction.Remove,
+              captionIdx,
+            })
+          }}
+          scrollerRef={scrollerRef}
+          captions={captions}
+          video={{
+            duration,
+            src: videoSrc,
+          }}
+        />
+        <CloseButton
+          $hide={!fullScreen}
+          onClick={() => {
+            setFullScreen(false)
+          }}
+        >
+          <span>X</span>
+        </CloseButton>
+      </FullScreen>
+      {editJsx}
+      {deleteAlertJsx}
+      <Container>
+        <video id="video" preload="metadata" ref={videoRef}>
+          <source src={videoSrc} />
+        </video>
+        <Controls id="video-controls">
+          <ProgressAndMarksBlock>
+            {marksJsx}
+            <ProgressBlock>
+              <Slider.Root
+                className="slider__root"
+                value={[currentTime]}
+                max={duration}
+                step={duration / 100}
+                onValueChange={(value) => {
+                  if (videoRef.current) {
+                    videoRef.current.currentTime = value[0]
+                  }
+                  setCurrentTime(value[0])
+                }}
+              >
+                <Slider.Track className="slider__track">
+                  <Slider.Range className="slider__range" />
+                </Slider.Track>
+                <Slider.Thumb className="slider__thumb" />
+              </Slider.Root>
+            </ProgressBlock>
+          </ProgressAndMarksBlock>
+          <PlayButton onClick={onPlayButtonClick}></PlayButton>
+          <PauseButton onClick={onPauseButtonClick}></PauseButton>
+          <div onClick={onPauseButtonClick}>
+            <AddCaptionButton
+              getVideoCurrentTime={() => {
+                return Number(currentTime.toFixed(2)) || 0
+              }}
+              onChange={(captionState) => {
+                const newCaptions = captions.concat(captionState)
+                setCaptions(newCaptions)
+
+                onChange({ captions: newCaptions })
+              }}
+            />
+          </div>
+          <div
+            style={{ cursor: 'pointer' }}
+            onClick={() => {
+              setFullScreen(!fullScreen)
             }}
-          />
-        </div>
-        <Duration>
-          {currentTime.toFixed(2)}/{duration.toFixed(2)}
-        </Duration>
-      </Controls>
-    </Container>
+          >
+            fullScreen
+          </div>
+          <Duration>
+            {currentTime.toFixed(2)}/{duration.toFixed(2)}
+          </Duration>
+        </Controls>
+      </Container>
+    </>
   )
 }
+
+const FullScreen = styled.div<{ $hide: boolean }>`
+  position: fixed;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: scroll;
+  z-index: 1000;
+  ${(props) => (props.$hide ? 'top: 200vh;' : 'top: 0;')}
+`
+
+const CloseButton = styled.div<{ $hide: boolean }>`
+  cursor: pointer;
+  position: fixed;
+  ${(props) => (props.$hide ? 'top: 200vh;' : 'top: 10px;')}
+  right: 30px;
+  width: 30px;
+  height: 30px;
+  border-radius: 100%;
+  background-color: lightgrey;
+  display: flex;
+
+  & > * {
+    margin: auto;
+  }
+`
 
 export { CaptionEditor }
 

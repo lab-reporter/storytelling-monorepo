@@ -1,7 +1,4 @@
-import React from 'react'
-import { AlertDialog } from '@keystone-ui/modals'
-import { CaptionInput } from './button'
-import { CaptionState } from './type'
+import React, { useEffect, useRef } from 'react'
 import { DeleteMarkIcon, EditMarkIcon, MarkIcon } from './styled'
 import { useState } from 'react'
 import styled from 'styled-components'
@@ -22,99 +19,65 @@ const Container = styled.div`
   }
 `
 
-const modes = {
-  default: 'default',
-  tooltip: 'tooltip',
-  edit: 'edit',
-  delete: 'delete',
-}
-
 export function CaptionMark({
   className,
-  captionState,
-  onChange,
+  captionIdx,
+  onEdit,
+  onRemove,
 }: {
   className?: string
-  captionState: CaptionState
-  onChange: (arg0: CaptionState | null) => void
+  captionIdx: number
+  onEdit: (captionIdx: number) => void
+  onRemove: (captionIdx: number) => void
 }) {
-  const [mode, setMode] = useState(modes.default)
+  const [editMode, setEditMode] = useState(false)
+  const wrapperRef = useRef<HTMLDivElement>(null)
 
-  let iconsJsx = null
-
-  switch (mode) {
-    case modes.tooltip:
-    case modes.delete:
-    case modes.edit: {
-      iconsJsx = (
-        <>
-          <EditMarkIcon
-            onClick={() => {
-              setMode(modes.edit)
-            }}
-          />
-          <DeleteMarkIcon
-            onClick={() => {
-              setMode(modes.delete)
-            }}
-          />
-        </>
-      )
-      break
+  useEffect(() => {
+    /**
+     * Alert if clicked on outside of element
+     */
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        wrapperRef.current &&
+        !wrapperRef.current.contains(event.target as Node)
+      ) {
+        if (editMode) {
+          setEditMode(false)
+        }
+      }
     }
-
-    case modes.default:
-    default: {
-      iconsJsx = (
-        <MarkIcon
-          onClick={() => {
-            setMode(modes.tooltip)
-          }}
-        />
-      )
-      break
+    // Bind the event listener
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      // Unbind the event listener on clean up
+      document.removeEventListener('mousedown', handleClickOutside)
     }
-  }
+  }, [wrapperRef, editMode])
 
-  const deleteAlertJsx = (
-    // @ts-ignore `children` should be optional
-    <AlertDialog
-      title="確認刪除"
-      isOpen={mode === modes.delete}
-      actions={{
-        cancel: {
-          label: 'Cancel',
-          action: () => {
-            setMode(modes.default)
-          },
-        },
-        confirm: {
-          label: 'Confirm',
-          action: () => {
-            onChange(null)
-            setMode(modes.default)
-          },
-        },
+  const iconsJsx = editMode ? (
+    <>
+      <EditMarkIcon
+        onClick={() => {
+          onEdit(captionIdx)
+        }}
+      />
+      <DeleteMarkIcon
+        onClick={() => {
+          onRemove(captionIdx)
+        }}
+      />
+    </>
+  ) : (
+    <MarkIcon
+      onClick={() => {
+        setEditMode(true)
       }}
-    ></AlertDialog>
+    />
   )
 
   return (
-    <Container className={className}>
-      {mode === modes.edit && (
-        <CaptionInput
-          onConfirm={(captionState) => {
-            onChange(captionState)
-            setMode(modes.default)
-          }}
-          onCancel={() => {
-            setMode(modes.default)
-          }}
-          isOpen={true}
-          inputValue={captionState}
-        />
-      )}
-      {deleteAlertJsx}
+    <Container className={className} ref={wrapperRef}>
       {iconsJsx}
     </Container>
   )
