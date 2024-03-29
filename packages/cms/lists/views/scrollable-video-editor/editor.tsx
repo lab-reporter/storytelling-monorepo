@@ -312,7 +312,7 @@ function ScrollableVideoEditor({
                 className="slider__root"
                 value={[currentTime]}
                 max={duration}
-                step={duration / 100}
+                step={duration / 1000}
                 onValueChange={(value) => {
                   if (videoRef.current) {
                     videoRef.current.currentTime = value[0]
