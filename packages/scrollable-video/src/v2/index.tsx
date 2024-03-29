@@ -23,6 +23,34 @@ const Sections = styled.div`
   position: relative;
 `
 
+const Buttons = styled.div`
+  position: absolute;
+  top: -30px;
+  right: 0px;
+
+  width: 100px;
+  height: 30px;
+
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+
+  &.darkMode {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  &.lightMode {
+    background-color: rgba(255, 255, 255, 0.5);
+  }
+
+  > span {
+    cursor: pointer;
+  }
+`
+
 const Section = styled.div`
   position: absolute;
   padding: 24px 16px;
@@ -135,6 +163,9 @@ export type ScrollableVideoProps = {
   darkMode?: boolean
   secondsPer100vh?: number
   scrollerRef?: React.RefObject<HTMLElement>
+  readOnly?: boolean
+  onEdit: (arg: number) => void
+  onRemove: (arg: number) => void
 }
 
 export function ScrollableVideo({
@@ -144,6 +175,9 @@ export function ScrollableVideo({
   darkMode = false,
   secondsPer100vh = 1.5,
   scrollerRef,
+  readOnly = true,
+  onEdit,
+  onRemove,
 }: ScrollableVideoProps) {
   const [windowObject, setWindowObject] = useState({
     innerWidth: 0,
@@ -332,6 +366,7 @@ export function ScrollableVideo({
     const _top = Math.round((startTime / secondsPer100vh) * 100) / 100
     const top = `${_top * windowObject.innerHeight}px`
     const sectionId = caption.id ? `section-${caption.id}` : undefined
+    const key = sectionId ?? idx
     return (
       <Section
         id={sectionId}
@@ -340,11 +375,29 @@ export function ScrollableVideo({
         data-section-dark-mode={darkMode}
         data-section-alignment={caption.alignment ?? 'left'}
         ref={idx === captions.length - 1 ? lastSectionRef : undefined}
-        key={idx}
+        key={key}
         style={{
           top,
         }}
       >
+        {!readOnly && (
+          <Buttons className={darkMode ? 'darkMode' : 'lightMode'}>
+            <span
+              onClick={() => {
+                onEdit(idx)
+              }}
+            >
+              edit
+            </span>
+            <span
+              onClick={() => {
+                onRemove(idx)
+              }}
+            >
+              remove
+            </span>
+          </Buttons>
+        )}
         <DraftRenderer
           darkMode={darkMode}
           rawContentState={caption.rawContentState}
