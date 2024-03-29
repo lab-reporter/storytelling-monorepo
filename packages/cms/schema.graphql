@@ -494,8 +494,6 @@ type ScrollableVideo {
   videoSrc: String
   mobileVideoSrc: String
   editorState: JSON
-  theme: String
-  secondsPer100vh: Float
   customCss: String
   embedCode: String
   preview: JSON
@@ -513,20 +511,7 @@ input ScrollableVideoWhereInput {
   name: StringFilter
   videoSrc: StringFilter
   mobileVideoSrc: StringFilter
-  theme: StringNullableFilter
-  secondsPer100vh: FloatFilter
   customCss: StringFilter
-}
-
-input FloatFilter {
-  equals: Float
-  in: [Float!]
-  notIn: [Float!]
-  lt: Float
-  lte: Float
-  gt: Float
-  gte: Float
-  not: FloatFilter
 }
 
 input ScrollableVideoOrderByInput {
@@ -534,8 +519,6 @@ input ScrollableVideoOrderByInput {
   name: OrderDirection
   videoSrc: OrderDirection
   mobileVideoSrc: OrderDirection
-  theme: OrderDirection
-  secondsPer100vh: OrderDirection
   customCss: OrderDirection
 }
 
@@ -544,8 +527,6 @@ input ScrollableVideoUpdateInput {
   videoSrc: String
   mobileVideoSrc: String
   editorState: JSON
-  theme: String
-  secondsPer100vh: Float
   customCss: String
 }
 
@@ -559,8 +540,6 @@ input ScrollableVideoCreateInput {
   videoSrc: String
   mobileVideoSrc: String
   editorState: JSON
-  theme: String
-  secondsPer100vh: Float
   customCss: String
 }
 
