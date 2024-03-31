@@ -234,10 +234,13 @@ const renderScrollToAudioHtml = (
 <body>
   ${hintEmbedCode}
   <div style="margin-top: 30vh;">
+    <div style="text-align: center;">捲到式聲音起始點</div>
     ${startEmbedCode}
   </div>
-  <div style="width: 100%; height: 200vh; background: linear-gradient(to bottom, #fcecfc 0%,#fba6e1 48%,#fd89d7 74%,#fd89d7 74%,#ff7cd8 100%);"></div>
+  <div style="width: 100%; height: 100vh; background: linear-gradient(to bottom, #fcecfc 0%,#fba6e1 48%,#fd89d7 74%,#fd89d7 74%,#ff7cd8 100%);"></div>
+  <div style="width: 100%; height: 100vh; background: linear-gradient(to top, #fcecfc 0%,#fba6e1 48%,#fd89d7 74%,#fd89d7 74%,#ff7cd8 100%);"></div>
   <div style="margin-bottom: 100vh;">
+    <div style="text-align: center;">捲到式聲音結束點</div>
     ${endEmbedCode}
   </div>
 </body>
