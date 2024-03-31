@@ -170,7 +170,7 @@ export type ScrollableVideoProps = {
 
 export function ScrollableVideo({
   className,
-  captions,
+  captions = [],
   video,
   darkMode = false,
   secondsPer100vh = 1.5,
