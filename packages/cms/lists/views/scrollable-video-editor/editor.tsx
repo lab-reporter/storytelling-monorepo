@@ -101,7 +101,7 @@ function ScrollableVideoEditor({
   const scrollerRef = useRef<HTMLDivElement>(null)
   const [duration, setDuration] = useState(defaultDuration)
   const [currentTime, setCurrentTime] = useState(0)
-  const [captions, setCaptions] = useState(svProp.captions)
+  const [captions, setCaptions] = useState(svProp.captions || [])
   const [fullScreen, setFullScreen] = useState(false)
   const [userBehaviorState, setUserBehaviorState] = useState({
     action: BehaviorAction.Nothing,
