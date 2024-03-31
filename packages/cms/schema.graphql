@@ -550,6 +550,7 @@ type ScrollToAudio {
   startEmbedCode: String
   endEmbedCode: String
   hintEmbedCode: String
+  preview: JSON
 }
 
 input ScrollToAudioWhereUniqueInput {

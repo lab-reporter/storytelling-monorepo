@@ -137,6 +137,34 @@ export default withAuth(
             res.send(renderScrollableVideoHtml(item?.embedCode))
           }
         )
+
+        app.get(
+          '/demo/scroll-to-audios/:id',
+          authenticationMw,
+          async (req, res) => {
+            const itemId = req.params.id
+
+            const context = await commonContext.withRequest(req, res)
+            const item = await context.query.ScrollToAudio.findOne({
+              where: { id: itemId },
+              query: 'hintEmbedCode startEmbedCode endEmbedCode',
+            })
+
+            if (!item) {
+              return res
+                .status(404)
+                .send(`ScrollToAudio ${itemId} is not found`)
+            }
+
+            res.send(
+              renderScrollToAudioHtml(
+                item?.hintEmbedCode,
+                item?.startEmbedCode,
+                item?.endEmbedCode
+              )
+            )
+          }
+        )
       },
     },
   })
@@ -187,6 +215,30 @@ const renderScrollableVideoHtml = (html: string) => {
 <body>
   <div class="article-container">
     ${html}
+  </div>
+</body>
+</html>
+`
+}
+
+const renderScrollToAudioHtml = (
+  hintEmbedCode: string,
+  startEmbedCode: string,
+  endEmbedCode: string
+) => {
+  return `
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+  ${hintEmbedCode}
+  <div style="margin-top: 30vh;">
+    ${startEmbedCode}
+  </div>
+  <div style="width: 100%; height: 200vh; background: linear-gradient(to bottom, #fcecfc 0%,#fba6e1 48%,#fd89d7 74%,#fd89d7 74%,#ff7cd8 100%);"></div>
+  <div style="margin-bottom: 100vh;">
+    ${endEmbedCode}
   </div>
 </body>
 </html>
