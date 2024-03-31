@@ -228,9 +228,19 @@ const listConfigurations = list({
     resolveInput: ({ inputData, item, resolvedData }) => {
       const videoSrc = inputData?.videoSrc
       if (videoSrc) {
-        const editorState = Object.assign({}, item?.editorState, {
-          videoSrc,
-        })
+        const editorState = Object.assign(
+          // default `editorState`
+          {
+            captions: [],
+            videoDuration: 0,
+            theme: ThemeEnum.LIGHT_MODE,
+            secondsPer100vh: 1.5,
+          },
+          item?.editorState,
+          {
+            videoSrc,
+          }
+        )
         resolvedData.editorState = editorState
       }
       return resolvedData
