@@ -95,7 +95,10 @@ function ScrollToAudio({
         bottomEntryY > 0 + rootMargin
       ) {
         setHideMuteButton(false)
-        setPaused(false)
+        if (!muted) {
+          // do not play audio since it's muted
+          setPaused(false)
+        }
       }
     }, 50)
     window.addEventListener('scroll', handleScroll)
@@ -103,7 +106,7 @@ function ScrollToAudio({
     return () => {
       window.removeEventListener('scroll', handleScroll)
     }
-  }, [topEntryPointRef.current, bottomEntryPointRef.current])
+  }, [topEntryPointRef.current, bottomEntryPointRef.current, muted])
 
   // set audio muted attribute according to browser muted state
   useEffect(() => {
@@ -137,6 +140,9 @@ function ScrollToAudio({
             // browser prevent from playing audio before user interactions
             console.log('[react-scroll-to-audio] unable to play audio')
             console.log('[react-scroll-to-audio] error: ', error)
+
+            // pause audio since browser does not allow to play it
+            setPaused(true)
           })
       }
     }
@@ -145,6 +151,9 @@ function ScrollToAudio({
   const onMuteButtonClick = () => {
     const nextMuted = !muted
     setMuted(nextMuted)
+
+    // pause audio if muted, otherwise play the audio
+    setPaused(nextMuted)
   }
 
   const bottomEntryId = id + '-bottom-entry-point'
