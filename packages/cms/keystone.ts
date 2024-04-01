@@ -7,6 +7,7 @@ import { Request, Response, NextFunction } from 'express'
 import { createAuth } from '@keystone-6/auth'
 import { statelessSessions } from '@keystone-6/core/session'
 import { InMemoryLRUCache } from '@apollo/utils.keyvaluecache'
+import bodyParser from 'body-parser'
 import express from 'express'
 import path from 'path'
 
@@ -77,6 +78,10 @@ export default withAuth(
         data: { status: 'healthy' },
       },
       extendExpressApp: (app, commonContext) => {
+        // extend JSON fileSize limit
+        app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }))
+        app.use(bodyParser.json({ limit: '10mb' }))
+
         const corsOpts = {
           origin: envVar.cors.allowOrigins,
         }
