@@ -32,8 +32,10 @@ export function DraftRenderer({
     }
     return true
   })
-  rawContentState.blocks = emptyBlockRemoved
-  const contentState = convertFromRaw(rawContentState)
+  const contentState = convertFromRaw({
+    blocks: emptyBlockRemoved,
+    entityMap: rawContentState.entityMap,
+  })
   const editorState = EditorState.createWithContent(contentState, decorator)
 
   return (
