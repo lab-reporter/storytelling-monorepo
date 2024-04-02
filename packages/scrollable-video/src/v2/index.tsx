@@ -151,7 +151,7 @@ type VideoObj = {
   duration: number
   src: string
   type?: string
-  preload?: boolean
+  preload?: string
   mobileSrc: string
   mobileType?: string
 }
@@ -406,8 +406,6 @@ export function ScrollableVideo({
     )
   })
 
-  const preload =
-    typeof video.preload === 'boolean' ? `${video.preload}` : 'true'
   const _sectionsHeight = Math.round((duration / secondsPer100vh) * 100) / 100
   const sectionsHeight = `${_sectionsHeight * windowObject.innerHeight}px`
   const lastSectionHeight = `${lastSectionOverflowHeight}px`
@@ -423,7 +421,7 @@ export function ScrollableVideo({
       <BackgroundVideo>
         <video
           ref={videoRef}
-          preload={preload}
+          preload={video?.preload || 'auto'}
           data-twreporter-story-telling
           data-react-scrollable-video
           data-autoplay={true}

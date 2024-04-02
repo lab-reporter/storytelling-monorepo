@@ -13,7 +13,6 @@ const mocks = {
     duration: 8.03,
     src: './static/2020092015-tnrail-02-land-10M-1920.mp4',
     type: 'video/mp4',
-    preload: true,
     mobileSrc: './static/2020091916-tnrail-01-port-720.mp4',
     mobileType: 'video/mp4',
   },
