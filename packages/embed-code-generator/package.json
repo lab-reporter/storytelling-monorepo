@@ -1,6 +1,6 @@
 {
   "name": "@story-telling-reporter/react-embed-code-generator",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "",
   "main": "lib/index.js",
   "scripts": {
@@ -30,7 +30,7 @@
     "@story-telling-reporter/react-dual-slides": "0.1.1",
     "@story-telling-reporter/react-karaoke": "^0.3.0",
     "@story-telling-reporter/react-scroll-to-audio": "^2.0.1",
-    "@story-telling-reporter/react-scrollable-video": "^2.0.2",
+    "@story-telling-reporter/react-scrollable-video": "^2.0.3",
     "@story-telling-reporter/react-subtitled-audio": "^1.1.0",
     "@story-telling-reporter/react-three-story-points": "0.1.1",
     "lodash": "^4.17.21",
