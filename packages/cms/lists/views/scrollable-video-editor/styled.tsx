@@ -20,7 +20,7 @@ const Icon = styled.div<{
 type IconProps = {
   className?: string
   onClick?: () => void
-  enabled?: boolean
+  darkMode?: boolean
 }
 
 export function PlayButton(props: IconProps) {
@@ -47,26 +47,39 @@ export function PauseButton(props: IconProps) {
   )
 }
 
-export function DeleteCaptionIcon(props: IconProps) {
-  const disableImg = '/static/icons/delete.disable.svg'
-  const enableImg = '/static/icons/delete.enable.svg'
-  return (
-    <Icon
-      className={props?.className}
-      onClick={props?.onClick}
-      $bgImg={props?.enabled ? enableImg : disableImg}
-      $hoverBgImg={props?.enabled ? enableImg : disableImg}
-    />
-  )
-}
-
-export function AddCaptionIcon(props: IconProps) {
+export function AddButton(props: IconProps) {
   return (
     <Icon
       className={props?.className}
       onClick={props?.onClick}
       $bgImg="/static/icons/add-caption.svg"
       $hoverBgImg="/static/icons/add-caption.hover.svg"
+    />
+  )
+}
+
+export function ZoomInButton(props: IconProps) {
+  return (
+    <Icon
+      className={props?.className}
+      onClick={props?.onClick}
+      $bgImg="/static/icons/zoom-in.svg"
+      $hoverBgImg="/static/icons/zoom-in.hover.svg"
+    />
+  )
+}
+
+export function ZoomOutButton(props: IconProps) {
+  const svg = '/static/icons/zoom-out.svg'
+  const svgHover = '/static/icons/zoom-out.hover.svg'
+  const svgDark = '/static/icons/zoom-out.dark.svg'
+  const svgDarkHover = '/static/icons/zoom-out.dark.hover.svg'
+  return (
+    <Icon
+      className={props?.className}
+      onClick={props?.onClick}
+      $bgImg={props?.darkMode ? svgDark : svg}
+      $hoverBgImg={props?.darkMode ? svgDarkHover : svgHover}
     />
   )
 }

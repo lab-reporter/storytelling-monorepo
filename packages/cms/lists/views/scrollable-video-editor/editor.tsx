@@ -4,8 +4,13 @@ import styled from 'styled-components'
 import { AddCaptionButton, CaptionInput, ConfigInput } from './input'
 import { AlertDialog } from '@keystone-ui/modals'
 import { CaptionMark } from './mark'
-import { ScrollableVideoProp } from './type'
-import { PlayButton, PauseButton } from './styled'
+import { ScrollableVideoProp, ThemeEnum } from './type'
+import {
+  PlayButton,
+  PauseButton,
+  ZoomInButton,
+  ZoomOutButton as _ZoomOutButton,
+} from './styled'
 import { ScrollableVideo } from '@story-telling-reporter/react-scrollable-video'
 
 const Container = styled.div`
@@ -289,14 +294,13 @@ function ScrollableVideoEditor({
           theme={svProp.theme}
           secondsPer100vh={svProp.secondsPer100vh}
         />
-        <CloseButton
+        <ZoomOutButton
           $hide={!fullScreen}
+          darkMode={svProp.theme === ThemeEnum.DARK_MODE}
           onClick={() => {
             setFullScreen(false)
           }}
-        >
-          <span>X</span>
-        </CloseButton>
+        />
       </FullScreen>
       {editJsx}
       {deleteAlertJsx}
@@ -342,14 +346,11 @@ function ScrollableVideoEditor({
               }}
             />
           </div>
-          <div
-            style={{ cursor: 'pointer' }}
+          <ZoomInButton
             onClick={() => {
               setFullScreen(!fullScreen)
             }}
-          >
-            fullScreen
-          </div>
+          />
           <Duration>
             {currentTime.toFixed(2)}/{duration.toFixed(2)}
           </Duration>
@@ -378,20 +379,10 @@ const FullScreen = styled.div<{ $hide: boolean }>`
   ${(props) => (props.$hide ? 'top: 200vh;' : 'top: 0;')}
 `
 
-const CloseButton = styled.div<{ $hide: boolean }>`
-  cursor: pointer;
+const ZoomOutButton = styled(_ZoomOutButton)<{ $hide: boolean }>`
   position: fixed;
-  ${(props) => (props.$hide ? 'top: 200vh;' : 'top: 10px;')}
-  right: 30px;
-  width: 30px;
-  height: 30px;
-  border-radius: 100%;
-  background-color: lightgrey;
-  display: flex;
-
-  & > * {
-    margin: auto;
-  }
+  right: 20px;
+  ${(props) => (props.$hide ? 'top: 200vh;' : 'top: 20px;')}
 `
 
 export { ScrollableVideoEditor }

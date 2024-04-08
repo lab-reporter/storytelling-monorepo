@@ -6,7 +6,7 @@ import {
   convertToRaw,
   convertFromRaw,
 } from 'draft-js'
-import { AddCaptionIcon } from './styled'
+import { AddButton } from './styled'
 import { Drawer, DrawerController, DrawerProvider } from '@keystone-ui/modals'
 import { FieldLabel, Select, TextArea, TextInput } from '@keystone-ui/fields'
 import {
@@ -274,7 +274,7 @@ export function AddCaptionButton({
           }}
         />
       )}
-      <AddCaptionIcon
+      <AddButton
         className={className}
         onClick={() => {
           setToShowInput(true)
