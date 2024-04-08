@@ -25,29 +25,17 @@ const Sections = styled.div`
 
 const Buttons = styled.div`
   position: absolute;
-  top: -30px;
+  top: -40px;
   right: 0px;
-
-  width: 100px;
-  height: 30px;
 
   display: flex;
   justify-content: space-around;
   align-items: center;
 
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-
-  &.darkMode {
-    background-color: rgba(0, 0, 0, 0.5);
-  }
-
-  &.lightMode {
-    background-color: rgba(255, 255, 255, 0.5);
-  }
-
-  > span {
+  > div {
     cursor: pointer;
+    width: 40px;
+    height: 40px;
   }
 `
 
@@ -381,21 +369,19 @@ export function ScrollableVideo({
         }}
       >
         {!readOnly && (
-          <Buttons className={darkMode ? 'darkMode' : 'lightMode'}>
-            <span
+          <Buttons>
+            <EditButton
+              darkMode={darkMode}
               onClick={() => {
                 onEdit(idx)
               }}
-            >
-              edit
-            </span>
-            <span
+            />
+            <DeleteButton
+              darkMode={darkMode}
               onClick={() => {
                 onRemove(idx)
               }}
-            >
-              remove
-            </span>
+            />
           </Buttons>
         )}
         <DraftRenderer
@@ -455,3 +441,54 @@ export function ScrollableVideo({
 }
 
 const LastSectionOverflowHeight = styled.div``
+
+const staticFileURLPrefix =
+  'https://www.unpkg.com/@story-telling-reporter/react-scrollable-video/public/icons'
+
+const Icon = styled.div<{
+  $bgImg?: string
+  $hoverBgImg?: string
+  $focusBgImg?: string
+}>`
+  background-image: url(${(props) => props.$bgImg || ''});
+
+  &:hover {
+    background-image: url(${(props) => props.$hoverBgImg || ''});
+  }
+`
+
+type IconProps = {
+  className?: string
+  onClick?: () => void
+  darkMode?: boolean
+}
+
+export function DeleteButton(props: IconProps) {
+  const svg = staticFileURLPrefix + '/delete.svg'
+  const svgHover = staticFileURLPrefix + '/delete.hover.svg'
+  const svgDark = staticFileURLPrefix + '/delete.dark.svg'
+  const svgDarkHover = staticFileURLPrefix + '/delete.dark.hover.svg'
+  return (
+    <Icon
+      className={props?.className}
+      onClick={props?.onClick}
+      $bgImg={props?.darkMode ? svgDark : svg}
+      $hoverBgImg={props?.darkMode ? svgDarkHover : svgHover}
+    />
+  )
+}
+
+export function EditButton(props: IconProps) {
+  const svg = staticFileURLPrefix + '/edit.svg'
+  const svgHover = staticFileURLPrefix + '/edit.hover.svg'
+  const svgDark = staticFileURLPrefix + '/edit.dark.svg'
+  const svgDarkHover = staticFileURLPrefix + '/edit.dark.hover.svg'
+  return (
+    <Icon
+      className={props?.className}
+      onClick={props?.onClick}
+      $bgImg={props?.darkMode ? svgDark : svg}
+      $hoverBgImg={props?.darkMode ? svgDarkHover : svgHover}
+    />
+  )
+}
