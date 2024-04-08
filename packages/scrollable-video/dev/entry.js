@@ -338,6 +338,7 @@ function Demo() {
         darkMode={mocks.darkMode}
         captions={mocks.captions}
         video={mocks.video}
+        readOnly={false}
       />
       <div style={{ marginTop: '50vh' }}></div>
     </>
