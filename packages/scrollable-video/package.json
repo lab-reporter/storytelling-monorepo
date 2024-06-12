@@ -19,8 +19,9 @@
   },
   "keywords": [
     "react",
-    "readr",
-    "slides"
+    "scroll",
+    "video",
+    "scrollable video"
   ],
   "license": "MIT",
   "dependencies": {
