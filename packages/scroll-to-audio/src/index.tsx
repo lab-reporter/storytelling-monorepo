@@ -45,24 +45,9 @@ function ScrollToAudio({
   const [paused, setPaused] = useState(true)
   const [mounted, setMounted] = useState(false)
   const [hideMuteButton, setHideMuteButton] = useState(true) // hide mute button initially
-  const portalNodeRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
     setMounted(true)
-
-    // Create a div element to be used as the portal root if it doesn't exist
-    if (!portalNodeRef.current) {
-      portalNodeRef.current = document.createElement('div')
-      document.body.appendChild(portalNodeRef.current)
-    }
-
-    // Cleanup function to remove the portal node
-    return () => {
-      if (portalNodeRef.current) {
-        document.body.removeChild(portalNodeRef.current)
-        portalNodeRef.current = null
-      }
-    }
   }, [])
 
   useEffect(() => {
@@ -198,7 +183,6 @@ function ScrollToAudio({
       default: {
         const mobileToolBarDiv = document.getElementById('mobile-tool-bar')
         let mobileButtonJsx = null
-
         if (mobileToolBarDiv) {
           mobileButtonJsx = createPortal(
             <MobileOnly>
@@ -213,7 +197,7 @@ function ScrollToAudio({
             mobileToolBarDiv
           )
         } else {
-          mobileButtonJsx = createPortal(
+          mobileButtonJsx = (
             <MobileOnly>
               <FixedMuteButton
                 className="scroll-to-audio-muted-button"
@@ -222,19 +206,11 @@ function ScrollToAudio({
               >
                 {muted ? <MuteIcon /> : <SoundIcon />}
               </FixedMuteButton>
-            </MobileOnly>,
-            portalNodeRef.current!
+            </MobileOnly>
           )
         }
 
-        // Add fixed button onto body element to avoid
-        // [containing block](https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block#identifying_the_containing_block)
-        // changed.
-        // The case is that we have to put `ScrollToAudio` embed code in the `ScrollableVideo` section,
-        // and `ScrollableVideo` section is an containing block.
-        // Therefore, `FixedMuteButton` might not be positioned fixed in the viewport as we think.
-        // The following solution is to use `createPortal` to append `FixedMuteButton` onto document.body.
-        const fixedButtonJsx = createPortal(
+        const fixedButtonJsx = (
           <DesktopOnly>
             <FixedMuteButton
               className="scroll-to-audio-muted-button"
@@ -243,9 +219,9 @@ function ScrollToAudio({
             >
               {muted ? <MuteIcon /> : <SoundIcon />}
             </FixedMuteButton>
-          </DesktopOnly>,
-          portalNodeRef.current!
+          </DesktopOnly>
         )
+
         buttonJsx = (
           <>
             {fixedButtonJsx}
