@@ -52,8 +52,11 @@ const Section = styled.div`
   }
 
   ${mediaQuery.mobileOnly} {
-    left: 50%;
-    transform: translateX(-50%);
+    // horizontally center
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
 
     &[data-section-narrow-width='true'] {
       width: 75vw;
@@ -82,8 +85,11 @@ const Section = styled.div`
       right: 4vw;
     }
     &[data-section-alignment='center'] {
-      left: 50%;
-      transform: translateX(-50%);
+      // horizontally center
+      left: 0;
+      right: 0;
+      margin-left: auto;
+      margin-right: auto;
     }
   }
 `
