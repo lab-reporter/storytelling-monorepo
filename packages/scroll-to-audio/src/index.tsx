@@ -54,7 +54,16 @@ function ScrollToAudio({
     const handleScroll = _.debounce(() => {
       const topEntryElement = topEntryPointRef.current
       const bottomEntryElement = bottomEntryPointRef.current
-      if (!topEntryElement) {
+
+      if (
+        !topEntryElement ||
+        topEntryElement.getBoundingClientRect().width == 0 ||
+        topEntryElement.getBoundingClientRect().height == 0
+      ) {
+        console.log(
+          '[react-scroll-to-audio] `topEntryElement` is not available. Remove scroll event listener.'
+        )
+        window.removeEventListener('scroll', handleScroll)
         return
       }
 
@@ -101,12 +110,19 @@ function ScrollToAudio({
         }
       }
     }, 50)
+
+    console.log(
+      `[react-scroll-to-audio] add scroll event listener. \`muted\` state is ${muted}`
+    )
     window.addEventListener('scroll', handleScroll)
 
     return () => {
+      console.log(
+        '[react-scroll-to-audio] useEffect cleanup function. Remove scroll event listener.'
+      )
       window.removeEventListener('scroll', handleScroll)
     }
-  }, [topEntryPointRef.current, bottomEntryPointRef.current, muted])
+  }, [muted])
 
   // set audio muted attribute according to browser muted state
   useEffect(() => {
