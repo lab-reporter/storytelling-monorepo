@@ -141,17 +141,17 @@ const Text = styled.div`
   }
 
   ${mediaQuery.tabletOnly} {
-    width: 197px;
+    width: calc(197 / 768 * 100%);
     font-size: 16px;
   }
 
   ${mediaQuery.desktopOnly} {
-    width: 301px;
+    width: calc(301 / 1024 * 100%);
     font-size: 16px;
   }
 
   ${mediaQuery.hdOnly} {
-    width: 453px;
+    width: calc(453 / 1440 * 100%);
     font-size: 16px;
   }
 `
@@ -178,17 +178,43 @@ const Imgs = styled.div`
 const Figure = styled.figure`
   background-color: #ffffff14;
   margin: 0;
-  width: 50%;
 
   ${mediaQuery.tabletAbove} {
     &:first-child {
+      aspect-ratio: 5 / 2;
       flex: 0.57;
     }
     &:nth-child(2) {
+      aspect-ratio: 5 / 3;
       flex: 0.24;
     }
     &:last-child {
-      flex: 0.17;
+      aspect-ratio: 1.5 / 1;
+      flex: 0.19;
+    }
+  }
+
+  ${mediaQuery.tabletOnly} {
+    &:not(:first-child) {
+      img {
+        height: 127px;
+      }
+    }
+  }
+
+  ${mediaQuery.desktopOnly} {
+    &:not(:first-child) {
+      img {
+        height: 127px;
+      }
+    }
+  }
+
+  ${mediaQuery.hdOnly} {
+    &:not(:first-child) {
+      img {
+        height: 181px;
+      }
     }
   }
 `
@@ -196,23 +222,13 @@ const Figure = styled.figure`
 const Img = styled.img`
   object-fit: cover;
   width: 100%;
-
-  ${mediaQuery.tabletOnly} {
-    height: 174px;
-  }
-
-  ${mediaQuery.desktopOnly} {
-    height: 208px;
-  }
-
-  ${mediaQuery.hdOnly} {
-    height: 279px;
-  }
+  height: 100%;
 `
 
 const FigCaption = styled.figcaption`
   font-weight: 400;
   line-height: 1.5;
+  padding: 5px 10px 17px 10px;
 
   ${mediaQuery.mobileOnly} {
     font-size: 10px;
@@ -240,14 +256,22 @@ const MobileFigures = styled.div`
   ${MobileFigure}:first-child {
     width: 100%;
     flex-shrink: 0;
+    aspect-ratio: 3.5 / 1;
   }
 
-  ${MobileFigure}:nth-child(2),
-  ${MobileFigure}:last-child {
-    width: 50%;
+  ${MobileFigure}:nth-child(2) {
+    width: 57%;
     img {
       height: 127px;
     }
+    aspect-ratio: 5 / 3;
+  }
+  ${MobileFigure}:last-child {
+    width: 43%;
+    img {
+      height: 127px;
+    }
+    aspect-ratio: 5 / 3;
   }
 `
 
@@ -257,7 +281,7 @@ const BlowUpFontLayout: React.FC<Props> = ({ className }) => {
   return (
     <Background className={className}>
       <MobileOnly>
-        <SubTitle>老招牌上的</SubTitle>
+        <SubTitle>老招牌上的熱門字體</SubTitle>
         <TitleSvg src="./blow-up-font/title-mobile.svg" />
         <Text>
           <p>
@@ -274,13 +298,13 @@ const BlowUpFontLayout: React.FC<Props> = ({ className }) => {
           <MobileFigure>
             <Img src="./blow-up-font/img-2.jpg" />
             <FigCaption>
-              香港路牌過去由囚犯製作，《香港年報》拍攝囚犯印刷的招牌的擺放現場。
+              《香港北魏真書》分析厚重的「豎鈎」是香港北魏最容易辨識特徵，一般楷書的鈎筆短短的、呈小三角形；香港北魏的鈎筆卻長的像鐮刀般，替整個字起到穩定作用。
             </FigCaption>
           </MobileFigure>
           <MobileFigure>
             <Img src="./blow-up-font/img-3.jpg" />
             <FigCaption>
-              香港路牌過去由囚犯製作，《香港年報》拍攝囚犯印刷的招牌的擺放現場。
+              「口」字呈正方形，本應穩定，香港北魏卻將「口」外部形狀寫成有如六角形，賦予動感。
             </FigCaption>
           </MobileFigure>
         </MobileFigures>
@@ -289,7 +313,7 @@ const BlowUpFontLayout: React.FC<Props> = ({ className }) => {
         <Layout>
           <TitleSvg src="./blow-up-font/title.svg" />
           <Body>
-            <SubTitle>老招牌上的</SubTitle>
+            <SubTitle>老招牌上的熱門字體</SubTitle>
             <div>
               <Text>
                 <p>
@@ -306,13 +330,13 @@ const BlowUpFontLayout: React.FC<Props> = ({ className }) => {
                 <Figure>
                   <Img src="./blow-up-font/img-2.jpg" />
                   <FigCaption>
-                    香港路牌過去由囚犯製作，《香港年報》拍攝囚犯印刷的招牌的擺放現場。
+                    《香港北魏真書》分析厚重的「豎鈎」是香港北魏最容易辨識特徵，一般楷書的鈎筆短短的、呈小三角形；香港北魏的鈎筆卻長的像鐮刀般，替整個字起到穩定作用。
                   </FigCaption>
                 </Figure>
                 <Figure>
                   <Img src="./blow-up-font/img-3.jpg" />
                   <FigCaption>
-                    香港路牌過去由囚犯製作，《香港年報》拍攝囚犯印刷的招牌的擺放現場。
+                    「口」字呈正方形，本應穩定，香港北魏卻將「口」外部形狀寫成有如六角形，賦予動感。
                   </FigCaption>
                 </Figure>
               </Imgs>
