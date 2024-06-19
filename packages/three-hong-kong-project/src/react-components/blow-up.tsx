@@ -1,0 +1,327 @@
+import React from 'react'
+import styled from '../styled-components'
+import { mediaQuery } from '../utils/media-query'
+
+const MobileOnly = styled.div`
+  ${mediaQuery.tabletAbove} {
+    display: none;
+  }
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+`
+
+const MobileAbove = styled.div`
+  ${mediaQuery.mobileOnly} {
+    display: none;
+  }
+`
+
+const Background = styled.div`
+  background: linear-gradient(180deg, #dee4e8 10%, #c3d7e6 57%, #96d0f9 100%);
+  width: 100vw;
+  height: 100vh;
+  overflow: scroll;
+
+  ${mediaQuery.mobileOnly} {
+    overflow-x: hidden;
+  }
+`
+
+const Layout = styled.div`
+  margin-left: auto;
+  margin-right: auto;
+  overflow: scroll;
+  min-height: 100vh;
+  display: flex;
+  gap: 15px;
+
+  ${mediaQuery.mobileOnly} {
+    width: 100%;
+  }
+
+  ${mediaQuery.tabletOnly} {
+    width: calc(717 / 768 * 100%);
+  }
+
+  ${mediaQuery.desktopOnly} {
+    width: calc(938 / 1024 * 100%);
+  }
+
+  ${mediaQuery.hdOnly} {
+    width: calc(1380 / 1440 * 100%);
+  }
+`
+
+const TitleSvg = styled.img`
+  width: auto;
+
+  ${mediaQuery.mobileOnly} {
+    width: fit-content;
+  }
+
+  ${mediaQuery.tabletOnly} {
+    margin-top: 37px;
+    height: 532px;
+  }
+
+  ${mediaQuery.desktopOnly} {
+    margin-top: 49px;
+    height: 90vh;
+  }
+
+  ${mediaQuery.hdOnly} {
+    margin-top: 85px;
+    height: calc(644 / 810 * 100vh);
+  }
+`
+
+const Body = styled.div`
+  flex-grow: 1;
+
+  display: flex;
+  flex-direction: column;
+
+  justify-content: space-between;
+
+  ${mediaQuery.tabletOnly} {
+    margin-bottom: 27px;
+  }
+
+  ${mediaQuery.desktopOnly} {
+    margin-bottom: 31px;
+  }
+
+  ${mediaQuery.hdOnly} {
+    margin-bottom: 81px;
+  }
+`
+
+const SubTitle = styled.div`
+  padding: 7px 10px 7px 10px;
+  background-color: #000;
+  color: #fff;
+  font-weight: 400;
+  width: fit-content;
+
+  ${mediaQuery.mobileOnly} {
+    font-size: 20px;
+    margin-top: 36px;
+  }
+
+  ${mediaQuery.tabletOnly} {
+    margin-top: 37px;
+    font-size: 16px;
+  }
+
+  ${mediaQuery.desktopOnly} {
+    margin-top: 49px;
+    font-size: 20px;
+  }
+
+  ${mediaQuery.hdOnly} {
+    margin-top: 85px;
+    font-size: 24px;
+  }
+`
+
+const Text = styled.div`
+  color: #000;
+  font-weight: 400;
+  line-height: 1.5;
+
+  ${mediaQuery.mobileOnly} {
+    width: calc(346 / 390 * 100%);
+    margin-top: 213px;
+    font-size: 14px;
+    line-height: 21px;
+    text-align: justify;
+  }
+
+  ${mediaQuery.tabletOnly} {
+    width: 197px;
+    font-size: 16px;
+  }
+
+  ${mediaQuery.desktopOnly} {
+    width: 301px;
+    font-size: 16px;
+  }
+
+  ${mediaQuery.hdOnly} {
+    width: 453px;
+    font-size: 16px;
+  }
+`
+
+const Imgs = styled.div`
+  display: flex;
+  gap: 2px;
+
+  ${mediaQuery.tabletOnly} {
+    margin-top: 15px;
+    width: calc(100% + 140px);
+    transform: translateX(-140px);
+  }
+
+  ${mediaQuery.desktopOnly} {
+    margin-top: 15px;
+  }
+
+  ${mediaQuery.hdOnly} {
+    margin-top: 25px;
+  }
+`
+
+const Figure = styled.figure`
+  background-color: #ffffff14;
+  margin: 0;
+  width: 50%;
+
+  ${mediaQuery.tabletAbove} {
+    &:first-child {
+      flex: 0.57;
+    }
+    &:nth-child(2) {
+      flex: 0.24;
+    }
+    &:last-child {
+      flex: 0.17;
+    }
+  }
+`
+
+const Img = styled.img`
+  object-fit: cover;
+  width: 100%;
+
+  ${mediaQuery.tabletOnly} {
+    height: 174px;
+  }
+
+  ${mediaQuery.desktopOnly} {
+    height: 208px;
+  }
+
+  ${mediaQuery.hdOnly} {
+    height: 279px;
+  }
+`
+
+const FigCaption = styled.figcaption`
+  font-weight: 400;
+  line-height: 1.5;
+
+  ${mediaQuery.mobileOnly} {
+    font-size: 10px;
+  }
+
+  ${mediaQuery.tabletAbove} {
+    font-size: 12px;
+    margin-top: 5px;
+  }
+`
+
+const MobileFigure = styled.figure`
+  background-color: #ffffff14;
+  width: 100%;
+  margin: 0;
+`
+
+const MobileFigures = styled.div`
+  margin-bottom: 39px;
+  width: calc(346 / 390 * 100%);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+
+  ${MobileFigure}:first-child {
+    width: 100%;
+    flex-shrink: 0;
+  }
+
+  ${MobileFigure}:nth-child(2),
+  ${MobileFigure}:last-child {
+    width: 50%;
+    img {
+      height: 127px;
+    }
+  }
+`
+
+type Props = { className?: string }
+
+const BlowUpFontLayout: React.FC<Props> = ({ className }) => {
+  return (
+    <Background className={className}>
+      <MobileOnly>
+        <SubTitle>老招牌上的</SubTitle>
+        <TitleSvg src="./blow-up-font/title-mobile.svg" />
+        <Text>
+          <p>
+            在還沒有電腦字體的年代，請街頭書法家為招牌題字是民間的主流做法。設計師陳濬人的招牌字體研究專書《香港北魏真書》記錄著清代書法家趙之謙研究筆畫粗壯剛直的魏碑後，用筆墨演繹出北魏字，這種風格被清末書法家區建公等人承襲，帶到香港，又因應招牌的需求，將字形調整得更穩定，成為「香港北魏」。
+          </p>
+          <p>
+            1960年代香港經濟起飛時期，店家快速增加，為了讓客人遠遠就能注意到招牌，在密集住宅中仍特別顯眼的「香港北魏」就成為熱門選項。
+          </p>
+        </Text>
+        <MobileFigures>
+          <MobileFigure>
+            <Img src="./blow-up-font/img-1.jpg" />
+          </MobileFigure>
+          <MobileFigure>
+            <Img src="./blow-up-font/img-2.jpg" />
+            <FigCaption>
+              香港路牌過去由囚犯製作，《香港年報》拍攝囚犯印刷的招牌的擺放現場。
+            </FigCaption>
+          </MobileFigure>
+          <MobileFigure>
+            <Img src="./blow-up-font/img-3.jpg" />
+            <FigCaption>
+              香港路牌過去由囚犯製作，《香港年報》拍攝囚犯印刷的招牌的擺放現場。
+            </FigCaption>
+          </MobileFigure>
+        </MobileFigures>
+      </MobileOnly>
+      <MobileAbove>
+        <Layout>
+          <TitleSvg src="./blow-up-font/title.svg" />
+          <Body>
+            <SubTitle>老招牌上的</SubTitle>
+            <div>
+              <Text>
+                <p>
+                  在還沒有電腦字體的年代，請街頭書法家為招牌題字是民間的主流做法。設計師陳濬人的招牌字體研究專書《香港北魏真書》記錄著清代書法家趙之謙研究筆畫粗壯剛直的魏碑後，用筆墨演繹出北魏字，這種風格被清末書法家區建公等人承襲，帶到香港，又因應招牌的需求，將字形調整得更穩定，成為「香港北魏」。
+                </p>
+                <p>
+                  1960年代香港經濟起飛時期，店家快速增加，為了讓客人遠遠就能注意到招牌，在密集住宅中仍特別顯眼的「香港北魏」就成為熱門選項。
+                </p>
+              </Text>
+              <Imgs>
+                <Figure>
+                  <Img src="./blow-up-font/img-1.jpg" />
+                </Figure>
+                <Figure>
+                  <Img src="./blow-up-font/img-2.jpg" />
+                  <FigCaption>
+                    香港路牌過去由囚犯製作，《香港年報》拍攝囚犯印刷的招牌的擺放現場。
+                  </FigCaption>
+                </Figure>
+                <Figure>
+                  <Img src="./blow-up-font/img-3.jpg" />
+                  <FigCaption>
+                    香港路牌過去由囚犯製作，《香港年報》拍攝囚犯印刷的招牌的擺放現場。
+                  </FigCaption>
+                </Figure>
+              </Imgs>
+            </div>
+          </Body>
+        </Layout>
+      </MobileAbove>
+    </Background>
+  )
+}
+
+export default BlowUpFontLayout
