@@ -14,6 +14,8 @@ const MobileOnly = styled.div`
 `
 
 const MobileAbove = styled.div`
+  height: 100%;
+
   ${mediaQuery.mobileOnly} {
     display: none;
   }
@@ -21,22 +23,25 @@ const MobileAbove = styled.div`
 
 const Background = styled.div`
   background: linear-gradient(180deg, #dee4e8 10%, #c3d7e6 57%, #96d0f9 100%);
-  width: 100vw;
-  height: 100vh;
-  overflow: scroll;
+  width: 100%;
 
   ${mediaQuery.mobileOnly} {
     overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  ${mediaQuery.tabletAbove} {
+    height: 100vh;
+    overflow: scroll;
   }
 `
 
 const Layout = styled.div`
   margin-left: auto;
   margin-right: auto;
-  overflow: scroll;
-  min-height: 100vh;
   display: flex;
   gap: 15px;
+  height: 100%;
 
   ${mediaQuery.mobileOnly} {
     width: 100%;
@@ -86,16 +91,8 @@ const Body = styled.div`
 
   justify-content: space-between;
 
-  ${mediaQuery.tabletOnly} {
-    margin-bottom: 27px;
-  }
-
-  ${mediaQuery.desktopOnly} {
-    margin-bottom: 31px;
-  }
-
-  ${mediaQuery.hdOnly} {
-    margin-bottom: 81px;
+  ${mediaQuery.tabletAbove} {
+    margin-bottom: 30px;
   }
 `
 
@@ -277,7 +274,7 @@ const MobileFigures = styled.div`
 
 type Props = { className?: string }
 
-const BlowUpFontLayout: React.FC<Props> = ({ className }) => {
+const FontLayout: React.FC<Props> = ({ className }) => {
   return (
     <Background className={className}>
       <MobileOnly>
@@ -348,4 +345,4 @@ const BlowUpFontLayout: React.FC<Props> = ({ className }) => {
   )
 }
 
-export default BlowUpFontLayout
+export default FontLayout
