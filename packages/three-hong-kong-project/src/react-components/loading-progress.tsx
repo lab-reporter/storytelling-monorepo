@@ -9,8 +9,8 @@ const _ = {
 
 export type GTLFModelObject = {
   url: string
-  name?: string
   data?: GLTF
+  userData: Record<string, any>
 }
 
 type OnModelsLoaded = (arg: GTLFModelObject[]) => void

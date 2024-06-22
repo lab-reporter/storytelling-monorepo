@@ -3,12 +3,11 @@ import styled, { css } from '../styled-components'
 import throttle from 'lodash/throttle'
 import debounce from 'lodash/debounce'
 import {
-  BoxGeometry,
-  MeshStandardMaterial,
-  Mesh,
   ACESFilmicToneMapping,
   DirectionalLight,
   PerspectiveCamera,
+  Raycaster,
+  Vector2,
   Vector3,
   Object3D,
   Quaternion,
@@ -61,35 +60,87 @@ enum FontName {
   PRISON = '監獄體',
 }
 
+enum PointName {
+  BLOW_UP = 'blow-up-point',
+  LEE_HON_KONG_KAI = 'lee-hon-kong-kai-point',
+  LEE_HON_TUNG_KAI = 'lee-hon-tung-kai-point',
+  PRISON = 'prison-point',
+}
+
 const modelObjs: GTLFModelObject[] = [
   {
     url: './models/major-scene.glb',
-    name: 'MAJOR_SCENE',
+    userData: {
+      name: 'MAJOR_SCENE',
+      castShadow: true,
+      intersectable: false,
+    },
   },
   {
     url: './models/lee-hon-kong-kai-font.glb',
-    name: FontName.LEE_HON_KONG_KAI,
+    userData: {
+      name: FontName.LEE_HON_KONG_KAI,
+      castShadow: true,
+      intersectable: false,
+    },
   },
   {
     url: './models/lee-hon-tung-kai-font.glb',
-    name: FontName.LEE_HON_TUNG_KAI,
+    userData: {
+      name: FontName.LEE_HON_TUNG_KAI,
+      castShadow: true,
+      intersectable: false,
+    },
   },
   {
     url: './models/blow-up-font.glb',
-    name: FontName.BLOW_UP,
+    userData: {
+      name: FontName.BLOW_UP,
+      castShadow: true,
+      intersectable: false,
+    },
   },
   {
     url: './models/prison-gothic-font.glb',
-    name: FontName.PRISON,
+    userData: {
+      name: FontName.PRISON,
+      castShadow: true,
+      intersectable: false,
+    },
+  },
+  {
+    url: './models/lee-hon-kong-kai-point.glb',
+    userData: {
+      name: PointName.LEE_HON_KONG_KAI,
+      castShadow: false,
+      intersectable: true,
+    },
+  },
+  {
+    url: './models/lee-hon-tung-kai-point.glb',
+    userData: {
+      name: PointName.LEE_HON_TUNG_KAI,
+      castShadow: false,
+      intersectable: true,
+    },
+  },
+  {
+    url: './models/blow-up-point.glb',
+    userData: {
+      name: PointName.BLOW_UP,
+      castShadow: false,
+      intersectable: true,
+    },
+  },
+  {
+    url: './models/prison-point.glb',
+    userData: {
+      name: PointName.PRISON,
+      castShadow: false,
+      intersectable: true,
+    },
   },
 ]
-
-const mark3DPositions: { [key: string]: number[] } = {
-  [FontName.BLOW_UP]: [-1.5, 4.5, 0],
-  [FontName.LEE_HON_KONG_KAI]: [3, 5, 0],
-  [FontName.LEE_HON_TUNG_KAI]: [0.8, 3.2, 0],
-  [FontName.PRISON]: [-1.5, 3, 0],
-}
 
 const plainPois = cameraData.pois
 
@@ -115,7 +166,7 @@ function createThreeObj(
       gltf.scene.position.set(1, 1, 0)
       gltf.scene.scale.set(0.01, 0.01, 0.01)
       gltf.scene.traverse(function (object) {
-        object.castShadow = true
+        object.castShadow = gltf.userData.castShadow
         object.receiveShadow = true
       })
       scene.add(gltf.scene)
@@ -194,13 +245,6 @@ const Container = styled.div`
     top: 0;
     left: 0;
   }
-`
-
-const Mark = styled.div`
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  background-color: pink;
 `
 
 const CloseBt = styled.div`
@@ -283,9 +327,6 @@ const LeaveBt = styled(Bt)`
 export default function HongKongFontProject() {
   const containerRef = useRef<HTMLDivElement>(null)
   const [gltfs, setGltfs] = useState<GLTF[]>([])
-  const [markCoordinates, setMarkCooridnates] = useState<{
-    [key: string]: { x: number; y: number }
-  }>({})
   const [selectedFont, setSelectedFont] = useState('')
   const [toInteractWithModel, setToInteractWithModel] = useState(false)
 
@@ -422,7 +463,7 @@ export default function HongKongFontProject() {
       if (!threeObj) {
         return
       }
-      const { camera, renderer, scene } = threeObj
+      const { camera, renderer } = threeObj
       const width = document.documentElement.clientWidth
       const height = document.documentElement.clientHeight
 
@@ -433,24 +474,6 @@ export default function HongKongFontProject() {
       // Update renderer
       renderer.setSize(width, height)
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-
-      const coordinates: { [key: string]: { x: number; y: number } } = {}
-
-      for (const fontName in mark3DPositions) {
-        const position = mark3DPositions[fontName]
-        const geometry = new BoxGeometry()
-        const material = new MeshStandardMaterial({
-          color: 0x000000,
-          transparent: true,
-          opacity: 0,
-        })
-        const box = new Mesh(geometry, material)
-        box.position.set(position[0], position[1], position[2])
-        scene.add(box)
-        const _coordinates = getCanvasCoordinates(box, camera, renderer)
-        coordinates[fontName] = _coordinates
-      }
-      setMarkCooridnates(coordinates)
     }, 100)
 
     window.addEventListener('resize', updateThreeObj)
@@ -462,21 +485,60 @@ export default function HongKongFontProject() {
     }
   }, [threeObj])
 
-  const marks = []
-  if (selectedFont === '') {
-    for (const fontName in markCoordinates) {
-      const { x, y } = markCoordinates[fontName]
-      marks.push(
-        <Mark
-          key={fontName}
-          style={{ left: x, top: y }}
-          onClick={() => {
-            setSelectedFont(fontName)
-          }}
-        />
-      )
+  useEffect(() => {
+    if (!threeObj) {
+      return
     }
-  }
+
+    const { camera } = threeObj
+
+    const intersect = (pos: Vector2) => {
+      raycaster.setFromCamera(pos, camera)
+      const objects = gltfs
+        .filter((gltf) => gltf.scene.userData.intersectable)
+        .map((gltf) => gltf.scene)
+      return raycaster.intersectObjects(objects)
+    }
+
+    const raycaster = new Raycaster()
+    const clickMouse = new Vector2()
+
+    const handleClick = (e: MouseEvent) => {
+      clickMouse.x = (e.clientX / window.innerWidth) * 2 - 1
+      clickMouse.y = -(e.clientY / window.innerHeight) * 2 + 1
+
+      const found = intersect(clickMouse)
+
+      if (found.length > 0) {
+        const rootGroup = getRootParent(found[0].object)
+        const name = rootGroup.userData.name
+        switch (name) {
+          case PointName.BLOW_UP: {
+            setSelectedFont(FontName.BLOW_UP)
+            break
+          }
+          case PointName.LEE_HON_KONG_KAI: {
+            setSelectedFont(FontName.LEE_HON_KONG_KAI)
+            break
+          }
+          case PointName.LEE_HON_TUNG_KAI: {
+            setSelectedFont(FontName.LEE_HON_TUNG_KAI)
+            break
+          }
+          case PointName.PRISON: {
+            setSelectedFont(FontName.PRISON)
+            break
+          }
+        }
+      }
+    }
+
+    window.addEventListener('click', handleClick)
+
+    return () => {
+      window.removeEventListener('click', handleClick)
+    }
+  }, [threeObj])
 
   const layout = (
     <>
@@ -498,7 +560,7 @@ export default function HongKongFontProject() {
       .map((obj) => {
         const data = obj.data
         if (data) {
-          data.scene.userData.name = obj.name
+          data.scene.userData = obj.userData
         }
         return data
       })
@@ -572,28 +634,13 @@ export default function HongKongFontProject() {
       ) : null}
       {layout}
       <canvas ref={canvasRef}></canvas>
-      {marks}
     </Container>
   )
 }
 
-// 將 3D 物件的位置轉換成 canvas 上的 x,y 絕對位置
-function getCanvasCoordinates(
-  object3D: Object3D,
-  camera: PerspectiveCamera,
-  renderer: WebGLRenderer
-) {
-  const vector = new Vector3()
-
-  // 將 3D 物件的世界座標轉換成標準化設備座標 (NDC)
-  object3D.updateMatrixWorld()
-  vector.setFromMatrixPosition(object3D.matrixWorld)
-  vector.project(camera)
-
-  // 將標準化設備座標轉換成 2D canvas 座標
-  const canvas = renderer.domElement
-  const x = ((vector.x * 0.5 + 0.5) * canvas.width) / window.devicePixelRatio
-  const y = ((vector.y * -0.5 + 0.5) * canvas.height) / window.devicePixelRatio
-
-  return { x, y }
+function getRootParent(object: Object3D) {
+  while (object.parent && object.parent.type !== 'Scene') {
+    object = object.parent
+  }
+  return object
 }
