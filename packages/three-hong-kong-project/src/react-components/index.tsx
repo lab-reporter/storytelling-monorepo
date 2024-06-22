@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react'
+import React, { useCallback, useState, useEffect, useRef, useMemo } from 'react'
 import styled, { css } from '../styled-components'
 import throttle from 'lodash/throttle'
 import debounce from 'lodash/debounce'
@@ -538,7 +538,7 @@ export default function HongKongFontProject() {
     return () => {
       window.removeEventListener('click', handleClick)
     }
-  }, [threeObj])
+  }, [threeObj, gltfs])
 
   const layout = (
     <>
@@ -555,7 +555,7 @@ export default function HongKongFontProject() {
     </>
   )
 
-  const onModelsLoaded = (_modelObjs: GTLFModelObject[]) => {
+  const onModelsLoaded = useCallback((_modelObjs: GTLFModelObject[]) => {
     const gltfs = _modelObjs
       .map((obj) => {
         const data = obj.data
@@ -566,7 +566,7 @@ export default function HongKongFontProject() {
       })
       .filter((data) => data !== null) as GLTF[]
     setGltfs(gltfs)
-  }
+  }, [])
 
   const areModelsLoaded = gltfs.length !== 0
 

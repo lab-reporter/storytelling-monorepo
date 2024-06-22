@@ -59,7 +59,7 @@ const LoadingProgress = ({ modelObjs, onModelsLoaded }: Props) => {
     }
 
     fetchData(modelObjs.map((obj) => obj.url)).then(setTotal)
-  }, [])
+  }, [modelObjs])
 
   useEffect(() => {
     const fetchData = async (modelObjs: GTLFModelObject[]) => {
@@ -93,7 +93,7 @@ const LoadingProgress = ({ modelObjs, onModelsLoaded }: Props) => {
         setFinished(true)
       }, loadingInterval)
     })
-  }, [])
+  }, [modelObjs, onModelsLoaded])
 
   if (finished) {
     return null
