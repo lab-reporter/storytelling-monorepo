@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useEffect, useRef, useMemo } from 'react'
-import styled, { css } from '../styled-components'
+import styled from '../styled-components'
 import throttle from 'lodash/throttle'
 import debounce from 'lodash/debounce'
 import {
@@ -22,31 +22,12 @@ import {
   StoryPointMarker,
 } from 'three-story-controls'
 import cameraData from './camera-data.json'
-import _BlowUpFont from './blow-up'
-import _LeeHonKongKaiFont from './lee-hon-kong-kai'
-import _LeeHonTungKaiFont from './lee-hon-tung-kai'
-import _PrisonFont from './prison'
+import BlowUpFont from './blow-up'
+import LeeHonKongKaiFont from './lee-hon-kong-kai'
+import LeeHonTungKaiFont from './lee-hon-tung-kai'
+import PrisonFont from './prison'
 import { LoadingProgress, GTLFModelObject } from './loading-progress'
-
-const fadeInDuration = 500 // ms
-
-const fontCss = css`
-  position: absolute;
-  left: 0;
-  top: 0;
-  transition: opacity ${fadeInDuration}ms linear;
-`
-
-const withOpacity = (Component: React.FC) => styled(Component)<{
-  $opacity: number
-}>`
-  ${fontCss}
-  opacity: ${(props) => props.$opacity};
-`
-const BlowUpFont = withOpacity(_BlowUpFont)
-const LeeHonKongKaiFont = withOpacity(_LeeHonKongKaiFont)
-const LeeHonTungKaiFont = withOpacity(_LeeHonTungKaiFont)
-const PrisonFont = withOpacity(_PrisonFont)
+import { Transition } from 'react-transition-group'
 
 const _ = {
   debounce,
@@ -540,18 +521,20 @@ export default function HongKongFontProject() {
     }
   }, [threeObj, gltfs])
 
-  const layout = (
+  const fontLayout = (
     <>
-      <BlowUpFont $opacity={selectedFont === FontName.BLOW_UP ? 1 : 0} />
-      <LeeHonKongKaiFont
-        $opacity={selectedFont === FontName.LEE_HON_KONG_KAI ? 1 : 0}
-      />
-      <LeeHonTungKaiFont
-        $opacity={selectedFont === FontName.LEE_HON_TUNG_KAI ? 1 : 0}
-      />
-      <PrisonFont
-        $opacity={selectedFont === FontName.LEE_HON_TUNG_KAI ? 1 : 0}
-      />
+      <FadedFont in={selectedFont === FontName.BLOW_UP}>
+        <BlowUpFont />
+      </FadedFont>
+      <FadedFont in={selectedFont === FontName.LEE_HON_KONG_KAI}>
+        <LeeHonKongKaiFont />
+      </FadedFont>
+      <FadedFont in={selectedFont === FontName.LEE_HON_TUNG_KAI}>
+        <LeeHonTungKaiFont />
+      </FadedFont>
+      <FadedFont in={selectedFont === FontName.LEE_HON_TUNG_KAI}>
+        <PrisonFont />
+      </FadedFont>
     </>
   )
 
@@ -632,7 +615,7 @@ export default function HongKongFontProject() {
           }}
         />
       ) : null}
-      {layout}
+      {fontLayout}
       <canvas ref={canvasRef}></canvas>
     </Container>
   )
@@ -643,4 +626,47 @@ function getRootParent(object: Object3D) {
     object = object.parent
   }
   return object
+}
+
+const duration = 500 // ms
+
+const defaultStyle: React.CSSProperties = {
+  position: 'absolute',
+  left: 0,
+  top: 0,
+  transition: `opacity ${duration}ms ease-in-out`,
+  opacity: 0,
+}
+
+const transitionStyles = {
+  entering: { opacity: 1 },
+  entered: { opacity: 1 },
+  exiting: { opacity: 0 },
+  exited: { opacity: 0 },
+  unmounted: {},
+}
+
+function FadedFont({
+  in: inProp,
+  children,
+}: {
+  in: boolean
+  children: React.ReactNode
+}) {
+  const nodeRef = useRef(null)
+  return (
+    <Transition nodeRef={nodeRef} in={inProp} timeout={duration} unmountOnExit>
+      {(state) => (
+        <div
+          ref={nodeRef}
+          style={{
+            ...defaultStyle,
+            ...transitionStyles[state],
+          }}
+        >
+          {children}
+        </div>
+      )}
+    </Transition>
+  )
 }
