@@ -4,7 +4,6 @@ import throttle from 'lodash/throttle'
 import debounce from 'lodash/debounce'
 import {
   ACESFilmicToneMapping,
-  DirectionalLight,
   PerspectiveCamera,
   Raycaster,
   Vector2,
@@ -29,30 +28,31 @@ import PrisonFont from './prison'
 import { LoadingProgress, GTLFModelObject } from './loading-progress'
 import { Transition } from 'react-transition-group'
 
+const duration = 500 // ms
+
 const _ = {
   debounce,
   throttle,
 }
 
-enum FontName {
+enum Object3DName {
   BLOW_UP = '香港北魏',
   LEE_HON_KONG_KAI = '一體成型字',
   LEE_HON_TUNG_KAI = '勾通字',
   PRISON = '監獄體',
-}
-
-enum PointName {
-  BLOW_UP = 'blow-up-point',
-  LEE_HON_KONG_KAI = 'lee-hon-kong-kai-point',
-  LEE_HON_TUNG_KAI = 'lee-hon-tung-kai-point',
-  PRISON = 'prison-point',
+  BLOW_UP_POINT = 'blow-up-point',
+  LEE_HON_KONG_KAI_POINT = 'lee-hon-kong-kai-point',
+  LEE_HON_TUNG_KAI_POINT = 'lee-hon-tung-kai-point',
+  PRISON_POINT = 'prison-point',
+  MAJOR_SCENE = 'major-scene',
+  LIGHTS = 'lights',
 }
 
 const modelObjs: GTLFModelObject[] = [
   {
     url: './models/major-scene.glb',
     userData: {
-      name: 'MAJOR_SCENE',
+      name: 'major-scene',
       castShadow: true,
       intersectable: false,
     },
@@ -60,7 +60,7 @@ const modelObjs: GTLFModelObject[] = [
   {
     url: './models/lee-hon-kong-kai-font.glb',
     userData: {
-      name: FontName.LEE_HON_KONG_KAI,
+      name: Object3DName.LEE_HON_KONG_KAI,
       castShadow: true,
       intersectable: false,
     },
@@ -68,7 +68,7 @@ const modelObjs: GTLFModelObject[] = [
   {
     url: './models/lee-hon-tung-kai-font.glb',
     userData: {
-      name: FontName.LEE_HON_TUNG_KAI,
+      name: Object3DName.LEE_HON_TUNG_KAI,
       castShadow: true,
       intersectable: false,
     },
@@ -76,15 +76,15 @@ const modelObjs: GTLFModelObject[] = [
   {
     url: './models/blow-up-font.glb',
     userData: {
-      name: FontName.BLOW_UP,
+      name: Object3DName.BLOW_UP,
       castShadow: true,
       intersectable: false,
     },
   },
   {
-    url: './models/prison-gothic-font.glb',
+    url: './models/prison-font.glb',
     userData: {
-      name: FontName.PRISON,
+      name: Object3DName.PRISON,
       castShadow: true,
       intersectable: false,
     },
@@ -92,7 +92,7 @@ const modelObjs: GTLFModelObject[] = [
   {
     url: './models/lee-hon-kong-kai-point.glb',
     userData: {
-      name: PointName.LEE_HON_KONG_KAI,
+      name: Object3DName.LEE_HON_KONG_KAI_POINT,
       castShadow: false,
       intersectable: true,
     },
@@ -100,7 +100,7 @@ const modelObjs: GTLFModelObject[] = [
   {
     url: './models/lee-hon-tung-kai-point.glb',
     userData: {
-      name: PointName.LEE_HON_TUNG_KAI,
+      name: Object3DName.LEE_HON_TUNG_KAI_POINT,
       castShadow: false,
       intersectable: true,
     },
@@ -108,7 +108,7 @@ const modelObjs: GTLFModelObject[] = [
   {
     url: './models/blow-up-point.glb',
     userData: {
-      name: PointName.BLOW_UP,
+      name: Object3DName.BLOW_UP_POINT,
       castShadow: false,
       intersectable: true,
     },
@@ -116,9 +116,17 @@ const modelObjs: GTLFModelObject[] = [
   {
     url: './models/prison-point.glb',
     userData: {
-      name: PointName.PRISON,
+      name: Object3DName.PRISON_POINT,
       castShadow: false,
       intersectable: true,
+    },
+  },
+  {
+    url: './models/lights.glb',
+    userData: {
+      name: 'lights',
+      castShadow: false,
+      intersectable: false,
     },
   },
 ]
@@ -144,8 +152,6 @@ function createThreeObj(
 
   if (Array.isArray(gltfs)) {
     gltfs.forEach((gltf) => {
-      gltf.scene.position.set(1, 1, 0)
-      gltf.scene.scale.set(0.01, 0.01, 0.01)
       gltf.scene.traverse(function (object) {
         object.castShadow = gltf.userData.castShadow
         object.receiveShadow = true
@@ -153,22 +159,6 @@ function createThreeObj(
       scene.add(gltf.scene)
     })
   }
-
-  const light = new DirectionalLight(0xffffff, 3)
-  light.position.set(5, 8, 10)
-  light.castShadow = true
-  light.shadow.bias = -0.0001
-  light.shadow.mapSize.width = 1024 * 2
-  light.shadow.mapSize.height = 1024 * 2
-  light.shadow.camera.near = 0.5 // default
-  light.shadow.camera.far = 50 // default
-
-  const d = 20
-  light.shadow.camera.left = -d
-  light.shadow.camera.right = d
-  light.shadow.camera.top = d
-  light.shadow.camera.bottom = -d
-  scene.add(light)
 
   /**
    *  Camera
@@ -361,53 +351,36 @@ export default function HongKongFontProject() {
   // Handle `StoryPointsControls` `update` event
   useEffect(() => {
     if (threeObj !== null) {
+      threeObj.scene.children.forEach((object) => {
+        if (
+          object.type === 'Group' &&
+          object.userData.name !== selectedFont &&
+          object.userData.name !== 'lights'
+        ) {
+          object.visible = false
+        }
+      })
       switch (selectedFont) {
-        case FontName.BLOW_UP: {
-          threeObj.scene.children.forEach((object) => {
-            if (
-              object.type === 'Group' &&
-              object.userData.name !== FontName.BLOW_UP
-            ) {
-              object.visible = false
-            }
-          })
+        case Object3DName.BLOW_UP: {
           return threeObj?.controls.goToPOI(1)
         }
-        case FontName.LEE_HON_KONG_KAI: {
-          threeObj.scene.children.forEach((object) => {
-            if (
-              object.type === 'Group' &&
-              object.userData.name !== FontName.LEE_HON_KONG_KAI
-            ) {
-              object.visible = false
-            }
-          })
+        case Object3DName.LEE_HON_KONG_KAI: {
           return threeObj?.controls.goToPOI(2)
         }
-        case FontName.LEE_HON_TUNG_KAI: {
-          threeObj.scene.children.forEach((object) => {
-            if (
-              object.type === 'Group' &&
-              object.userData.name !== FontName.LEE_HON_TUNG_KAI
-            ) {
-              object.visible = false
-            }
-          })
+        case Object3DName.LEE_HON_TUNG_KAI: {
           return threeObj?.controls.goToPOI(3)
         }
-        case FontName.PRISON: {
-          threeObj.scene.children.forEach((object) => {
-            if (
-              object.type === 'Group' &&
-              object.userData.name !== FontName.PRISON
-            ) {
-              object.visible = false
-            }
-          })
+        case Object3DName.PRISON: {
           return threeObj?.controls.goToPOI(4)
         }
+        case '':
         default: {
-          return threeObj?.controls.goToPOI(0)
+          threeObj.scene.children.forEach((object) => {
+            if (object.type === 'Group') {
+              object.visible = true
+            }
+          })
+          threeObj?.controls.goToPOI(0)
         }
       }
     }
@@ -494,20 +467,20 @@ export default function HongKongFontProject() {
         const rootGroup = getRootParent(found[0].object)
         const name = rootGroup.userData.name
         switch (name) {
-          case PointName.BLOW_UP: {
-            setSelectedFont(FontName.BLOW_UP)
+          case Object3DName.BLOW_UP_POINT: {
+            setSelectedFont(Object3DName.BLOW_UP)
             break
           }
-          case PointName.LEE_HON_KONG_KAI: {
-            setSelectedFont(FontName.LEE_HON_KONG_KAI)
+          case Object3DName.LEE_HON_KONG_KAI_POINT: {
+            setSelectedFont(Object3DName.LEE_HON_KONG_KAI)
             break
           }
-          case PointName.LEE_HON_TUNG_KAI: {
-            setSelectedFont(FontName.LEE_HON_TUNG_KAI)
+          case Object3DName.LEE_HON_TUNG_KAI_POINT: {
+            setSelectedFont(Object3DName.LEE_HON_TUNG_KAI)
             break
           }
-          case PointName.PRISON: {
-            setSelectedFont(FontName.PRISON)
+          case Object3DName.PRISON_POINT: {
+            setSelectedFont(Object3DName.PRISON)
             break
           }
         }
@@ -523,16 +496,16 @@ export default function HongKongFontProject() {
 
   const fontLayout = (
     <>
-      <FadedFont in={selectedFont === FontName.BLOW_UP}>
+      <FadedFont in={selectedFont === Object3DName.BLOW_UP}>
         <BlowUpFont />
       </FadedFont>
-      <FadedFont in={selectedFont === FontName.LEE_HON_KONG_KAI}>
+      <FadedFont in={selectedFont === Object3DName.LEE_HON_KONG_KAI}>
         <LeeHonKongKaiFont />
       </FadedFont>
-      <FadedFont in={selectedFont === FontName.LEE_HON_TUNG_KAI}>
+      <FadedFont in={selectedFont === Object3DName.LEE_HON_TUNG_KAI}>
         <LeeHonTungKaiFont />
       </FadedFont>
-      <FadedFont in={selectedFont === FontName.LEE_HON_TUNG_KAI}>
+      <FadedFont in={selectedFont === Object3DName.PRISON}>
         <PrisonFont />
       </FadedFont>
     </>
@@ -627,8 +600,6 @@ function getRootParent(object: Object3D) {
   }
   return object
 }
-
-const duration = 500 // ms
 
 const defaultStyle: React.CSSProperties = {
   position: 'absolute',
