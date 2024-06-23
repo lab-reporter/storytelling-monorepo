@@ -19,6 +19,7 @@ import {
   CameraRig,
   StoryPointsControls,
   StoryPointMarker,
+  ThreeDOFControls,
 } from 'three-story-controls'
 import cameraData from './camera-data.json'
 import BlowUpFont from './blow-up'
@@ -173,9 +174,17 @@ function createThreeObj(
    */
   // Initialize StoryPointControls with poi data
   const rig = new CameraRig(camera, scene)
-  const controls = new StoryPointsControls(rig, pois)
-  controls.enable()
-  controls.goToPOI(0)
+  const storyPointsControls = new StoryPointsControls(rig, pois)
+  storyPointsControls.enable()
+  storyPointsControls.goToPOI(0)
+
+  const controls3dof = new ThreeDOFControls(rig, {
+    panFactor: Math.PI / 20,
+    tiltFactor: Math.PI / 4,
+    //truckFactor: 10,
+    //pedestalFactor: 10,
+  })
+  controls3dof.enable()
 
   //
   /**
@@ -197,7 +206,8 @@ function createThreeObj(
 
   return {
     scene,
-    controls,
+    storyPointsControls,
+    controls3dof,
     renderer,
     camera,
   }
@@ -327,10 +337,15 @@ export default function HongKongFontProject() {
     let requestId: number
     const tick = () => {
       if (threeObj !== null) {
-        const { scene, controls, camera, renderer } = threeObj
+        const { scene, storyPointsControls, controls3dof, camera, renderer } =
+          threeObj
 
         // Update controls
-        controls.update()
+        storyPointsControls.update()
+
+        if (selectedFont === '') {
+          controls3dof.update(Date.now())
+        }
 
         // Render
         renderer.render(scene, camera)
@@ -346,7 +361,7 @@ export default function HongKongFontProject() {
     return () => {
       cancelAnimationFrame(requestId)
     }
-  }, [threeObj])
+  }, [threeObj, selectedFont])
 
   // Handle `StoryPointsControls` `update` event
   useEffect(() => {
@@ -362,16 +377,16 @@ export default function HongKongFontProject() {
       })
       switch (selectedFont) {
         case Object3DName.BLOW_UP: {
-          return threeObj?.controls.goToPOI(1)
+          return threeObj?.storyPointsControls.goToPOI(1)
         }
         case Object3DName.LEE_HON_KONG_KAI: {
-          return threeObj?.controls.goToPOI(2)
+          return threeObj?.storyPointsControls.goToPOI(2)
         }
         case Object3DName.LEE_HON_TUNG_KAI: {
-          return threeObj?.controls.goToPOI(3)
+          return threeObj?.storyPointsControls.goToPOI(3)
         }
         case Object3DName.PRISON: {
-          return threeObj?.controls.goToPOI(4)
+          return threeObj?.storyPointsControls.goToPOI(4)
         }
         case '':
         default: {
@@ -380,7 +395,7 @@ export default function HongKongFontProject() {
               object.visible = true
             }
           })
-          threeObj?.controls.goToPOI(0)
+          threeObj?.storyPointsControls.goToPOI(0)
         }
       }
     }
@@ -402,11 +417,14 @@ export default function HongKongFontProject() {
         }
       }, 100)
 
-      threeObj.controls.addEventListener('update', updateHandler)
+      threeObj.storyPointsControls.addEventListener('update', updateHandler)
 
       // Clean up
       return () => {
-        threeObj.controls.removeEventListener('update', updateHandler)
+        threeObj.storyPointsControls.removeEventListener(
+          'update',
+          updateHandler
+        )
       }
     }
   }, [threeObj])
