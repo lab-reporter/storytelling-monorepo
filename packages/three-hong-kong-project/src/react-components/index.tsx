@@ -260,6 +260,7 @@ const CloseBt = styled.div`
 const HintCover = styled.div`
   position: absolute;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 100vw;
@@ -310,6 +311,7 @@ export default function HongKongFontProject() {
   const [gltfs, setGltfs] = useState<GLTF[]>([])
   const [selectedFont, setSelectedFont] = useState('')
   const [toInteractWithModel, setToInteractWithModel] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
 
   const pois: StoryPointMarker[] = useMemo(() => {
     // Create POIs with data exported from the CameraHelper tool
@@ -343,7 +345,7 @@ export default function HongKongFontProject() {
         // Update controls
         storyPointsControls.update()
 
-        if (selectedFont === '') {
+        if (selectedFont === '' && !isMobile) {
           controls3dof.update(Date.now())
         }
 
@@ -361,7 +363,7 @@ export default function HongKongFontProject() {
     return () => {
       cancelAnimationFrame(requestId)
     }
-  }, [threeObj, selectedFont])
+  }, [threeObj, selectedFont, isMobile])
 
   // Handle `StoryPointsControls` `update` event
   useEffect(() => {
@@ -446,6 +448,12 @@ export default function HongKongFontProject() {
       // Update renderer
       renderer.setSize(width, height)
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+
+      if (width < 768) {
+        setIsMobile(true)
+      } else {
+        setIsMobile(false)
+      }
     }, 100)
 
     window.addEventListener('resize', updateThreeObj)
@@ -510,7 +518,7 @@ export default function HongKongFontProject() {
     return () => {
       window.removeEventListener('click', handleClick)
     }
-  }, [threeObj, gltfs])
+  }, [threeObj, gltfs, isMobile])
 
   const fontLayout = (
     <>
@@ -572,7 +580,10 @@ export default function HongKongFontProject() {
                   })
                 }
                 setToInteractWithModel(true)
-                document.body.style.overflow = 'hidden'
+
+                if (!isMobile) {
+                  document.body.style.overflow = 'hidden'
+                }
               }}
             >
               開始閱讀
@@ -606,8 +617,8 @@ export default function HongKongFontProject() {
           }}
         />
       ) : null}
-      {fontLayout}
       <canvas ref={canvasRef}></canvas>
+      {fontLayout}
     </Container>
   )
 }
@@ -620,6 +631,7 @@ function getRootParent(object: Object3D) {
 }
 
 const defaultStyle: React.CSSProperties = {
+  width: '100%',
   position: 'absolute',
   left: 0,
   top: 0,
@@ -651,6 +663,7 @@ function FadedFont({
           style={{
             ...defaultStyle,
             ...transitionStyles[state],
+            transition: inProp ? `opacity ${duration}ms ease-in-out` : '',
           }}
         >
           {children}

@@ -20,7 +20,7 @@ const MobileAbove = styled.div`
 `
 
 const Background = styled.div`
-  background: linear-gradient(180deg, #dee4e8 10%, #c3d7e6 57%, #96d0f9 100%);
+  background: transparent;
   width: 100%;
   height: 100%;
   overflow: scroll;
@@ -65,6 +65,7 @@ const TitleSvg = styled.img`
   ${mediaQuery.tabletOnly} {
     margin-top: 37px;
     height: calc(405 / 567 * 100vh);
+    max-height: 405px;
   }
 
   ${mediaQuery.desktopOnly} {
@@ -141,17 +142,17 @@ const Text = styled.div`
   }
 
   ${mediaQuery.tabletOnly} {
-    width: 197px;
+    width: 110px;
     font-size: 16px;
   }
 
   ${mediaQuery.desktopOnly} {
-    width: 301px;
+    width: 281px;
     font-size: 16px;
   }
 
   ${mediaQuery.hdOnly} {
-    width: 453px;
+    width: 342px;
     font-size: 16px;
   }
 `

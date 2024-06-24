@@ -22,7 +22,7 @@ const MobileAbove = styled.div`
 `
 
 const Background = styled.div`
-  background: linear-gradient(180deg, #dee4e8 10%, #c3d7e6 57%, #96d0f9 100%);
+  background: transparent;
   width: 100%;
 
   ${mediaQuery.mobileOnly} {
@@ -138,18 +138,21 @@ const Text = styled.div`
   }
 
   ${mediaQuery.tabletOnly} {
-    width: calc(197 / 768 * 100%);
+    width: calc(197 / 523 * 100%);
     font-size: 16px;
+    max-width: 197px;
   }
 
   ${mediaQuery.desktopOnly} {
-    width: calc(301 / 1024 * 100%);
+    width: calc(288 / 822 * 100%);
     font-size: 16px;
+    max-width: 288px;
   }
 
   ${mediaQuery.hdOnly} {
-    width: calc(453 / 1440 * 100%);
+    width: calc(453 / 1170 * 100%);
     font-size: 16px;
+    max-width: 453px;
   }
 `
 
