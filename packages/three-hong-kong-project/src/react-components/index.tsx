@@ -526,7 +526,7 @@ export default function HongKongFontProject() {
       return
     }
 
-    const { camera } = threeObj
+    const { camera, renderer } = threeObj
 
     const intersect = (pos: Vector2) => {
       raycaster.setFromCamera(pos, camera)
@@ -540,8 +540,8 @@ export default function HongKongFontProject() {
     const clickMouse = new Vector2()
 
     const handleClick = (e: MouseEvent) => {
-      clickMouse.x = (e.clientX / window.innerWidth) * 2 - 1
-      clickMouse.y = -(e.clientY / window.innerHeight) * 2 + 1
+      clickMouse.x = (e.offsetX / window.innerWidth) * 2 - 1
+      clickMouse.y = -(e.offsetY / window.innerHeight) * 2 + 1
 
       const found = intersect(clickMouse)
 
@@ -568,11 +568,12 @@ export default function HongKongFontProject() {
         }
       }
     }
+    const canvas = renderer.domElement
 
-    window.addEventListener('click', handleClick)
+    canvas.addEventListener('click', handleClick)
 
     return () => {
-      window.removeEventListener('click', handleClick)
+      canvas.removeEventListener('click', handleClick)
     }
   }, [threeObj, gltfs])
 
