@@ -89,7 +89,7 @@ const Body = styled.div`
   justify-content: space-between;
 
   ${mediaQuery.tabletOnly} {
-    margin-bottom: 27px;
+    margin-bottom: 50px;
   }
 
   ${mediaQuery.desktopOnly} {
@@ -145,6 +145,8 @@ const Text = styled.div`
   ${mediaQuery.tabletOnly} {
     width: 110px;
     font-size: 16px;
+    padding: 5px;
+    background-color: #ffffff1f;
   }
 
   ${mediaQuery.desktopOnly} {

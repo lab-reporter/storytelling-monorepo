@@ -142,6 +142,8 @@ const Text = styled.div`
     width: calc(197 / 523 * 100%);
     font-size: 16px;
     max-width: 197px;
+    padding: 5px 5px;
+    background-color: #ffffff2f;
   }
 
   ${mediaQuery.desktopOnly} {
