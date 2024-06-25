@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from '../styled-components'
 import { mediaQuery } from '../utils/media-query'
+import { urlPrefix } from '../constants'
 
 const MobileOnly = styled.div`
   ${mediaQuery.tabletAbove} {
@@ -282,7 +283,7 @@ const FontLayout: React.FC<Props> = ({ className }) => {
     <Background className={className}>
       <MobileOnly>
         <SubTitle>老招牌上的熱門字體</SubTitle>
-        <TitleSvg src="./blow-up-font/title-mobile.svg" />
+        <TitleSvg src={`${urlPrefix}/blow-up-font/title-mobile.svg`} />
         <Text>
           <p>
             在還沒有電腦字體的年代，請街頭書法家為招牌題字是民間的主流做法。設計師陳濬人的招牌字體研究專書《香港北魏真書》記錄著清代書法家趙之謙研究筆畫粗壯剛直的魏碑後，用筆墨演繹出北魏字，這種風格被清末書法家區建公等人承襲，帶到香港，又因應招牌的需求，將字形調整得更穩定，成為「香港北魏」。
@@ -293,16 +294,16 @@ const FontLayout: React.FC<Props> = ({ className }) => {
         </Text>
         <MobileFigures>
           <MobileFigure>
-            <Img src="./blow-up-font/img-1.jpg" />
+            <Img src={`${urlPrefix}/blow-up-font/img-1.jpg`} />
           </MobileFigure>
           <MobileFigure>
-            <Img src="./blow-up-font/img-2.jpg" />
+            <Img src={`${urlPrefix}/blow-up-font/img-2.jpg`} />
             <FigCaption>
               《香港北魏真書》分析厚重的「豎鈎」是香港北魏最容易辨識特徵，一般楷書的鈎筆短短的、呈小三角形；香港北魏的鈎筆卻長的像鐮刀般，替整個字起到穩定作用。
             </FigCaption>
           </MobileFigure>
           <MobileFigure>
-            <Img src="./blow-up-font/img-3.jpg" />
+            <Img src={`${urlPrefix}/blow-up-font/img-3.jpg`} />
             <FigCaption>
               「口」字呈正方形，本應穩定，香港北魏卻將「口」外部形狀寫成有如六角形，賦予動感。
             </FigCaption>
@@ -311,7 +312,7 @@ const FontLayout: React.FC<Props> = ({ className }) => {
       </MobileOnly>
       <MobileAbove>
         <Layout>
-          <TitleSvg src="./blow-up-font/title.svg" />
+          <TitleSvg src={`${urlPrefix}/blow-up-font/title.svg`} />
           <Body>
             <SubTitle>老招牌上的熱門字體</SubTitle>
             <div>
@@ -325,16 +326,16 @@ const FontLayout: React.FC<Props> = ({ className }) => {
               </Text>
               <Imgs>
                 <Figure>
-                  <Img src="./blow-up-font/img-1.jpg" />
+                  <Img src={`${urlPrefix}/blow-up-font/img-1.jpg`} />
                 </Figure>
                 <Figure>
-                  <Img src="./blow-up-font/img-2.jpg" />
+                  <Img src={`${urlPrefix}/blow-up-font/img-2.jpg`} />
                   <FigCaption>
                     《香港北魏真書》分析厚重的「豎鈎」是香港北魏最容易辨識特徵，一般楷書的鈎筆短短的、呈小三角形；香港北魏的鈎筆卻長的像鐮刀般，替整個字起到穩定作用。
                   </FigCaption>
                 </Figure>
                 <Figure>
-                  <Img src="./blow-up-font/img-3.jpg" />
+                  <Img src={`${urlPrefix}/blow-up-font/img-3.jpg`} />
                   <FigCaption>
                     「口」字呈正方形，本應穩定，香港北魏卻將「口」外部形狀寫成有如六角形，賦予動感。
                   </FigCaption>

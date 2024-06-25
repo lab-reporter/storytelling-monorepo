@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import HongKongFontProject from './react-components/index'
 
-export function HongKongFontProjectForKeystoneEditorCMS(props: {
-  name: string
-}) {
-  const { name } = props
+export function HongKongFontProjectForKeystoneEditorCMS() {
   const [messageOnly, setMessageOnly] = useState(true)
   const [mounted, setMounted] = useState(false)
 
@@ -31,7 +28,7 @@ export function HongKongFontProjectForKeystoneEditorCMS(props: {
         padding: '30px',
       }}
     >
-      捲動式影片元件：{name}（編輯模式，不載入影片）
+      香港字體 3D 專題（編輯模式，不載入模型）
     </div>
   ) : (
     <HongKongFontProject />

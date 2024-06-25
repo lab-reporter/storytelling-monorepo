@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from '../styled-components'
 import { mediaQuery } from '../utils/media-query'
+import { urlPrefix } from '../constants'
 
 const MobileOnly = styled.div`
   ${mediaQuery.tabletAbove} {
@@ -164,7 +165,7 @@ const FontLayout: React.FC<Props> = ({ className }) => {
     <Background className={className}>
       <MobileOnly>
         <SubTitle>為噴漆或刻印而生</SubTitle>
-        <TitleSvg src="./lee-hon-tung-kai-font/title-mobile.svg" />
+        <TitleSvg src={`${urlPrefix}/lee-hon-tung-kai-font/title-mobile.svg`} />
         <Text>
           <p>
             1950、60年代香港老鋪相當流行「通花鐵閘」，鐵閘本是為了防盜，功能類似鐵捲門，但為了美觀和通風，店鋪請匠人手工將店名或圖案刻印在鐵閘門上。刻印時使用的字需要經過特殊設計，將筆畫斷開，切割時才能維持字形完整。
@@ -173,7 +174,7 @@ const FontLayout: React.FC<Props> = ({ className }) => {
       </MobileOnly>
       <MobileAbove>
         <Layout>
-          <TitleSvg src="./lee-hon-tung-kai-font/title.svg" />
+          <TitleSvg src={`${urlPrefix}/lee-hon-tung-kai-font/title.svg`} />
           <Body>
             <SubTitle>為噴漆或刻印而生</SubTitle>
             <div>

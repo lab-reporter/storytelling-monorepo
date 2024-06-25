@@ -137,8 +137,7 @@ const webpackConfig = {
   plugins: [
     new webpack.EnvironmentPlugin({
       NODE_ENV: process.env.NODE_ENV,
-      EMBED_CODE_GENERATOR_VERSION: pkg.version,
-      RESOURCES_HOSTED_AT: 'youtube',
+      RESOURCES_HOSTED_AT: 'github',
     }),
     new WebpackManifestPlugin({
       useEntryKeys: true,

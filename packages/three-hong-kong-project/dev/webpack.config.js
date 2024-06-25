@@ -1,6 +1,7 @@
 import * as url from 'url'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import path from 'path'
+import webpack from 'webpack'
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url))
 
@@ -50,6 +51,10 @@ export default {
   plugins: [
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, './index.html'),
+    }),
+    new webpack.EnvironmentPlugin({
+      NODE_ENV: process.env.NODE_ENV,
+      RESOURCES_HOSTED_AT: 'localhost',
     }),
   ],
   devtool: 'eval-source-map',

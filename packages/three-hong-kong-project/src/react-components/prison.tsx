@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from '../styled-components'
 import { mediaQuery } from '../utils/media-query'
+import { urlPrefix } from '../constants'
 
 const MobileOnly = styled.div`
   ${mediaQuery.tabletAbove} {
@@ -248,14 +249,14 @@ const FontLayout: React.FC<Props> = ({ className }) => {
     <Background className={className}>
       <MobileOnly>
         <SubTitle>囚犯製作的手工路牌字</SubTitle>
-        <TitleSvg src="./prison/title-mobile.svg" />
+        <TitleSvg src={`${urlPrefix}/prison/title-mobile.svg`} />
         <Text>
           <p>
             1970年至1997年間香港路牌由監獄裡的在囚人士製作。路牌上的字，有的是使用金屬字膜噴漆在鋼板上而成，有的則是由囚犯拿美工刀切割反光貼紙製作，筆畫保留許多手工特色，如切割時不易保持直線，很容易在橫筆尾端顯得較寬。隨著道路更新，近年路牌被陸續更換為電腦字體，目前全港由囚犯製作的路牌只剩下500～600塊。
           </p>
         </Text>
         <Figure>
-          <Img src="./prison/img-1.jpg" />
+          <Img src={`${urlPrefix}/prison/img-1.jpg`} />
           <FigCaption>
             香港路牌過去由囚犯製作，
             <br />
@@ -265,7 +266,7 @@ const FontLayout: React.FC<Props> = ({ className }) => {
       </MobileOnly>
       <MobileAbove>
         <Layout>
-          <TitleSvg src="./prison/title.svg" />
+          <TitleSvg src={`${urlPrefix}/prison/title.svg`} />
           <Body>
             <SubTitle>囚犯製作的手工路牌字</SubTitle>
             <div>
@@ -275,7 +276,7 @@ const FontLayout: React.FC<Props> = ({ className }) => {
                 </p>
               </Text>
               <Figure>
-                <Img src="./prison/img-1.jpg" />
+                <Img src={`${urlPrefix}/prison/img-1.jpg`} />
                 <FigCaption>
                   香港路牌過去由囚犯製作，圖為1983年《香港年報》拍攝囚犯印刷的招牌的擺放現場。
                 </FigCaption>

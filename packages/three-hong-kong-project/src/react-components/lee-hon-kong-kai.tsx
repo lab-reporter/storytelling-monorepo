@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from '../styled-components'
 import { mediaQuery } from '../utils/media-query'
+import { urlPrefix } from '../constants'
 
 const MobileOnly = styled.div`
   ${mediaQuery.tabletAbove} {
@@ -244,7 +245,7 @@ const FontLayout: React.FC<Props> = ({ className }) => {
     <Background className={className}>
       <MobileOnly>
         <SubTitle>老招牌作坊的智慧</SubTitle>
-        <TitleSvg src="./lee-hon-kong-kai-font/title-mobile.svg" />
+        <TitleSvg src={`${urlPrefix}/lee-hon-kong-kai-font/title-mobile.svg`} />
         <Text>
           <p>傳統招牌的字形設計相當呼應製作工法。</p>
           <p>
@@ -253,19 +254,19 @@ const FontLayout: React.FC<Props> = ({ className }) => {
         </Text>
         <MobileFigures>
           <MobileFigure>
-            <Img src="./lee-hon-kong-kai-font/img-1.jpg" />
+            <Img src={`${urlPrefix}/lee-hon-kong-kai-font/img-1.jpg`} />
           </MobileFigure>
           <MobileFigure>
-            <Img src="./lee-hon-kong-kai-font/img-2.jpg" />
+            <Img src={`${urlPrefix}/lee-hon-kong-kai-font/img-2.jpg`} />
           </MobileFigure>
           <MobileFigure>
-            <Img src="./lee-hon-kong-kai-font/img-3.jpg" />
+            <Img src={`${urlPrefix}/lee-hon-kong-kai-font/img-3.jpg`} />
           </MobileFigure>
         </MobileFigures>
       </MobileOnly>
       <MobileAbove>
         <Layout>
-          <TitleSvg src="./lee-hon-kong-kai-font/title.svg" />
+          <TitleSvg src={`${urlPrefix}/lee-hon-kong-kai-font/title.svg`} />
           <Body>
             <SubTitle>老招牌作坊的智慧</SubTitle>
             <div>
@@ -277,13 +278,13 @@ const FontLayout: React.FC<Props> = ({ className }) => {
               </Text>
               <Imgs>
                 <Figure>
-                  <Img src="./lee-hon-kong-kai-font/img-1.jpg" />
+                  <Img src={`${urlPrefix}/lee-hon-kong-kai-font/img-1.jpg`} />
                 </Figure>
                 <Figure>
-                  <Img src="./lee-hon-kong-kai-font/img-2.jpg" />
+                  <Img src={`${urlPrefix}/lee-hon-kong-kai-font/img-2.jpg`} />
                 </Figure>
                 <Figure>
-                  <Img src="./lee-hon-kong-kai-font/img-3.jpg" />
+                  <Img src={`${urlPrefix}/lee-hon-kong-kai-font/img-3.jpg`} />
                 </Figure>
               </Imgs>
               <FigCaption>

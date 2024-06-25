@@ -28,6 +28,7 @@ import LeeHonTungKaiFont from './lee-hon-tung-kai'
 import PrisonFont from './prison'
 import { LoadingProgress, GTLFModelObject } from './loading-progress'
 import { Transition } from 'react-transition-group'
+import { urlPrefix } from '../constants'
 
 const duration = 500 // ms
 
@@ -51,7 +52,7 @@ enum Object3DName {
 
 const modelObjs: GTLFModelObject[] = [
   {
-    url: './models/major-scene.glb',
+    url: `${urlPrefix}/models/major-scene.glb`,
     userData: {
       name: 'major-scene',
       castShadow: true,
@@ -59,7 +60,7 @@ const modelObjs: GTLFModelObject[] = [
     },
   },
   {
-    url: './models/lee-hon-kong-kai-font.glb',
+    url: `${urlPrefix}/models/lee-hon-kong-kai-font.glb`,
     userData: {
       name: Object3DName.LEE_HON_KONG_KAI,
       castShadow: true,
@@ -67,7 +68,7 @@ const modelObjs: GTLFModelObject[] = [
     },
   },
   {
-    url: './models/lee-hon-tung-kai-font.glb',
+    url: `${urlPrefix}/models/lee-hon-tung-kai-font.glb`,
     userData: {
       name: Object3DName.LEE_HON_TUNG_KAI,
       castShadow: true,
@@ -75,7 +76,7 @@ const modelObjs: GTLFModelObject[] = [
     },
   },
   {
-    url: './models/blow-up-font.glb',
+    url: `${urlPrefix}/models/blow-up-font.glb`,
     userData: {
       name: Object3DName.BLOW_UP,
       castShadow: true,
@@ -83,7 +84,7 @@ const modelObjs: GTLFModelObject[] = [
     },
   },
   {
-    url: './models/prison-font.glb',
+    url: `${urlPrefix}/models/prison-font.glb`,
     userData: {
       name: Object3DName.PRISON,
       castShadow: true,
@@ -91,7 +92,7 @@ const modelObjs: GTLFModelObject[] = [
     },
   },
   {
-    url: './models/lee-hon-kong-kai-point.glb',
+    url: `${urlPrefix}/models/lee-hon-kong-kai-point.glb`,
     userData: {
       name: Object3DName.LEE_HON_KONG_KAI_POINT,
       castShadow: false,
@@ -99,7 +100,7 @@ const modelObjs: GTLFModelObject[] = [
     },
   },
   {
-    url: './models/lee-hon-tung-kai-point.glb',
+    url: `${urlPrefix}/models/lee-hon-tung-kai-point.glb`,
     userData: {
       name: Object3DName.LEE_HON_TUNG_KAI_POINT,
       castShadow: false,
@@ -107,7 +108,7 @@ const modelObjs: GTLFModelObject[] = [
     },
   },
   {
-    url: './models/blow-up-point.glb',
+    url: `${urlPrefix}/models/blow-up-point.glb`,
     userData: {
       name: Object3DName.BLOW_UP_POINT,
       castShadow: false,
@@ -115,7 +116,7 @@ const modelObjs: GTLFModelObject[] = [
     },
   },
   {
-    url: './models/prison-point.glb',
+    url: `${urlPrefix}/models/prison-point.glb`,
     userData: {
       name: Object3DName.PRISON_POINT,
       castShadow: false,
@@ -123,7 +124,7 @@ const modelObjs: GTLFModelObject[] = [
     },
   },
   {
-    url: './models/lights.glb',
+    url: `${urlPrefix}/models/lights.glb`,
     userData: {
       name: 'lights',
       castShadow: false,
