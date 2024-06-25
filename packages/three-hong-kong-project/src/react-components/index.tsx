@@ -147,8 +147,6 @@ const modelObjs: GTLFModelObject[] = [
   },
 ]
 
-const plainPois = cameraData.pois
-
 function createThreeObj(
   gltfs: GLTF[],
   pois: StoryPointMarker[],
@@ -193,9 +191,6 @@ function createThreeObj(
    *  Camera
    */
   const camera = new PerspectiveCamera(40, width / height, 1, 500)
-  //const camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-  const initPosition = pois[0].position
-  camera.position.set(initPosition.x, initPosition.y, initPosition.z)
 
   /**
    *  Controls
@@ -337,6 +332,13 @@ const LeaveBt = styled(Bt)`
   z-index: 1;
 `
 
+type PlainPoi = {
+  position: number[]
+  quaternion: number[]
+  duration: number
+  ease: string
+}
+
 export function HongKongFontProject() {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const [gltfs, setGltfs] = useState<GLTF[]>([])
@@ -345,6 +347,9 @@ export function HongKongFontProject() {
   const [inViewRef, inView] = useInView({
     rootMargin: '-50% 0% -50% 0%',
   })
+  const [plainPois, setPlainPois] = useState<PlainPoi[]>(
+    cameraData.desktop.pois
+  )
   const clock = new Clock()
 
   // Use `useCallback` so we don't recreate the function on each render
@@ -363,7 +368,7 @@ export function HongKongFontProject() {
     // Create POIs with data exported from the CameraHelper tool
     // (see here for more: https://nytimes.github.io/three-story-controls/#camera-helper)
     // Note: Any method of listing camera position and quaternion will work for StoryPointControls
-    return plainPois?.map((poi) => {
+    return plainPois.map((poi) => {
       const storyPointMarker: StoryPointMarker = {
         position: new Vector3(...poi.position),
         quaternion: new Quaternion(...poi.quaternion),
@@ -372,7 +377,7 @@ export function HongKongFontProject() {
       }
       return storyPointMarker
     })
-  }, [])
+  }, [plainPois])
 
   const canvasRef = useRef(null)
   const threeObj = useMemo(
@@ -496,7 +501,7 @@ export function HongKongFontProject() {
 
   // Handle canvas size change
   useEffect(() => {
-    const updateThreeObj = _.throttle(function () {
+    const handleResize = _.throttle(function () {
       if (!threeObj) {
         return
       }
@@ -511,16 +516,33 @@ export function HongKongFontProject() {
       // Update renderer
       renderer.setSize(width, height)
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+
+      // scroll to container
+      if (containerRef.current && toInteractWithModel) {
+        containerRef.current?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        })
+      }
+
+      // change plainPois if needed
+      if (width >= 1440) {
+        setPlainPois(cameraData.hd.pois)
+      } else if (width >= 1024) {
+        setPlainPois(cameraData.desktop.pois)
+      } else if (width >= 768) {
+        setPlainPois(cameraData.tablet.pois)
+      }
     }, 100)
 
-    window.addEventListener('resize', updateThreeObj)
-    updateThreeObj()
+    window.addEventListener('resize', handleResize)
+    handleResize()
 
     // Clean up
     return () => {
-      window.removeEventListener('resize', updateThreeObj)
+      window.removeEventListener('resize', handleResize)
     }
-  }, [threeObj])
+  }, [threeObj, toInteractWithModel])
 
   // handle model point clicked
   useEffect(() => {
