@@ -1,8 +1,38 @@
 import React, { useEffect, useState } from 'react'
 import HongKongFontProject from './react-components/index'
+import styled from './styled-components'
+
+const Container = styled.div<{ $embedInTwreporterReact: boolean }>`
+  ${({ $embedInTwreporterReact }) => {
+    return $embedInTwreporterReact
+      ? `
+  /* 往上移動，使其與上一個區塊連接在一起。*/
+  margin-top: -40px;
+
+  /* 左移動，撐滿文章頁 */
+  @media (max-width: 767px) {
+    margin-left: -3.4vw;
+  }
+
+  @media (min-width: 768px) and (max-width: 1023px) {
+    margin-left: calc((100vw - 512px)/2 * -1);
+  }
+
+  @media (min-width: 1024px) and (max-width: 1439px) {
+    margin-left: calc((100vw - 550px)/2 * -1);
+  }
+
+  @media (min-width: 1440px) {
+    margin-left: calc((100vw - 730px)/2 * -1);
+  }
+  `
+      : ''
+  }}
+`
 
 export function HongKongFontProjectForKeystoneEditorCMS() {
   const [messageOnly, setMessageOnly] = useState(true)
+  const [embedInTwreporterReact, setEmbedInTwreporterReact] = useState(false)
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
@@ -13,6 +43,19 @@ export function HongKongFontProjectForKeystoneEditorCMS() {
       host !== 'staging-keystone-editor.twreporter.org'
     ) {
       setMessageOnly(false)
+    }
+
+    if (
+      [
+        'test.twreporter.org',
+        'www.twreporter.org',
+        'twreporter.org',
+        'keystone-preview.twreporter.org',
+        'staging.twreporter.org',
+        'staging-keystone-preview.twreporter.org',
+      ].indexOf(host) > -1
+    ) {
+      setEmbedInTwreporterReact(true)
     }
   }, [])
 
@@ -31,7 +74,9 @@ export function HongKongFontProjectForKeystoneEditorCMS() {
       香港字體 3D 專題（編輯模式，不載入模型）
     </div>
   ) : (
-    <HongKongFontProject />
+    <Container $embedInTwreporterReact={embedInTwreporterReact}>
+      <HongKongFontProject />
+    </Container>
   )
 }
 
