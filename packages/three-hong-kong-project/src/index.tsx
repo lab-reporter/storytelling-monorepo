@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import HongKongFontProject from './react-components/index'
+import {
+  HongKongFontProject,
+  HongKongFontProjectPlaceholder,
+} from './react-components/index'
 import styled from './styled-components'
 
 const Container = styled.div<{ $embedInTwreporterReact: boolean }>`
@@ -30,37 +33,32 @@ const Container = styled.div<{ $embedInTwreporterReact: boolean }>`
   }}
 `
 
-export function HongKongFontProjectForKeystoneEditorCMS() {
-  const [messageOnly, setMessageOnly] = useState(true)
-  const [embedInTwreporterReact, setEmbedInTwreporterReact] = useState(false)
+export function EmbedHongKongFontProject({
+  embedInTwreporterReact,
+}: {
+  embedInTwreporterReact: boolean
+}) {
+  const [messageOnly, setMessageOnly] = useState(false)
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
     setMounted(true)
     const host = document.location.hostname
     if (
-      host !== 'keystone-editor.twreporter.org' &&
-      host !== 'staging-keystone-editor.twreporter.org'
+      host === 'keystone-editor.twreporter.org' ||
+      host === 'staging-keystone-editor.twreporter.org'
     ) {
-      setMessageOnly(false)
-    }
-
-    if (
-      [
-        'test.twreporter.org',
-        'www.twreporter.org',
-        'twreporter.org',
-        'keystone-preview.twreporter.org',
-        'staging.twreporter.org',
-        'staging-keystone-preview.twreporter.org',
-      ].indexOf(host) > -1
-    ) {
-      setEmbedInTwreporterReact(true)
+      setMessageOnly(true)
+      return
     }
   }, [])
 
   if (!mounted) {
-    return null
+    return (
+      <Container $embedInTwreporterReact={embedInTwreporterReact}>
+        <HongKongFontProjectPlaceholder />
+      </Container>
+    )
   }
 
   return messageOnly ? (
@@ -78,11 +76,4 @@ export function HongKongFontProjectForKeystoneEditorCMS() {
       <HongKongFontProject />
     </Container>
   )
-}
-
-export { HongKongFontProject }
-
-export default {
-  HongKongFontProject,
-  HongKongFontProjectForKeystoneEditorCMS,
 }

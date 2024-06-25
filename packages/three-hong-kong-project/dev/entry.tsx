@@ -1,4 +1,4 @@
-import { HongKongFontProjectForKeystoneEditorCMS } from '../src/index'
+import { EmbedHongKongFontProject } from '../src/index'
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 
@@ -8,6 +8,6 @@ const root = createRoot(container!)
 
 root.render(
   <div>
-    <HongKongFontProjectForKeystoneEditorCMS />
+    <EmbedHongKongFontProject embedInTwreporterReact={false} />
   </div>
 )
