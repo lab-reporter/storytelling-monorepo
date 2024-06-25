@@ -202,7 +202,9 @@ function createThreeObj(
    */
   // Initialize StoryPointControls with poi data
   const rig = new CameraRig(camera as Camera, scene)
-  const storyPointsControls = new StoryPointsControls(rig, pois)
+  const storyPointsControls = new StoryPointsControls(rig, pois, {
+    useKeyboard: false,
+  })
   storyPointsControls.enable()
   storyPointsControls.goToPOI(0)
 
