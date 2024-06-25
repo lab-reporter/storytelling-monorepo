@@ -3,7 +3,9 @@ import styled from '../styled-components'
 import throttle from 'lodash/throttle'
 import debounce from 'lodash/debounce'
 import {
+  AnimationMixer,
   Camera,
+  Clock,
   ACESFilmicToneMapping,
   PerspectiveCamera,
   Raycaster,
@@ -59,6 +61,7 @@ const modelObjs: GTLFModelObject[] = [
       name: 'major-scene',
       castShadow: true,
       intersectable: false,
+      hasAnimations: false,
     },
   },
   {
@@ -67,6 +70,7 @@ const modelObjs: GTLFModelObject[] = [
       name: Object3DName.LEE_HON_KONG_KAI,
       castShadow: true,
       intersectable: false,
+      hasAnimations: false,
     },
   },
   {
@@ -75,6 +79,7 @@ const modelObjs: GTLFModelObject[] = [
       name: Object3DName.LEE_HON_TUNG_KAI,
       castShadow: true,
       intersectable: false,
+      hasAnimations: false,
     },
   },
   {
@@ -83,6 +88,7 @@ const modelObjs: GTLFModelObject[] = [
       name: Object3DName.BLOW_UP,
       castShadow: true,
       intersectable: false,
+      hasAnimations: false,
     },
   },
   {
@@ -91,6 +97,7 @@ const modelObjs: GTLFModelObject[] = [
       name: Object3DName.PRISON,
       castShadow: true,
       intersectable: false,
+      hasAnimations: false,
     },
   },
   {
@@ -99,6 +106,7 @@ const modelObjs: GTLFModelObject[] = [
       name: Object3DName.LEE_HON_KONG_KAI_POINT,
       castShadow: false,
       intersectable: true,
+      hasAnimations: true,
     },
   },
   {
@@ -107,6 +115,7 @@ const modelObjs: GTLFModelObject[] = [
       name: Object3DName.LEE_HON_TUNG_KAI_POINT,
       castShadow: false,
       intersectable: true,
+      hasAnimations: true,
     },
   },
   {
@@ -115,6 +124,7 @@ const modelObjs: GTLFModelObject[] = [
       name: Object3DName.BLOW_UP_POINT,
       castShadow: false,
       intersectable: true,
+      hasAnimations: true,
     },
   },
   {
@@ -123,6 +133,7 @@ const modelObjs: GTLFModelObject[] = [
       name: Object3DName.PRISON_POINT,
       castShadow: false,
       intersectable: true,
+      hasAnimations: true,
     },
   },
   {
@@ -131,6 +142,7 @@ const modelObjs: GTLFModelObject[] = [
       name: 'lights',
       castShadow: false,
       intersectable: false,
+      hasAnimations: false,
     },
   },
 ]
@@ -154,13 +166,26 @@ function createThreeObj(
    */
   const scene = new Scene()
 
+  /**
+   *  AnimationMixers
+   */
+  const mixers: AnimationMixer[] = []
+
   if (Array.isArray(gltfs)) {
     gltfs.forEach((gltf) => {
       gltf.scene.traverse(function (object) {
-        object.castShadow = gltf.userData.castShadow
+        object.castShadow = gltf.scene.userData.castShadow
         object.receiveShadow = true
       })
       scene.add(gltf.scene)
+
+      if (gltf.scene.userData.hasAnimations) {
+        const mixer = new AnimationMixer(gltf.scene)
+        gltf.animations.forEach((clip) => {
+          mixer.clipAction(clip).play()
+        })
+        mixers.push(mixer)
+      }
     })
   }
 
@@ -213,6 +238,7 @@ function createThreeObj(
     controls3dof,
     renderer,
     camera,
+    mixers,
   }
 }
 
@@ -318,6 +344,7 @@ export default function HongKongFontProject() {
   const [inViewRef, inView] = useInView({
     rootMargin: '-50% 0% -50% 0%',
   })
+  const clock = new Clock()
 
   // Use `useCallback` so we don't recreate the function on each render
   const setRefs = useCallback(
@@ -359,17 +386,30 @@ export default function HongKongFontProject() {
       inView ? 'yes' : 'no'
     )
     let requestId: number
+
     const tick = () => {
       if (threeObj !== null && inView) {
-        const { scene, storyPointsControls, controls3dof, camera, renderer } =
-          threeObj
+        const {
+          scene,
+          storyPointsControls,
+          controls3dof,
+          camera,
+          renderer,
+          mixers,
+        } = threeObj
 
         // Update controls
         storyPointsControls.update()
 
+        const delta = clock.getDelta()
+
         if (selectedFont === '' && !isMobile) {
-          controls3dof.update(Date.now())
+          controls3dof.update(delta)
         }
+
+        mixers.forEach((mixer) => {
+          mixer.update(delta)
+        })
 
         // Render
         renderer.render(scene, camera)
