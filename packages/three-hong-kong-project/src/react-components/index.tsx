@@ -335,7 +335,7 @@ const LeaveBt = styled(Bt)`
   z-index: 1;
 `
 
-export default function HongKongFontProject() {
+export function HongKongFontProject() {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const [gltfs, setGltfs] = useState<GLTF[]>([])
   const [selectedFont, setSelectedFont] = useState('')
@@ -731,5 +731,20 @@ function FadedFont({
         </div>
       )}
     </Transition>
+  )
+}
+
+export function HongKongFontProjectPlaceholder() {
+  return (
+    <Container>
+      <HintCover>
+        <p>
+          你即將進入3D體驗，移動畫面可探索空間點擊物件可查看街景中字體的故事
+        </p>
+        <div>
+          <StartBt $disabled={true}>開始閱讀</StartBt>
+        </div>
+      </HintCover>
+    </Container>
   )
 }
