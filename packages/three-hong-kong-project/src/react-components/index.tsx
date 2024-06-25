@@ -340,7 +340,6 @@ export default function HongKongFontProject() {
   const [gltfs, setGltfs] = useState<GLTF[]>([])
   const [selectedFont, setSelectedFont] = useState('')
   const [toInteractWithModel, setToInteractWithModel] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
   const [inViewRef, inView] = useInView({
     rootMargin: '-50% 0% -50% 0%',
   })
@@ -403,7 +402,7 @@ export default function HongKongFontProject() {
 
         const delta = clock.getDelta()
 
-        if (selectedFont === '' && !isMobile) {
+        if (selectedFont === '') {
           controls3dof.update(delta)
         }
 
@@ -425,7 +424,7 @@ export default function HongKongFontProject() {
     return () => {
       cancelAnimationFrame(requestId)
     }
-  }, [threeObj, selectedFont, isMobile, inView])
+  }, [threeObj, selectedFont, inView])
 
   // Handle `StoryPointsControls` `update` event
   useEffect(() => {
@@ -510,12 +509,6 @@ export default function HongKongFontProject() {
       // Update renderer
       renderer.setSize(width, height)
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-
-      if (width < 768) {
-        setIsMobile(true)
-      } else {
-        setIsMobile(false)
-      }
     }, 100)
 
     window.addEventListener('resize', updateThreeObj)
@@ -527,6 +520,7 @@ export default function HongKongFontProject() {
     }
   }, [threeObj])
 
+  // handle model point clicked
   useEffect(() => {
     if (!threeObj) {
       return
@@ -580,7 +574,16 @@ export default function HongKongFontProject() {
     return () => {
       window.removeEventListener('click', handleClick)
     }
-  }, [threeObj, gltfs, isMobile])
+  }, [threeObj, gltfs])
+
+  useEffect(() => {
+    if (toInteractWithModel) {
+      document.body.style.overflow = 'hidden'
+      return
+    }
+
+    document.body.style.overflow = ''
+  }, [toInteractWithModel])
 
   const fontLayout = (
     <>
@@ -642,10 +645,6 @@ export default function HongKongFontProject() {
                   })
                 }
                 setToInteractWithModel(true)
-
-                if (!isMobile) {
-                  document.body.style.overflow = 'hidden'
-                }
               }}
             >
               開始閱讀
@@ -666,7 +665,6 @@ export default function HongKongFontProject() {
             })
 
             setToInteractWithModel(false)
-            document.body.style.overflow = ''
           }}
         >
           繼續閱讀
