@@ -3,6 +3,7 @@ import styled from '../styled-components'
 import throttle from 'lodash/throttle'
 import debounce from 'lodash/debounce'
 import {
+  Camera,
   ACESFilmicToneMapping,
   PerspectiveCamera,
   Raycaster,
@@ -174,7 +175,7 @@ function createThreeObj(
    *  Controls
    */
   // Initialize StoryPointControls with poi data
-  const rig = new CameraRig(camera, scene)
+  const rig = new CameraRig(camera as Camera, scene)
   const storyPointsControls = new StoryPointsControls(rig, pois)
   storyPointsControls.enable()
   storyPointsControls.goToPOI(0)
@@ -631,9 +632,9 @@ function getRootParent(object: Object3D) {
   return object
 }
 
-const defaultStyle: React.CSSProperties = {
+const defaultStyle = {
   width: '100%',
-  position: 'absolute',
+  position: 'absolute' as const,
   left: 0,
   top: 0,
   transition: `opacity ${duration}ms ease-in-out`,
