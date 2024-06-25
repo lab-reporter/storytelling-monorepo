@@ -30,6 +30,7 @@ import PrisonFont from './prison'
 import { LoadingProgress, GTLFModelObject } from './loading-progress'
 import { Transition } from 'react-transition-group'
 import { urlPrefix } from '../constants'
+import { useInView } from 'react-intersection-observer'
 
 const duration = 500 // ms
 
@@ -309,11 +310,26 @@ const LeaveBt = styled(Bt)`
 `
 
 export default function HongKongFontProject() {
-  const containerRef = useRef<HTMLDivElement>(null)
+  const containerRef = useRef<HTMLDivElement | null>(null)
   const [gltfs, setGltfs] = useState<GLTF[]>([])
   const [selectedFont, setSelectedFont] = useState('')
   const [toInteractWithModel, setToInteractWithModel] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
+  const [inViewRef, inView] = useInView({
+    rootMargin: '-50% 0% -50% 0%',
+  })
+
+  // Use `useCallback` so we don't recreate the function on each render
+  const setRefs = useCallback(
+    (node: HTMLDivElement) => {
+      // Ref's from useRef needs to have the node assigned to `current`
+      containerRef.current = node
+
+      // Callback refs, like the one from `useInView`, is a function that takes the node as an argument
+      inViewRef(node)
+    },
+    [inViewRef]
+  )
 
   const pois: StoryPointMarker[] = useMemo(() => {
     // Create POIs with data exported from the CameraHelper tool
@@ -338,9 +354,13 @@ export default function HongKongFontProject() {
 
   // Handle 3D model animation
   useEffect(() => {
+    console.log(
+      '[react-three-hong-kong-project] is container in the viewport? ',
+      inView ? 'yes' : 'no'
+    )
     let requestId: number
     const tick = () => {
-      if (threeObj !== null) {
+      if (threeObj !== null && inView) {
         const { scene, storyPointsControls, controls3dof, camera, renderer } =
           threeObj
 
@@ -365,7 +385,7 @@ export default function HongKongFontProject() {
     return () => {
       cancelAnimationFrame(requestId)
     }
-  }, [threeObj, selectedFont, isMobile])
+  }, [threeObj, selectedFont, isMobile, inView])
 
   // Handle `StoryPointsControls` `update` event
   useEffect(() => {
@@ -555,7 +575,7 @@ export default function HongKongFontProject() {
   const areModelsLoaded = gltfs.length !== 0
 
   return (
-    <Container ref={containerRef}>
+    <Container ref={setRefs}>
       {!toInteractWithModel && (
         <HintCover>
           <p>
