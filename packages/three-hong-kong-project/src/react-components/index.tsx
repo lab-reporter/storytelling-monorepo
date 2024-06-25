@@ -259,11 +259,11 @@ const Container = styled.div`
 
 const CloseBt = styled.div`
   position: absolute;
-  width: 16px;
-  height: 16px;
+  width: 30px;
+  height: 30px;
   cursor: pointer;
   z-index: 1;
-  top: 30px;
+  top: 100px;
   right: 30px;
 
   &::before,
