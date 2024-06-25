@@ -13,6 +13,7 @@ function buildEmbedCode() {
     <!-- @story-telling-reporter/three-hong-kong-project embed code -->
     <div id="${containerId}">
     </div>
+    <script type="text/javascript" defer crossorigin src="${manifest?.['react-vendor']}"></script>
     <script type="text/javascript" defer crossorigin src="${manifest?.main}"></script>
   `
 }
