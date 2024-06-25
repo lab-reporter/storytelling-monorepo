@@ -10,7 +10,9 @@
     "dev": "make dev",
     "build": "make build",
     "clean": "make clean",
-    "build-lib": "make build-lib"
+    "build-lib": "make build-lib",
+    "build-webpack-bundles": "make build-webpack-bundles",
+    "build-embed-code": "make build-embed-code"
   },
   "repository": {
     "type": "git",

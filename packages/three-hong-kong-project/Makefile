@@ -16,10 +16,22 @@ build-lib:
 	BUILD_TARGET=commonjs NODE_ENV=production yarn babel src --out-dir lib/cjs --extensions '.ts,.tsx,.js,.jsx' --copy-files --root-mode upward
 	echo '{ "type": "commonjs" }' > lib/cjs/package.json
 
-build: clean build-lib
+build-webpack-bundles: clean-webpack-bundles
+	@echo "$(P) Build webpack chunks, bundles and manifest.json"
+	RESOURCES_HOSTED_AT=youtube NODE_ENV=production yarn webpack --config build-embed-code/webpack.config.js
 
-clean:
+build-embed-code: build-webpack-bundles
+	@echo "$(P) Generate embed code"
+	node build-embed-code/index.js
+
+build: clean build-lib build-webpack-bundles
+
+clean-webpack-bundles:
+	@echo "$(P) Clean  webpack-bundles/"
+	rm -rf webpack-bundles/
+
+clean: clean-webpack-bundles
 	@echo "$(P) Clean lib/"
-	rm -rf lib/
+	rm -rf lib/ 
 
-.PHONY: build clean dev build-lib
+.PHONY: build clean clean-webpack-bundles dev build-lib build-webpack-bundles build-embed-code
