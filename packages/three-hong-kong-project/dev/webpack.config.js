@@ -20,6 +20,7 @@ export default {
     hot: false,
     host: '0.0.0.0',
     port: 8080,
+    allowedHosts: 'all',
     static: {
       directory: path.join(__dirname),
     },
