@@ -27,14 +27,12 @@ const Container = styled.div`
 
 const enlarge = keyframes`
   0% {
-    width: 36%;
-    height: 36%;
+    transform: scale(0.3, 0.3);
     opacity: 1;
   }
 
   100% {
-    width: 95%;
-    height: 95%;
+    transform: scale(0.9, 0.9);
     opacity: 0;
   }
 `
@@ -46,17 +44,15 @@ const Circle = styled.div`
   cursor: pointer;
 
   > div {
-    width: 36%;
-    height: 36%;
+    width: 100%;
+    height: 100%;
     background: #fff;
     position: absolute;
     border-radius: 50%;
     animation-name: ${enlarge};
     animation-iteration-count: infinite;
     animation-duration: 2s;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    opacity: 0;
   }
 
   > div:first-child: {
