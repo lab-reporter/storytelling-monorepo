@@ -70,6 +70,10 @@
     "webpack": "^5.72.1",
     "webpack-dev-server": "^4.15.1"
   },
+  "resolutions": {
+    "react": "18.3.0",
+    "react-dom": "18.3.0"
+  },
   "files": [
     "lib",
     "webpack-bundles",
