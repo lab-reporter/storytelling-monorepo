@@ -7,6 +7,7 @@ import {
   AnimationMixer,
   Camera,
   Clock,
+  EquirectangularReflectionMapping,
   Object3D,
   PCFSoftShadowMap,
   PerspectiveCamera,
@@ -17,7 +18,7 @@ import {
   Vector3,
   WebGLRenderer,
 } from 'three'
-
+import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader'
 import { GLTF } from '../loader'
 import {
   CameraRig,
@@ -146,8 +147,8 @@ const modelObjs: GTLFModelObject[] = [
   {
     url: `${urlPrefix}/models/lights.glb`,
     userData: {
-      name: 'lights',
-      castShadow: false,
+      name: Object3DName.LIGHTS,
+      castShadow: true,
       intersectable: false,
       hasAnimations: false,
     },
@@ -170,6 +171,14 @@ function createThreeObj(
    *  Scene
    */
   const scene = new Scene()
+
+  new RGBELoader().load(
+    `${urlPrefix}/public/background.hdr`,
+    function (texture) {
+      texture.mapping = EquirectangularReflectionMapping
+      scene.environment = texture
+    }
+  )
 
   /**
    *  AnimationMixers
@@ -232,6 +241,7 @@ function createThreeObj(
   renderer.toneMappingExposure = 1
   renderer.shadowMap.enabled = true
   renderer.shadowMap.type = PCFSoftShadowMap
+
   renderer.setSize(width, height)
   renderer.setPixelRatio(window.devicePixelRatio)
   renderer.setClearColor(0x000000, 0) // 第二個參數 0 表示透明度
@@ -251,7 +261,7 @@ const Container = styled.div`
   width: 100vw;
   height: 100vh;
   overflow: scroll;
-  background: linear-gradient(180deg, #dee4e8 10%, #c3d7e6 57%, #96d0f9 100%);
+  background: #cbcbcb;
 
   canvas {
     width: 100%;
@@ -396,7 +406,7 @@ export function HongKongFontProject() {
         if (
           object.type === 'Group' &&
           object.userData.name !== selectedFont &&
-          object.userData.name !== 'lights'
+          object.userData.name !== Object3DName.LIGHTS
         ) {
           object.visible = false
         }

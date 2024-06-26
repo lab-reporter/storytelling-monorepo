@@ -18,7 +18,6 @@ const CloseBt = styled(_CloseBt)`
 
 const Container = styled.div`
   position: relative;
-  background-color: lightblue;
   width: 100vw;
 
   > img {
@@ -218,7 +217,7 @@ const defaultStyle = {
   left: 0,
   transition: `opacity ${duration}ms ease-in-out`,
   opacity: 0,
-  background: 'linear-gradient(180deg, #dee4e8 10%, #c3d7e6 57%, #96d0f9 100%)',
+  background: '#CBCBCB',
 }
 
 const transitionStyles = {
