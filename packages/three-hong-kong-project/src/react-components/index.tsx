@@ -601,15 +601,6 @@ export function HongKongFontProject() {
     }
   }, [threeObj, gltfs])
 
-  useEffect(() => {
-    if (toInteractWithModel) {
-      document.body.style.overflow = 'hidden'
-      return
-    }
-
-    document.body.style.overflow = ''
-  }, [toInteractWithModel])
-
   const fontLayout = (
     <>
       <FadedFont in={selectedFont === Object3DName.BLOW_UP}>
