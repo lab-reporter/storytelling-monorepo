@@ -157,7 +157,6 @@ const MobileFigure = styled.figure`
 `
 
 const MobileFigures = styled.div`
-  margin-bottom: 39px;
   width: calc(346 / 390 * 100%);
 
   ${MobileFigure}:first-child {

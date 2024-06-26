@@ -110,6 +110,7 @@ const FigCaption = styled.figcaption`
   font-weight: 400;
   line-height: 1.5;
   text-align: right;
+  margin-top: 5px;
 
   ${mediaQuery.mobileOnly} {
     font-size: 10px;
@@ -117,7 +118,6 @@ const FigCaption = styled.figcaption`
 
   ${mediaQuery.tabletAbove} {
     font-size: 12px;
-    margin-top: 5px;
   }
 `
 
@@ -180,6 +180,9 @@ const FontLayout: React.FC<Props> = ({ className }) => {
           <MobileFigure>
             <Img src={`${urlPrefix}/lee-hon-kong-kai-font/img-3.webp`} />
           </MobileFigure>
+          <FigCaption>
+            李威、李健明父子經營一間招牌店，他們展示切割招牌的傳統作法。
+          </FigCaption>
         </MobileFigures>
       </MobileOnly>
       <MobileAbove>
