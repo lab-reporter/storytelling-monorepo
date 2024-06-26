@@ -51,14 +51,24 @@ const LoadingProgress = ({ modelObjs, onModelsLoaded }: Props) => {
 
   useEffect(() => {
     const fetchData = async (urls: string[]) => {
-      let _total = 0
+      const promises = []
       for (const url of urls) {
-        _total = _total + (await getModelFileSize(url))
+        const promise = getModelFileSize(url)
+        promises.push(promise)
       }
-      return _total
+
+      return Promise.allSettled(promises)
     }
 
-    fetchData(modelObjs.map((obj) => obj.url)).then(setTotal)
+    fetchData(modelObjs.map((obj) => obj.url)).then((results) => {
+      let total = 0
+      results.forEach((result) => {
+        if (result.status === 'fulfilled') {
+          total += result.value
+        }
+      })
+      setTotal(total)
+    })
   }, [modelObjs])
 
   useEffect(() => {
@@ -99,7 +109,10 @@ const LoadingProgress = ({ modelObjs, onModelsLoaded }: Props) => {
     return null
   }
 
-  const loadedPct = total !== 0 ? Math.round(loaded / total) * 100 : 0
+  let loadedPct = total !== 0 ? Math.round(loaded / total) * 100 : 0
+  if (loadedPct > 100) {
+    loadedPct = 100
+  }
 
   return (
     <div>
