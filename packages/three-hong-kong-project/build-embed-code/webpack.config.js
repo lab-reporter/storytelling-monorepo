@@ -73,7 +73,7 @@ const webpackConfig = {
               '@babel/preset-env',
               [
                 '@babel/preset-react',
-                { development: true, runtime: 'automatic' },
+                { runtime: 'automatic' },
               ],
             ],
             plugins: [
