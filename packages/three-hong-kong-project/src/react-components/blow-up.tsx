@@ -37,10 +37,6 @@ const Body = styled(_Body)`
 `
 
 const SubTitle = styled(_Subtitle)`
-  ${mediaQuery.mobileOnly} {
-    margin-top: 36px;
-  }
-
   ${mediaQuery.tabletOnly} {
     margin-top: 37px;
   }
@@ -142,6 +138,7 @@ const FigCaption = styled.figcaption`
   font-weight: 400;
   line-height: 1.5;
   padding: 5px 10px 17px 10px;
+  text-align: left;
 
   ${mediaQuery.mobileOnly} {
     font-size: 10px;

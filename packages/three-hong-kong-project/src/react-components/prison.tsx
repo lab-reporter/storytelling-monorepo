@@ -48,10 +48,6 @@ const Body = styled(_Body)`
 `
 
 const SubTitle = styled(_Subtitle)`
-  ${mediaQuery.mobileOnly} {
-    margin-top: 36px;
-  }
-
   ${mediaQuery.tabletOnly} {
     margin-top: 37px;
   }
@@ -134,6 +130,7 @@ const FigCaption = styled.figcaption`
     background-color: #000;
     color: #fff;
     width: fit-content;
+    max-width: 90%;
   }
 
   ${mediaQuery.tabletAbove} {

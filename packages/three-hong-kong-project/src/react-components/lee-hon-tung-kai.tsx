@@ -45,10 +45,6 @@ const Body = styled(_Body)`
 `
 
 const SubTitle = styled(_Subtitle)`
-  ${mediaQuery.mobileOnly} {
-    margin-top: 36px;
-  }
-
   ${mediaQuery.tabletOnly} {
     margin-top: 37px;
   }

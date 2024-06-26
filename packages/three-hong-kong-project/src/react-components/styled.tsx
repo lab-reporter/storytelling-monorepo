@@ -7,12 +7,15 @@ export const MobileOnly = styled.div`
     display: none;
   }
 
+  max-height: 100vh;
+  overflow: scroll;
+
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  margin-bottom: 40px;
-  margin-top: 40px;
+  padding-bottom: 100px;
+  padding-top: 100px;
 `
 
 export const MobileAbove = styled.div`
@@ -42,10 +45,6 @@ export const MobileAbove = styled.div`
 export const Background = styled.div`
   background: transparent;
   width: 100%;
-
-  ${mediaQuery.mobileOnly} {
-    overflow-y: hidden;
-  }
 `
 
 export const TitleSvg = styled.img`
@@ -74,7 +73,6 @@ export const SubTitle = styled.div`
 
   ${mediaQuery.mobileOnly} {
     font-size: 20px;
-    margin-top: 36px;
   }
 
   ${mediaQuery.tabletOnly} {
