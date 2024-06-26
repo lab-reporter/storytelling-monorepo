@@ -211,8 +211,8 @@ function createThreeObj(
   storyPointsControls.goToPOI(0)
 
   const controls3dof = new ThreeDOFControls(rig, {
-    panFactor: Math.PI / 20,
-    tiltFactor: Math.PI / 4,
+    panFactor: Math.PI / 15,
+    tiltFactor: Math.PI / 2,
     //truckFactor: 10,
     //pedestalFactor: 10,
   })
