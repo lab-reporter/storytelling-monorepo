@@ -19,6 +19,7 @@ const CloseBt = styled(_CloseBt)`
 const Container = styled.div`
   position: relative;
   background-color: lightblue;
+  width: 100vw;
 
   > img {
     width: 100%;
