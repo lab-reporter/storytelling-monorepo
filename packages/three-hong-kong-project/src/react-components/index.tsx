@@ -3,20 +3,21 @@ import styled from '../styled-components'
 import throttle from 'lodash/throttle'
 import debounce from 'lodash/debounce'
 import {
+  ACESFilmicToneMapping,
   AnimationMixer,
   Camera,
   Clock,
-  ACESFilmicToneMapping,
+  Object3D,
+  PCFSoftShadowMap,
   PerspectiveCamera,
+  Quaternion,
   Raycaster,
+  Scene,
   Vector2,
   Vector3,
-  Object3D,
-  Quaternion,
-  Scene,
   WebGLRenderer,
-  PCFSoftShadowMap,
 } from 'three'
+
 import { GLTF } from '../loader'
 import {
   CameraRig,
@@ -33,6 +34,12 @@ import { LoadingProgress, GTLFModelObject } from './loading-progress'
 import { Transition } from 'react-transition-group'
 import { urlPrefix } from '../constants'
 import { useInView } from 'react-intersection-observer'
+import {
+  CloseBt as _CloseBt,
+  HintCover as _HintCover,
+  Bt,
+  StartBt,
+} from './styled'
 
 const duration = 500 // ms
 
@@ -254,71 +261,9 @@ const Container = styled.div`
   }
 `
 
-const CloseBt = styled.div`
+const HintCover = styled(_HintCover)`
   position: absolute;
-  width: 30px;
-  height: 30px;
-  cursor: pointer;
   z-index: 1;
-  top: 100px;
-  right: 30px;
-
-  &::before,
-  &::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 100%;
-    height: 2px;
-    background-color: #808080;
-  }
-
-  &::before {
-    transform: translate(-50%, -50%) rotate(45deg);
-  }
-
-  &::after {
-    transform: translate(-50%, -50%) rotate(-45deg);
-  }
-`
-
-const HintCover = styled.div`
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100vw;
-  height: 100vh;
-  z-index: 1;
-  background-color: #f1f1f1e5;
-
-  p {
-    font-size: 16px;
-    line-height: 28px;
-    font-weight: 400;
-    width: 300px;
-    text-align: center;
-    margin: 0;
-    margin-bottom: 20px;
-  }
-`
-
-const Bt = styled.div<{ $disabled?: boolean }>`
-  width: fit-content;
-  padding: 8px 16px;
-  border-radius: 40px;
-  font-size: 16px;
-  line-height: 24px;
-  color: #fff;
-  cursor: ${(props) => (props.$disabled ? 'default' : 'pointer')};
-`
-
-const StartBt = styled(Bt)`
-  margin-left: auto;
-  margin-right: auto;
-  background-color: ${(props) => (props.$disabled ? '#BBB' : '#404040')};
 `
 
 const LeaveBt = styled(Bt)`
@@ -329,6 +274,13 @@ const LeaveBt = styled(Bt)`
   bottom: 40px;
   left: 50%;
   transform: translateX(-50%);
+  z-index: 1;
+`
+
+const CloseBt = styled(_CloseBt)`
+  position: absolute;
+  top: 100px;
+  right: 30px;
   z-index: 1;
 `
 
@@ -663,7 +615,7 @@ export function HongKongFontProject() {
                 setToInteractWithModel(true)
               }}
             >
-              開始閱讀
+              開始體驗
             </StartBt>
           </div>
         </HintCover>

@@ -3,7 +3,13 @@ import {
   HongKongFontProject,
   HongKongFontProjectPlaceholder,
 } from './react-components/index'
+import MobileHongKongProject from './react-components/mobile'
+import throttle from 'lodash/throttle'
 import styled from './styled-components'
+
+const _ = {
+  throttle,
+}
 
 const Container = styled.div<{ $embedInTwreporterReact: boolean }>`
   ${({ $embedInTwreporterReact }) => {
@@ -40,6 +46,7 @@ export function EmbedHongKongFontProject({
 }) {
   const [messageOnly, setMessageOnly] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const [mobileLayout, setMobileLayout] = useState(false)
 
   useEffect(() => {
     setMounted(true)
@@ -51,12 +58,37 @@ export function EmbedHongKongFontProject({
       setMessageOnly(true)
       return
     }
+
+    const handleResize = _.throttle(() => {
+      const width = document.documentElement.clientWidth
+      if (width <= 768) {
+        setMobileLayout(true)
+      } else {
+        setMobileLayout(false)
+      }
+    }, 300)
+
+    window.addEventListener('resize', handleResize)
+    handleResize()
+
+    // Clean up
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
   }, [])
 
   if (!mounted) {
     return (
       <Container $embedInTwreporterReact={embedInTwreporterReact}>
         <HongKongFontProjectPlaceholder />
+      </Container>
+    )
+  }
+
+  if (mobileLayout) {
+    return (
+      <Container $embedInTwreporterReact={embedInTwreporterReact}>
+        <MobileHongKongProject />
       </Container>
     )
   }
