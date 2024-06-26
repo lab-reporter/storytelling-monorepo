@@ -256,7 +256,7 @@ const FontLayout: React.FC<Props> = ({ className }) => {
           </p>
         </Text>
         <Figure>
-          <Img src={`${urlPrefix}/prison/img-1.jpg`} />
+          <Img src={`${urlPrefix}/prison/img-1.webp`} />
           <FigCaption>
             1983年《香港年報》拍攝囚犯製作招牌的擺放現場。（圖／香港政府新聞處）
           </FigCaption>
@@ -274,7 +274,7 @@ const FontLayout: React.FC<Props> = ({ className }) => {
                 </p>
               </Text>
               <Figure>
-                <Img src={`${urlPrefix}/prison/img-1.jpg`} />
+                <Img src={`${urlPrefix}/prison/img-1.webp`} />
                 <FigCaption>
                   1983年《香港年報》拍攝囚犯製作招牌的擺放現場。（圖／香港政府新聞處）
                 </FigCaption>

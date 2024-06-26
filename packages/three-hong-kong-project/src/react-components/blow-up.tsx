@@ -296,16 +296,16 @@ const FontLayout: React.FC<Props> = ({ className }) => {
         </Text>
         <MobileFigures>
           <MobileFigure>
-            <Img src={`${urlPrefix}/blow-up-font/img-1.jpg`} />
+            <Img src={`${urlPrefix}/blow-up-font/img-1.webp`} />
           </MobileFigure>
           <MobileFigure>
-            <Img src={`${urlPrefix}/blow-up-font/img-2.jpg`} />
+            <Img src={`${urlPrefix}/blow-up-font/img-2.webp`} />
             <FigCaption>
               《香港北魏真書》分析厚重的「豎鈎」是香港北魏最容易辨識特徵，一般楷書的鈎筆短短的、呈小三角形；香港北魏的鈎筆卻長得像鐮刀般，替整個字起到穩定作用。
             </FigCaption>
           </MobileFigure>
           <MobileFigure>
-            <Img src={`${urlPrefix}/blow-up-font/img-3.jpg`} />
+            <Img src={`${urlPrefix}/blow-up-font/img-3.webp`} />
             <FigCaption>
               「口」字呈正方形，本應穩定，香港北魏卻將「口」外部形狀寫成有如六角形，賦予動感。
             </FigCaption>
@@ -328,16 +328,16 @@ const FontLayout: React.FC<Props> = ({ className }) => {
               </Text>
               <Imgs>
                 <Figure>
-                  <Img src={`${urlPrefix}/blow-up-font/img-1.jpg`} />
+                  <Img src={`${urlPrefix}/blow-up-font/img-1.webp`} />
                 </Figure>
                 <Figure>
-                  <Img src={`${urlPrefix}/blow-up-font/img-2.jpg`} />
+                  <Img src={`${urlPrefix}/blow-up-font/img-2.webp`} />
                   <FigCaption>
                     《香港北魏真書》分析厚重的「豎鈎」是香港北魏最容易辨識特徵，一般楷書的鈎筆短短的、呈小三角形；香港北魏的鈎筆卻長得像鐮刀般，替整個字起到穩定作用。
                   </FigCaption>
                 </Figure>
                 <Figure>
-                  <Img src={`${urlPrefix}/blow-up-font/img-3.jpg`} />
+                  <Img src={`${urlPrefix}/blow-up-font/img-3.webp`} />
                   <FigCaption>
                     「口」字呈正方形，本應穩定，香港北魏卻將「口」外部形狀寫成有如六角形，賦予動感。
                   </FigCaption>

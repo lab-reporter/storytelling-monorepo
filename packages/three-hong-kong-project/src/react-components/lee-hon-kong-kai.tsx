@@ -256,13 +256,13 @@ const FontLayout: React.FC<Props> = ({ className }) => {
         </Text>
         <MobileFigures>
           <MobileFigure>
-            <Img src={`${urlPrefix}/lee-hon-kong-kai-font/img-1.jpg`} />
+            <Img src={`${urlPrefix}/lee-hon-kong-kai-font/img-1.webp`} />
           </MobileFigure>
           <MobileFigure>
-            <Img src={`${urlPrefix}/lee-hon-kong-kai-font/img-2.jpg`} />
+            <Img src={`${urlPrefix}/lee-hon-kong-kai-font/img-2.webp`} />
           </MobileFigure>
           <MobileFigure>
-            <Img src={`${urlPrefix}/lee-hon-kong-kai-font/img-3.jpg`} />
+            <Img src={`${urlPrefix}/lee-hon-kong-kai-font/img-3.webp`} />
           </MobileFigure>
         </MobileFigures>
       </MobileOnly>
@@ -280,13 +280,13 @@ const FontLayout: React.FC<Props> = ({ className }) => {
               </Text>
               <Imgs>
                 <Figure>
-                  <Img src={`${urlPrefix}/lee-hon-kong-kai-font/img-1.jpg`} />
+                  <Img src={`${urlPrefix}/lee-hon-kong-kai-font/img-1.webp`} />
                 </Figure>
                 <Figure>
-                  <Img src={`${urlPrefix}/lee-hon-kong-kai-font/img-2.jpg`} />
+                  <Img src={`${urlPrefix}/lee-hon-kong-kai-font/img-2.webp`} />
                 </Figure>
                 <Figure>
-                  <Img src={`${urlPrefix}/lee-hon-kong-kai-font/img-3.jpg`} />
+                  <Img src={`${urlPrefix}/lee-hon-kong-kai-font/img-3.webp`} />
                 </Figure>
               </Imgs>
               <FigCaption>
