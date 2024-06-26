@@ -61,7 +61,7 @@ export function EmbedHongKongFontProject({
 
     const handleResize = _.throttle(() => {
       const width = document.documentElement.clientWidth
-      if (width <= 768) {
+      if (width < 768) {
         setMobileLayout(true)
       } else {
         setMobileLayout(false)

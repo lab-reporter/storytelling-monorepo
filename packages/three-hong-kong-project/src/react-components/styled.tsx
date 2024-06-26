@@ -27,7 +27,8 @@ export const MobileAbove = styled.div`
   margin-right: auto;
   display: flex;
   gap: 15px;
-  min-height: 100vh;
+
+  height: 100%;
 
   ${mediaQuery.tabletOnly} {
     width: calc(717 / 768 * 100%);
@@ -45,6 +46,7 @@ export const MobileAbove = styled.div`
 export const Background = styled.div`
   background: transparent;
   width: 100%;
+  height: 100%;
 `
 
 export const TitleSvg = styled.img`

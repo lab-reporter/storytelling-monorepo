@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 
 import BlowUpFontLayout from './blow-up'
 import LeeHonKongKaiLayout from './lee-hon-kong-kai'
@@ -6,14 +6,14 @@ import LeeHonTungKaiLayout from './lee-hon-tung-kai'
 import PrisonFontLayout from './prison'
 
 import styled, { keyframes } from '../styled-components'
+import { CloseBt as _CloseBt, HintCover, StartBt } from './styled'
 import { Transition } from 'react-transition-group'
 import { urlPrefix } from '../constants'
-import { CloseBt as _CloseBt, HintCover, StartBt } from './styled'
 
 const CloseBt = styled(_CloseBt)`
   position: absolute;
-  top: 30px;
-  right: 30px;
+  top: 100px;
+  right: 10px;
 `
 
 const Container = styled.div`
@@ -99,30 +99,63 @@ enum FontName {
 export default function HongKongProject() {
   const [selectedFont, setSelectedFont] = useState('')
   const [toInteractWithModel, setToInteractWithModel] = useState(false)
+  const containerRef = useRef<HTMLDivElement>(null)
 
+  const closeBtJsx = <CloseBt onClick={() => setSelectedFont('')} />
   const fontLayout = (
     <>
       <FadedFont in={selectedFont === FontName.BLOW_UP}>
+        {closeBtJsx}
         <BlowUpFontLayout />
       </FadedFont>
       <FadedFont in={selectedFont === FontName.LEE_HON_KONG_KAI}>
+        {closeBtJsx}
         <LeeHonKongKaiLayout />
       </FadedFont>
       <FadedFont in={selectedFont === FontName.LEE_HON_TUNG_KAI}>
+        {closeBtJsx}
         <LeeHonTungKaiLayout />
       </FadedFont>
       <FadedFont in={selectedFont === FontName.PRISON}>
+        {closeBtJsx}
         <PrisonFontLayout />
       </FadedFont>
-      {selectedFont !== '' && <CloseBt onClick={() => setSelectedFont('')} />}
     </>
   )
 
+  useEffect(() => {
+    const container = containerRef.current
+
+    if (selectedFont !== '' && container) {
+      containerRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      })
+
+      return document.body.classList.add('disable-scroll')
+    }
+    document.body.classList.remove('disable-scroll')
+
+    return () => {
+      document.body.classList.remove('disable-scroll')
+    }
+  }, [selectedFont])
+
+  useEffect(() => {
+    const container = containerRef.current
+    if (toInteractWithModel && container) {
+      containerRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      })
+    }
+  }, [toInteractWithModel])
+
   return (
-    <Container>
+    <Container ref={containerRef}>
       {!toInteractWithModel && (
         <HintCover>
-          <p>點擊物件可查看街景中字體的故事</p>
+          <p>你即將進入互動體驗，點擊物件可查看街景中字體的故事</p>
           <StartBt
             $disabled={false}
             onClick={() => {
@@ -184,7 +217,7 @@ const duration = 300 // ms
 const defaultStyle = {
   width: '100%',
   position: 'absolute' as const,
-  top: 0,
+  top: '0',
   left: 0,
   transition: `opacity ${duration}ms ease-in-out`,
   opacity: 0,

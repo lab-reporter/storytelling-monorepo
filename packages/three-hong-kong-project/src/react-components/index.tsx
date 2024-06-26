@@ -250,6 +250,7 @@ const Container = styled.div`
   position: relative;
   width: 100vw;
   height: 100vh;
+  overflow: scroll;
   background: linear-gradient(180deg, #dee4e8 10%, #c3d7e6 57%, #96d0f9 100%);
 
   canvas {
@@ -469,14 +470,6 @@ export function HongKongFontProject() {
       renderer.setSize(width, height)
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
-      // scroll to container
-      if (containerRef.current && toInteractWithModel) {
-        containerRef.current?.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start',
-        })
-      }
-
       // change plainPois if needed
       if (width >= 1440) {
         setPlainPois(cameraData.hd.pois)
@@ -485,6 +478,9 @@ export function HongKongFontProject() {
       } else if (width >= 768) {
         setPlainPois(cameraData.tablet.pois)
       }
+
+      // to avoid scroll lock
+      setToInteractWithModel(false)
     }, 100)
 
     window.addEventListener('resize', handleResize)
@@ -494,7 +490,25 @@ export function HongKongFontProject() {
     return () => {
       window.removeEventListener('resize', handleResize)
     }
-  }, [threeObj, toInteractWithModel])
+  }, [threeObj])
+
+  useEffect(() => {
+    const container = containerRef.current
+    if (toInteractWithModel && container) {
+      containerRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      })
+
+      return document.body.classList.add('disable-scroll')
+    }
+
+    document.body.classList.remove('disable-scroll')
+
+    return () => {
+      document.body.classList.remove('disable-scroll')
+    }
+  }, [toInteractWithModel])
 
   // handle model point clicked
   useEffect(() => {
@@ -589,9 +603,7 @@ export function HongKongFontProject() {
     <Container ref={setRefs}>
       {!toInteractWithModel && (
         <HintCover>
-          <p>
-            你即將進入3D體驗，移動畫面可探索空間點擊物件可查看街景中字體的故事
-          </p>
+          <p>你即將進入3D體驗，點擊物件可查看街景中字體的故事</p>
           <div>
             {!areModelsLoaded && (
               <LoadingProgress
@@ -660,6 +672,7 @@ function getRootParent(object: Object3D) {
 
 const defaultStyle = {
   width: '100%',
+  height: '100%',
   position: 'absolute' as const,
   left: 0,
   top: 0,
@@ -705,9 +718,7 @@ export function HongKongFontProjectPlaceholder() {
   return (
     <Container>
       <HintCover>
-        <p>
-          你即將進入3D體驗，移動畫面可探索空間點擊物件可查看街景中字體的故事
-        </p>
+        <p>你即將進入3D體驗，點擊物件可查看街景中字體的故事</p>
         <div>
           <StartBt $disabled={true}>開始閱讀</StartBt>
         </div>
