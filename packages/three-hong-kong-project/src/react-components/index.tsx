@@ -256,9 +256,6 @@ const Container = styled.div`
   canvas {
     width: 100%;
     height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
   }
 `
 
@@ -283,6 +280,12 @@ const CloseBt = styled(_CloseBt)`
   top: 100px;
   right: 30px;
   z-index: 1;
+`
+
+const CanvasContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 `
 
 type PlainPoi = {
@@ -657,7 +660,9 @@ export function HongKongFontProject() {
           }}
         />
       ) : null}
-      <canvas ref={canvasRef}></canvas>
+      <CanvasContainer>
+        <canvas ref={canvasRef}></canvas>
+      </CanvasContainer>
       {fontLayout}
     </Container>
   )

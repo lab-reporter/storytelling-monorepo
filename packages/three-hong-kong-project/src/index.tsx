@@ -16,7 +16,7 @@ const Container = styled.div<{ $embedInTwreporterReact: boolean }>`
     return $embedInTwreporterReact
       ? `
   /* 往上移動，使其與上一個區塊連接在一起。*/
-  margin-top: -40px;
+    /* margin-top: -40px; */
 
   /* 左移動，撐滿文章頁 */
   @media (max-width: 767px) {
