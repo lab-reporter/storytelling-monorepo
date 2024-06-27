@@ -65,8 +65,6 @@ const Text = styled(_Text)`
 
   ${mediaQuery.tabletOnly} {
     width: 197px;
-    padding: 5px;
-    background-color: #ffffff1f;
   }
 
   ${mediaQuery.desktopOnly} {

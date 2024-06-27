@@ -121,6 +121,7 @@ const FigCaption = styled.figcaption`
   font-weight: 400;
   line-height: 1.5;
   position: absolute;
+  text-align: left;
 
   ${mediaQuery.mobileOnly} {
     font-size: 10px;

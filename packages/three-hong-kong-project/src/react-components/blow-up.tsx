@@ -58,8 +58,6 @@ const Text = styled(_Text)`
   ${mediaQuery.tabletOnly} {
     width: calc(197 / 523 * 100%);
     max-width: 197px;
-    padding: 5px 5px;
-    background-color: #ffffff2f;
   }
 
   ${mediaQuery.desktopOnly} {

@@ -96,6 +96,13 @@ export const SubTitle = styled.div`
 export const Text = styled.div`
   color: #000;
   font-weight: 400;
+  padding: 5px;
+  background-color: #cbcbcb99;
+
+  > p {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
 
   ${mediaQuery.mobileOnly} {
     font-size: 14px;
