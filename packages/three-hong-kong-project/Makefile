@@ -18,7 +18,7 @@ build-lib:
 
 build-webpack-bundles: clean-webpack-bundles
 	@echo "$(P) Build webpack chunks, bundles and manifest.json"
-	RESOURCES_HOSTED_AT=github NODE_ENV=production yarn webpack --config build-embed-code/webpack.config.js
+	RESOURCES_HOSTED_AT=gcs NODE_ENV=production yarn webpack --config build-embed-code/webpack.config.js
 
 build-embed-code: build-webpack-bundles
 	@echo "$(P) Generate embed code"

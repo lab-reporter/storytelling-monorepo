@@ -14,12 +14,26 @@ const __dirname = dirname(__filename)
 const port = process.env.PORT || 8080
 
 const isProduction = process.env.NODE_ENV === 'production'
+const resourcesHostedAt = process.env.RESOURCES_HOSTED_AT
 
 const distFolderName = 'webpack-bundles'
 
-const publicPath = isProduction
-  ? `https://unpkg.com/${pkg.name}@${pkg.version}/${distFolderName}/`
-  : `http://localhost:${port}/${distFolderName}/`
+let publicPath = ''
+switch(resourcesHostedAt) {
+  case 'unpkg':
+  case 'github': {
+    publicPath = `https://unpkg.com/${pkg.name}@${pkg.version}/${distFolderName}/`
+    break
+  }
+  case 'gcs': {
+    publicPath = `https://story-telling-storage.twreporter.org/projects/three-hong-kong-project/${distFolderName}/`
+    break
+  }
+  case 'localhost':
+  default: {
+    publicPath = `http://localhost:${port}/${distFolderName}/`
+  }
+}
 
 const distDir = `../${distFolderName}`
 const manifestFileName = 'manifest.json'
@@ -137,7 +151,7 @@ const webpackConfig = {
   plugins: [
     new webpack.EnvironmentPlugin({
       NODE_ENV: process.env.NODE_ENV,
-      RESOURCES_HOSTED_AT: 'github',
+      RESOURCES_HOSTED_AT: 'gcs',
     }),
     new WebpackManifestPlugin({
       useEntryKeys: true,
