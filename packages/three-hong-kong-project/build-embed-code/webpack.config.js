@@ -64,7 +64,7 @@ const webpackConfig = {
     main: {import: path.resolve(__dirname, './entry.js')},
   },
   output: {
-    filename: '[name].js',
+    filename: '[name].[chunkhash].js',
     path: path.resolve(__dirname, distDir),
     library: '@story-telling-reporter/react-three-hong-kong-project',
     libraryTarget: 'umd',
@@ -112,32 +112,32 @@ const webpackConfig = {
         'threejs-vendor': {
           test: /[\\/]node_modules[\\/](three|three-story-controls)[\\/]/,
           name: 'threejs-vendor',
-          filename: '[name].js',
+          filename: '[name].[chunkhash].js',
         },
         'react-vendor': {
           test: /[\\/]node_modules[\\/](react|react-dom|scheduler)[\\/]/,
           name: 'react-vendor',
-          filename: '[name].js',
+          filename: '[name].[chunkhash].js',
         },
         'regenerator-runtime': {
           test: /[\\/]node_modules[\\/](regenerator-runtime)[\\/]/,
           name: 'regenerator-runtime',
-          filename: '[name].js',
+          filename: '[name].[chunkhash].js',
         },
         'styled-components': {
           test: /[\\/]node_modules[\\/](styled-components)[\\/]/,
           name: 'styled-components',
-          filename: '[name].js',
+          filename: '[name].[chunkhash].js',
         },
         lodash: {
           test: /[\\/]node_modules[\\/](lodash)[\\/]/,
           name: 'lodash',
-          filename: '[name].js',
+          filename: '[name].[chunkhash].js',
         },
         gsap: {
           test: /[\\/]node_modules[\\/](gsap)[\\/]/,
           name: 'gsap',
-          filename: '[name].js',
+          filename: '[name].[chunkhash].js',
         },
         //vendor: {
         //  test: /[\\/]node_modules[\\/]/,
