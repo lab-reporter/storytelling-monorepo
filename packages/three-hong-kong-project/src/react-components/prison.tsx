@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from '../styled-components'
 import { mediaQuery } from '../utils/media-query'
-import { urlPrefix } from '../constants'
+import { imgsForEachComponent } from '../constants'
 import {
   MobileOnly,
   MobileAbove,
@@ -155,6 +155,8 @@ const FigCaption = styled.figcaption`
   }
 `
 
+const imgs = imgsForEachComponent[4]
+
 type Props = { className?: string }
 
 const FontLayout: React.FC<Props> = ({ className }) => {
@@ -162,22 +164,22 @@ const FontLayout: React.FC<Props> = ({ className }) => {
     <Background className={className}>
       <MobileOnly>
         <SubTitle>囚犯製作的手工路牌字</SubTitle>
-        <TitleSvg src={`${urlPrefix}/prison/title-mobile.svg`} />
+        <TitleSvg src={imgs[0]} />
         <Figure style={{ margin: '25px 0' }}>
-          <Img src={`${urlPrefix}/prison/mobile-font.webp`} />
+          <Img src={imgs[1]} />
         </Figure>
         <Text>
           1970～1997年間香港路牌由監獄裡的在囚人士製作。路牌上的字，有的是使用金屬字膜噴漆在鋼板上而成，有的則是由囚犯拿美工刀切割反光貼紙製作，筆畫保留許多手工特色，如切割時不易保持直線，很容易在橫筆尾端顯得較寬。隨著道路更新，近年路牌被陸續更換為電腦字體，目前全港由囚犯製作的路牌只剩下500～600塊。
         </Text>
         <Figure>
-          <Img src={`${urlPrefix}/prison/img-1.webp`} />
+          <Img src={imgs[2]} />
           <FigCaption>
             1983年《香港年報》拍攝囚犯製作招牌的擺放現場。（圖／香港政府新聞處）
           </FigCaption>
         </Figure>
       </MobileOnly>
       <MobileAbove>
-        <TitleSvg src={`${urlPrefix}/prison/title.svg`} />
+        <TitleSvg src={imgs[3]} />
         <Body>
           <SubTitle>囚犯製作的手工路牌字</SubTitle>
           <div>
@@ -185,7 +187,7 @@ const FontLayout: React.FC<Props> = ({ className }) => {
               1970～1997年間香港路牌由監獄裡的在囚人士製作。路牌上的字，有的是使用金屬字膜噴漆在鋼板上而成，有的則是由囚犯拿美工刀切割反光貼紙製作，筆畫保留許多手工特色，如切割時不易保持直線，很容易在橫筆尾端顯得較寬。隨著道路更新，近年路牌被陸續更換為電腦字體，目前全港由囚犯製作的路牌只剩下500～600塊。
             </Text>
             <Figure>
-              <Img src={`${urlPrefix}/prison/img-1.webp`} />
+              <Img src={imgs[2]} />
               <FigCaption>
                 1983年《香港年報》拍攝囚犯製作招牌的擺放現場。（圖／香港政府新聞處）
               </FigCaption>

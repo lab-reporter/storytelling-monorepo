@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from '../styled-components'
 import { mediaQuery } from '../utils/media-query'
-import { urlPrefix } from '../constants'
+import { imgsForEachComponent } from '../constants'
 import {
   MobileOnly,
   MobileAbove,
@@ -150,6 +150,8 @@ const MobileFigures = styled.div`
   }
 `
 
+const imgs = imgsForEachComponent[2]
+
 type Props = { className?: string }
 
 const FontLayout: React.FC<Props> = ({ className }) => {
@@ -157,10 +159,10 @@ const FontLayout: React.FC<Props> = ({ className }) => {
     <Background className={className}>
       <MobileOnly>
         <SubTitle>老招牌作坊的智慧</SubTitle>
-        <TitleSvg src={`${urlPrefix}/lee-hon-kong-kai-font/title-mobile.svg`} />
+        <TitleSvg src={imgs[0]} />
         <Img
           style={{ width: 'calc(345/390*100%)', margin: '25px 0' }}
-          src={`${urlPrefix}/lee-hon-kong-kai-font/mobile-font.webp`}
+          src={imgs[1]}
         />
         <Text>
           <p>傳統招牌的字形設計相當呼應製作工法。</p>
@@ -170,13 +172,13 @@ const FontLayout: React.FC<Props> = ({ className }) => {
         </Text>
         <MobileFigures>
           <MobileFigure>
-            <Img src={`${urlPrefix}/lee-hon-kong-kai-font/img-1.webp`} />
+            <Img src={imgs[2]} />
           </MobileFigure>
           <MobileFigure>
-            <Img src={`${urlPrefix}/lee-hon-kong-kai-font/img-2.webp`} />
+            <Img src={imgs[3]} />
           </MobileFigure>
           <MobileFigure>
-            <Img src={`${urlPrefix}/lee-hon-kong-kai-font/img-3.webp`} />
+            <Img src={imgs[4]} />
           </MobileFigure>
           <FigCaption>
             李威、李健明父子經營一間招牌店，他們展示切割招牌的傳統作法。
@@ -184,7 +186,7 @@ const FontLayout: React.FC<Props> = ({ className }) => {
         </MobileFigures>
       </MobileOnly>
       <MobileAbove>
-        <TitleSvg src={`${urlPrefix}/lee-hon-kong-kai-font/title.svg`} />
+        <TitleSvg src={imgs[5]} />
         <Body>
           <SubTitle>老招牌作坊的智慧</SubTitle>
           <div>
@@ -196,13 +198,13 @@ const FontLayout: React.FC<Props> = ({ className }) => {
             </Text>
             <Imgs>
               <Figure>
-                <Img src={`${urlPrefix}/lee-hon-kong-kai-font/img-1.webp`} />
+                <Img src={imgs[2]} />
               </Figure>
               <Figure>
-                <Img src={`${urlPrefix}/lee-hon-kong-kai-font/img-2.webp`} />
+                <Img src={imgs[3]} />
               </Figure>
               <Figure>
-                <Img src={`${urlPrefix}/lee-hon-kong-kai-font/img-3.webp`} />
+                <Img src={imgs[4]} />
               </Figure>
             </Imgs>
             <FigCaption>

@@ -33,7 +33,7 @@ import LeeHonTungKaiFont from './lee-hon-tung-kai'
 import PrisonFont from './prison'
 import { LoadingProgress, GTLFModelObject } from './loading-progress'
 import { Transition } from 'react-transition-group'
-import { urlPrefix } from '../constants'
+import { urlPrefix, imgsForEachComponent } from '../constants'
 import { useInView } from 'react-intersection-observer'
 import {
   CloseBt as _CloseBt,
@@ -41,6 +41,7 @@ import {
   Bt,
   StartBt,
 } from './styled'
+import { preloadImages } from '../utils/preload-images'
 
 const duration = 500 // ms
 
@@ -350,6 +351,14 @@ export function HongKongFontProject() {
     () => createThreeObj(gltfs, pois, canvasRef),
     [gltfs, canvasRef, pois]
   )
+
+  // preload images
+  useEffect(() => {
+    // after models are loaded
+    if (gltfs.length > 0) {
+      imgsForEachComponent.forEach((imgs) => preloadImages(imgs))
+    }
+  }, [gltfs])
 
   // Handle 3D model animation
   useEffect(() => {

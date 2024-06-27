@@ -8,7 +8,8 @@ import PrisonFontLayout from './prison'
 import styled, { keyframes } from '../styled-components'
 import { CloseBt as _CloseBt, HintCover, StartBt } from './styled'
 import { Transition } from 'react-transition-group'
-import { urlPrefix } from '../constants'
+import { imgsForEachComponent } from '../constants'
+import { preloadImages } from '../utils/preload-images'
 
 const CloseBt = styled(_CloseBt)`
   position: absolute;
@@ -119,6 +120,11 @@ export default function HongKongProject() {
     </>
   )
 
+  // preload images
+  useEffect(() => {
+    imgsForEachComponent.forEach((imgs) => preloadImages(imgs))
+  }, [])
+
   useEffect(() => {
     const container = containerRef.current
 
@@ -164,7 +170,7 @@ export default function HongKongProject() {
       )}
       {toInteractWithModel && (
         <>
-          <img src={`${urlPrefix}/public/mobile-scene.png`} />
+          <img src={imgsForEachComponent[0][0]} />
           <PointContainer
             $left={90}
             $top={280}

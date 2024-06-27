@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from '../styled-components'
 import { mediaQuery } from '../utils/media-query'
-import { urlPrefix } from '../constants'
+import { imgsForEachComponent } from '../constants'
 import {
   MobileOnly,
   MobileAbove,
@@ -76,6 +76,8 @@ const Text = styled(_Text)`
   }
 `
 
+const imgs = imgsForEachComponent[3]
+
 type Props = { className?: string }
 
 const FontLayout: React.FC<Props> = ({ className }) => {
@@ -83,10 +85,10 @@ const FontLayout: React.FC<Props> = ({ className }) => {
     <Background className={className}>
       <MobileOnly>
         <SubTitle>為噴漆或刻印而生</SubTitle>
-        <TitleSvg src={`${urlPrefix}/lee-hon-tung-kai-font/title-mobile.svg`} />
+        <TitleSvg src={imgs[0]} />
         <img
           style={{ width: 'calc(345/390*100%)', margin: '25px 0' }}
-          src={`${urlPrefix}/lee-hon-tung-kai-font/mobile-font.webp`}
+          src={imgs[1]}
         />
         <Text>
           <p>
@@ -95,7 +97,7 @@ const FontLayout: React.FC<Props> = ({ className }) => {
         </Text>
       </MobileOnly>
       <MobileAbove>
-        <TitleSvg src={`${urlPrefix}/lee-hon-tung-kai-font/title.svg`} />
+        <TitleSvg src={imgs[2]} />
         <Body>
           <SubTitle>為噴漆或刻印而生</SubTitle>
           <div>
