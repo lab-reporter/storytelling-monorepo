@@ -1,6 +1,6 @@
 {
   "name": "@story-telling-reporter/react-three-hong-kong-project",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "lib/cjs/index.js",
   "module": "lib/esm/index.js",
