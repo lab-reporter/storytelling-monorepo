@@ -1,13 +1,9 @@
 {
   "private": true,
   "workspaces": [
-    "packages/core",
     "packages/draft-editor",
     "packages/cms",
     "packages/karaoke",
-    "packages/dual-slides",
-    "packages/three-story-points",
-    "packages/scrollable-video",
     "packages/embed-code-generator",
     "packages/subtitled-audio",
     "packages/scrollable-video",
