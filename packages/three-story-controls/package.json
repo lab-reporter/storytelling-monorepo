@@ -1,0 +1,48 @@
+{
+  "name": "@story-telling-reporter/react-three-story-controls",
+  "version": "0.0.1",
+  "description": "",
+  "main": "lib/cjs/index.js",
+  "module": "lib/esm/index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "make dev",
+    "build": "make build",
+    "clean": "make clean",
+    "build-lib": "make build-lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nickhsine/story-telling-reporter.git",
+    "directory": "packages/three-story-controls"
+  },
+  "keywords": [
+    "react",
+    "threejs",
+    "three",
+    "camera helper"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "three": "0.137.5",
+    "three-story-controls": "^1.0.6"
+  },
+  "devDependencies": {
+    "@types/three": "^0.165.0",
+    "react": "18.1.0",
+    "react-dom": "18.1.0",
+    "styled-components": "5.3.5"
+  },
+  "peerDependencies": {
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0",
+    "styled-components": "5.3.5"
+  },
+  "files": [
+    "lib",
+    "webpack-bundles",
+    "src",
+    "dev"
+  ]
+}
