@@ -5,21 +5,22 @@ import {
   MeshPhongMaterial,
   Mesh,
   ACESFilmicToneMapping,
-  // AnimationClip,
+  AnimationClip,
   Camera,
   GridHelper,
   PCFSoftShadowMap,
   PerspectiveCamera,
   Quaternion,
-  // QuaternionKeyframeTrack,
+  QuaternionKeyframeTrack,
   Scene,
   Vector3,
-  // VectorKeyframeTrack,
+  VectorKeyframeTrack,
   WebGLRenderer,
 } from 'three'
 import { CameraRig, FreeMovementControls } from 'three-story-controls'
 import { CaptionInput } from './caption-input'
 import { AlignmentEnum, WidthEnum, CaptionProp } from './type'
+import gsap from 'gsap'
 
 type POI = {
   position: Vector3
@@ -30,86 +31,88 @@ type POI = {
   caption: CaptionProp
 }
 
-//function createClip(pois: POI[]) {
-//  if (pois.length > 0) {
-//    const times = []
-//    const positionValues = []
-//    const quaternionValues = []
-//    const tmpPosition = new Vector3()
-//    const tmpQuaternion = new Quaternion()
-//    const framesPerPoi = 10
+function createClip(pois: POI[]) {
+  if (pois.length > 0) {
+    const times = []
+    const positionValues: number[] = []
+    const quaternionValues: number[] = []
+    const tmpPosition = new Vector3()
+    const tmpQuaternion = new Quaternion()
+    const framesPerPoi = 10
 
-//    let tweenStartTime = 0
+    let tweenStartTime = 0
 
-//    // transform imported arrays to quaternions and vector3 when loading a camera file
-//    if (!this.pois[0].quaternion.isQuaternion && !this.pois[0].position.isVector3) {
-//      for (let i = 0; i < this.pois.length; i++) {
-//        const p = this.pois[i]
-//        p.quaternion = new Quaternion(p.quaternion[0], p.quaternion[1], p.quaternion[2], p.quaternion[3])
-//        p.position = new Vector3(p.position[0], p.position[1], p.position[2])
-//      }
-//    }
+    for (let i = 0; i < pois.length - 1; i++) {
+      const p1 = pois[i]
+      const p2 = pois[i + 1]
 
-//    for (let i = 0; i < this.pois.length - 1; i++) {
-//      const p1 = this.pois[i]
-//      const p2 = this.pois[i + 1]
+      const values = {
+        px: p1.position.x,
+        py: p1.position.y,
+        pz: p1.position.z,
+        qx: p1.quaternion.x,
+        qy: p1.quaternion.y,
+        qz: p1.quaternion.z,
+        qw: p1.quaternion.w,
+        slerpAmount: 0,
+      }
 
-//      const values = {
-//        px: p1.position.x,
-//        py: p1.position.y,
-//        pz: p1.position.z,
-//        qx: p1.quaternion.x,
-//        qy: p1.quaternion.y,
-//        qz: p1.quaternion.z,
-//        qw: p1.quaternion.w,
-//        slerpAmount: 0,
-//      }
+      const target = {
+        px: p2.position.x,
+        py: p2.position.y,
+        pz: p2.position.z,
+        qx: p2.quaternion.x,
+        qy: p2.quaternion.y,
+        qz: p2.quaternion.z,
+        qw: p2.quaternion.w,
+        slerpAmount: 1,
+        duration: p2.duration,
+        ease: p2.ease,
+      }
 
-//      const target = {
-//        px: p2.position.x,
-//        py: p2.position.y,
-//        pz: p2.position.z,
-//        qx: p2.quaternion.x,
-//        qy: p2.quaternion.y,
-//        qz: p2.quaternion.z,
-//        qw: p2.quaternion.w,
-//        slerpAmount: 1,
-//        duration: p2.duration,
-//        ease: p2.ease,
-//      }
+      const tween = gsap.to(values, target)
 
-//      const tween = gsap.to(values, target)
+      for (let j = 0; j < framesPerPoi; j++) {
+        const lerpAmount = p2.duration * (j / framesPerPoi)
+        times.push(tweenStartTime + lerpAmount)
+        tween.seek(lerpAmount)
+        tmpQuaternion.slerpQuaternions(
+          p1.quaternion,
+          p2.quaternion,
+          values.slerpAmount
+        )
+        tmpPosition.set(values.px, values.py, values.pz)
+        tmpQuaternion.toArray(quaternionValues, quaternionValues.length)
+        tmpPosition.toArray(positionValues, positionValues.length)
+      }
+      tweenStartTime += p2.duration
+    }
+    // add last point
+    const last = pois[pois.length - 1]
+    last.quaternion.toArray(quaternionValues, quaternionValues.length)
+    last.position.toArray(positionValues, positionValues.length)
+    times.push(tweenStartTime)
+    const animationClip = new AnimationClip(undefined, tweenStartTime, [
+      new VectorKeyframeTrack('Translation.position', times, positionValues),
+      new QuaternionKeyframeTrack(
+        'Rotation.quaternion',
+        times,
+        quaternionValues
+      ),
+    ])
+    return animationClip
+  }
+}
 
-//      for (let j = 0; j < framesPerPoi; j++) {
-//        const lerpAmount = p2.duration * (j / framesPerPoi)
-//        times.push(tweenStartTime + lerpAmount)
-//        tween.seek(lerpAmount)
-//        if (this.useSlerp) {
-//          tmpQuaternion.slerpQuaternions(p1.quaternion, p2.quaternion, values.slerpAmount)
-//        } else {
-//          tmpQuaternion.set(values.qx, values.qy, values.qz, values.qw)
-//        }
-//        tmpPosition.set(values.px, values.py, values.pz)
-//        tmpQuaternion.toArray(quaternionValues, quaternionValues.length)
-//        tmpPosition.toArray(positionValues, positionValues.length)
-//      }
-//      tweenStartTime += p2.duration
-//    }
-//    // add last point
-//    const last = this.pois[this.pois.length - 1]
-//    last.quaternion.toArray(quaternionValues, quaternionValues.length)
-//    last.position.toArray(positionValues, positionValues.length)
-//    times.push(tweenStartTime)
-//    this.animationClip = new AnimationClip(null, tweenStartTime, [
-//      new VectorKeyframeTrack('Translation.position', times, positionValues),
-//      new QuaternionKeyframeTrack('Rotation.quaternion', times, quaternionValues),
-//    ])
-//    this.rig.setAnimationClip(this.animationClip)
-//  }
-//}
+type CameraData = {
+  pois: POI[]
+  animationClip?: AnimationClip
+}
 
 type CameraHelperProps = {
   scene?: Scene
+  cameraData?: CameraData
+  onChange?: (arg: CameraData) => void
 }
 
 type ThreeObj = {
@@ -120,15 +123,18 @@ type ThreeObj = {
   scene: Scene
 }
 
-export function CameraHelper({ scene }: CameraHelperProps) {
+export function CameraHelper({
+  scene,
+  cameraData,
+  onChange,
+}: CameraHelperProps) {
   const [threeObj, setThreeObj] = useState<ThreeObj | null>(null)
-  const [pois, setPois] = useState<POI[]>([])
+  const [pois, setPois] = useState<POI[]>(cameraData?.pois || [])
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
     const _scene = scene ?? new Scene()
     const threeObj = createThreeObj(_scene, canvasRef)
-    console.log(threeObj)
     setThreeObj(threeObj)
   }, [scene])
 
@@ -159,7 +165,7 @@ export function CameraHelper({ scene }: CameraHelperProps) {
     }
   }, [threeObj, pois])
 
-  const addPoi = () => {
+  const createPoi = () => {
     if (threeObj) {
       const { cameraRig, renderer, camera, scene } = threeObj
 
@@ -190,7 +196,7 @@ export function CameraHelper({ scene }: CameraHelperProps) {
           width: WidthEnum.NARROW,
         },
       }
-      setPois([...pois, poi])
+      return poi
     }
   }
 
@@ -201,6 +207,11 @@ export function CameraHelper({ scene }: CameraHelperProps) {
         pois={pois}
         onPoisChange={(pois) => {
           setPois(pois)
+          const animationClip = createClip(pois)
+          onChange?.({
+            pois,
+            animationClip,
+          })
         }}
         onPoiVisit={(poi) => {
           if (threeObj) {
@@ -225,7 +236,18 @@ export function CameraHelper({ scene }: CameraHelperProps) {
             controls.enable()
           }
         }}
-        onPoiAdd={addPoi}
+        onPoiAdd={() => {
+          const poi = createPoi()
+          if (poi) {
+            const newPois = [...pois, poi]
+            const animationClip = createClip(newPois)
+            onChange?.({
+              pois: newPois,
+              animationClip,
+            })
+            setPois(newPois)
+          }
+        }}
       />
     </Container>
   )
