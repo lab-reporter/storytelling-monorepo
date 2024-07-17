@@ -18,6 +18,8 @@ import {
   WebGLRenderer,
 } from 'three'
 import { CameraRig, FreeMovementControls } from 'three-story-controls'
+import { CaptionInput } from './caption-input'
+import { AlignmentEnum, WidthEnum, CaptionProp } from './type'
 
 type POI = {
   position: Vector3
@@ -25,6 +27,7 @@ type POI = {
   duration: number
   ease: string
   image?: string
+  caption: CaptionProp
 }
 
 //function createClip(pois: POI[]) {
@@ -167,10 +170,10 @@ export function CameraHelper({ scene }: CameraHelperProps) {
 
       // Draw image
       const canvas = document.createElement('canvas')
-      const ctx = canvas.getContext('2d')!
+      const ctx = canvas.getContext('2d')
       canvas.width = 640
       canvas.height = 480
-      ctx.drawImage(canvasRef.current!, 0, 0, canvas.width, canvas.height)
+      ctx?.drawImage(canvasRef.current!, 0, 0, canvas.width, canvas.height)
       const image = canvas.toDataURL('image/png')
 
       const poi = {
@@ -178,6 +181,14 @@ export function CameraHelper({ scene }: CameraHelperProps) {
         duration: 1,
         ease: 'power1',
         image,
+        caption: {
+          rawContentState: {
+            blocks: [],
+            entityMap: {},
+          },
+          alignment: AlignmentEnum.LEFT,
+          width: WidthEnum.NARROW,
+        },
       }
       setPois([...pois, poi])
     }
@@ -200,6 +211,18 @@ export function CameraHelper({ scene }: CameraHelperProps) {
               poi.duration,
               poi.ease
             )
+          }
+        }}
+        onPoiEditStart={() => {
+          if (threeObj) {
+            const { controls } = threeObj
+            controls.disable()
+          }
+        }}
+        onPoiEditFinish={() => {
+          if (threeObj) {
+            const { controls } = threeObj
+            controls.enable()
           }
         }}
         onPoiAdd={addPoi}
@@ -243,7 +266,7 @@ function createThreeObj(scene: Scene, canvasRef: React.RefObject<HTMLElement>) {
    *  Controls
    */
   const controls = new FreeMovementControls(cameraRig, {
-    domElement: canvasRef.current!,
+    domElement: canvasRef.current,
     keyboardScaleFactor: 0.1,
     wheelScaleFactor: 0.01,
     pointerDampFactor: 0.1,
@@ -293,13 +316,18 @@ function Panel({
   onPoisChange,
   onPoiVisit,
   onPoiAdd,
+  onPoiEditStart,
+  onPoiEditFinish,
 }: {
   pois: POI[]
   onPoisChange: (pois: POI[]) => void
   onPoiVisit: (poi: POI) => void
   onPoiAdd: () => void
+  onPoiEditStart: () => void
+  onPoiEditFinish: () => void
 }) {
   const [expand, setExpand] = useState(true)
+  const [poiIdx, setPoiIdx] = useState(-1)
 
   const poisJsx = pois.map((poi, idx) => {
     return (
@@ -360,12 +388,45 @@ function Panel({
             >
               ↓
             </ControlBt>
-            <ControlBt>✎</ControlBt>
+            <ControlBt
+              onClick={() => {
+                setPoiIdx(idx)
+                onPoiEditStart()
+              }}
+            >
+              ✎
+            </ControlBt>
           </PoiControls>
         </Poi>
       </div>
     )
   })
+
+  const editJsx =
+    poiIdx > -1 ? (
+      <CaptionInput
+        isOpen={true}
+        onConfirm={(caption) => {
+          const newPoi = Object.assign({}, pois[poiIdx], {
+            caption,
+          })
+
+          const newPois = [
+            ...pois.slice(0, poiIdx),
+            newPoi,
+            ...pois.slice(poiIdx + 1, pois.length),
+          ]
+          onPoisChange(newPois)
+          setPoiIdx(-1)
+          onPoiEditFinish()
+        }}
+        onCancel={() => {
+          setPoiIdx(-1)
+          onPoiEditFinish()
+        }}
+        inputValue={pois[poiIdx].caption}
+      />
+    ) : null
 
   return (
     <PanelContainer $expand={expand}>
@@ -374,6 +435,7 @@ function Panel({
         {expand ? '<' : '>'}
       </ExpandBt>
       <AddBt onClick={onPoiAdd}>+</AddBt>
+      {editJsx}
     </PanelContainer>
   )
 }
