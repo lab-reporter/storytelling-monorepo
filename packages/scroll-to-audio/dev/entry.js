@@ -26,20 +26,11 @@ root.render(
     <ScrollToAudio hintOnly={true} />
     <MockContentBlock />
     <EmbedCodeBlock>
-      <ScrollToAudio
-        theme="twreporter"
-        id="scroll-to-audio-1"
-        audioUrls={['./audio-1.mp3']}
-        idForHintContainer="muted-hint-id"
-      />
+      <ScrollToAudio id="scroll-to-audio-1" audioUrls={['./audio-1.mp3']} />
     </EmbedCodeBlock>
     <MockContentBlock />
     <div id="scroll-to-audio-1-bottom-entry-point" />
-    <ScrollToAudio
-      theme="twreporter"
-      id="scroll-to-audio-2"
-      audioUrls={['./audio-2.mp3']}
-    />
+    <ScrollToAudio id="scroll-to-audio-2" audioUrls={['./audio-2.mp3']} />
     <MockContentBlock />
     <div id="scroll-to-audio-2-bottom-entry-point" />
   </div>

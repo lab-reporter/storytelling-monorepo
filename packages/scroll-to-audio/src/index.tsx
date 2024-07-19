@@ -11,19 +11,11 @@ const _ = {
   debounce,
 }
 
-enum ThemeEnum {
-  TWREPORTER = 'twreporter',
-  KIDS = 'kids',
-  ID_SELECTOR = 'id-selector',
-}
-
 function ScrollToAudio({
   id = 'scroll-to-audio-id',
   audioUrls,
   className,
   preload = 'auto',
-  theme = ThemeEnum.TWREPORTER,
-  idForMuteButton = '',
   hintOnly = false,
   hintId,
 }: {
@@ -32,8 +24,6 @@ function ScrollToAudio({
   className?: string
   preload?: string
   bottomEntryOnly?: boolean
-  theme?: string
-  idForMuteButton?: string // enabled when theme === `ThemeEnum.ID_SELECTOR`
   hintOnly?: boolean
   hintId?: string
 }) {
@@ -179,73 +169,36 @@ function ScrollToAudio({
   if (mounted) {
     bottomEntryPlaceholder = document.getElementById(bottomEntryId)
 
-    switch (theme) {
-      case ThemeEnum.ID_SELECTOR: {
-        const buttonContainer = document.getElementById(idForMuteButton)
-        if (buttonContainer) {
-          buttonJsx = createPortal(
-            <MuteButton
-              className="scroll-to-audio-muted-button"
-              onClick={onMuteButtonClick}
-            >
-              {muted ? <MuteIcon /> : <SoundIcon />}
-            </MuteButton>,
-            buttonContainer
-          )
-        }
-        break
-      }
-      case ThemeEnum.TWREPORTER:
-      default: {
-        const mobileToolBarDiv = document.getElementById('mobile-tool-bar')
-        let mobileButtonJsx = null
-        if (mobileToolBarDiv) {
-          mobileButtonJsx = createPortal(
-            <MobileOnly>
-              <MuteButtonWithMobileToolBar
-                className="scroll-to-audio-muted-button"
-                $hide={hideMuteButton}
-                onClick={onMuteButtonClick}
-              >
-                {muted ? <MuteIcon /> : <SoundIcon />}
-              </MuteButtonWithMobileToolBar>
-            </MobileOnly>,
-            mobileToolBarDiv
-          )
-        } else {
-          mobileButtonJsx = (
-            <MobileOnly>
-              <FixedMuteButton
-                className="scroll-to-audio-muted-button"
-                $hide={hideMuteButton}
-                onClick={onMuteButtonClick}
-              >
-                {muted ? <MuteIcon /> : <SoundIcon />}
-              </FixedMuteButton>
-            </MobileOnly>
-          )
-        }
+    const mobileButtonJsx = (
+      <MobileOnly>
+        <MuteButtonWithMobileToolBar
+          className="scroll-to-audio-muted-button"
+          $hide={hideMuteButton}
+          onClick={onMuteButtonClick}
+        >
+          {muted ? <MuteIcon /> : <SoundIcon />}
+        </MuteButtonWithMobileToolBar>
+      </MobileOnly>
+    )
 
-        const fixedButtonJsx = (
-          <DesktopOnly>
-            <FixedMuteButton
-              className="scroll-to-audio-muted-button"
-              $hide={hideMuteButton}
-              onClick={onMuteButtonClick}
-            >
-              {muted ? <MuteIcon /> : <SoundIcon />}
-            </FixedMuteButton>
-          </DesktopOnly>
-        )
+    const desktopButtonJsx = (
+      <DesktopOnly>
+        <FixedMuteButton
+          className="scroll-to-audio-muted-button"
+          $hide={hideMuteButton}
+          onClick={onMuteButtonClick}
+        >
+          {muted ? <MuteIcon /> : <SoundIcon />}
+        </FixedMuteButton>
+      </DesktopOnly>
+    )
 
-        buttonJsx = (
-          <>
-            {fixedButtonJsx}
-            {mobileButtonJsx}
-          </>
-        )
-      }
-    }
+    buttonJsx = (
+      <>
+        {mobileButtonJsx}
+        {desktopButtonJsx}
+      </>
+    )
   }
 
   if (hintOnly) {
@@ -339,10 +292,10 @@ const MuteButton = styled.div`
 `
 
 const MuteButtonWithMobileToolBar = styled(MuteButton)<{ $hide: boolean }>`
-  position: absolute;
+  position: fixed;
   /* above the mobile tool bar */
-  /* 40px is button height, 48px is the margin between mute button and mobile tool bar */
-  top: calc(-40px - 48px);
+  /* 40px is mute button height, 48px is the margin between mute button and mobile tool bar */
+  bottom: calc(40px + 48px);
 
   /* push mute button to the right edge of viewport */
   /* 40px is the width of mute button */
