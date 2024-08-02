@@ -1,4 +1,5 @@
 import { RawDraftContentState } from 'draft-js'
+import { Vector3, Quaternion } from 'three'
 
 export enum WidthEnum {
   WIDE = 'wide',
@@ -21,4 +22,27 @@ export type CaptionProp = {
   alignment?: AlignmentEnum
   width?: WidthEnum
   customCss?: string
+}
+
+export type POI = {
+  position: Vector3
+  quaternion: Quaternion
+  duration: number
+  ease: string
+  image?: string
+  caption: CaptionProp
+}
+
+export type CameraData = {
+  pois?: PlainPOI[]
+  animationClip?: any
+}
+
+export type PlainPOI = {
+  position: number[]
+  quaternion: number[]
+  duration: number
+  ease: string
+  image?: string
+  caption: CaptionProp
 }
