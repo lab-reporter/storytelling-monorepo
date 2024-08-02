@@ -1,12 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useCallback, useMemo, useState, useEffect, useRef } from 'react'
+import gsap from 'gsap'
 import styled from '../styled-components'
 import {
-  ConeGeometry,
-  MeshPhongMaterial,
-  Mesh,
   ACESFilmicToneMapping,
   AnimationClip,
-  Camera,
   GridHelper,
   PCFSoftShadowMap,
   PerspectiveCamera,
@@ -19,17 +16,9 @@ import {
 } from 'three'
 import { CameraRig, FreeMovementControls } from 'three-story-controls'
 import { CaptionInput } from './caption-input'
-import { AlignmentEnum, WidthEnum, CaptionProp } from './type'
-import gsap from 'gsap'
-
-type POI = {
-  position: Vector3
-  quaternion: Quaternion
-  duration: number
-  ease: string
-  image?: string
-  caption: CaptionProp
-}
+import { AlignmentEnum, CameraData, POI, PlainPOI, WidthEnum } from './type'
+import { LoadingProgress, GTLFModelObject } from './loading-progress'
+import { GLTF } from '../loader'
 
 function createClip(pois: POI[]) {
   if (pois.length > 0) {
@@ -104,39 +93,76 @@ function createClip(pois: POI[]) {
   }
 }
 
-type CameraData = {
-  pois: POI[]
-  animationClip?: AnimationClip
-}
-
 type CameraHelperProps = {
-  scene?: Scene
-  cameraData?: CameraData
+  modelObjs: GTLFModelObject[]
+  plainPois?: PlainPOI[]
   onChange?: (arg: CameraData) => void
 }
 
-type ThreeObj = {
-  camera: Camera
-  cameraRig: CameraRig
-  controls: FreeMovementControls
-  renderer: WebGLRenderer
-  scene: Scene
+/**
+ *  Transfer PlainPOI data structure to POI data structure.
+ */
+function unserializePlainPOIs(plainPois: PlainPOI[]): POI[] {
+  return plainPois.map(({ position, quaternion, ...rest }) => {
+    const poi = {
+      position: new Vector3(position[0], position[1], position[2]),
+      quaternion: new Quaternion(
+        quaternion[0],
+        quaternion[1],
+        quaternion[2],
+        quaternion[3]
+      ),
+      ...rest,
+    }
+    return poi
+  })
+}
+
+/**
+ *  Transfer POI data structure to PlainPOI data structure.
+ */
+function serializePOIs(pois: POI[]): PlainPOI[] {
+  return pois.map(({ position, quaternion, ...rest }) => {
+    const plainPoi = {
+      position: position.toArray(),
+      quaternion: quaternion.toArray(),
+      ...rest,
+    }
+    return plainPoi
+  })
 }
 
 export function CameraHelper({
-  scene,
-  cameraData,
+  modelObjs,
+  plainPois,
   onChange,
 }: CameraHelperProps) {
-  const [threeObj, setThreeObj] = useState<ThreeObj | null>(null)
-  const [pois, setPois] = useState<POI[]>(cameraData?.pois || [])
+  const [gltfs, setGltfs] = useState<GLTF[]>([])
+  const [pois, setPois] = useState<POI[]>(unserializePlainPOIs(plainPois || []))
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
-  useEffect(() => {
-    const _scene = scene ?? new Scene()
-    const threeObj = createThreeObj(_scene, canvasRef)
-    setThreeObj(threeObj)
-  }, [scene])
+  const onModelsLoaded = useCallback((_modelObjs: GTLFModelObject[]) => {
+    const gltfs = _modelObjs
+      .map((obj) => {
+        const gltf = obj.data
+        if (gltf && obj.userData) {
+          gltf.scene.userData = obj.userData
+        }
+        return gltf
+      })
+      .filter((gltf) => gltf !== null) as GLTF[]
+
+    setGltfs(gltfs)
+  }, [])
+
+  const threeObj = useMemo(
+    () =>
+      createThreeObj({
+        gltfs,
+        canvasRef,
+      }),
+    [gltfs, canvasRef]
+  )
 
   // update 3D model
   useEffect(() => {
@@ -152,7 +178,7 @@ export function CameraHelper({
         // Render
         renderer.render(scene, camera)
 
-        // Call tick again on the next frame
+        // Call render again on the next frame
         requestId = window.requestAnimationFrame(render)
       }
     }
@@ -166,7 +192,7 @@ export function CameraHelper({
   }, [threeObj, pois])
 
   const createPoi = () => {
-    if (threeObj) {
+    if (threeObj && canvasRef.current) {
       const { cameraRig, renderer, camera, scene } = threeObj
 
       // Call render before drawing image.
@@ -179,7 +205,7 @@ export function CameraHelper({
       const ctx = canvas.getContext('2d')
       canvas.width = 640
       canvas.height = 480
-      ctx?.drawImage(canvasRef.current!, 0, 0, canvas.width, canvas.height)
+      ctx?.drawImage(canvasRef.current, 0, 0, canvas.width, canvas.height)
       const image = canvas.toDataURL('image/png')
 
       const poi = {
@@ -200,17 +226,28 @@ export function CameraHelper({
     }
   }
 
+  const areModelsLoaded = gltfs.length > 0
+
   return (
     <Container>
-      <canvas id="three" ref={canvasRef}></canvas>
+      {!areModelsLoaded && (
+        <div className="loading-progress">
+          <LoadingProgress
+            modelObjs={modelObjs}
+            onModelsLoaded={onModelsLoaded}
+          />
+        </div>
+      )}
+      <canvas ref={canvasRef}></canvas>
       <Panel
         pois={pois}
         onPoisChange={(pois) => {
           setPois(pois)
           const animationClip = createClip(pois)
           onChange?.({
-            pois,
-            animationClip,
+            pois: serializePOIs(pois),
+            //@ts-ignore we do not need to pass argument to `toJSON` function
+            animationClip: animationClip?.toJSON(),
           })
         }}
         onPoiVisit={(poi) => {
@@ -242,8 +279,9 @@ export function CameraHelper({
             const newPois = [...pois, poi]
             const animationClip = createClip(newPois)
             onChange?.({
-              pois: newPois,
-              animationClip,
+              pois: serializePOIs(newPois),
+              //@ts-ignore we do not need to pass argument to `toJSON` function
+              animationClip: animationClip?.toJSON(),
             })
             setPois(newPois)
           }
@@ -254,9 +292,20 @@ export function CameraHelper({
 }
 
 const Container = styled.div`
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   position: relative;
+  background-color: #f1f1f1;
+
+  > .loading-progress {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+  }
 
   > canvas {
     width: 100%;
@@ -264,7 +313,17 @@ const Container = styled.div`
   }
 `
 
-function createThreeObj(scene: Scene, canvasRef: React.RefObject<HTMLElement>) {
+/**
+ *  Create ThreeJS related objects, such as controls, scene, camera, renderer etc.
+ *  Therefore, we could use those objects to manipulate the 3d models.
+ */
+function createThreeObj({
+  gltfs,
+  canvasRef,
+}: {
+  gltfs: GLTF[]
+  canvasRef: React.RefObject<HTMLElement>
+}) {
   if (!canvasRef.current) {
     return null
   }
@@ -273,11 +332,24 @@ function createThreeObj(scene: Scene, canvasRef: React.RefObject<HTMLElement>) {
   const height = document.documentElement.clientHeight
 
   /**
+   *  Scene
+   */
+  const scene = new Scene()
+
+  if (Array.isArray(gltfs)) {
+    gltfs.forEach((gltf) => {
+      gltf.scene.traverse(function (object) {
+        object.castShadow = gltf.scene.userData.castShadow
+        object.receiveShadow = gltf.scene.userData.receiveShadow
+      })
+      scene.add(gltf.scene)
+    })
+  }
+
+  /**
    *  Camera
    */
   const camera = new PerspectiveCamera(75, width / height, 0.1, 2000)
-  camera.position.set(10, 10, 10)
-  // camera.lookAt(0, 0, 0)
 
   /**
    *  CameraRig
@@ -319,11 +391,6 @@ function createThreeObj(scene: Scene, canvasRef: React.RefObject<HTMLElement>) {
   grid.position.set(0, -5, 0)
   scene.add(grid)
 
-  const coneGeo = new ConeGeometry(3, 10, 4)
-  const mesh = new Mesh(coneGeo, new MeshPhongMaterial({ color: 0x000000 }))
-  mesh.position.copy(new Vector3(0, 0, -30))
-  scene.add(mesh)
-
   return {
     scene,
     renderer,
@@ -349,7 +416,7 @@ function Panel({
   onPoiEditFinish: () => void
 }) {
   const [expand, setExpand] = useState(true)
-  const [poiIdx, setPoiIdx] = useState(-1)
+  const [editPoiIdx, setEditPoiIdx] = useState(-1)
 
   const poisJsx = pois.map((poi, idx) => {
     return (
@@ -360,6 +427,7 @@ function Panel({
           <PoiControls>
             <ControlBt
               onClick={() => {
+                // delete the poi
                 const newPois = [
                   ...pois.slice(0, idx),
                   ...pois.slice(idx + 1, pois.length),
@@ -371,6 +439,7 @@ function Panel({
             </ControlBt>
             <ControlBt
               onClick={() => {
+                // fly to the poi position
                 onPoiVisit(poi)
               }}
             >
@@ -378,6 +447,7 @@ function Panel({
             </ControlBt>
             <ControlBt
               onClick={() => {
+                // switch the target poi with the previous one
                 const previousPoi = pois.slice(idx - 1, idx)[0]
                 if (previousPoi) {
                   const currentPoi = pois.slice(idx, idx + 1)[0]
@@ -395,6 +465,7 @@ function Panel({
             </ControlBt>
             <ControlBt
               onClick={() => {
+                // switch the target poi with the next one
                 const nextPoi = pois.slice(idx + 1, idx + 2)[0]
                 if (nextPoi) {
                   const currentPoi = pois.slice(idx, idx + 1)[0]
@@ -412,7 +483,9 @@ function Panel({
             </ControlBt>
             <ControlBt
               onClick={() => {
-                setPoiIdx(idx)
+                // edit the poi's content
+                setEditPoiIdx(idx)
+
                 onPoiEditStart()
               }}
             >
@@ -425,28 +498,27 @@ function Panel({
   })
 
   const editJsx =
-    poiIdx > -1 ? (
+    editPoiIdx > -1 ? (
       <CaptionInput
         isOpen={true}
         onConfirm={(caption) => {
-          const newPoi = Object.assign({}, pois[poiIdx], {
+          const newPoi = Object.assign({}, pois[editPoiIdx], {
             caption,
           })
-
           const newPois = [
-            ...pois.slice(0, poiIdx),
+            ...pois.slice(0, editPoiIdx),
             newPoi,
-            ...pois.slice(poiIdx + 1, pois.length),
+            ...pois.slice(editPoiIdx + 1, pois.length),
           ]
           onPoisChange(newPois)
-          setPoiIdx(-1)
+          setEditPoiIdx(-1)
           onPoiEditFinish()
         }}
         onCancel={() => {
-          setPoiIdx(-1)
+          setEditPoiIdx(-1)
           onPoiEditFinish()
         }}
-        inputValue={pois[poiIdx].caption}
+        inputValue={pois[editPoiIdx].caption}
       />
     ) : null
 
@@ -465,7 +537,7 @@ function Panel({
 const PanelContainer = styled.div<{ $expand: boolean }>`
   width: 350px;
   height: 100%;
-  position: fixed;
+  position: absolute;
   left: 0;
   top: 0;
   background-color: rgba(255, 255, 255, 0.8);
