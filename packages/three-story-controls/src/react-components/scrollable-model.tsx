@@ -380,7 +380,7 @@ function createThreeObj({
    */
   const cameraRig = new CameraRig(camera, scene)
   cameraRig.setAnimationClip(animationClip)
-  // cameraRig.setAnimationTime(0)
+  cameraRig.setAnimationTime(0)
 
   //
   /**
