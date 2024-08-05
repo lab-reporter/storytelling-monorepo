@@ -19,6 +19,11 @@ import { CaptionInput } from './caption-input'
 import { AlignmentEnum, CameraData, POI, PlainPOI, WidthEnum } from './type'
 import { LoadingProgress, GTLFModelObject } from './loading-progress'
 import { GLTF } from '../loader'
+import { ScrollableThreeModel } from './scrollable-model'
+import {
+  ZoomInButton as _ZoomInButton,
+  ZoomOutButton as _ZoomOutButton,
+} from './styled'
 
 function createClip(pois: POI[]) {
   if (pois.length > 0) {
@@ -139,7 +144,9 @@ export function CameraHelper({
 }: CameraHelperProps) {
   const [gltfs, setGltfs] = useState<GLTF[]>([])
   const [pois, setPois] = useState<POI[]>(unserializePlainPOIs(plainPois || []))
+  const [fullScreen, setFullScreen] = useState(false)
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const scrollerRef = useRef<HTMLDivElement>(null)
 
   const onModelsLoaded = useCallback((_modelObjs: GTLFModelObject[]) => {
     const gltfs = _modelObjs
@@ -230,6 +237,25 @@ export function CameraHelper({
 
   return (
     <Container>
+      {fullScreen && (
+        <FullScreen ref={scrollerRef}>
+          <ScrollableThreeModel
+            cameraData={{
+              pois: serializePOIs(pois),
+              //@ts-ignore we do not need to pass argument to `toJSON` function
+              animationClip: createClip(pois)?.toJSON(),
+            }}
+            scrollerRef={scrollerRef}
+            modelObjs={modelObjs}
+          />
+          <ZoomOutButton
+            $hide={!fullScreen}
+            onClick={() => {
+              setFullScreen(false)
+            }}
+          />
+        </FullScreen>
+      )}
       {!areModelsLoaded && (
         <div className="loading-progress">
           <LoadingProgress
@@ -287,6 +313,12 @@ export function CameraHelper({
           }
         }}
       />
+      <ZoomInButton
+        $hide={fullScreen}
+        onClick={() => {
+          setFullScreen(!fullScreen)
+        }}
+      />
     </Container>
   )
 }
@@ -311,6 +343,28 @@ const Container = styled.div`
     width: 100%;
     height: 100%;
   }
+`
+
+const FullScreen = styled.div`
+  position: fixed;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: scroll;
+  z-index: 1000;
+  top: 0;
+`
+
+const ZoomOutButton = styled(_ZoomOutButton)<{ $hide: boolean }>`
+  position: fixed;
+  right: 20px;
+  ${(props) => (props.$hide ? 'top: 200vh;' : 'top: 20px;')}
+`
+
+const ZoomInButton = styled(_ZoomInButton)<{ $hide: boolean }>`
+  position: absolute;
+  right: 20px;
+  ${(props) => (props.$hide ? 'top: 200vh;' : 'top: 20px;')}
 `
 
 /**
@@ -505,6 +559,7 @@ function Panel({
           const newPoi = Object.assign({}, pois[editPoiIdx], {
             caption,
           })
+
           const newPois = [
             ...pois.slice(0, editPoiIdx),
             newPoi,
