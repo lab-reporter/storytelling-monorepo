@@ -7,7 +7,7 @@ import {
   convertFromRaw,
 } from 'draft-js'
 import { Drawer, DrawerController, DrawerProvider } from '@keystone-ui/modals'
-import { FieldLabel, Select } from '@keystone-ui/fields'
+import { FieldLabel, Select, TextInput } from '@keystone-ui/fields'
 import {
   RichTextEditor,
   buttonNames,
@@ -67,6 +67,7 @@ export function CaptionInput({
     editorState: EditorState.createWithContent(contentState),
     alignment: inputValue.alignment,
     width: inputValue.width,
+    top: inputValue.top,
   })
 
   const selectedAlignmentValue =
@@ -149,6 +150,23 @@ export function CaptionInput({
               }
             }}
             value={selectedWidthValue}
+          />
+          <MarginTop />
+          <FieldLabel>
+            字幕間距（與上一個字幕上端的距離。單位是螢幕高，例如：1
+            代表一個螢幕高）
+          </FieldLabel>
+          <TextInput
+            onChange={(e) =>
+              setInputValueState((prevState) => {
+                return Object.assign({}, prevState, {
+                  top: Number(e.target.value),
+                })
+              })
+            }
+            placeholder="0"
+            type="number"
+            value={inputValueState.top ? inputValueState.top.toString() : 1}
           />
         </Drawer>
       </DrawerController>

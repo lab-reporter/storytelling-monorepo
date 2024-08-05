@@ -21,6 +21,7 @@ export type CaptionProp = {
   rawContentState: RawDraftContentState
   alignment?: AlignmentEnum
   width?: WidthEnum
+  top?: number
   customCss?: string
 }
 

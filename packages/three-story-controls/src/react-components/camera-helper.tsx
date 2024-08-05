@@ -227,6 +227,7 @@ export function CameraHelper({
           },
           alignment: AlignmentEnum.LEFT,
           width: WidthEnum.NARROW,
+          top: 1,
         },
       }
       return poi
@@ -559,6 +560,10 @@ function Panel({
           const newPoi = Object.assign({}, pois[editPoiIdx], {
             caption,
           })
+
+          if (caption.top) {
+            newPoi.duration = caption.top
+          }
 
           const newPois = [
             ...pois.slice(0, editPoiIdx),
