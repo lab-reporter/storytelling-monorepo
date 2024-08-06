@@ -21,8 +21,16 @@ import { LoadingProgress, GTLFModelObject } from './loading-progress'
 import { GLTF } from '../loader'
 import { ScrollableThreeModel } from './scrollable-model'
 import {
-  ZoomInButton as _ZoomInButton,
-  ZoomOutButton as _ZoomOutButton,
+  OpenPreviewButton as _OpenPreviewButton,
+  ClosePreviewButton as _ClosePreviewButton,
+  ExpandButton as _ExpandButton,
+  AddButton as _AddButton,
+  DeleteButton as _DeleteButton,
+  FocusButton as _FocusButton,
+  SwitchPrevButton as _SwitchPrevButton,
+  SwitchNextButton as _SwitchNextButton,
+  HideButton as _HideButton,
+  EditButton as _EditButton,
 } from './styled'
 
 function createClip(pois: POI[]) {
@@ -249,7 +257,7 @@ export function CameraHelper({
             scrollerRef={scrollerRef}
             modelObjs={modelObjs}
           />
-          <ZoomOutButton
+          <ClosePreviewButton
             $hide={!fullScreen}
             onClick={() => {
               setFullScreen(false)
@@ -314,7 +322,7 @@ export function CameraHelper({
           }
         }}
       />
-      <ZoomInButton
+      <OpenPreviewButton
         $hide={fullScreen}
         onClick={() => {
           setFullScreen(!fullScreen)
@@ -356,13 +364,13 @@ const FullScreen = styled.div`
   top: 0;
 `
 
-const ZoomOutButton = styled(_ZoomOutButton)<{ $hide: boolean }>`
+const ClosePreviewButton = styled(_ClosePreviewButton)<{ $hide: boolean }>`
   position: fixed;
   right: 20px;
   ${(props) => (props.$hide ? 'top: 200vh;' : 'top: 20px;')}
 `
 
-const ZoomInButton = styled(_ZoomInButton)<{ $hide: boolean }>`
+const OpenPreviewButton = styled(_OpenPreviewButton)<{ $hide: boolean }>`
   position: absolute;
   right: 20px;
   ${(props) => (props.$hide ? 'top: 200vh;' : 'top: 20px;')}
@@ -475,80 +483,71 @@ function Panel({
 
   const poisJsx = pois.map((poi, idx) => {
     return (
-      <div key={idx}>
-        <h3>{idx + 1}.</h3>
-        <Poi>
-          <PoiImg src={poi.image} />
-          <PoiControls>
-            <ControlBt
-              onClick={() => {
-                // delete the poi
+      <Poi key={'poi_' + idx}>
+        <PoiImg src={poi.image} />
+        <PoiControls>
+          <h3>{(idx + 1).toString().padStart(3, '0')}</h3>
+          <DeleteButton
+            onClick={() => {
+              // delete the poi
+              const newPois = [
+                ...pois.slice(0, idx),
+                ...pois.slice(idx + 1, pois.length),
+              ]
+              onPoisChange(newPois)
+            }}
+          />
+          <FocusButton
+            onClick={() => {
+              // fly to the poi position
+              onPoiVisit(poi)
+            }}
+          />
+          <SwitchPrevButton
+            disabled={idx === 0 || pois.length === 1}
+            onClick={() => {
+              // switch the target poi with the previous one
+              const previousPoi = pois.slice(idx - 1, idx)[0]
+              if (previousPoi) {
+                const currentPoi = pois.slice(idx, idx + 1)[0]
                 const newPois = [
-                  ...pois.slice(0, idx),
+                  ...pois.slice(0, idx - 1),
+                  currentPoi,
+                  previousPoi,
                   ...pois.slice(idx + 1, pois.length),
                 ]
                 onPoisChange(newPois)
-              }}
-            >
-              x
-            </ControlBt>
-            <ControlBt
-              onClick={() => {
-                // fly to the poi position
-                onPoiVisit(poi)
-              }}
-            >
-              →
-            </ControlBt>
-            <ControlBt
-              onClick={() => {
-                // switch the target poi with the previous one
-                const previousPoi = pois.slice(idx - 1, idx)[0]
-                if (previousPoi) {
-                  const currentPoi = pois.slice(idx, idx + 1)[0]
-                  const newPois = [
-                    ...pois.slice(0, idx - 1),
-                    currentPoi,
-                    previousPoi,
-                    ...pois.slice(idx + 1, pois.length),
-                  ]
-                  onPoisChange(newPois)
-                }
-              }}
-            >
-              ↑
-            </ControlBt>
-            <ControlBt
-              onClick={() => {
-                // switch the target poi with the next one
-                const nextPoi = pois.slice(idx + 1, idx + 2)[0]
-                if (nextPoi) {
-                  const currentPoi = pois.slice(idx, idx + 1)[0]
-                  const newPois = [
-                    ...pois.slice(0, idx),
-                    nextPoi,
-                    currentPoi,
-                    ...pois.slice(idx + 2, pois.length),
-                  ]
-                  onPoisChange(newPois)
-                }
-              }}
-            >
-              ↓
-            </ControlBt>
-            <ControlBt
-              onClick={() => {
-                // edit the poi's content
-                setEditPoiIdx(idx)
+              }
+            }}
+          />
+          <SwitchNextButton
+            disabled={idx === pois.length - 1 || pois.length === 1}
+            onClick={() => {
+              // switch the target poi with the next one
+              const nextPoi = pois.slice(idx + 1, idx + 2)[0]
+              if (nextPoi) {
+                const currentPoi = pois.slice(idx, idx + 1)[0]
+                const newPois = [
+                  ...pois.slice(0, idx),
+                  nextPoi,
+                  currentPoi,
+                  ...pois.slice(idx + 2, pois.length),
+                ]
+                onPoisChange(newPois)
+              }
+            }}
+          />
+          <EditButton
+            focus={editPoiIdx === idx}
+            onClick={() => {
+              // edit the poi's content
+              setEditPoiIdx(idx)
 
-                onPoiEditStart()
-              }}
-            >
-              ✎
-            </ControlBt>
-          </PoiControls>
-        </Poi>
-      </div>
+              onPoiEditStart()
+            }}
+          />
+        </PoiControls>
+      </Poi>
     )
   })
 
@@ -585,10 +584,12 @@ function Panel({
   return (
     <PanelContainer $expand={expand}>
       <Pois>{poisJsx}</Pois>
-      <ExpandBt onClick={() => setExpand(!expand)}>
-        {expand ? '<' : '>'}
-      </ExpandBt>
-      <AddBt onClick={onPoiAdd}>+</AddBt>
+      {expand ? (
+        <HideButton onClick={() => setExpand(false)} />
+      ) : (
+        <ExpandButton onClick={() => setExpand(true)} />
+      )}
+      <AddButton onClick={onPoiAdd} />
       {editJsx}
     </PanelContainer>
   )
@@ -615,43 +616,69 @@ const Poi = styled.div`
   margin-bottom: 15px;
   display: flex;
   justify-content: space-between;
+
+  border: solid 1px #000;
+  border-radius: 6px;
+  padding: 10px;
+
+  h3 {
+    font-size: 14px;
+    font-weigth: bold;
+    color: #000;
+    margin: 0;
+  }
 `
 
 const PoiImg = styled.img`
-  width: 280px;
+  max-width: 260px;
 `
 
 const PoiControls = styled.div`
   display: flex;
   flex-direction: column;
   gap: 5px;
-  justify-content: center;
+  justify-content: flex-start;
 `
 
-const ControlBt = styled.button`
-  padding: 10px;
-  width: 30px;
-  height: 30px;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`
-
-const ExpandBt = styled(ControlBt)`
+const ExpandButton = styled(_ExpandButton)`
   position: absolute;
   bottom: 100px;
   left: 360px;
-  width: 40px;
-  height: 40px;
-  font-size: 30px;
 `
 
-const AddBt = styled(ControlBt)`
+const HideButton = styled(_HideButton)`
   position: absolute;
-  bottom: 50px;
+  bottom: 100px;
   left: 360px;
-  width: 40px;
-  height: 40px;
-  font-size: 30px;
+`
+
+const AddButton = styled(_AddButton)`
+  position: absolute;
+  bottom: 40px;
+  left: 360px;
+`
+
+const EditButton = styled(_EditButton)`
+  width: 25px;
+  height: 25px;
+`
+
+const DeleteButton = styled(_DeleteButton)`
+  width: 25px;
+  height: 25px;
+`
+
+const FocusButton = styled(_FocusButton)`
+  width: 25px;
+  height: 25px;
+`
+
+const SwitchPrevButton = styled(_SwitchPrevButton)`
+  width: 25px;
+  height: 25px;
+`
+
+const SwitchNextButton = styled(_SwitchNextButton)`
+  width: 25px;
+  height: 25px;
 `
