@@ -25,7 +25,16 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "three": "0.137.5",
+    "@gsap/react": "^2.1.0",
+    "@keystone-ui/fields": "^7.2.0",
+    "@keystone-ui/modals": "^6.0.3",
+    "@story-telling-reporter/draft-editor": "^2.0.0",
+    "axios": "^1.7.2",
+    "draft-js": "^0.11.7",
+    "gsap": "^3.12.5",
+    "lodash": "^4.17.15",
+    "nanoid": "^5.0.7",
+    "three": "^0.163.0",
     "three-story-controls": "^1.0.6"
   },
   "devDependencies": {
@@ -41,8 +50,6 @@
   },
   "files": [
     "lib",
-    "webpack-bundles",
-    "src",
-    "dev"
+    "public"
   ]
 }
