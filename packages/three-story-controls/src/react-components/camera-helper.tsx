@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo, useState, useEffect, useRef } from 'react'
+import debounce from 'lodash/debounce'
 import gsap from 'gsap'
 import styled from '../styled-components'
 import {
@@ -32,6 +33,10 @@ import {
   HideButton as _HideButton,
   EditButton as _EditButton,
 } from './styled'
+
+const _ = {
+  debounce,
+}
 
 function createClip(pois: POI[]) {
   if (pois.length > 0) {
@@ -205,6 +210,34 @@ export function CameraHelper({
       cancelAnimationFrame(requestId)
     }
   }, [threeObj, pois])
+
+  // Handle resize
+  useEffect(() => {
+    const handleResize = _.debounce(() => {
+      if (!threeObj) {
+        return
+      }
+
+      const { camera, renderer } = threeObj
+      const width = document.documentElement.clientWidth
+      const height = document.documentElement.clientHeight
+
+      // Update camera
+      camera.aspect = width / height
+      camera.updateProjectionMatrix()
+
+      // Update renderer
+      renderer.setSize(width, height)
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+    }, 300)
+
+    window.addEventListener('resize', handleResize)
+    handleResize()
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [threeObj])
 
   const createPoi = () => {
     if (threeObj && canvasRef.current) {

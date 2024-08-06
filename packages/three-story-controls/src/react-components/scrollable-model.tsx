@@ -274,11 +274,27 @@ function ScrollableThreeModel({
           innerHeight: window.innerHeight,
         })
       }
+
+      if (!threeObj) {
+        return
+      }
+
+      const { camera, renderer } = threeObj
+      const width = document.documentElement.clientWidth
+      const height = document.documentElement.clientHeight
+
+      // Update camera
+      camera.aspect = width / height
+      camera.updateProjectionMatrix()
+
+      // Update renderer
+      renderer.setSize(width, height)
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     }, 300)
 
+    window.addEventListener('resize', handleResize)
     handleResize()
 
-    window.addEventListener('resize', handleResize)
     return () => {
       window.removeEventListener('resize', handleResize)
     }
