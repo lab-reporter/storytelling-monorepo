@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState, useEffect, useRef } from 'react'
+import React, { useCallback, useState, useEffect, useRef } from 'react'
 import debounce from 'lodash/debounce'
 import gsap from 'gsap'
 import styled from '../styled-components'
@@ -22,6 +22,8 @@ import { LoadingProgress, GTLFModelObject } from './loading-progress'
 import { GLTF } from '../loader'
 import { ScrollableThreeModel } from './scrollable-model'
 import {
+  ZoomInButton as _ZoomInButton,
+  ZoomOutButton as _ZoomOutButton,
   OpenPreviewButton as _OpenPreviewButton,
   ClosePreviewButton as _ClosePreviewButton,
   ExpandButton as _ExpandButton,
@@ -111,6 +113,14 @@ function createClip(pois: POI[]) {
   }
 }
 
+type ThreeObj = {
+  controls: FreeMovementControls
+  cameraRig: CameraRig
+  renderer: WebGLRenderer
+  camera: PerspectiveCamera
+  scene: Scene
+}
+
 type CameraHelperProps = {
   modelObjs: GTLFModelObject[]
   plainPois?: PlainPOI[]
@@ -158,8 +168,11 @@ export function CameraHelper({
   const [gltfs, setGltfs] = useState<GLTF[]>([])
   const [pois, setPois] = useState<POI[]>(unserializePlainPOIs(plainPois || []))
   const [fullScreen, setFullScreen] = useState(false)
+  const [previewMode, setPreviewMode] = useState(false)
+  const [threeObj, setThreeObj] = useState<ThreeObj | null>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const scrollerRef = useRef<HTMLDivElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
 
   const onModelsLoaded = useCallback((_modelObjs: GTLFModelObject[]) => {
     const gltfs = _modelObjs
@@ -175,14 +188,13 @@ export function CameraHelper({
     setGltfs(gltfs)
   }, [])
 
-  const threeObj = useMemo(
-    () =>
-      createThreeObj({
-        gltfs,
-        canvasRef,
-      }),
-    [gltfs, canvasRef]
-  )
+  useEffect(() => {
+    const threeObj = createThreeObj({
+      gltfs,
+      canvas: canvasRef.current,
+    })
+    setThreeObj(threeObj)
+  }, [gltfs, previewMode])
 
   // update 3D model
   useEffect(() => {
@@ -209,7 +221,7 @@ export function CameraHelper({
     return () => {
       cancelAnimationFrame(requestId)
     }
-  }, [threeObj, pois])
+  }, [threeObj])
 
   // Handle resize
   useEffect(() => {
@@ -219,8 +231,13 @@ export function CameraHelper({
       }
 
       const { camera, renderer } = threeObj
-      const width = document.documentElement.clientWidth
-      const height = document.documentElement.clientHeight
+      let width = document.documentElement.clientWidth
+      let height = document.documentElement.clientHeight
+
+      if (!fullScreen && containerRef.current) {
+        width = containerRef?.current?.clientWidth
+        height = containerRef?.current?.clientHeight
+      }
 
       // Update camera
       camera.aspect = width / height
@@ -237,7 +254,7 @@ export function CameraHelper({
     return () => {
       window.removeEventListener('resize', handleResize)
     }
-  }, [threeObj])
+  }, [threeObj, fullScreen])
 
   const createPoi = () => {
     if (threeObj && canvasRef.current) {
@@ -277,35 +294,41 @@ export function CameraHelper({
 
   const areModelsLoaded = gltfs.length > 0
 
+  if (previewMode) {
+    return (
+      <PreviewContainer ref={scrollerRef}>
+        <ScrollableThreeModel
+          cameraData={{
+            pois: serializePOIs(pois),
+            //@ts-ignore we do not need to pass argument to `toJSON` function
+            animationClip: createClip(pois)?.toJSON(),
+          }}
+          scrollerRef={scrollerRef}
+          modelObjs={modelObjs}
+        />
+        <ClosePreviewButton
+          $hide={!previewMode}
+          onClick={() => {
+            setPreviewMode(false)
+          }}
+        />
+      </PreviewContainer>
+    )
+  }
+
+  if (!areModelsLoaded) {
+    return (
+      <LoadingProgressContainer>
+        <LoadingProgress
+          modelObjs={modelObjs}
+          onModelsLoaded={onModelsLoaded}
+        />
+      </LoadingProgressContainer>
+    )
+  }
+
   return (
-    <Container>
-      {fullScreen && (
-        <FullScreen ref={scrollerRef}>
-          <ScrollableThreeModel
-            cameraData={{
-              pois: serializePOIs(pois),
-              //@ts-ignore we do not need to pass argument to `toJSON` function
-              animationClip: createClip(pois)?.toJSON(),
-            }}
-            scrollerRef={scrollerRef}
-            modelObjs={modelObjs}
-          />
-          <ClosePreviewButton
-            $hide={!fullScreen}
-            onClick={() => {
-              setFullScreen(false)
-            }}
-          />
-        </FullScreen>
-      )}
-      {!areModelsLoaded && (
-        <div className="loading-progress">
-          <LoadingProgress
-            modelObjs={modelObjs}
-            onModelsLoaded={onModelsLoaded}
-          />
-        </div>
-      )}
+    <Container $fullScreen={fullScreen} ref={containerRef}>
       <canvas ref={canvasRef}></canvas>
       <Panel
         pois={pois}
@@ -355,31 +378,51 @@ export function CameraHelper({
           }
         }}
       />
-      <OpenPreviewButton
-        $hide={fullScreen}
-        onClick={() => {
-          setFullScreen(!fullScreen)
-        }}
-      />
+      {Array.isArray(pois) && pois.length > 0 && (
+        <OpenPreviewButton
+          $hide={previewMode}
+          onClick={() => {
+            setPreviewMode(true)
+          }}
+        />
+      )}
+      {fullScreen ? (
+        <ZoomOutButton onClick={() => setFullScreen(false)} />
+      ) : (
+        <ZoomInButton onClick={() => setFullScreen(true)} />
+      )}
     </Container>
   )
 }
 
-const Container = styled.div`
-  width: 100vw;
-  height: 100vh;
-  position: relative;
-  background-color: #f1f1f1;
+const LoadingProgressContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-  > .loading-progress {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: #f1f1f1e5;
+`
 
-    position: absolute;
-    width: 100vw;
-    height: 100vh;
-  }
+const Container = styled.div<{ $fullScreen: boolean }>`
+  background-color: #f1f1f1e5;
+
+  ${({ $fullScreen }) => {
+    return $fullScreen
+      ? `
+      width: 100vw;
+      height: 100vh;
+      position: fixed;
+      top: 0px;
+      left: 0px;
+    `
+      : `
+      width: 100%;
+      height: 100%;
+      position: relative;
+    `
+  }}
 
   > canvas {
     width: 100%;
@@ -387,26 +430,37 @@ const Container = styled.div`
   }
 `
 
-const FullScreen = styled.div`
+const PreviewContainer = styled.div`
   position: fixed;
   left: 0;
   width: 100%;
   height: 100%;
   overflow: scroll;
-  z-index: 1000;
   top: 0;
 `
 
 const ClosePreviewButton = styled(_ClosePreviewButton)<{ $hide: boolean }>`
   position: fixed;
   right: 20px;
-  ${(props) => (props.$hide ? 'top: 200vh;' : 'top: 20px;')}
+  ${(props) => (props.$hide ? 'top: 200vh;' : 'top: 90px;')}
 `
 
 const OpenPreviewButton = styled(_OpenPreviewButton)<{ $hide: boolean }>`
   position: absolute;
   right: 20px;
-  ${(props) => (props.$hide ? 'top: 200vh;' : 'top: 20px;')}
+  ${(props) => (props.$hide ? 'top: 200vh;' : 'top: 90px;')}
+`
+
+const ZoomInButton = styled(_ZoomInButton)`
+  position: absolute;
+  right: 20px;
+  top: 20px;
+`
+
+const ZoomOutButton = styled(_ZoomOutButton)`
+  position: absolute;
+  right: 20px;
+  top: 20px;
 `
 
 /**
@@ -415,17 +469,17 @@ const OpenPreviewButton = styled(_OpenPreviewButton)<{ $hide: boolean }>`
  */
 function createThreeObj({
   gltfs,
-  canvasRef,
+  canvas,
 }: {
   gltfs: GLTF[]
-  canvasRef: React.RefObject<HTMLElement>
-}) {
-  if (!canvasRef.current) {
+  canvas: HTMLCanvasElement | null
+}): ThreeObj | null {
+  if (!canvas) {
     return null
   }
 
-  const width = document.documentElement.clientWidth
-  const height = document.documentElement.clientHeight
+  const width = canvas.clientWidth
+  const height = canvas.clientHeight
 
   /**
    *  Scene
@@ -456,7 +510,7 @@ function createThreeObj({
    *  Controls
    */
   const controls = new FreeMovementControls(cameraRig, {
-    domElement: canvasRef.current,
+    domElement: canvas,
     keyboardScaleFactor: 0.1,
     wheelScaleFactor: 0.01,
     pointerDampFactor: 0.1,
@@ -468,7 +522,7 @@ function createThreeObj({
    * Renderer
    */
   const renderer = new WebGLRenderer({
-    canvas: canvasRef.current,
+    canvas: canvas,
   })
 
   renderer.toneMapping = ACESFilmicToneMapping

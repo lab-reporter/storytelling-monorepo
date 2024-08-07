@@ -28,6 +28,28 @@ type IconProps = {
   focus?: boolean
 }
 
+export function ZoomInButton(props: IconProps) {
+  return (
+    <Icon
+      className={props?.className}
+      onClick={props?.onClick}
+      $bgImg={urlPrefix + '/zoom-in.normal.svg'}
+      $hoverBgImg={urlPrefix + '/zoom-in.hover.svg'}
+    />
+  )
+}
+
+export function ZoomOutButton(props: IconProps) {
+  return (
+    <Icon
+      className={props?.className}
+      onClick={props?.onClick}
+      $bgImg={urlPrefix + '/zoom-out.normal.svg'}
+      $hoverBgImg={urlPrefix + '/zoom-out.hover.svg'}
+    />
+  )
+}
+
 export function OpenPreviewButton(props: IconProps) {
   return (
     <Icon
