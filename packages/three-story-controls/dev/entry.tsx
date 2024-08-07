@@ -9,7 +9,7 @@ const root = createRoot(container!)
 function Root() {
   const modelUrl = './model.glb'
   return (
-    <div>
+    <div style={{ width: '50vw', height: '50vh' }}>
       <CameraHelper
         modelObjs={[
           {
