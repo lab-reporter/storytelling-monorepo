@@ -25,23 +25,23 @@ export type CaptionProp = {
   customCss?: string
 }
 
+export type CameraData = {
+  pois?: POI[]
+  animationClip?: any
+}
+
 export type POI = {
-  position: Vector3
-  quaternion: Quaternion
+  position: number[]
+  quaternion: number[]
   duration: number
   ease: string
   image?: string
   caption: CaptionProp
 }
 
-export type CameraData = {
-  pois?: PlainPOI[]
-  animationClip?: any
-}
-
-export type PlainPOI = {
-  position: number[]
-  quaternion: number[]
+export type ThreePOI = {
+  position: Vector3
+  quaternion: Quaternion
   duration: number
   ease: string
   image?: string

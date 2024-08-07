@@ -17,7 +17,7 @@ import {
 } from 'three'
 import { CameraRig, FreeMovementControls } from 'three-story-controls'
 import { CaptionInput } from './caption-input'
-import { AlignmentEnum, CameraData, POI, PlainPOI, WidthEnum } from './type'
+import { AlignmentEnum, CameraData, POI, ThreePOI, WidthEnum } from './type'
 import { LoadingProgress, GTLFModelObject } from './loading-progress'
 import { GLTF } from '../loader'
 import { ScrollableThreeModel } from './scrollable-model'
@@ -40,7 +40,7 @@ const _ = {
   debounce,
 }
 
-function createClip(pois: POI[]) {
+function createClip(pois: ThreePOI[]) {
   if (pois.length > 0) {
     const times = []
     const positionValues: number[] = []
@@ -123,50 +123,31 @@ type ThreeObj = {
 
 type CameraHelperProps = {
   modelObjs: GTLFModelObject[]
-  plainPois?: PlainPOI[]
+  pois?: POI[]
   onChange?: (arg: CameraData) => void
 }
 
 /**
- *  Transfer PlainPOI data structure to POI data structure.
+ *  Transfer POI data structure to ThreePOI data structure.
  */
-function unserializePlainPOIs(plainPois: PlainPOI[]): POI[] {
-  return plainPois.map(({ position, quaternion, ...rest }) => {
+function transferPOIsToThreePOIs(pois: POI[]): ThreePOI[] {
+  return pois.map(({ position, quaternion, ...rest }) => {
     const poi = {
-      position: new Vector3(position[0], position[1], position[2]),
-      quaternion: new Quaternion(
-        quaternion[0],
-        quaternion[1],
-        quaternion[2],
-        quaternion[3]
-      ),
+      position: new Vector3(...position),
+      quaternion: new Quaternion(...quaternion),
       ...rest,
     }
     return poi
   })
 }
 
-/**
- *  Transfer POI data structure to PlainPOI data structure.
- */
-function serializePOIs(pois: POI[]): PlainPOI[] {
-  return pois.map(({ position, quaternion, ...rest }) => {
-    const plainPoi = {
-      position: position.toArray(),
-      quaternion: quaternion.toArray(),
-      ...rest,
-    }
-    return plainPoi
-  })
-}
-
 export function CameraHelper({
   modelObjs,
-  plainPois,
+  pois: _pois,
   onChange,
 }: CameraHelperProps) {
   const [gltfs, setGltfs] = useState<GLTF[]>([])
-  const [pois, setPois] = useState<POI[]>(unserializePlainPOIs(plainPois || []))
+  const [pois, setPois] = useState<POI[]>(_pois || [])
   const [fullScreen, setFullScreen] = useState(false)
   const [previewMode, setPreviewMode] = useState(false)
   const [threeObj, setThreeObj] = useState<ThreeObj | null>(null)
@@ -256,7 +237,7 @@ export function CameraHelper({
     }
   }, [threeObj, fullScreen])
 
-  const createPoi = () => {
+  const createPoi = (): POI | undefined => {
     if (threeObj && canvasRef.current) {
       const { cameraRig, renderer, camera, scene } = threeObj
 
@@ -272,9 +253,11 @@ export function CameraHelper({
       canvas.height = 480
       ctx?.drawImage(canvasRef.current, 0, 0, canvas.width, canvas.height)
       const image = canvas.toDataURL('image/png')
+      const coord = cameraRig.getWorldCoordinates()
 
       const poi = {
-        ...cameraRig.getWorldCoordinates(),
+        position: coord.position.toArray(),
+        quaternion: coord.quaternion.toArray(),
         duration: 1,
         ease: 'power1',
         image,
@@ -299,9 +282,9 @@ export function CameraHelper({
       <PreviewContainer ref={scrollerRef}>
         <ScrollableThreeModel
           cameraData={{
-            pois: serializePOIs(pois),
+            pois,
             //@ts-ignore we do not need to pass argument to `toJSON` function
-            animationClip: createClip(pois)?.toJSON(),
+            animationClip: createClip(transferPOIsToThreePOIs(pois))?.toJSON(),
           }}
           scrollerRef={scrollerRef}
           modelObjs={modelObjs}
@@ -334,9 +317,9 @@ export function CameraHelper({
         pois={pois}
         onPoisChange={(pois) => {
           setPois(pois)
-          const animationClip = createClip(pois)
+          const animationClip = createClip(transferPOIsToThreePOIs(pois))
           onChange?.({
-            pois: serializePOIs(pois),
+            pois,
             //@ts-ignore we do not need to pass argument to `toJSON` function
             animationClip: animationClip?.toJSON(),
           })
@@ -344,12 +327,9 @@ export function CameraHelper({
         onPoiVisit={(poi) => {
           if (threeObj) {
             const { cameraRig } = threeObj
-            cameraRig.flyTo(
-              poi.position,
-              poi.quaternion,
-              poi.duration,
-              poi.ease
-            )
+            const position = new Vector3(...poi.position)
+            const quaternion = new Quaternion(...poi.quaternion)
+            cameraRig.flyTo(position, quaternion, poi.duration, poi.ease)
           }
         }}
         onPoiEditStart={() => {
@@ -368,9 +348,9 @@ export function CameraHelper({
           const poi = createPoi()
           if (poi) {
             const newPois = [...pois, poi]
-            const animationClip = createClip(newPois)
+            const animationClip = createClip(transferPOIsToThreePOIs(newPois))
             onChange?.({
-              pois: serializePOIs(newPois),
+              pois: newPois,
               //@ts-ignore we do not need to pass argument to `toJSON` function
               animationClip: animationClip?.toJSON(),
             })

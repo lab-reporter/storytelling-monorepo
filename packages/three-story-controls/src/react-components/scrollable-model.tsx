@@ -10,9 +10,12 @@ import {
   Scene,
   WebGLRenderer,
 } from 'three'
-import { PlainPOI } from './type'
+import { POI } from './type'
 import { CameraData } from './type'
-import { CameraRig, ThreeDOFControls } from 'three-story-controls'
+import {
+  CameraRig,
+  ThreeDOFControls,
+} from 'three-story-controls/dist/three-story-controls'
 import { DraftRenderer } from '../draft-renderer/index'
 import { GLTF } from '../loader'
 import { LoadingProgress, GTLFModelObject } from './loading-progress'
@@ -33,7 +36,7 @@ function Sections({
   durationPer100vh,
   windowObject,
 }: {
-  pois: PlainPOI[]
+  pois: POI[]
   durationPer100vh: number
   windowObject: {
     innerHeight: number
@@ -131,6 +134,14 @@ const Section = styled.div`
   }
 `
 
+type ThreeObj = {
+  controls: ThreeDOFControls
+  cameraRig: CameraRig
+  renderer: WebGLRenderer
+  camera: PerspectiveCamera
+  scene: Scene
+}
+
 type ScrollableThreeModelProps = {
   cameraData: CameraData
   debugMode?: boolean
@@ -153,6 +164,7 @@ function ScrollableThreeModel({
   const scrollTriggerInstance = useRef<ScrollTrigger | null>(null)
   const scrollTriggerRef = useRef<HTMLDivElement>(null)
   const [gltfs, setGltfs] = useState<GLTF[]>([])
+  const [threeObj, setThreeObj] = useState<ThreeObj | null>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
   const animationClip = useMemo(
@@ -181,16 +193,6 @@ function ScrollableThreeModel({
 
     setGltfs(gltfs)
   }, [])
-
-  const threeObj = useMemo(
-    () =>
-      createThreeObj({
-        gltfs,
-        canvasRef,
-        animationClip,
-      }),
-    [gltfs, animationClip]
-  )
 
   const areModelsLoaded = gltfs.length !== 0
 
@@ -238,6 +240,15 @@ function ScrollableThreeModel({
       dependencies: [debugMode, windowObject, scrollerRef, threeObj],
     }
   )
+
+  useEffect(() => {
+    const threeObj = createThreeObj({
+      gltfs,
+      canvas: canvasRef.current,
+      animationClip,
+    })
+    setThreeObj(threeObj)
+  }, [gltfs])
 
   // Handle 3D model rendering
   useEffect(() => {
@@ -300,16 +311,19 @@ function ScrollableThreeModel({
     }
   }, [windowObject])
 
+  if (!areModelsLoaded) {
+    return (
+      <LoadingProgressContainer>
+        <LoadingProgress
+          modelObjs={modelObjs}
+          onModelsLoaded={onModelsLoaded}
+        />
+      </LoadingProgressContainer>
+    )
+  }
+
   return (
     <Container>
-      {!areModelsLoaded && (
-        <div className="loading-progress">
-          <LoadingProgress
-            modelObjs={modelObjs}
-            onModelsLoaded={onModelsLoaded}
-          />
-        </div>
-      )}
       <CanvasContainer>
         <canvas ref={canvasRef}></canvas>
       </CanvasContainer>
@@ -326,18 +340,21 @@ function ScrollableThreeModel({
   )
 }
 
-const Container = styled.div`
-  width: fit-content;
-  position: relative;
+const LoadingProgressContainer = styled.div`
+  width: 100vw;
+  height: 100vh;
 
-  /*
-  > .loading-progress {
-    position: sticky;
-    width: 100vw;
-    height: 100vh;
-    top: 0;
-  }
-  */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: #f1f1f1e5;
+`
+
+const Container = styled.div`
+  position: relative;
+  width: fit-content;
+  height: fit-content;
 `
 
 const CanvasContainer = styled.div`
@@ -355,14 +372,14 @@ const Content = styled.div`
 
 function createThreeObj({
   gltfs,
-  canvasRef,
+  canvas,
   animationClip,
 }: {
   gltfs: GLTF[]
-  canvasRef: React.RefObject<HTMLElement>
+  canvas: HTMLCanvasElement | null
   animationClip: AnimationClip
 }) {
-  if (!canvasRef.current) {
+  if (!canvas) {
     return null
   }
 
@@ -403,7 +420,7 @@ function createThreeObj({
    * Renderer
    */
   const renderer = new WebGLRenderer({
-    canvas: canvasRef.current,
+    canvas: canvas,
   })
 
   renderer.toneMapping = ACESFilmicToneMapping
