@@ -249,8 +249,8 @@ export function CameraHelper({
       // Draw image
       const canvas = document.createElement('canvas')
       const ctx = canvas.getContext('2d')
-      canvas.width = 640
-      canvas.height = 480
+      canvas.width = 550
+      canvas.height = 340
       ctx?.drawImage(canvasRef.current, 0, 0, canvas.width, canvas.height)
       const image = canvas.toDataURL('image/png')
       const coord = cameraRig.getWorldCoordinates()
@@ -422,7 +422,7 @@ const PreviewContainer = styled.div`
 const ClosePreviewButton = styled(_ClosePreviewButton)<{ $hide: boolean }>`
   position: fixed;
   right: 20px;
-  ${(props) => (props.$hide ? 'top: 200vh;' : 'top: 90px;')}
+  ${(props) => (props.$hide ? 'top: 200vh;' : 'top: 20px;')}
 `
 
 const OpenPreviewButton = styled(_OpenPreviewButton)<{ $hide: boolean }>`
@@ -564,12 +564,6 @@ function Panel({
               onPoisChange(newPois)
             }}
           />
-          <FocusButton
-            onClick={() => {
-              // fly to the poi position
-              onPoiVisit(poi)
-            }}
-          />
           <SwitchPrevButton
             disabled={idx === 0 || pois.length === 1}
             onClick={() => {
@@ -602,6 +596,12 @@ function Panel({
                 ]
                 onPoisChange(newPois)
               }
+            }}
+          />
+          <FocusButton
+            onClick={() => {
+              // fly to the poi position
+              onPoiVisit(poi)
             }}
           />
           <EditButton
