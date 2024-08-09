@@ -121,7 +121,7 @@ type ThreeObj = {
   scene: Scene
 }
 
-type CameraHelperProps = {
+export type CameraHelperProps = {
   modelObjs: GTLFModelObject[]
   pois?: POI[]
   onChange?: (arg: CameraData) => void

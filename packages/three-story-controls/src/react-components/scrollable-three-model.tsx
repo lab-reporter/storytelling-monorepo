@@ -142,7 +142,7 @@ type ThreeObj = {
   scene: Scene
 }
 
-type ScrollableThreeModelProps = {
+export type ScrollableThreeModelProps = {
   cameraData: CameraData
   debugMode?: boolean
   modelObjs: GTLFModelObject[]

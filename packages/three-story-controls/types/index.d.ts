@@ -1,18 +1,15 @@
-// index.d.ts
+import {
+  CameraHelper,
+  CameraHelperProps,
+} from '../src/react-components/camera-helper'
+import {
+  ScrollableThreeModel,
+  ScrollableThreeModelProps,
+} from '../src/react-components/scrollable-three-model'
 
-import { CameraData, POI } from '../src/react-components/type'
-import { GTLFModelObject } from '../src/react-components/loading-progress'
-
-// Type definitions for CameraHelperProps
-export type CameraHelperProps = {
-  modelObjs: GTLFModelObject[]
-  pois?: POI[]
-  onChange?: (arg: CameraData) => void
+export {
+  CameraHelper,
+  CameraHelperProps,
+  ScrollableThreeModel,
+  ScrollableThreeModelProps,
 }
-
-// Component definitions
-export function CameraHelper({
-  modelObjs,
-  pois,
-  onChange,
-}: CameraHelperProps): JSX.Element
