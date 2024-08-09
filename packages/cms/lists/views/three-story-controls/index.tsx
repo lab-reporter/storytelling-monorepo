@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { FieldProps } from '@keystone-6/core/types'
 import { FieldContainer, FieldLabel } from '@keystone-ui/fields'
 import { controller } from '@keystone-6/core/fields/types/json/views'
