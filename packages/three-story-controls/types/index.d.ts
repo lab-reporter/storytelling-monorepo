@@ -1,6 +1,5 @@
 // index.d.ts
 
-import React from 'react'; // eslint-disable-line
 import { CameraData, POI } from '../src/react-components/type'
 import { GTLFModelObject } from '../src/react-components/loading-progress'
 
