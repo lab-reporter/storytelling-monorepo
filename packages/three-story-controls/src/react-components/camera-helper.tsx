@@ -173,9 +173,10 @@ export function CameraHelper({
     const threeObj = createThreeObj({
       gltfs,
       canvas: canvasRef.current,
+      domElementForControls: containerRef.current,
     })
     setThreeObj(threeObj)
-  }, [gltfs, previewMode])
+  }, [gltfs, previewMode, fullScreen])
 
   // update 3D model
   useEffect(() => {
@@ -450,9 +451,11 @@ const ZoomOutButton = styled(_ZoomOutButton)`
 function createThreeObj({
   gltfs,
   canvas,
+  domElementForControls,
 }: {
   gltfs: GLTF[]
   canvas: HTMLCanvasElement | null
+  domElementForControls: HTMLDivElement | null
 }): ThreeObj | null {
   if (!canvas) {
     return null
@@ -490,7 +493,7 @@ function createThreeObj({
    *  Controls
    */
   const controls = new FreeMovementControls(cameraRig, {
-    domElement: canvas,
+    domElement: domElementForControls || undefined,
     keyboardScaleFactor: 0.1,
     wheelScaleFactor: 0.01,
     pointerDampFactor: 0.1,
