@@ -20,7 +20,7 @@ import { CaptionInput } from './caption-input'
 import { AlignmentEnum, CameraData, POI, ThreePOI, WidthEnum } from './type'
 import { LoadingProgress, GTLFModelObject } from './loading-progress'
 import { GLTF } from '../loader'
-import { ScrollableThreeModel } from './scrollable-model'
+import { ScrollableThreeModel } from './scrollable-three-model'
 import {
   ZoomInButton as _ZoomInButton,
   ZoomOutButton as _ZoomOutButton,
