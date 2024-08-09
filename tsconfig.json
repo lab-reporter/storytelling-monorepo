@@ -1,13 +1,16 @@
 {
   "compilerOptions": {
+    "isolatedModules": true,
     "strict": true,
-    "target": "ES6",
+    "module": "esnext",
+    "target": "esnext",
     "jsx": "react",
-    "esModuleInterop": true, 
+    "noEmit": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
     "checkJs": false,
-    "allowJs": true,
-    "allowSyntheticDefaultImports": true,
-    "resolveJsonModule": true,
-    "moduleResolution": "nodenext"
-  }
+    "allowJs": true
+  },
+  "include": ["packages/**/*"]
 }
