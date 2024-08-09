@@ -8,7 +8,8 @@
     "packages/subtitled-audio",
     "packages/scrollable-video",
     "packages/scroll-to-audio",
-    "packages/ui-toolkit"
+    "packages/ui-toolkit",
+    "packages/three-story-controls"
   ],
   "scripts": {
     "prepare": "husky install"
