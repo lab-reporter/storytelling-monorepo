@@ -488,6 +488,50 @@ input SubtitledAudioCreateInput {
   hintText: String
 }
 
+type ScrollToAudio {
+  id: ID!
+  name: String
+  audioSrc: String
+  startEmbedCode: String
+  endEmbedCode: String
+  hintEmbedCode: String
+  preview: JSON
+}
+
+input ScrollToAudioWhereUniqueInput {
+  id: ID
+}
+
+input ScrollToAudioWhereInput {
+  AND: [ScrollToAudioWhereInput!]
+  OR: [ScrollToAudioWhereInput!]
+  NOT: [ScrollToAudioWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  audioSrc: StringFilter
+}
+
+input ScrollToAudioOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  audioSrc: OrderDirection
+}
+
+input ScrollToAudioUpdateInput {
+  name: String
+  audioSrc: String
+}
+
+input ScrollToAudioUpdateArgs {
+  where: ScrollToAudioWhereUniqueInput!
+  data: ScrollToAudioUpdateInput!
+}
+
+input ScrollToAudioCreateInput {
+  name: String
+  audioSrc: String
+}
+
 type ScrollableVideo {
   id: ID!
   name: String
@@ -543,48 +587,101 @@ input ScrollableVideoCreateInput {
   customCss: String
 }
 
-type ScrollToAudio {
+type ThreeStoryControl {
   id: ID!
   name: String
-  audioSrc: String
-  startEmbedCode: String
-  endEmbedCode: String
-  hintEmbedCode: String
-  preview: JSON
+  modelSrc: String
+  cameraHelperData: JSON
 }
 
-input ScrollToAudioWhereUniqueInput {
+input ThreeStoryControlWhereUniqueInput {
   id: ID
 }
 
-input ScrollToAudioWhereInput {
-  AND: [ScrollToAudioWhereInput!]
-  OR: [ScrollToAudioWhereInput!]
-  NOT: [ScrollToAudioWhereInput!]
+input ThreeStoryControlWhereInput {
+  AND: [ThreeStoryControlWhereInput!]
+  OR: [ThreeStoryControlWhereInput!]
+  NOT: [ThreeStoryControlWhereInput!]
   id: IDFilter
   name: StringFilter
-  audioSrc: StringFilter
+  modelSrc: StringFilter
 }
 
-input ScrollToAudioOrderByInput {
+input ThreeStoryControlOrderByInput {
   id: OrderDirection
   name: OrderDirection
-  audioSrc: OrderDirection
+  modelSrc: OrderDirection
 }
 
-input ScrollToAudioUpdateInput {
+input ThreeStoryControlUpdateInput {
   name: String
-  audioSrc: String
+  modelSrc: String
+  cameraHelperData: JSON
 }
 
-input ScrollToAudioUpdateArgs {
-  where: ScrollToAudioWhereUniqueInput!
-  data: ScrollToAudioUpdateInput!
+input ThreeStoryControlUpdateArgs {
+  where: ThreeStoryControlWhereUniqueInput!
+  data: ThreeStoryControlUpdateInput!
 }
 
-input ScrollToAudioCreateInput {
+input ThreeStoryControlCreateInput {
   name: String
-  audioSrc: String
+  modelSrc: String
+  cameraHelperData: JSON
+}
+
+type ThreeModel {
+  id: ID!
+  name: String
+  file: FileFieldOutput
+  url: String
+  description: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input ThreeModelWhereUniqueInput {
+  id: ID
+}
+
+input ThreeModelWhereInput {
+  AND: [ThreeModelWhereInput!]
+  OR: [ThreeModelWhereInput!]
+  NOT: [ThreeModelWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  description: StringFilter
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input ThreeModelOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  description: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input ThreeModelUpdateInput {
+  name: String
+  file: FileFieldInput
+  description: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input ThreeModelUpdateArgs {
+  where: ThreeModelWhereUniqueInput!
+  data: ThreeModelUpdateInput!
+}
+
+input ThreeModelCreateInput {
+  name: String
+  file: FileFieldInput
+  description: String
+  createdAt: DateTime
+  updatedAt: DateTime
 }
 
 """
@@ -629,18 +726,30 @@ type Mutation {
   updateSubtitledAudios(data: [SubtitledAudioUpdateArgs!]!): [SubtitledAudio]
   deleteSubtitledAudio(where: SubtitledAudioWhereUniqueInput!): SubtitledAudio
   deleteSubtitledAudios(where: [SubtitledAudioWhereUniqueInput!]!): [SubtitledAudio]
-  createScrollableVideo(data: ScrollableVideoCreateInput!): ScrollableVideo
-  createScrollableVideos(data: [ScrollableVideoCreateInput!]!): [ScrollableVideo]
-  updateScrollableVideo(where: ScrollableVideoWhereUniqueInput!, data: ScrollableVideoUpdateInput!): ScrollableVideo
-  updateScrollableVideos(data: [ScrollableVideoUpdateArgs!]!): [ScrollableVideo]
-  deleteScrollableVideo(where: ScrollableVideoWhereUniqueInput!): ScrollableVideo
-  deleteScrollableVideos(where: [ScrollableVideoWhereUniqueInput!]!): [ScrollableVideo]
   createScrollToAudio(data: ScrollToAudioCreateInput!): ScrollToAudio
   createScrollToAudios(data: [ScrollToAudioCreateInput!]!): [ScrollToAudio]
   updateScrollToAudio(where: ScrollToAudioWhereUniqueInput!, data: ScrollToAudioUpdateInput!): ScrollToAudio
   updateScrollToAudios(data: [ScrollToAudioUpdateArgs!]!): [ScrollToAudio]
   deleteScrollToAudio(where: ScrollToAudioWhereUniqueInput!): ScrollToAudio
   deleteScrollToAudios(where: [ScrollToAudioWhereUniqueInput!]!): [ScrollToAudio]
+  createScrollableVideo(data: ScrollableVideoCreateInput!): ScrollableVideo
+  createScrollableVideos(data: [ScrollableVideoCreateInput!]!): [ScrollableVideo]
+  updateScrollableVideo(where: ScrollableVideoWhereUniqueInput!, data: ScrollableVideoUpdateInput!): ScrollableVideo
+  updateScrollableVideos(data: [ScrollableVideoUpdateArgs!]!): [ScrollableVideo]
+  deleteScrollableVideo(where: ScrollableVideoWhereUniqueInput!): ScrollableVideo
+  deleteScrollableVideos(where: [ScrollableVideoWhereUniqueInput!]!): [ScrollableVideo]
+  createThreeStoryControl(data: ThreeStoryControlCreateInput!): ThreeStoryControl
+  createThreeStoryControls(data: [ThreeStoryControlCreateInput!]!): [ThreeStoryControl]
+  updateThreeStoryControl(where: ThreeStoryControlWhereUniqueInput!, data: ThreeStoryControlUpdateInput!): ThreeStoryControl
+  updateThreeStoryControls(data: [ThreeStoryControlUpdateArgs!]!): [ThreeStoryControl]
+  deleteThreeStoryControl(where: ThreeStoryControlWhereUniqueInput!): ThreeStoryControl
+  deleteThreeStoryControls(where: [ThreeStoryControlWhereUniqueInput!]!): [ThreeStoryControl]
+  createThreeModel(data: ThreeModelCreateInput!): ThreeModel
+  createThreeModels(data: [ThreeModelCreateInput!]!): [ThreeModel]
+  updateThreeModel(where: ThreeModelWhereUniqueInput!, data: ThreeModelUpdateInput!): ThreeModel
+  updateThreeModels(data: [ThreeModelUpdateArgs!]!): [ThreeModel]
+  deleteThreeModel(where: ThreeModelWhereUniqueInput!): ThreeModel
+  deleteThreeModels(where: [ThreeModelWhereUniqueInput!]!): [ThreeModel]
   endSession: Boolean!
   authenticateUserWithPassword(email: String!, password: String!): UserAuthenticationWithPasswordResult
   createInitialUser(data: CreateInitialUserInput!): UserAuthenticationWithPasswordSuccess!
@@ -683,12 +792,18 @@ type Query {
   subtitledAudios(where: SubtitledAudioWhereInput! = {}, orderBy: [SubtitledAudioOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubtitledAudioWhereUniqueInput): [SubtitledAudio!]
   subtitledAudio(where: SubtitledAudioWhereUniqueInput!): SubtitledAudio
   subtitledAudiosCount(where: SubtitledAudioWhereInput! = {}): Int
-  scrollableVideos(where: ScrollableVideoWhereInput! = {}, orderBy: [ScrollableVideoOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ScrollableVideoWhereUniqueInput): [ScrollableVideo!]
-  scrollableVideo(where: ScrollableVideoWhereUniqueInput!): ScrollableVideo
-  scrollableVideosCount(where: ScrollableVideoWhereInput! = {}): Int
   scrollToAudios(where: ScrollToAudioWhereInput! = {}, orderBy: [ScrollToAudioOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ScrollToAudioWhereUniqueInput): [ScrollToAudio!]
   scrollToAudio(where: ScrollToAudioWhereUniqueInput!): ScrollToAudio
   scrollToAudiosCount(where: ScrollToAudioWhereInput! = {}): Int
+  scrollableVideos(where: ScrollableVideoWhereInput! = {}, orderBy: [ScrollableVideoOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ScrollableVideoWhereUniqueInput): [ScrollableVideo!]
+  scrollableVideo(where: ScrollableVideoWhereUniqueInput!): ScrollableVideo
+  scrollableVideosCount(where: ScrollableVideoWhereInput! = {}): Int
+  threeStoryControls(where: ThreeStoryControlWhereInput! = {}, orderBy: [ThreeStoryControlOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ThreeStoryControlWhereUniqueInput): [ThreeStoryControl!]
+  threeStoryControl(where: ThreeStoryControlWhereUniqueInput!): ThreeStoryControl
+  threeStoryControlsCount(where: ThreeStoryControlWhereInput! = {}): Int
+  threeModels(where: ThreeModelWhereInput! = {}, orderBy: [ThreeModelOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ThreeModelWhereUniqueInput): [ThreeModel!]
+  threeModel(where: ThreeModelWhereUniqueInput!): ThreeModel
+  threeModelsCount(where: ThreeModelWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
 }
