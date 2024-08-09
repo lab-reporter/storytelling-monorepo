@@ -1,6 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { FieldProps } from '@keystone-6/core/types'
-import { FieldContainer, FieldLabel } from '@keystone-ui/fields'
+import {
+  FieldContainer,
+  FieldDescription,
+  FieldLabel,
+} from '@keystone-ui/fields'
 import { controller } from '@keystone-6/core/fields/types/json/views'
 import { CameraHelperProps } from '@story-telling-reporter/react-three-story-controls'
 
@@ -46,15 +50,21 @@ export const Field = ({
   return (
     <FieldContainer>
       <FieldLabel>{field.label}</FieldLabel>
-      {Component && (
-        <div
-          style={{
-            maxWidth: '50vw',
-            height: '300px',
-            position: 'relative',
-            zIndex: '30',
-          }}
-        >
+      <FieldDescription id="camera-helper-desc">
+        箭頭鍵、WASD 鍵、滑鼠滾輪或是觸控板可以前後左右移動鏡頭。 <br />
+        點擊滑鼠後拖拉可以轉動鏡頭。 <br />
+        U 鍵可以水平向上移動鏡頭。 <br />
+        N 鍵可以水平向下移動鏡頭。 <br />
+      </FieldDescription>
+      <div
+        style={{
+          maxWidth: '50vw',
+          height: '300px',
+          position: 'relative',
+          zIndex: '30',
+        }}
+      >
+        {Component && (
           <Component
             modelObjs={modelObjs}
             pois={pois}
@@ -66,8 +76,8 @@ export const Field = ({
               }
             }}
           />
-        </div>
-      )}
+        )}
+      </div>
     </FieldContainer>
   )
 }
