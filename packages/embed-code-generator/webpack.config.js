@@ -41,6 +41,7 @@ const webpackConfig = {
   entry: {
     // @TODO import `pkgNames` from './src/build-codes/constants.js'
     karaoke: {import: './src/build-code/karaoke.js'},
+    'scrollable-three-model': { import: './src/build-code/scrollable-three-model.js' },
     'scrollable-video': { import: './src/build-code/scrollable-video.js' },
     'scroll-to-audio': { import: './src/build-code/scroll-to-audio.js' },
     'subtitled-audio': { import: './src/build-code/subtitled-audio.js' },

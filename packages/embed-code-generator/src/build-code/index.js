@@ -52,6 +52,14 @@ export function buildScrollToAudioEmbedCode(
 }
 
 /**
+ *  @param {import('@story-telling-reporter/react-three-story-controls').ScrollableThreeModelProps} data
+ *  @returns string
+ */
+export function buildScrollableThreeModelEmbedCode(data) {
+  return buildEmbedCode(data, pkgNames.scrollableThreeModel, null)
+}
+
+/**
  *
  * @export
  * @param {Object} data - Data for react component
