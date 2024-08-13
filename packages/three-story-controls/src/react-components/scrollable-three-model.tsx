@@ -12,10 +12,7 @@ import {
 } from 'three'
 import { POI } from './type'
 import { CameraData } from './type'
-import {
-  CameraRig,
-  ThreeDOFControls,
-} from 'three-story-controls/dist/three-story-controls'
+import { CameraRig, ThreeDOFControls } from 'three-story-controls'
 import { DraftRenderer } from '../draft-renderer/index'
 import { GLTF } from '../loader'
 import { LoadingProgress, GTLFModelObject } from './loading-progress'
