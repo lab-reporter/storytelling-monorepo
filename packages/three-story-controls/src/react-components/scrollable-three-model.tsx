@@ -10,12 +10,10 @@ import {
   Scene,
   WebGLRenderer,
 } from 'three'
-import { POI } from './type'
-import { CameraData } from './type'
+import { CameraData, GTLFModelObject, POI, GLTF } from './type'
 import { CameraRig, ThreeDOFControls } from 'three-story-controls'
 import { DraftRenderer } from '../draft-renderer/index'
-import { GLTF } from '../loader'
-import { LoadingProgress, GTLFModelObject } from './loading-progress'
+import { LoadingProgress } from './loading-progress'
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger'
 import { gsap } from 'gsap/dist/gsap'
 import { mediaQuery } from '../utils/media-query'
@@ -139,8 +137,7 @@ type ThreeObj = {
   scene: Scene
 }
 
-export type ScrollableThreeModelProps = {
-  cameraData: CameraData
+export type ScrollableThreeModelProps = CameraData & {
   debugMode?: boolean
   modelObjs: GTLFModelObject[]
   scrollerRef?: React.RefObject<HTMLElement>
@@ -148,7 +145,8 @@ export type ScrollableThreeModelProps = {
 }
 
 function ScrollableThreeModel({
-  cameraData,
+  pois,
+  animationClip: animationClipJSON,
   debugMode,
   modelObjs,
   scrollerRef,
@@ -165,8 +163,8 @@ function ScrollableThreeModel({
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
   const animationClip = useMemo(
-    () => AnimationClip.parse(cameraData.animationClip),
-    [cameraData.animationClip]
+    () => AnimationClip.parse(animationClipJSON),
+    [animationClipJSON]
   )
 
   // We use duration to calculate sections' height.
@@ -245,7 +243,7 @@ function ScrollableThreeModel({
       animationClip,
     })
     setThreeObj(threeObj)
-  }, [gltfs])
+  }, [gltfs, animationClip])
 
   // Handle 3D model rendering
   useEffect(() => {
@@ -306,7 +304,7 @@ function ScrollableThreeModel({
     return () => {
       window.removeEventListener('resize', handleResize)
     }
-  }, [windowObject])
+  }, [windowObject, threeObj])
 
   if (!areModelsLoaded) {
     return (
@@ -324,10 +322,10 @@ function ScrollableThreeModel({
       <CanvasContainer>
         <canvas ref={canvasRef}></canvas>
       </CanvasContainer>
-      {windowObject.innerHeight !== 0 && Array.isArray(cameraData.pois) && (
+      {windowObject.innerHeight !== 0 && Array.isArray(pois) && (
         <Content ref={scrollTriggerRef} style={{ height: sectionsHeight }}>
           <Sections
-            pois={cameraData.pois || []}
+            pois={pois || []}
             durationPer100vh={durationPer100vh}
             windowObject={windowObject}
           />

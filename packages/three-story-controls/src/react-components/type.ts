@@ -1,5 +1,6 @@
 import { RawDraftContentState } from 'draft-js'
 import { Vector3, Quaternion } from 'three'
+import { GLTF } from '../loader'
 
 export enum WidthEnum {
   WIDE = 'wide',
@@ -27,7 +28,7 @@ export type CaptionProp = {
 
 export type CameraData = {
   pois?: POI[]
-  animationClip?: any
+  animationClip?: Record<string, unknown>
 }
 
 export type POI = {
@@ -47,3 +48,11 @@ export type ThreePOI = {
   image?: string
   caption: CaptionProp
 }
+
+export type GTLFModelObject = {
+  url: string
+  data?: GLTF
+  userData?: Record<string, unknown>
+}
+
+export type { GLTF }

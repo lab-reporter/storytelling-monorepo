@@ -17,9 +17,16 @@ import {
 } from 'three'
 import { CameraRig, FreeMovementControls } from 'three-story-controls'
 import { CaptionInput } from './caption-input'
-import { AlignmentEnum, CameraData, POI, ThreePOI, WidthEnum } from './type'
-import { LoadingProgress, GTLFModelObject } from './loading-progress'
-import { GLTF } from '../loader'
+import {
+  AlignmentEnum,
+  CameraData,
+  POI,
+  ThreePOI,
+  WidthEnum,
+  GTLFModelObject,
+  GLTF,
+} from './type'
+import { LoadingProgress } from './loading-progress'
 import { ScrollableThreeModel } from './scrollable-three-model'
 import {
   ZoomInButton as _ZoomInButton,
@@ -282,11 +289,9 @@ export function CameraHelper({
     return (
       <PreviewContainer ref={scrollerRef}>
         <ScrollableThreeModel
-          cameraData={{
-            pois,
-            //@ts-ignore we do not need to pass argument to `toJSON` function
-            animationClip: createClip(transferPOIsToThreePOIs(pois))?.toJSON(),
-          }}
+          pois={pois}
+          // @ts-ignore we do not need to pass argument to `toJSON` function
+          animationClip={createClip(transferPOIsToThreePOIs(pois))?.toJSON()}
           scrollerRef={scrollerRef}
           modelObjs={modelObjs}
         />

@@ -1,17 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import debounce from 'lodash/debounce'
 import styled from '../styled-components'
-import { getModelFileSize, loadGltfModel, GLTF } from '../loader'
+import { getModelFileSize, loadGltfModel } from '../loader'
+import { GTLFModelObject } from './type'
 
 // lodash
 const _ = {
   debounce,
-}
-
-export type GTLFModelObject = {
-  url: string
-  data?: GLTF
-  userData?: Record<string, any>
 }
 
 type OnModelsLoaded = (arg: GTLFModelObject[]) => void
