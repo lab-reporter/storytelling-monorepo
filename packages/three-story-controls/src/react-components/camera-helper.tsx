@@ -25,7 +25,7 @@ import {
   WidthEnum,
   GTLFModelObject,
   GLTF,
-} from './type'
+} from '../types'
 import { LoadingProgress } from './loading-progress'
 import { ScrollableThreeModel } from './scrollable-three-model'
 import {

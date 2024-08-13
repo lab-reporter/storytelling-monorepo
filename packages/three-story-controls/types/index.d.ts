@@ -16,7 +16,8 @@ export {
   POI,
   ThreePOI,
   GTLFModelObject,
-} from '../src/react-components/type'
+  GLTF,
+} from '../src/type'
 
 export {
   CameraHelper,

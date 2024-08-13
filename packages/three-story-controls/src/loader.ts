@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { GLTFLoader, GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 
 /**
@@ -11,8 +11,6 @@ dracoLoader.setDecoderPath(
 )
 const gltfLoader = new GLTFLoader()
 gltfLoader.setDRACOLoader(dracoLoader)
-
-export type { GLTF }
 
 type HandleProgress = (args: ProgressEvent) => void
 

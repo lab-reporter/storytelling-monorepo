@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import debounce from 'lodash/debounce'
 import styled from '../styled-components'
 import { getModelFileSize, loadGltfModel } from '../loader'
-import { GTLFModelObject } from './type'
+import { GTLFModelObject } from '../types'
 
 // lodash
 const _ = {

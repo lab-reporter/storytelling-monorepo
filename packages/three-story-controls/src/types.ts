@@ -1,6 +1,6 @@
 import { RawDraftContentState } from 'draft-js'
 import { Vector3, Quaternion } from 'three'
-import { GLTF } from '../loader'
+import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js'
 
 export enum WidthEnum {
   WIDE = 'wide',

@@ -12,7 +12,7 @@ import {
   RichTextEditor,
   buttonNames,
 } from '@story-telling-reporter/draft-editor'
-import { AlignmentEnum, CaptionProp, WidthEnum } from './type'
+import { AlignmentEnum, CaptionProp, WidthEnum } from '../types'
 
 const disabledButtons = [
   buttonNames.code,

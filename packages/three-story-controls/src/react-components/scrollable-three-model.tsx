@@ -10,7 +10,7 @@ import {
   Scene,
   WebGLRenderer,
 } from 'three'
-import { CameraData, GTLFModelObject, POI, GLTF } from './type'
+import { CameraData, GTLFModelObject, POI, GLTF } from '../types'
 import { CameraRig, ThreeDOFControls } from 'three-story-controls'
 import { DraftRenderer } from '../draft-renderer/index'
 import { LoadingProgress } from './loading-progress'
