@@ -41,8 +41,16 @@ function Sections({
   const jsx = pois.map((poi, idx) => {
     const caption = poi.caption
 
+    // remove empty blocks
+    const emptyBlockRemoved = caption.rawContentState.blocks.filter((b) => {
+      if (b.type === 'unstyled' && b.text === '') {
+        return false
+      }
+      return true
+    })
+
     // No content to render
-    if (caption.rawContentState.blocks.length === 0) {
+    if (emptyBlockRemoved.length === 0) {
       return null
     }
 
@@ -137,6 +145,11 @@ type ThreeObj = {
   scene: Scene
 }
 
+type WindowObject = {
+  innerWidth: number
+  innerHeight: number
+}
+
 export type ScrollableThreeModelProps = CameraData & {
   debugMode?: boolean
   modelObjs: GTLFModelObject[]
@@ -152,7 +165,7 @@ function ScrollableThreeModel({
   scrollerRef,
   durationPer100vh = 1,
 }: ScrollableThreeModelProps) {
-  const [windowObject, setWindowObject] = useState({
+  const [windowObject, setWindowObject] = useState<WindowObject>({
     innerWidth: 0,
     innerHeight: 0,
   })
@@ -241,9 +254,10 @@ function ScrollableThreeModel({
       gltfs,
       canvas: canvasRef.current,
       animationClip,
+      windowObject,
     })
     setThreeObj(threeObj)
-  }, [gltfs, animationClip])
+  }, [gltfs, animationClip, windowObject])
 
   // Handle 3D model rendering
   useEffect(() => {
@@ -274,10 +288,13 @@ function ScrollableThreeModel({
   // Handle resize
   useEffect(() => {
     const handleResize = _.debounce(() => {
-      if (window.innerWidth !== windowObject.innerWidth) {
+      const innerWidth = window.innerWidth
+      const innerHeight = window.innerHeight
+
+      if (innerWidth !== windowObject.innerWidth) {
         setWindowObject({
-          innerWidth: window.innerWidth,
-          innerHeight: window.innerHeight,
+          innerWidth,
+          innerHeight,
         })
       }
 
@@ -286,15 +303,13 @@ function ScrollableThreeModel({
       }
 
       const { camera, renderer } = threeObj
-      const width = document.documentElement.clientWidth
-      const height = document.documentElement.clientHeight
 
       // Update camera
-      camera.aspect = width / height
+      camera.aspect = innerWidth / innerHeight
       camera.updateProjectionMatrix()
 
       // Update renderer
-      renderer.setSize(width, height)
+      renderer.setSize(innerWidth, innerHeight)
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     }, 300)
 
@@ -369,17 +384,19 @@ function createThreeObj({
   gltfs,
   canvas,
   animationClip,
+  windowObject,
 }: {
   gltfs: GLTF[]
   canvas: HTMLCanvasElement | null
   animationClip: AnimationClip
+  windowObject: WindowObject
 }) {
-  if (!canvas) {
+  if (!canvas || windowObject.innerHeight === 0) {
     return null
   }
 
-  const width = document.documentElement.clientWidth
-  const height = document.documentElement.clientHeight
+  const width = windowObject.innerWidth
+  const height = windowObject.innerHeight
 
   /**
    *  Scene
