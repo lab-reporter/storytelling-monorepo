@@ -49,8 +49,8 @@
     "*.{js,ts,jsx,tsx}": "eslint --cache --fix"
   },
   "resolutions": {
-    "react": "18.1.0",
-    "react-dom": "18.1.0"
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
   },
   "version": "0.0.0"
 }
