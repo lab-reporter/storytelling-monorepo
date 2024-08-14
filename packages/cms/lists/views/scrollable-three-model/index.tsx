@@ -6,7 +6,10 @@ import {
   FieldLabel,
 } from '@keystone-ui/fields'
 import { controller } from '@keystone-6/core/fields/types/json/views'
-import { CameraHelperProps } from '@story-telling-reporter/react-three-story-controls'
+import {
+  ScrollableThreeModelProps,
+  CameraHelperProps,
+} from '@story-telling-reporter/react-three-story-controls'
 
 export const Field = ({
   field,
@@ -50,6 +53,7 @@ export const Field = ({
   return (
     <FieldContainer>
       <FieldLabel>{field.label}</FieldLabel>
+      {/* @ts-ignore `FieldDescription` could recieve multiple children */}
       <FieldDescription id="camera-helper-desc">
         箭頭鍵、WASD 鍵、滑鼠滾輪或是觸控板可以前後左右移動鏡頭。 <br />
         點擊滑鼠後拖拉可以轉動鏡頭。 <br />
@@ -70,9 +74,13 @@ export const Field = ({
             pois={pois}
             onChange={(value) => {
               if (typeof onFieldChange === 'function') {
-                onFieldChange(
-                  JSON.stringify(Object.assign({ modelObjs }, value))
+                const fieldData: ScrollableThreeModelProps = Object.assign(
+                  {
+                    modelObjs,
+                  },
+                  value
                 )
+                onFieldChange(JSON.stringify(fieldData))
               }
             }}
           />

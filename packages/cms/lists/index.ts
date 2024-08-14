@@ -5,9 +5,9 @@ import Photo from './photo'
 import Karaoke from './karaoke'
 import SubtitledAudio from './subtitled-audio'
 import ScrollToAudio from './scroll-to-audio'
+import ScrollableThreeModel from './scrollable-three-model'
 import ScrollableVideo from './scrollable-video'
 import ThreeModel from './three-model'
-import ThreeStoryControls from './three-story-controls'
 
 export const listDefinition = {
   User,
@@ -17,7 +17,7 @@ export const listDefinition = {
   Karaoke,
   SubtitledAudio,
   ScrollToAudio,
+  ScrollableThreeModel,
   ScrollableVideo,
-  ThreeStoryControl: ThreeStoryControls,
   ThreeModel,
 }
