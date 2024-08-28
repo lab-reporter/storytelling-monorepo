@@ -47,7 +47,8 @@ export default {
         ? DatabaseProvider.Sqlite
         : DatabaseProvider.Postgres,
     url:
-      DATABASE_URL || 'postgres://user:password@localhost:5432/story-telling',
+      DATABASE_URL ||
+      'postgres://user:password@localhost:5432/story-telling-cms',
   },
   session: {
     secret:
