@@ -5,7 +5,7 @@ import {
   EmbeddedCodeInput,
   EmbeddedCodeInputValue,
 } from '../buttons/embedded-code'
-import { EditableBlock as _EditableBlock } from './styled'
+import { EditableBlock } from './styled'
 import { TextArea } from '@keystone-ui/fields'
 
 function EmbeddedCode({
@@ -27,14 +27,6 @@ const StyledEmbeddedCode = styled(EmbeddedCode)`
   max-width: 700px;
   margin: 0 auto 30px auto;
   background-color: #fafbfc;
-`
-
-const EditableBlock = styled(_EditableBlock)`
-  &:hover {
-    ${StyledEmbeddedCode} {
-      background-color: #f0f0f0;
-      opacity: 0.3;
-    }
 `
 
 export function EditableEmbeddedCode(
@@ -69,12 +61,13 @@ export function EditableEmbeddedCode(
         inputValue={data}
       />
       <EditableBlock
-        component={<StyledEmbeddedCode embeddedCode={data?.embeddedCode} />}
         onClick={() => {
           onEditStart()
           setIsInputOpen(true)
         }}
-      />
+      >
+        <StyledEmbeddedCode embeddedCode={data?.embeddedCode} />
+      </EditableBlock>
     </React.Fragment>
   )
 }

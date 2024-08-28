@@ -10,7 +10,7 @@ const EditButton = styled.div`
   transform: translate(-50%, -50%);
 `
 
-const _EditableBlock = styled.div`
+const Container = styled.div`
   position: relative;
 
   &:hover {
@@ -18,20 +18,26 @@ const _EditableBlock = styled.div`
       opacity: 1;
       display: block;
     }
+
+    & > :not(${EditButton}) {
+      opacity: 0.3;
+      background-color: #f0f0f0;
+    }
   }
 `
 
 export const EditableBlock = (props: {
-  component: ReactNode
+  className?: string
+  children: ReactNode
   onClick: () => void
 }) => {
   return (
-    <_EditableBlock>
-      {props.component}
+    <Container className={props?.className}>
+      {props.children}
       <EditButton onClick={props.onClick}>
         <i className="fa-solid fa-pen"></i>
         <span>Modify</span>
       </EditButton>
-    </_EditableBlock>
+    </Container>
   )
 }

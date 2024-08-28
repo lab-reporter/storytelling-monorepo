@@ -117,12 +117,13 @@ export function EditableImage(props: AtomicBlockProps<EntityData>) {
         />
       )}
       <EditableBlock
-        component={<ImageBlock data={data} />}
         onClick={() => {
           onEditStart()
           setIsSelectorOpen(true)
         }}
-      />
+      >
+        <ImageBlock data={data} />
+      </EditableBlock>
     </React.Fragment>
   )
 }
