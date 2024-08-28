@@ -25,5 +25,6 @@ export default {
   annotation: 'annotation',
   embed: 'embed',
   image: 'image',
+  imageLink: 'image-link',
   link: 'link',
 }

@@ -9,6 +9,7 @@ import { EmbeddedCodeButton } from './embedded-code'
 import { EnlargeButton } from './enlarge'
 import { FontColorButton } from './font-color'
 import { ImageButton } from './image'
+import { ImageLinkButton } from './image-link'
 import { LinkButton } from './link'
 import { AnnotationButton } from './annotation'
 import {
@@ -32,6 +33,7 @@ export const CustomEnlargeButton = styled(withStyle(EnlargeButton))`
   color: #999;
 `
 export const CustomImageButton = withStyle(ImageButton)
+export const CustomImageLinkButton = withStyle(ImageLinkButton)
 export const CustomEmbeddedCodeButton = withStyle(EmbeddedCodeButton)
 export const CustomBackgroundColorButton = withStyle(BackgroundColorButton)
 export const CustomFontColorButton = withStyle(FontColorButton)

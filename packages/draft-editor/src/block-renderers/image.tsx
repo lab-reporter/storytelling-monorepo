@@ -37,8 +37,8 @@ type ImageBlockProps = {
     desc?: string
     imageFile: {
       url: string
-      width: number
-      height: number
+      width?: number
+      height?: number
     }
     resized?: {
       small: string
