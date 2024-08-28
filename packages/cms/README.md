@@ -1,51 +1,55 @@
-# @mirrormedia/lilith-editools
+# @story-telling-reporter/cms
 
 ## Preface
+
 此Repo
+
 - 使用[KeystoneJS 6](https://keystonejs.com/docs)來產生CMS服務。
 - 串接 Cloud Build 產生 Docker image 和部署到 Cloud Run 上。
 
-cloud builds:
-- [lilith-editools-dev](https://console.cloud.google.com/cloud-build/triggers;region=global/edit/8d457467-a205-47aa-b2c7-7ad074f162d4?project=mirrorlearning-161006)
-- [lilith-editools-prod](https://console.cloud.google.com/cloud-build/triggers;region=global/edit/a092cb26-f629-4b85-8a17-3c4ebbaf5884?project=mirrorlearning-161006)
-
-cloud runs:
-- [editools-dev](https://console.cloud.google.com/run/detail/asia-east1/editools-dev?project=mirrorlearning-161006)
-- [editools-gql-dev](https://console.cloud.google.com/run/detail/asia-east1/editools-gql-dev?project=mirrorlearning-161006)
-- [editools-prod](https://console.cloud.google.com/run/detail/asia-east1/editools-prod?project=mirrorlearning-161006)
-- [editools-gql-prod](https://console.cloud.google.com/run/detail/asia-east1/editools-gql-prod?project=mirrorlearning-161006)
-
 ## Getting started on local environment
-### Start postgres instance
-在起 lilith-editools 服務前，需要在 local 端先起 postgres database。
-而我們可以透過 [Docker](https://docs.docker.com/) 快速起 postgres database。
+
+### Start PostgreSQL instance
+
+在起 CMS 服務前，需要在 local 端先起 PostgreSQL database。
+而我們可以透過 [Docker](https://docs.docker.com/) 快速起 PostgreSQL database。
 在電腦上安裝 Docker 的方式，可以參考 [Docker 安裝文件](https://docs.docker.com/engine/install/)。
-安裝 Docker 後，可以執行以下 command 來產生 local 端需要的 postgres 服務。
-```
-docker run -p 5433:5432 --name lilith-editools -e POSTGRES_PASSWORD=passwd -e POSTGRES_USER=account -e POSTGRES_DB=lilith-editools -d postgres
+安裝 Docker 後，可以執行以下 command 來產生 local 端需要的 PostgreSQL 服務。
+
+```bash
+docker run -p 5432:5432 --name story-telling-cms -e POSTGRES_PASSWORD=password -e POSTGRES_USER=user -e POSTGRES_DB=story-telling-cms -d postgres
 ```
 
 註：
 `POSTGRES_PASSWORD`, `POSTGRES_USER` 和 `POSTGRES_DB` 都可更動。
-只是要注意，改了後，在起 lilith-editools 的服務時，也要更改傳入的 `DATABASE_URL` 環境變數。
+只是要注意，改了後，在起 CMS 的服務時，也要更改傳入的 `DATABASE_URL` 環境變數。
 
 ### Install dependencies
+
 我們透過 yarn 來安裝相關套件。
-```
+
+```bash
 yarn install
 ```
 
 ### Start dev instance
-確定 postgres 服務起來和相關套件安裝完畢後，可以執行以下 command 來起 lilith-editools 服務
-```
+
+確定 PostgreSQL 服務起來和相關套件安裝完畢後，可以執行以下 command 來起 CMS 服務
+
+```bash
 yarn dev
-// or
+```
+
+or
+
+```bash
 npm run dev
 ```
 
 如果你的 database 的設定與上述不同，
 可以透過 `DATABASE_URL` 環境變數傳入。
-```
+
+```bash
 DATABASE_URL=postgres://anotherAccount:anotherPasswd@localhost:5433/anotherDatabase yarn dev
 // or
 DATABASE_URL=postgres://anotherAccount:anotherPasswd@localhost:5433/anotherDatabase npm run dev
@@ -54,37 +58,94 @@ DATABASE_URL=postgres://anotherAccount:anotherPasswd@localhost:5433/anotherDatab
 成功將服務起來後，使用瀏覽器打開 [http://localhost:3000](http://localhost:3000)，便可以開始使用 CMS 服務。
 
 ### GraphQL playground
-起 lilith-editools CMS 服務後，我們可以透過 [http://localhost:3000/api/graphql](http://localhost:3000/api/graphql) 來使用 GraphQL playground。
 
-### Start GraphQL API server only
-我們也可以單獨把 lilith-editools 當作 GraphQL API server 使用。
-透過傳入 `IS_UI_DISABLED` 環境變數，我們可以把 CMS WEB UI 的部分關閉，只留下 GraphQL endpoint `/api/graphql`。
-```
-IS_UI_DISABLED=true npm run dev
-```
+起 CMS 服務後，我們可以透過 [http://localhost:3000/api/graphql](http://localhost:3000/api/graphql) 來使用 GraphQL playground。
 
-### Access control
-透過 `npm run dev` 起服務時，預設是起 CMS 的服務，所以我們必須是登入的狀態下，才能使用 GraphQL endpoint `http://localhost:3000/api/graphql`。
-若是在登出的狀態下，我們是無法使用 GraphQL API 的。
 
-除了 `cms` 權限控管模式，我們可以使用 `ACCESS_CONTROL_STRATEGY` 環境變數來切換不同的 GraphQL API 權限控管的模式。
-例如：
-```
-ACCESS_CONTROL_STRATEGY=gql npm run dev
-```
-切換成 `gql` 模式後，GraphQL API server 就不會檢查使用者是否處於登入的狀態（意即 GraphQL API server 會處理所有的 requests）。
-注意：`gql` 模式的使用上，需要搭配「不允許外部網路的限制」來部署程式碼，以免門戶大開。
+### Database Migration （建議同步參考 [Keystone 文件](https://keystonejs.com/docs/guides/database-migration#title)）
 
+Keystone 底層是透過 [Prisma](https://github.com/prisma/prisma)來管理資料庫（Postgres）。
+當我們更動 Keystone List，例如：`lists/user.ts`，Keystone 會根據改動調整 `schema.grahpql` 和 `schema.prisma` 兩個檔案。
+`schema.graphql` 會影響 GraphQL API 的 schema，而 `schema.prisma` 則會影響與資料庫的串接。
+
+在 `migrations/` 資料夾底下，存放所有 migration 的歷史紀錄。
+在部署 CMS 服務到 Cloud Run 上時，Keystone 會逐一執行 `migrations/` 底下的檔案，確保資料庫現有的 schema 與要部署的程式碼相符。
+因此，當 `schema.prisma` 檔案有所更動時，我們就需要執行 database migration，並將改動的內容寫進 `migrations/` 資料夾底下。
+
+#### 1. 產生新的 `schema.prisma` 和 database schema
+
+上述有說到，當有新的 `schema.prisma` 時，要產生新的 migration 檔案。
+但是，我們要怎麼根據修改的 list 去產生新的 `schema.prisma` 呢？
+我們需要在 local 端跑 `yarn dev` 。
+`yarn dev` 會預設會執行 auto migration，所以會將新的 list 所產生的 schema 直接覆蓋 database 的 schema，
+也會修改 `schema.prisma`。
+
+#### 2. 產生 migration 檔案
+
+當 database 的 schema 有所改動，其 databsase schema 就會與 `migrations/` 底下的檔案產生差異，
+我們會需要為這些差異產生新的 migration 檔案。
+以下是推薦的做法：
+
+1. (optional) Stop the Docker database instance if necessary.
+
+    ```bash
+    docker stop story-telling-cms;
+    ```
+
+2. Run a new Docker container for the database migration.
+
+    ```bash
+    docker run -p 5432:5432 --name story-telling-cms-migration -e POSTGRES_PASSWORD=password -e POSTGRES_USER=user -e POSTGRES_DB=story-telling-cms -d postgres;
+    ```
+
+    We run a new instance because Prisma migrations clean up all data before generating migration files.
+
+3. Auto migrate new list schemas
+
+    ```bash
+    yarn dev;
+    ```
+
+    You can enter CTRL+C to stop Keystone server after auto migration done
+
+4. Generate new migration file for schema changes
+
+    ```bash
+    yarn keystone prisma migrate dev --name 'example_migration_name'
+    ```
+
+    `example_migration_name` will be part of the file name of the migration file.
+
+5. (optional) Stop the Docker container for the database migration.
+
+    ```bash
+    docker stop story-telling-cms-migration;
+    ```
+
+6. (optional) Start the Docker container for the database.
+
+    ```bash
+    docker start story-telling-cms;
+    ```
+
+7. (optional) Remove the Docker container for the database migration.
+
+    ```bash
+    docker rm story-telling-cms-migration;
+    ```
+
+    you may check if the container is removed by running `docker ps -a`.
+
+#### 3. 上傳 migration 檔案和新的 schema.prisma 到 repo
+
+Database migration 執行的時機點是在部署的時候，
+因此，新產生的 `shema.prisma` 和 `migrations/example_migration_name` 檔案都需要進到 GitHub Repo 當中。
+如果忘記上傳，則可能會遇到 Keystone server 跑不起來的狀況。
 
 ### Troubleshootings
-#### Q1: 我在 `packages/(vision|mesh|editools)` 資料夾底下跑 `yarn install` 時，在 `yarn postinstall` 階段發生錯誤。
 
-A1: 如果錯誤訊息與 `@mirrormedia/lilith-core` 有關，可以嘗試先到 `packages/core` 底下，執行
-  1. `yarn build`
-  2. `yarn install`
+#### Q1: 我在 `packages/cms` 資料夾底下跑 `yarn install` 時，在 `yarn postinstall` 階段發生錯誤。
 
-確保 local 端有 `@mirrormedia-/lilith-core` 相關的檔案可以讓 `packages/(vision|mesh|editools)` 載入。
+A1: 如果錯誤訊息與 `@story-telling-reporter/draft-editor` 有關，可以嘗試先到 `packages/draft-editor` 底下，執行 `yarn build`。
 
-## Patch
-
-### 目前使用 patch-package 讓 keystone admin UI (keystone-6/core 5.2.0) 可以在手機版進行編輯，該功能已在 keystone-6/core 5.5.1 新增，日後更新 keystone 板上時可移除。
+確保 local 端有相關的檔案可以讓 `packages/cms` 載入。
