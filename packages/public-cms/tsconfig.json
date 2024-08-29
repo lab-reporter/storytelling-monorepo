@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "strict": true,
+    "module": "esnext",
+    "target": "esnext",
+    "jsx": "react",
+    "noEmit": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "checkJs": false,
+    "allowJs": true
+  }
+}
