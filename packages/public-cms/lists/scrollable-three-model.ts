@@ -2,6 +2,7 @@ import { graphql, list } from '@keystone-6/core'
 import { text, json, virtual } from '@keystone-6/core/fields'
 import { buildScrollableThreeModelEmbedCode } from '@story-telling-reporter/react-embed-code-generator'
 import { ScrollableThreeModelProps } from '@story-telling-reporter/react-three-story-controls'
+import { createdByFilter, createdByHooks } from './utils/access-control-list'
 
 const listConfigurations = list({
   fields: {
@@ -66,10 +67,19 @@ const listConfigurations = list({
     },
     labelField: 'name',
   },
-
-  access: () => true,
+  access: {
+    operation: () => true,
+    filter: createdByFilter,
+  },
   hooks: {
-    resolveInput: ({ inputData, item, resolvedData }) => {
+    resolveInput: (args) => {
+      let { resolvedData } = args
+      const { inputData, item } = args
+
+      if (typeof createdByHooks.resolveInput === 'function') {
+        resolvedData = createdByHooks.resolveInput(args)
+      }
+
       const modelSrc = inputData?.modelSrc
       if (modelSrc) {
         const cameraHelperData = Object.assign(

@@ -9,6 +9,7 @@ import { customAlphabet } from 'nanoid'
 import CleanCss from 'clean-css'
 import postcss from 'postcss'
 import postcssNesting from 'postcss-nesting'
+import { createdByFilter, createdByHooks } from './utils/access-control-list'
 
 const nanoid = customAlphabet('abcdefghijklmnopq', 10)
 
@@ -222,10 +223,19 @@ const listConfigurations = list({
     },
     labelField: 'name',
   },
-
-  access: () => true,
+  access: {
+    operation: () => true,
+    filter: createdByFilter,
+  },
   hooks: {
-    resolveInput: ({ inputData, item, resolvedData }) => {
+    resolveInput: (args) => {
+      let { resolvedData } = args
+      const { inputData, item } = args
+
+      if (typeof createdByHooks.resolveInput === 'function') {
+        resolvedData = createdByHooks.resolveInput(args)
+      }
+
       const videoSrc = inputData?.videoSrc
       if (videoSrc) {
         const editorState = Object.assign(
