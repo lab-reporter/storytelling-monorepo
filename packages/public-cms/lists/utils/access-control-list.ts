@@ -1,3 +1,5 @@
+import { BaseListTypeInfo, ListHooks } from '@keystone-6/core/types'
+
 type Session = {
   data: {
     name: string
@@ -50,4 +52,34 @@ export const denyRoles = (roles: string[]) => {
     }
     return roles.indexOf(session?.data.role) === -1
   }
+}
+
+const filterOperation = ({ session }: { session: Session }) => {
+  return {
+    created_by: {
+      id: {
+        equals: session?.itemId,
+      },
+    },
+  }
+}
+
+export const createdByFilter = {
+  query: filterOperation,
+  update: filterOperation,
+  delete: filterOperation,
+}
+
+export const createdByHooks: ListHooks<BaseListTypeInfo> = {
+  resolveInput: ({ resolvedData, operation, context }) => {
+    if (operation === 'create') {
+      const userId = context.session?.itemId
+      resolvedData.created_by = {
+        connect: {
+          id: Number(userId),
+        },
+      }
+    }
+    return resolvedData
+  },
 }
