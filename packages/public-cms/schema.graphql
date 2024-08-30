@@ -202,6 +202,7 @@ type ScrollableThreeModel {
   modelSrc: String
   cameraHelperData: JSON
   embedCode: String
+  created_by: User
 }
 
 input ScrollableThreeModelWhereUniqueInput {
@@ -215,6 +216,7 @@ input ScrollableThreeModelWhereInput {
   id: IDFilter
   name: StringFilter
   modelSrc: StringFilter
+  created_by: UserWhereInput
 }
 
 input ScrollableThreeModelOrderByInput {
@@ -227,6 +229,7 @@ input ScrollableThreeModelUpdateInput {
   name: String
   modelSrc: String
   cameraHelperData: JSON
+  created_by: UserRelateToOneForUpdateInput
 }
 
 input ScrollableThreeModelUpdateArgs {
@@ -238,6 +241,7 @@ input ScrollableThreeModelCreateInput {
   name: String
   modelSrc: String
   cameraHelperData: JSON
+  created_by: UserRelateToOneForCreateInput
 }
 
 type ScrollableVideo {
@@ -249,6 +253,7 @@ type ScrollableVideo {
   customCss: String
   embedCode: String
   preview: JSON
+  created_by: User
 }
 
 input ScrollableVideoWhereUniqueInput {
@@ -264,6 +269,7 @@ input ScrollableVideoWhereInput {
   videoSrc: StringFilter
   mobileVideoSrc: StringFilter
   customCss: StringFilter
+  created_by: UserWhereInput
 }
 
 input ScrollableVideoOrderByInput {
@@ -280,6 +286,7 @@ input ScrollableVideoUpdateInput {
   mobileVideoSrc: String
   editorState: JSON
   customCss: String
+  created_by: UserRelateToOneForUpdateInput
 }
 
 input ScrollableVideoUpdateArgs {
@@ -293,6 +300,7 @@ input ScrollableVideoCreateInput {
   mobileVideoSrc: String
   editorState: JSON
   customCss: String
+  created_by: UserRelateToOneForCreateInput
 }
 
 """
