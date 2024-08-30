@@ -55,6 +55,11 @@ export const denyRoles = (roles: string[]) => {
 }
 
 const filterOperation = ({ session }: { session: Session }) => {
+  const role = session?.data?.role
+  if (role === RoleEnum.Admin || role === RoleEnum.Owner) {
+    return true
+  }
+
   return {
     created_by: {
       id: {
