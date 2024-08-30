@@ -1,5 +1,5 @@
 import { graphql, list } from '@keystone-6/core'
-import { text, json, virtual } from '@keystone-6/core/fields'
+import { text, json, relationship, virtual } from '@keystone-6/core/fields'
 import { buildScrollableThreeModelEmbedCode } from '@story-telling-reporter/react-embed-code-generator'
 import { ScrollableThreeModelProps } from '@story-telling-reporter/react-three-story-controls'
 import { createdByFilter, createdByHooks } from './utils/access-control-list'
@@ -55,6 +55,18 @@ const listConfigurations = list({
         },
         listView: {
           fieldMode: 'hidden',
+        },
+      },
+    }),
+    created_by: relationship({
+      ref: 'User',
+      many: false,
+      ui: {
+        createView: {
+          fieldMode: 'hidden',
+        },
+        itemView: {
+          fieldMode: 'read',
         },
       },
     }),

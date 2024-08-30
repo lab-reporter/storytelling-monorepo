@@ -1,6 +1,6 @@
 import { buildScrollableVideoEmbedCode } from '@story-telling-reporter/react-embed-code-generator'
 import { list, graphql } from '@keystone-6/core'
-import { text, json, virtual } from '@keystone-6/core/fields'
+import { text, json, relationship, virtual } from '@keystone-6/core/fields'
 import {
   ScrollableVideoProp,
   ThemeEnum,
@@ -211,6 +211,18 @@ const listConfigurations = list({
         omit: {
           create: true,
           update: true,
+        },
+      },
+    }),
+    created_by: relationship({
+      ref: 'User',
+      many: false,
+      ui: {
+        createView: {
+          fieldMode: 'hidden',
+        },
+        itemView: {
+          fieldMode: 'read',
         },
       },
     }),
