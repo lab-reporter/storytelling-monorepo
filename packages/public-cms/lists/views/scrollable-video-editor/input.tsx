@@ -109,13 +109,13 @@ export function CaptionInput({
             confirm: {
               label: 'Confirm',
               action: () => {
-                onConfirm(
-                  Object.assign({}, inputValueState, {
-                    rawContentState: convertToRaw(
-                      inputValueState.editorState.getCurrentContent()
-                    ),
-                  })
-                )
+                const { editorState, ...rest } = inputValueState  // eslint-disable-line
+                onConfirm({
+                  rawContentState: convertToRaw(
+                    inputValueState.editorState.getCurrentContent()
+                  ),
+                  ...rest,
+                })
               },
             },
           }}
