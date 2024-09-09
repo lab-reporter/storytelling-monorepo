@@ -200,6 +200,7 @@ type ScrollableThreeModel {
   id: ID!
   name: String
   modelSrc: String
+  description: String
   cameraHelperData: JSON
   embedCode: String
   created_by: User

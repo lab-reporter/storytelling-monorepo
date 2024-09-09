@@ -7,13 +7,30 @@ import { createdByFilter, createdByHooks } from './utils/access-control-list'
 const listConfigurations = list({
   fields: {
     name: text({
-      label: 'Three Story Points 名稱',
+      label: '名稱',
       validation: { isRequired: true },
     }),
     modelSrc: text({
       label: '3D model 檔案 URL（必須是 .gltf 或是 .glb 格式）',
       validation: {
         isRequired: true,
+      },
+    }),
+    description: virtual({
+      label: '檔案使用說明',
+      field: graphql.field({
+        type: graphql.String,
+        resolve: async (): Promise<string> => {
+          return '目前系統還不支援檔案上傳，因此，您的檔案若要在此編輯器使用，該檔案資源的回應需要包含允許跨域請求的標頭（response header）：`Access-Control-Allow-Origin: https://lab-storytelling.twreporter.org`。'
+        },
+      }),
+      ui: {
+        createView: {
+          fieldMode: 'hidden',
+        },
+        listView: {
+          fieldMode: 'hidden',
+        },
       },
     }),
     cameraHelperData: json({
