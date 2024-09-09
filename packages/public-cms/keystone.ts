@@ -177,35 +177,6 @@ const renderScrollableVideoHtml = (html: string) => {
   <style> 
   * { box-sizing: border-box; } 
   body { margin:0; padding:50vh 0; font-family: 'Roboto', 'Noto Sans TC', sans-serif } 
-
-  .article-container {
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  @media (max-width: 767px) {
-    .article-container {
-      width: calc(93.3333%);
-    }
-  }
-
-  @media (min-width: 768px) and (max-width: 1023px) {
-    .article-container {
-      width: 512px; 
-    }
-  }
-
-  @media (min-width: 1024px) and (max-width: 1439px) {
-    .article-container {
-      width: 550px; 
-    }
-  }
-
-  @media (min-width: 1440px) {
-    .article-container {
-      width: 730px; 
-    }
-  }
   </style>
 </head>
 <body>
