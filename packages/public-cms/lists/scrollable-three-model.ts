@@ -95,7 +95,7 @@ const listConfigurations = list({
       pageSize: 50,
     },
     labelField: 'name',
-    label: '捲動式3D',
+    label: '捲動式3D（測試版）',
   },
   access: {
     operation: () => true,
