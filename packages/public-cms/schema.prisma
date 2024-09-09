@@ -20,8 +20,8 @@ model User {
   createdAt                            DateTime?              @default(now())
   updatedAt                            DateTime?              @updatedAt
   from_ScrollToAudio_created_by        ScrollToAudio[]        @relation("ScrollToAudio_created_by")
-  from_ScrollableThreeModel_created_by ScrollableThreeModel[] @relation("ScrollableThreeModel_created_by")
   from_ScrollableVideo_created_by      ScrollableVideo[]      @relation("ScrollableVideo_created_by")
+  from_ScrollableThreeModel_created_by ScrollableThreeModel[] @relation("ScrollableThreeModel_created_by")
 }
 
 model ScrollToAudio {
@@ -36,17 +36,6 @@ model ScrollToAudio {
   @@index([created_byId])
 }
 
-model ScrollableThreeModel {
-  id               Int    @id @default(autoincrement())
-  name             String @default("")
-  modelSrc         String @default("")
-  cameraHelperData Json?  @default("{\"plainPois\":[],\"animationClip\":null,\"modelObjs\":[]}")
-  created_by       User?  @relation("ScrollableThreeModel_created_by", fields: [created_byId], references: [id])
-  created_byId     Int?   @map("created_by")
-
-  @@index([created_byId])
-}
-
 model ScrollableVideo {
   id             Int    @id @default(autoincrement())
   name           String @default("")
@@ -56,6 +45,17 @@ model ScrollableVideo {
   customCss      String @default("\n.scrollable-video {\n  /* 覆寫所有區塊預設的 css */\n  .section {\n    /* 例如：background-color: pink; */\n\n    /* 覆寫所有區塊內圖說預設的 css */\n    .draft-image-desc {\n    }\n\n    /* 覆寫所有區塊內抽言預設的 css */\n    .draft-blockquote {\n    }\n\n    /* 覆寫所有區塊內 H2 預設的 css */\n    .draft-header-two {\n    }\n\n    /* 覆寫所有區塊內 H3 預設的 css */\n    .draft-header-three {\n    }\n\n    /* 覆寫所有區塊內內文預設的 css */\n    .draft-paragraph {\n    }\n\n    /* 覆寫所有區塊內超連結預設的 css */\n    .draft-link {\n    }\n\n    /* 覆寫所有區塊內 annotation 預設的 css */\n    .annotation-wrapper {\n    }\n    .annotation-title {\n    }\n    .annotation-body {\n    }\n  }\n\n}\n      ")
   created_by     User?  @relation("ScrollableVideo_created_by", fields: [created_byId], references: [id])
   created_byId   Int?   @map("created_by")
+
+  @@index([created_byId])
+}
+
+model ScrollableThreeModel {
+  id               Int    @id @default(autoincrement())
+  name             String @default("")
+  modelSrc         String @default("")
+  cameraHelperData Json?  @default("{\"plainPois\":[],\"animationClip\":null,\"modelObjs\":[]}")
+  created_by       User?  @relation("ScrollableThreeModel_created_by", fields: [created_byId], references: [id])
+  created_byId     Int?   @map("created_by")
 
   @@index([created_byId])
 }

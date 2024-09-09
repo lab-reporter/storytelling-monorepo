@@ -6,6 +6,6 @@ import ScrollableVideo from './scrollable-video'
 export const listDefinition = {
   User,
   ScrollToAudio,
-  ScrollableThreeModel,
   ScrollableVideo,
+  ScrollableThreeModel,
 }

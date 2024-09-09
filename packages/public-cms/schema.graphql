@@ -196,55 +196,6 @@ input UserRelateToOneForCreateInput {
   connect: UserWhereUniqueInput
 }
 
-type ScrollableThreeModel {
-  id: ID!
-  name: String
-  modelSrc: String
-  description: String
-  cameraHelperData: JSON
-  embedCode: String
-  created_by: User
-}
-
-input ScrollableThreeModelWhereUniqueInput {
-  id: ID
-}
-
-input ScrollableThreeModelWhereInput {
-  AND: [ScrollableThreeModelWhereInput!]
-  OR: [ScrollableThreeModelWhereInput!]
-  NOT: [ScrollableThreeModelWhereInput!]
-  id: IDFilter
-  name: StringFilter
-  modelSrc: StringFilter
-  created_by: UserWhereInput
-}
-
-input ScrollableThreeModelOrderByInput {
-  id: OrderDirection
-  name: OrderDirection
-  modelSrc: OrderDirection
-}
-
-input ScrollableThreeModelUpdateInput {
-  name: String
-  modelSrc: String
-  cameraHelperData: JSON
-  created_by: UserRelateToOneForUpdateInput
-}
-
-input ScrollableThreeModelUpdateArgs {
-  where: ScrollableThreeModelWhereUniqueInput!
-  data: ScrollableThreeModelUpdateInput!
-}
-
-input ScrollableThreeModelCreateInput {
-  name: String
-  modelSrc: String
-  cameraHelperData: JSON
-  created_by: UserRelateToOneForCreateInput
-}
-
 type ScrollableVideo {
   id: ID!
   name: String
@@ -304,6 +255,55 @@ input ScrollableVideoCreateInput {
   created_by: UserRelateToOneForCreateInput
 }
 
+type ScrollableThreeModel {
+  id: ID!
+  name: String
+  modelSrc: String
+  description: String
+  cameraHelperData: JSON
+  embedCode: String
+  created_by: User
+}
+
+input ScrollableThreeModelWhereUniqueInput {
+  id: ID
+}
+
+input ScrollableThreeModelWhereInput {
+  AND: [ScrollableThreeModelWhereInput!]
+  OR: [ScrollableThreeModelWhereInput!]
+  NOT: [ScrollableThreeModelWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  modelSrc: StringFilter
+  created_by: UserWhereInput
+}
+
+input ScrollableThreeModelOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  modelSrc: OrderDirection
+}
+
+input ScrollableThreeModelUpdateInput {
+  name: String
+  modelSrc: String
+  cameraHelperData: JSON
+  created_by: UserRelateToOneForUpdateInput
+}
+
+input ScrollableThreeModelUpdateArgs {
+  where: ScrollableThreeModelWhereUniqueInput!
+  data: ScrollableThreeModelUpdateInput!
+}
+
+input ScrollableThreeModelCreateInput {
+  name: String
+  modelSrc: String
+  cameraHelperData: JSON
+  created_by: UserRelateToOneForCreateInput
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -322,18 +322,18 @@ type Mutation {
   updateScrollToAudios(data: [ScrollToAudioUpdateArgs!]!): [ScrollToAudio]
   deleteScrollToAudio(where: ScrollToAudioWhereUniqueInput!): ScrollToAudio
   deleteScrollToAudios(where: [ScrollToAudioWhereUniqueInput!]!): [ScrollToAudio]
-  createScrollableThreeModel(data: ScrollableThreeModelCreateInput!): ScrollableThreeModel
-  createScrollableThreeModels(data: [ScrollableThreeModelCreateInput!]!): [ScrollableThreeModel]
-  updateScrollableThreeModel(where: ScrollableThreeModelWhereUniqueInput!, data: ScrollableThreeModelUpdateInput!): ScrollableThreeModel
-  updateScrollableThreeModels(data: [ScrollableThreeModelUpdateArgs!]!): [ScrollableThreeModel]
-  deleteScrollableThreeModel(where: ScrollableThreeModelWhereUniqueInput!): ScrollableThreeModel
-  deleteScrollableThreeModels(where: [ScrollableThreeModelWhereUniqueInput!]!): [ScrollableThreeModel]
   createScrollableVideo(data: ScrollableVideoCreateInput!): ScrollableVideo
   createScrollableVideos(data: [ScrollableVideoCreateInput!]!): [ScrollableVideo]
   updateScrollableVideo(where: ScrollableVideoWhereUniqueInput!, data: ScrollableVideoUpdateInput!): ScrollableVideo
   updateScrollableVideos(data: [ScrollableVideoUpdateArgs!]!): [ScrollableVideo]
   deleteScrollableVideo(where: ScrollableVideoWhereUniqueInput!): ScrollableVideo
   deleteScrollableVideos(where: [ScrollableVideoWhereUniqueInput!]!): [ScrollableVideo]
+  createScrollableThreeModel(data: ScrollableThreeModelCreateInput!): ScrollableThreeModel
+  createScrollableThreeModels(data: [ScrollableThreeModelCreateInput!]!): [ScrollableThreeModel]
+  updateScrollableThreeModel(where: ScrollableThreeModelWhereUniqueInput!, data: ScrollableThreeModelUpdateInput!): ScrollableThreeModel
+  updateScrollableThreeModels(data: [ScrollableThreeModelUpdateArgs!]!): [ScrollableThreeModel]
+  deleteScrollableThreeModel(where: ScrollableThreeModelWhereUniqueInput!): ScrollableThreeModel
+  deleteScrollableThreeModels(where: [ScrollableThreeModelWhereUniqueInput!]!): [ScrollableThreeModel]
   endSession: Boolean!
   authenticateUserWithPassword(email: String!, password: String!): UserAuthenticationWithPasswordResult
   createInitialUser(data: CreateInitialUserInput!): UserAuthenticationWithPasswordSuccess!
@@ -364,12 +364,12 @@ type Query {
   scrollToAudios(where: ScrollToAudioWhereInput! = {}, orderBy: [ScrollToAudioOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ScrollToAudioWhereUniqueInput): [ScrollToAudio!]
   scrollToAudio(where: ScrollToAudioWhereUniqueInput!): ScrollToAudio
   scrollToAudiosCount(where: ScrollToAudioWhereInput! = {}): Int
-  scrollableThreeModels(where: ScrollableThreeModelWhereInput! = {}, orderBy: [ScrollableThreeModelOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ScrollableThreeModelWhereUniqueInput): [ScrollableThreeModel!]
-  scrollableThreeModel(where: ScrollableThreeModelWhereUniqueInput!): ScrollableThreeModel
-  scrollableThreeModelsCount(where: ScrollableThreeModelWhereInput! = {}): Int
   scrollableVideos(where: ScrollableVideoWhereInput! = {}, orderBy: [ScrollableVideoOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ScrollableVideoWhereUniqueInput): [ScrollableVideo!]
   scrollableVideo(where: ScrollableVideoWhereUniqueInput!): ScrollableVideo
   scrollableVideosCount(where: ScrollableVideoWhereInput! = {}): Int
+  scrollableThreeModels(where: ScrollableThreeModelWhereInput! = {}, orderBy: [ScrollableThreeModelOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ScrollableThreeModelWhereUniqueInput): [ScrollableThreeModel!]
+  scrollableThreeModel(where: ScrollableThreeModelWhereUniqueInput!): ScrollableThreeModel
+  scrollableThreeModelsCount(where: ScrollableThreeModelWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
 }
