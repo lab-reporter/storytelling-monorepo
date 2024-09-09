@@ -234,6 +234,7 @@ const listConfigurations = list({
       pageSize: 50,
     },
     labelField: 'name',
+    label: '捲動式影片',
   },
   access: {
     operation: () => true,

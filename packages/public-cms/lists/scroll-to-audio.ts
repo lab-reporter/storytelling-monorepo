@@ -163,6 +163,7 @@ const listConfigurations = list({
       pageSize: 50,
     },
     labelField: 'name',
+    label: '捲到式聲音',
   },
 
   access: {

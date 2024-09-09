@@ -71,6 +71,7 @@ const listConfigurations = list({
     listView: {
       initialColumns: ['name', 'role'],
     },
+    label: '使用者',
   },
   access: {
     operation: {

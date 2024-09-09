@@ -78,6 +78,7 @@ const listConfigurations = list({
       pageSize: 50,
     },
     labelField: 'name',
+    label: '捲動式3D',
   },
   access: {
     operation: () => true,
