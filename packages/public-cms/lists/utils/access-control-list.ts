@@ -12,6 +12,7 @@ type Session = {
 export const RoleEnum = {
   Owner: 'owner',
   Admin: 'admin',
+  SystemEditor: 'system_editor',
   Developer: 'developer',
   Editor: 'editor',
   Contributor: 'contributor',
@@ -36,6 +37,7 @@ export const allowAllRoles = () => {
   const roles = [
     RoleEnum.Owner,
     RoleEnum.Admin,
+    RoleEnum.SystemEditor,
     RoleEnum.Developer,
     RoleEnum.Editor,
     RoleEnum.Contributor,
@@ -62,9 +64,18 @@ const filterOperation = ({ session }: { session: Session }) => {
 
   return {
     created_by: {
-      id: {
-        equals: session?.itemId,
-      },
+      OR: [
+        {
+          id: {
+            equals: session?.itemId,
+          },
+        },
+        {
+          role: {
+            equals: RoleEnum.SystemEditor,
+          },
+        },
+      ],
     },
   }
 }

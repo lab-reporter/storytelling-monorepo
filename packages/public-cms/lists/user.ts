@@ -35,6 +35,10 @@ const listConfigurations = list({
           value: RoleEnum.Admin,
         },
         {
+          label: RoleEnum.SystemEditor,
+          value: RoleEnum.SystemEditor,
+        },
+        {
           label: RoleEnum.Developer,
           value: RoleEnum.Developer,
         },
