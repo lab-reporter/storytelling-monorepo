@@ -26,7 +26,7 @@ switch(resourcesHostedAt) {
     break
   }
   case 'gcs': {
-    publicPath = `https://story-telling-storage.twreporter.org/projects/three-hong-kong-project/${distFolderName}/`
+    publicPath = `https://storytelling-storage.twreporter.org/projects/three-hong-kong-project/${distFolderName}/`
     break
   }
   case 'localhost':
