@@ -10,6 +10,19 @@ import {
   ScrollableThreeModelProps,
   CameraHelperProps,
 } from '@story-telling-reporter/react-three-story-controls'
+import { buttonNames } from '@story-telling-reporter/draft-editor'
+
+const disabledButtons = [
+  buttonNames.code,
+  buttonNames.codeBlock,
+  buttonNames.newsReading,
+  buttonNames.slideshow,
+  buttonNames.divider,
+  buttonNames.infoBox,
+  buttonNames.image,
+  buttonNames.h4,
+  buttonNames.h5,
+]
 
 export const Field = ({
   field,
@@ -83,6 +96,7 @@ export const Field = ({
                 onFieldChange(JSON.stringify(fieldData))
               }
             }}
+            disabledButtons={disabledButtons}
           />
         )}
       </div>
