@@ -132,6 +132,7 @@ export type CameraHelperProps = {
   modelObjs: GTLFModelObject[]
   pois?: POI[]
   onChange?: (arg: CameraData) => void
+  disabledButtons?: string[]
 }
 
 /**
@@ -152,6 +153,9 @@ export function CameraHelper({
   modelObjs,
   pois: _pois,
   onChange,
+
+  // @TODO use Context API to replace `disabledButtons` prop
+  disabledButtons,
 }: CameraHelperProps) {
   const [gltfs, setGltfs] = useState<GLTF[]>([])
   const [pois, setPois] = useState<POI[]>(_pois || [])
@@ -363,6 +367,7 @@ export function CameraHelper({
             setPois(newPois)
           }
         }}
+        disabledButtons={disabledButtons}
       />
       {Array.isArray(pois) && pois.length > 0 && (
         <OpenPreviewButton
@@ -545,6 +550,7 @@ function Panel({
   onPoiAdd,
   onPoiEditStart,
   onPoiEditFinish,
+  disabledButtons,
 }: {
   pois: POI[]
   onPoisChange: (pois: POI[]) => void
@@ -552,6 +558,7 @@ function Panel({
   onPoiAdd: () => void
   onPoiEditStart: () => void
   onPoiEditFinish: () => void
+  disabledButtons?: string[]
 }) {
   const [expand, setExpand] = useState(true)
   const [editPoiIdx, setEditPoiIdx] = useState(-1)
@@ -653,6 +660,7 @@ function Panel({
           onPoiEditFinish()
         }}
         inputValue={pois[editPoiIdx].caption}
+        disabledButtons={disabledButtons}
       />
     ) : null
 

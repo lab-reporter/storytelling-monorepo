@@ -14,7 +14,7 @@ import {
 } from '@story-telling-reporter/draft-editor'
 import { AlignmentEnum, CaptionProp, WidthEnum } from '../types'
 
-const disabledButtons = [
+const _disabledButtons = [
   buttonNames.code,
   buttonNames.codeBlock,
   buttonNames.newsReading,
@@ -56,11 +56,13 @@ export function CaptionInput({
   onConfirm,
   onCancel,
   inputValue,
+  disabledButtons,
 }: {
   isOpen: boolean
   onConfirm: (arg0: CaptionProp) => void
   onCancel: () => void
   inputValue: CaptionProp
+  disabledButtons?: string[]
 }) {
   const contentState = convertFromRaw(inputValue.rawContentState)
   const [inputValueState, setInputValueState] = useState({
@@ -109,7 +111,7 @@ export function CaptionInput({
           <MarginTop />
           <FieldLabel>字幕內容</FieldLabel>
           <RichTextEditor
-            disabledButtons={disabledButtons}
+            disabledButtons={disabledButtons ?? _disabledButtons}
             editorState={inputValueState.editorState}
             onChange={(editorState: EditorState) => {
               setInputValueState((prevState) => {
