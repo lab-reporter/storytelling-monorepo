@@ -1,6 +1,6 @@
 import { ContentState, ContentBlock } from 'draft-js'
 import { blockRenderers } from './block-renderers'
-const { ImageBlock, EmbeddedCodeBlock } = blockRenderers
+const { ImageBlock, ImageLink, EmbeddedCodeBlock } = blockRenderers
 
 const AtomicBlock = (props: {
   contentState: ContentState
@@ -14,6 +14,9 @@ const AtomicBlock = (props: {
   switch (entityType) {
     case 'IMAGE': {
       return ImageBlock({ data: entityData })
+    }
+    case 'IMAGE_LINK': {
+      return ImageLink({ data: entityData })
     }
     case 'EMBEDDEDCODE': {
       return EmbeddedCodeBlock({ data: entityData })
