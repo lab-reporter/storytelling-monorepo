@@ -1,6 +1,6 @@
 {
   "name": "@story-telling-reporter/react-embed-code-generator",
-  "version": "2.1.0-beta.3",
+  "version": "2.1.0-beta.4",
   "description": "",
   "main": "lib/index.js",
   "scripts": {
@@ -28,10 +28,10 @@
   "license": "MIT",
   "dependencies": {
     "@story-telling-reporter/react-karaoke": "^0.3.0",
-    "@story-telling-reporter/react-scroll-to-audio": "^2.0.5",
-    "@story-telling-reporter/react-scrollable-video": "^2.0.5",
+    "@story-telling-reporter/react-scroll-to-audio": "^2.1.0",
+    "@story-telling-reporter/react-scrollable-video": "^2.1.0",
     "@story-telling-reporter/react-subtitled-audio": "^1.1.0",
-    "@story-telling-reporter/react-three-story-controls": "^1.0.0-beta.0",
+    "@story-telling-reporter/react-three-story-controls": "^1.0.0-beta.2",
     "lodash": "^4.17.21",
     "serialize-javascript": "^6.0.0"
   },
