@@ -32,7 +32,7 @@ $ make build
 當 `RESOURCES_HOSTED_AT=local` 時，所有的資源都是從 local 讀取。(`yarn dev` 就是預設 `RESOURCES_HOSTED_AT=local`）
 
 #### `RESOURCES_HOSTED_AT=gcs`
-當 `RESOURCES_HOSTED_AT=gcs` 時，所有的資源皆從 Google Cloud Storage 的 `gs://story-telling-storage.twreporter.org/projects/three-hong-kong-project` 底下讀取。目前[用字體留住消逝的街景記憶──香港的野生造字人們](https://www.twreporter.org/a/never-forget-hong-kong-vanishing-street-and-font-designers)網頁即是使用此參數。
+當 `RESOURCES_HOSTED_AT=gcs` 時，所有的資源皆從 Google Cloud Storage 的 `gs://storytelling-storage.twreporter.org/projects/three-hong-kong-project` 底下讀取。目前[用字體留住消逝的街景記憶──香港的野生造字人們](https://www.twreporter.org/a/never-forget-hong-kong-vanishing-street-and-font-designers)網頁即是使用此參數。
 
 你可以透過 Google Cloud Platform 的網頁上傳圖片和 3D models 檔案和 `webpack-bundles` 資料夾，也可以透過 `gsutils` 等 cli 來處理。
 
