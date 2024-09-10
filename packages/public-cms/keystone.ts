@@ -14,7 +14,7 @@ import path from 'path'
 const { withAuth } = createAuth({
   listKey: 'User',
   identityField: 'email',
-  sessionData: 'id name role',
+  sessionData: 'id name email role',
   secretField: 'password',
   initFirstItem: {
     // If there are no items in the database, keystone will ask you to create
