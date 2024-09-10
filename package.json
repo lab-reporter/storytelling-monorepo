@@ -9,7 +9,8 @@
     "packages/scrollable-video",
     "packages/scroll-to-audio",
     "packages/ui-toolkit",
-    "packages/three-story-controls"
+    "packages/three-story-controls",
+    "packages/public-cms"
   ],
   "scripts": {
     "prepare": "husky install"
