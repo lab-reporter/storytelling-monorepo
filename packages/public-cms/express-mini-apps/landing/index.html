@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>報導者數位敘事元件庫</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@200..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&family=Noto+Serif+TC:wght@200..900&display=swap" rel="stylesheet">
+    <style>
+        html,body{margin: 0;padding: 0;}
+        body{background: #F1F1F1;font-family: "Noto Sans TC", serif;}
+        img{width: 100%;height: auto;}
+        a{color: #9F7544;text-decoration-line:none;}
+        button{cursor: pointer;}
+        button.primary{background: rgba(196, 13, 35,1);border:0;color:#fff;padding: 12px 24px;border-radius: 40px;font-size: 16px;font-weight: 600;}
+        button.primary:hover{background: rgba(155, 5, 30,1);}
+        button.secondary{background: rgba(0,0,0,0);color: #9F7544;border: 1px solid #9F7544;padding: 6px 16px;border-radius: 40px;font-size: 14px;}
+        button.secondary:hover{color: #7A522C;border: 1px solid #7A522C;}
+        button.default{border:0;color:#1A7AEB;font-size: 14px;font-weight: 300;}
+        button.default:hover{text-decoration-line:underline;text-underline-offset: 4px;text-decoration-thickness: 1px;}
+        button.textPrimary{background: rgba(0,0,0,0);border:0;color: #9F7544;;font-size: 14px;font-weight: 300;}
+        button.textPrimary:hover{text-decoration-line:underline;text-underline-offset: 4px;text-decoration-thickness: 1px;}
+        button.textSecondary{background: rgba(0,0,0,0);border:0;color: #808080;;font-size: 14px;font-weight: 300;}
+        button.textSecondary:hover{text-decoration-line:underline;text-underline-offset: 4px;text-decoration-thickness: 1px;}
+        .frame{width: 100vw;height: 100vh;position: fixed;z-index: 1;top:0;left: 0;pointer-events: none;}
+        .frame .dottedLine{width: calc(100vw - 60px);height: calc(100vh - 60px);position: absolute;top:30px;left:30px;border: 1px dashed #231815;}
+        .frame .gradient{z-index: 2;width: 40px;height: 200px;background:linear-gradient(to bottom, rgba(241, 241, 241,0), rgba(241, 241, 241,0.8),rgba(241, 241, 241,0));position: absolute;top:40px;animation-duration: 10s;animation-name:goDown;animation-iteration-count: infinite;}
+        .frame .blockUp,.frame .blockDown{height: 40px;width: 100%;background: #F1F1F1;position: absolute;}
+        .frame .blockUp{top:0;left:0}
+        .frame .blockDown{bottom:0;left:0}
+        .frame .cornerImg{z-index: 3;width: 60px;height: 60px;position: absolute;}
+        .frame .rightUp{right:0;top:0;-moz-transform:rotate(90deg);-webkit-transform:rotate(90deg);-o-transform:rotate(90deg);-ms-transform:rotate(90deg);transform:rotate(90deg);}
+        .frame .rightDown{right:0;bottom: 0;-moz-transform:rotate(180deg);-webkit-transform:rotate(180deg);-o-transform:rotate(180deg);-ms-transform:rotate(180deg);transform:rotate(180deg);}
+        .frame .leftUp{left: 0;top:0;}
+        .frame .leftDown{left: 0;bottom: 0;-moz-transform:rotate(-90deg);-webkit-transform:rotate(-90deg);-o-transform:rotate(-90deg);-ms-transform:rotate(-90deg);transform:rotate(-90deg);}
+        .contentArea{z-index: 100;width: calc(100vw - 80px);height: auto;margin: 40px;text-align: center;overflow: scroll;}
+        .openIntro{z-index: 101;width: calc(100vw - 80px);padding: 100px 0 80px;width: 100%;text-align: center;}
+        .openIntro .logo{width: 230px;margin: 0 auto 30px;}
+        .openIntro h1{font-family: "Noto Serif TC", serif;font-weight: 700;font-size: 60px;margin: 0;}
+        .openIntro p{font-family: "Noto Sans TC", serif;font-weight: 300;font-size: 16px;margin: 50px 0 40px;}
+        .openIntro .btnMain{margin-bottom: 20px;}
+        .cards{z-index: 101;display: flex;flex-direction:column;}
+        .cards3{display: flex;justify-content:center;margin: 0 auto;}
+        .cards4{display: flex;justify-content:center;margin: 0 auto;}
+        .card{margin: 10px 10px;background: #fff;width: calc(220px - 40px);height: calc(220px - 40px);padding: 20px;text-align: left;display: flex;flex-wrap:wrap;align-content:space-between;}
+        .card .info .name{color: #9F7544;}
+        .card .info .name p{margin: 0;font-weight: 600;}
+        .card .info .name .en{font-size: 14px;font-family: "Noto Serif TC", serif;font-weight: 700;}
+        .card .info .name .ch{font-size: 12px;}
+        .card .info .line{border: 1px solid #231815;width: 60px;margin: 20px 0;border-bottom: 0;}
+        .card .info .intro{font-size: 14px;font-weight: 300px;color: #231815;}
+        .card .act{width: 100%;display: flex;flex-wrap:nowrap;justify-content:space-between;}
+        footer{z-index: 101;width: 100%;margin: 80px 0;text-align: center;}
+        footer .links{display: flex;flex-wrap:nowrap;justify-content:center;}
+        footer .links a{margin: 0 15px;}
+        footer .copyright p{color: #808080;font-size: 12px;font-weight: 300;margin: 20px 0 0;}
+        @keyframes goDown {0%{margin-top: 40px;} 100%{margin-top: calc(100vh - 200px);}
+  }
+        @media(max-width: 1024px) {
+            .cards3{flex-wrap:wrap;}
+            .cards4{max-width: 600px;flex-wrap:wrap;}
+        }
+        @media(max-width: 768px) {
+            .frame .blockUp,.frame .blockDown{height: 20px;}
+            .frame .dottedLine{width: calc(100vw - 30px);height: calc(100vh - 30px);top:15px;left:15px;}
+            .frame .gradient{width: 20px;}
+            .frame .cornerImg{width: 40px;height: 40px;}
+            .contentArea{width: calc(100vw - 40px);margin: 20px;}
+            .openIntro{width: calc(100vw - 40px);padding: 60px 0 40px;}
+            .openIntro .logo{width: 190px;margin: 0 auto 20px;}
+            .openIntro h1{font-size: 50px;margin: 0px 0 30px;}
+            .card{width: calc(160px - 20px);height: calc(160px - 30px);padding: 15px 10px;}
+            .card .info .name .en{font-size: 12px;}
+            .card .info .name .ch a{text-decoration-line:underline;text-underline-offset: 4px;text-decoration-thickness: 1px;}
+            .card .info .line{display: none;}
+            .card .info .intro{font-size: 12px;}
+            .card .act button{font-size: 12px;}
+            .card .act button.textPrimary{display: none;}
+            .cards4{max-width: 400px;}
+        }
+        @media(max-width: 550px) {
+            .openIntro h1{font-size: 42px;}
+            .openIntro p{font-size: 14px;margin: 50px 0 40px;}
+            footer .links{width: 300px;margin: 0 auto;flex-wrap:wrap;}
+            footer .links a{margin: 5px 15px;}
+            footer .copyright p{margin: 30px 0 0;}
+        }
+        @media(max-width: 400px) {
+            .openIntro h1{font-size: 36px;}
+            .card{width: calc(220px - 20px);height: calc(220px - 30px);padding: 15px 10px;}
+            .card .info .name .en{font-size: 14px;}
+            .card .info .name .ch a{text-decoration-line:none;}
+            .card .info .intro{font-size: 14px;}
+            .card .info .line{display: inherit;}
+            .card .act{align-items: center;}
+            .card .act button{font-size: 14px;}
+            .card .act button.textPrimary{display: inherit;text-decoration-line:underline;text-underline-offset: 4px;text-decoration-thickness: 1px;}
+            
+        }
+    </style>
+</head>
+<body>
+    <div class="frame">
+        <div class="blockUp"></div>
+        <div class="blockDown"></div>
+        <div class="dottedLine"></div>
+        <div class="gradient" style="left: 0;"></div>
+        <div class="gradient" style="right: 0;animation-delay: 2s;"></div>
+        <div class="rightUp cornerImg"><img src="landing/img/cornerImg.svg" /></div>
+        <div class="rightDown cornerImg"><img src="landing/img/cornerImg.svg" /></div>
+        <div class="leftUp cornerImg"><img src="landing/img/cornerImg.svg" /></div>
+        <div class="leftDown cornerImg"><img src="landing/img/cornerImg.svg" /></div>
+    </div>
+    <div class="contentArea">
+        <div class="openIntro">
+            <div class="logo"><img src="landing/img/logo.svg" /></div>
+            <div><h1>數位敘事元件庫</h1></div>
+            <div><p>報導者開放實驗室 The Reporter Lab<br/>提供開源的數位敘事元件<br/>增加說故事的方式<br/>並成為數位內容創作的好幫手<br/>讓你專注生產優質的內容</p></div>
+            <div class="btnMain"><a target="_blank" href="/signin"><button class="primary">前往體驗元件庫</button></a></div>
+            <div><a target="_blank" href="https://docs.google.com/forms/d/e/1FAIpQLSfE2pVLOZLOi_GAAm6FifYsLlPmfRxaK4kBBal9rgixO2VNDg/viewform"><button class="default">申請帳號 / 回報問題</button></a></div>
+        </div>
+        <div class="cards">
+            <div class="cards3">
+                <div class="card">
+                    <div class="info">
+                        <div class="name">
+                            <p class="en">ScrollToAudios</p>
+                            <p class="ch">捲到式聲音</p>
+                        </div>
+                        <div class="line"></div>
+                        <div class="intro"><p>讓聲音跟隨內容變換<br/>創造身歷其境的閱讀感受</p></div>
+                    </div>
+                    <div class="act">
+                        <a target="_blank" href="/signin?from=%2Fscroll-to-audios"><button class="secondary">Create</button></a>
+                        <a target="_blank" href="https://medium.com/twreporter/af91e8fb1a9c"><button class="textPrimary">intro</button></a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="info">
+                        <div class="name">
+                            <p class="en">ScrollableVideos</p>
+                            <p class="ch">捲動式影片</p>
+                        </div>
+                        <div class="line"></div>
+                        <div class="intro"><p>滿版影片連袂多元敘事<br/>影像敘事的豐盛表現</p></div>
+                    </div>
+                    <div class="act">
+                        <a target="_blank" href="/signin?from=%2Fscrollable-videos"><button class="secondary">Create</button></a>
+                        <a target="_blank" href="https://medium.com/twreporter"><button class="textPrimary">intro</button></a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="info">
+                        <div class="name">
+                            <p class="en">ScrollableThreeModels</p>
+                            <p class="ch">捲動式 3D</p>
+                        </div>
+                        <div class="line"></div>
+                        <div class="intro"><p>滑動展演 3D 的影像敘事<br/>模擬空間的最佳應用</p></div>
+                    </div>
+                    <div class="act">
+                        <a target="_blank" href="/signin?from=%2Fscrollable-three-models"><button class="secondary">Create</button></a>
+                        <button class="textPrimary" style="color:#E0E0E0;text-decoration-line:none;cursor: auto;">intro</button>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="cards4">
+                <div class="card">
+                    <div class="info">
+                        <div class="name">
+                            <p class="en">ZoomIn</p>
+                            <p class="ch">大圖點我</p>
+                        </div>
+                        <div class="line"></div>
+                        <div class="intro"><p>舒適又順暢的賞圖體驗<br/>貼近使用者習慣的觸動關閉</p></div>
+                    </div>
+                    <div class="act">
+                        <a target="_blank" href="/signin?from=%2Fiframe%2Fzoom-in"><button class="secondary">Create</button></a>
+                        <a target="_blank" href="https://medium.com/twreporter/6b56188e4647"><button class="textPrimary">intro</button></a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="info">
+                        <div class="name">
+                            <p class="en">DualChannel</p>
+                            <p class="ch">左右互搏</p>
+                        </div>
+                        <div class="line"></div>
+                        <div class="intro"><p>最推薦的圖文互動敘事<br/>兼容多元載具的呈現</p></div>
+                    </div>
+                    <div class="act">
+                        <a target="_blank" href="/signin?from=%2Fiframe%2Fdual-channel"><button class="secondary">Create</button></a>
+                        <a target="_blank" href="https://medium.com/twreporter/5c13c7a83e24"><button class="textPrimary">intro</button></a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="info">
+                        <div class="name">
+                            <p class="en">ScrollableImage</p>
+                            <p class="ch">橫著滾吧</p>
+                        </div>
+                        <div class="line"></div>
+                        <div class="intro"><p>橫向閱讀長條的圖像敘事<br/>多圖拼接加快載入速度</p></div>
+                    </div>
+                    <div class="act">
+                        <a target="_blank" href="/signin?from=%2Fiframe%2Fscrollable-image"><button class="secondary">Create</button></a>
+                        <a target="_blank" href="https://medium.com/twreporter/3fa0c27423c"><button class="textPrimary">intro</button></a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="info">
+                        <div class="name">
+                            <p class="en">TimeLine</p>
+                            <p class="ch">大事記</p>
+                        </div>
+                        <div class="line"></div>
+                        <div class="intro"><p>從手工業到程式自動生成<br/>輕鬆產出時間軸敘事</p></div>
+                    </div>
+                    <div class="act">
+                        <a target="_blank" href="/signin?from=%2Fiframe%2Ftimeline"><button class="secondary">Create</button></a>
+                        <a target="_blank" href="https://medium.com/twreporter/4fe8db1035f2"><button class="textPrimary">intro</button></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer>
+            <div class="links">
+                <a target="_blank" href="https://www.twreporter.org/"><button class="textSecondary">前往《報導者》</button></a>
+                <a target="_blank" href="https://www.twreporter.org/about-us"><button class="textSecondary">關於我們</button></a>
+                <a target="_blank" href="https://medium.com/twreporter"><button class="textSecondary">報導者開放實驗室</button></a>
+                <a target="_blank" href="https://support.twreporter.org/"><button class="textSecondary">贊助支持</button></a>
+            </div>
+            <div class="copyright"><p>Copyright © 2024 The Reporter</p></div>
+        </footer>
+    </div>
+    
+</body>
+</html>

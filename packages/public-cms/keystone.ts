@@ -4,9 +4,11 @@ import { listDefinition as lists } from './lists'
 import appConfig from './config'
 import envVar from './environment-variables'
 import { Request, Response, NextFunction } from 'express'
-import { createAuth } from '@keystone-6/auth'
-import { statelessSessions } from '@keystone-6/core/session'
 import { InMemoryLRUCache } from '@apollo/utils.keyvaluecache'
+import { createAuth } from '@keystone-6/auth'
+import { createLandingMiniApp } from './express-mini-apps/landing/app'
+import { statelessSessions } from '@keystone-6/core/session'
+
 import bodyParser from 'body-parser'
 import express from 'express'
 import path from 'path'
@@ -39,6 +41,16 @@ export default withAuth(
       isDisabled: envVar.isUIDisabled,
       // For our starter, we check that someone has session data before letting them see the Admin UI.
       isAccessAllowed: (context) => !!context.session?.data,
+      // Replace default favicon, ref: https://github.com/keystonejs/keystone/discussions/7506
+      getAdditionalFiles: [
+        async () => [
+          {
+            mode: 'copy',
+            inputPath: path.resolve('static/icons/favicon.ico'),
+            outputPath: 'public/favicon.ico',
+          },
+        ],
+      ],
     },
     lists,
     session,
@@ -160,6 +172,13 @@ export default withAuth(
               )
             )
           }
+        )
+
+        // landing page router
+        app.use(
+          createLandingMiniApp({
+            keystoneContext: commonContext,
+          })
         )
       },
     },
