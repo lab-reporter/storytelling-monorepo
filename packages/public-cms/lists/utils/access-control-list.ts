@@ -56,7 +56,7 @@ export const denyRoles = (roles: string[]) => {
   }
 }
 
-const filterOperation = ({ session }: { session: Session }) => {
+const filterQueryOperation = ({ session }: { session: Session }) => {
   const role = session?.data?.role
   if (role === RoleEnum.Admin || role === RoleEnum.Owner) {
     return true
@@ -80,10 +80,22 @@ const filterOperation = ({ session }: { session: Session }) => {
   }
 }
 
+const filterUpdateOperation = ({ session }: { session: Session }) => {
+  return {
+    created_by: {
+      id: {
+        equals: session?.itemId,
+      },
+    },
+  }
+}
+
+const filterDeleteOpertion = filterUpdateOperation
+
 export const createdByFilter = {
-  query: filterOperation,
-  update: filterOperation,
-  delete: filterOperation,
+  query: filterQueryOperation,
+  update: filterUpdateOperation,
+  delete: filterDeleteOpertion,
 }
 
 export const createdByHooks: ListHooks<BaseListTypeInfo> = {
