@@ -78,6 +78,20 @@ const listConfigurations = list({
     label: '使用者',
   },
   access: {
+    filter: {
+      query: ({ session }) => {
+        const role = session?.data?.role
+        if (role === RoleEnum.Admin || role === RoleEnum.Owner) {
+          return true
+        }
+
+        return {
+          id: {
+            equals: session?.data?.id,
+          },
+        }
+      },
+    },
     operation: {
       query: allowAllRoles(),
       create: allowRoles([RoleEnum.Owner, RoleEnum.Admin]),
