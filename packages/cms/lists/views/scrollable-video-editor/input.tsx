@@ -227,11 +227,11 @@ export function AddCaptionButton({
     }
 
     /* 覆寫此區塊內 H2 預設的 css */
-    .draft-header-two {
+    .draft-header-two h2 {
     }
 
     /* 覆寫此區塊內 H3 預設的 css */
-    .draft-header-three {
+    .draft-header-three h3 {
     }
 
     /* 覆寫此區塊內內文預設的 css */
