@@ -7,7 +7,7 @@ Promise.all([
   import('./utils'),
   import(
     /* webpackChunkName: "react-scrollable-video" */
-    '@story-telling-reporter/react-scrollable-video'
+    '@story-telling-reporter/react-scrollable-video/lib/esm/v2/scrollable-video-for-keystone-editor.js'
   ),
   import('./constants'),
   import('regenerator-runtime/runtime'),
