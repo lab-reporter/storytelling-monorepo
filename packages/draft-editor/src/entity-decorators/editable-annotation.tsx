@@ -19,8 +19,8 @@ const disabledButtons = [
   buttonNames.codeBlock,
   buttonNames.blockquote,
   buttonNames.annotation,
-  buttonNames.embed,
   buttonNames.image,
+  buttonNames.imageLink,
 ]
 
 export const AnnotationEditor = (props: {

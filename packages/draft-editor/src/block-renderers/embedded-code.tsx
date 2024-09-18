@@ -8,7 +8,7 @@ import {
 import { EditableBlock } from './styled'
 import { TextArea } from '@keystone-ui/fields'
 
-function EmbeddedCode({
+export function EmbeddedCode({
   className,
   embeddedCode,
 }: {

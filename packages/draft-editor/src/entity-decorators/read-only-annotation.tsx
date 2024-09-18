@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import {
+  ContentBlock,
   CompositeDecorator,
   ContentState,
   Editor,
@@ -11,6 +12,35 @@ import { annotationBlockRenderMap } from '../block-render-maps/index'
 import { readOnlyLinkDecorator } from '../entity-decorators/read-only-link'
 import { Entity } from '../constants'
 import { findEntitiesByType } from './utils'
+import { EmbeddedCode } from '../block-renderers/embedded-code'
+
+const AtomicBlock = (props: {
+  block: ContentBlock
+  contentState: ContentState
+}) => {
+  const entity = props.contentState.getEntity(props.block.getEntityAt(0))
+  const data = entity.getData()
+  const entityType = entity.getType()
+
+  switch (entityType) {
+    case 'EMBEDDEDCODE': {
+      return EmbeddedCode({ embeddedCode: data?.embeddedCode })
+    }
+  }
+  return null
+}
+
+const blockRendererFn = (block: ContentBlock) => {
+  if (block.getType() === 'atomic') {
+    return {
+      component: AtomicBlock,
+      editable: false,
+      props: {},
+    }
+  }
+
+  return null
+}
 
 const AnnotationWrapper = styled.span`
   display: inline;
@@ -101,6 +131,7 @@ function AnnotationBlock(props: {
           <Editor
             editorState={editorState}
             blockRenderMap={annotationBlockRenderMap}
+            blockRendererFn={blockRendererFn}
             readOnly
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             onChange={() => {}}
