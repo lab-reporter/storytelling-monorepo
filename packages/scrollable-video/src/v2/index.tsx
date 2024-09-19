@@ -323,7 +323,7 @@ export function ScrollableVideo({
     return () => {
       window.removeEventListener('resize', handleResize)
     }
-  }, [windowObject])
+  }, [windowObject, video.src, video.mobileSrc])
 
   // use query param to enable debugMode
   useEffect(() => {
