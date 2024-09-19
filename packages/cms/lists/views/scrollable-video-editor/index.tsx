@@ -1,16 +1,18 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import { FieldProps } from '@keystone-6/core/types'
 import { FieldContainer, FieldLabel } from '@keystone-ui/fields'
 import { controller } from '@keystone-6/core/fields/types/json/views'
-import { ScrollableVideoEditor } from './editor'
-import { ScrollableVideoProp } from './type'
+import {
+  ScrollableVideoEditor,
+  ScrollableVideoEditorProps,
+} from '@story-telling-reporter/react-scrollable-video'
 
 export const Field = ({
   field,
   value,
   onChange: onFieldChange,
 }: FieldProps<typeof controller>) => {
-  const [svProp, setSvProp] = useState<ScrollableVideoProp>(
+  const [svProp, setSvProp] = useState<ScrollableVideoEditorProps>(
     value ? JSON.parse(value) : {}
   )
   const [prevValue, setPrevValue] = useState(value)
@@ -20,17 +22,14 @@ export const Field = ({
     setSvProp(value ? JSON.parse(value) : {})
   }
 
+  const onChange = useCallback((newValue: ScrollableVideoEditorProps) => {
+    onFieldChange?.(JSON.stringify(newValue))
+  }, [])
+
   return (
     <FieldContainer>
       <FieldLabel>{field.label}</FieldLabel>
-      <ScrollableVideoEditor
-        {...svProp}
-        onChange={(newSvProp: ScrollableVideoProp) => {
-          if (typeof onFieldChange === 'function') {
-            onFieldChange(JSON.stringify(newSvProp))
-          }
-        }}
-      />
+      <ScrollableVideoEditor {...svProp} onChange={onChange} />
     </FieldContainer>
   )
 }

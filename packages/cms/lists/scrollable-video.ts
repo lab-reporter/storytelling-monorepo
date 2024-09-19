@@ -2,9 +2,9 @@ import { buildScrollableVideoEmbedCode } from '@story-telling-reporter/react-emb
 import { list, graphql } from '@keystone-6/core'
 import { text, json, virtual } from '@keystone-6/core/fields'
 import {
-  ScrollableVideoProp,
+  ScrollableVideoEditorProps,
   ThemeEnum,
-} from './views/scrollable-video-editor/type'
+} from '@story-telling-reporter/react-scrollable-video'
 import { customAlphabet } from 'nanoid'
 import CleanCss from 'clean-css'
 import postcss from 'postcss'
@@ -130,7 +130,7 @@ const listConfigurations = list({
       field: graphql.field({
         type: graphql.String,
         resolve: async (item: Record<string, unknown>): Promise<string> => {
-          const editorState = item?.editorState as ScrollableVideoProp
+          const editorState = item?.editorState as ScrollableVideoEditorProps
           const captions = editorState.captions
           const code = buildScrollableVideoEmbedCode({
             video: {
