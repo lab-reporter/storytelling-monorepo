@@ -15,7 +15,7 @@ import {
 } from '@story-telling-reporter/draft-editor'
 import {
   AlignmentEnum,
-  CaptionProp,
+  CaptionState,
   ConfigProp,
   WidthEnum,
   ThemeEnum,
@@ -69,9 +69,9 @@ export function CaptionInput({
   inputValue,
 }: {
   isOpen: boolean
-  onConfirm: (arg0: CaptionProp) => void
+  onConfirm: (arg0: CaptionState) => void
   onCancel: () => void
-  inputValue: CaptionProp
+  inputValue: CaptionState
 }) {
   const contentState = convertFromRaw(inputValue.rawContentState)
   const [inputValueState, setInputValueState] = useState({
@@ -203,7 +203,7 @@ export function AddCaptionButton({
   getVideoCurrentTime,
 }: {
   className?: string
-  onChange: (arg0: CaptionProp) => void
+  onChange: (arg0: CaptionState) => void
   getVideoCurrentTime: () => number
 }) {
   const [toShowInput, setToShowInput] = useState(false)

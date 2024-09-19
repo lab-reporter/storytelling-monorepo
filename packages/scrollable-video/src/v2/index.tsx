@@ -7,6 +7,7 @@ import { RawDraftContentState } from 'draft-js' // eslint-disable-line
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger'
 import { mediaQuery } from '../utils/media-query'
 import { useGSAP } from '@gsap/react'
+import { CaptionState } from '../type'
 
 const _ = {
   debounce,
@@ -121,25 +122,6 @@ const DebugPanel = styled.div`
     color: black;
   }
 `
-
-export enum WidthEnum {
-  WIDE = 'wide',
-  NARROW = 'narrow',
-}
-
-export enum AlignmentEnum {
-  RIGHT = 'right',
-  LEFT = 'left',
-  CENTER = 'center',
-}
-
-export type CaptionState = {
-  id?: string
-  rawContentState: RawDraftContentState
-  startTime: number
-  alignment?: AlignmentEnum
-  width?: WidthEnum
-}
 
 type VideoObj = {
   duration: number

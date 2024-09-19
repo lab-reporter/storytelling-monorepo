@@ -4,7 +4,7 @@ import styled from '../styled-components'
 import { AddCaptionButton, CaptionInput, ConfigInput } from './input'
 import { AlertDialog } from '@keystone-ui/modals'
 import { CaptionMark } from './mark'
-import { ScrollableVideoProp, ThemeEnum } from './type'
+import { CaptionState, ConfigProp, ThemeEnum } from './type'
 import {
   PlayButton,
   PauseButton,
@@ -96,11 +96,17 @@ enum BehaviorAction {
 
 const defaultDuration = 10 // seconds
 
+export type ScrollableVideoEditorProps = {
+  captions: CaptionState[]
+  videoSrc: string
+  videoDuration: number
+} & ConfigProp
+
 function ScrollableVideoEditor({
   onChange,
   ...svProp
-}: ScrollableVideoProp & {
-  onChange: (arg: ScrollableVideoProp) => void
+}: ScrollableVideoEditorProps & {
+  onChange: (arg: ScrollableVideoEditorProps) => void
 }) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const scrollerRef = useRef<HTMLDivElement>(null)
@@ -146,7 +152,7 @@ function ScrollableVideoEditor({
     return () => {
       video?.removeEventListener('loadedmetadata', onLoadedMetadata)
     }
-  }, [])
+  }, [svProp])
 
   useEffect(() => {
     const video = videoRef.current
