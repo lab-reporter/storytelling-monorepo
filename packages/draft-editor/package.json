@@ -1,6 +1,6 @@
 {
   "name": "@story-telling-reporter/draft-editor",
-  "version": "2.1.0-beta.0",
+  "version": "2.1.0",
   "description": "",
   "main": "lib/index.js",
   "scripts": {
