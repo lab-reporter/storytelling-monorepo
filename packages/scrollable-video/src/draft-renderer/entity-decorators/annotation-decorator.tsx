@@ -9,6 +9,7 @@ import {
 } from 'draft-js'
 import { annotationBlockRenderMap } from '../block-render-maps/index'
 import { decorator } from '../entity-decorators/index'
+import { EmbeddedCodeBlock } from '../block-renderers/embedded-code-block'
 
 const AnnotationWrapper = styled.span`
   display: inline;
@@ -70,6 +71,34 @@ const ArrowIcon = styled.span<{ $showContent: boolean }>`
   }
 `
 
+const AtomicBlock = (props: {
+  block: ContentBlock
+  contentState: ContentState
+}) => {
+  const entity = props.contentState.getEntity(props.block.getEntityAt(0))
+  const data = entity.getData()
+  const entityType = entity.getType()
+
+  switch (entityType) {
+    case 'EMBEDDEDCODE': {
+      return EmbeddedCodeBlock({ data })
+    }
+  }
+  return null
+}
+
+const blockRendererFn = (block: ContentBlock) => {
+  if (block.getType() === 'atomic') {
+    return {
+      component: AtomicBlock,
+      editable: false,
+      props: {},
+    }
+  }
+
+  return null
+}
+
 function AnnotationBlock(props: {
   contentState: ContentState
   entityKey: string
@@ -83,6 +112,15 @@ function AnnotationBlock(props: {
 
   const contentState = convertFromRaw(rawContentState)
   const editorState = EditorState.createWithContent(contentState, decorator)
+
+  const [preRawContentState, setPreRawContentState] = useState(rawContentState)
+
+  // Pattern for monitoring props change:
+  // https://react.dev/learn/you-might-not-need-an-effect#adjusting-some-state-when-a-prop-changes
+  if (preRawContentState !== rawContentState) {
+    setPreRawContentState(rawContentState)
+    setShowContent(false)
+  }
 
   return (
     <React.Fragment>
@@ -101,6 +139,7 @@ function AnnotationBlock(props: {
           <Editor
             editorState={editorState}
             blockRenderMap={annotationBlockRenderMap}
+            blockRendererFn={blockRendererFn}
             readOnly
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             onChange={() => {}}
