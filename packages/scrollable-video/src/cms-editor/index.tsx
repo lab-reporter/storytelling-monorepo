@@ -276,41 +276,6 @@ function ScrollableVideoEditor({
 
   return (
     <>
-      <FullScreen ref={scrollerRef} $hide={!fullScreen}>
-        <ScrollableVideo
-          readOnly={false}
-          onEdit={(captionIdx: number) => {
-            setUserBehaviorState({
-              action: BehaviorAction.Edit,
-              captionIdx,
-            })
-          }}
-          onRemove={(captionIdx: number) => {
-            setUserBehaviorState({
-              action: BehaviorAction.Remove,
-              captionIdx,
-            })
-          }}
-          scrollerRef={scrollerRef}
-          captions={captions}
-          video={{
-            duration,
-            src: svProp.videoSrc,
-            mobileSrc: svProp.videoSrc,
-          }}
-          darkMode={svProp.theme === ThemeEnum.DARK_MODE}
-          secondsPer100vh={svProp.secondsPer100vh}
-        />
-        <ZoomOutButton
-          $hide={!fullScreen}
-          darkMode={svProp.theme === ThemeEnum.DARK_MODE}
-          onClick={() => {
-            setFullScreen(false)
-          }}
-        />
-      </FullScreen>
-      {editJsx}
-      {deleteAlertJsx}
       <Container>
         <video id="video" preload="metadata" ref={videoRef}>
           <source src={svProp.videoSrc} />
@@ -372,6 +337,41 @@ function ScrollableVideoEditor({
           onChange(Object.assign({}, svProp, newConfigProp))
         }}
       />
+      <FullScreen ref={scrollerRef} $hide={!fullScreen}>
+        <ScrollableVideo
+          readOnly={false}
+          onEdit={(captionIdx: number) => {
+            setUserBehaviorState({
+              action: BehaviorAction.Edit,
+              captionIdx,
+            })
+          }}
+          onRemove={(captionIdx: number) => {
+            setUserBehaviorState({
+              action: BehaviorAction.Remove,
+              captionIdx,
+            })
+          }}
+          scrollerRef={scrollerRef}
+          captions={captions}
+          video={{
+            duration,
+            src: svProp.videoSrc,
+            mobileSrc: svProp.videoSrc,
+          }}
+          darkMode={svProp.theme === ThemeEnum.DARK_MODE}
+          secondsPer100vh={svProp.secondsPer100vh}
+        />
+        <ZoomOutButton
+          $hide={!fullScreen}
+          darkMode={svProp.theme === ThemeEnum.DARK_MODE}
+          onClick={() => {
+            setFullScreen(false)
+          }}
+        />
+      </FullScreen>
+      {editJsx}
+      {deleteAlertJsx}
     </>
   )
 }
@@ -382,7 +382,6 @@ const FullScreen = styled.div<{ $hide: boolean }>`
   width: 100%;
   height: 100%;
   overflow: scroll;
-  z-index: 1000;
   ${(props) => (props.$hide ? 'top: 200vh;' : 'top: 0;')}
 `
 
