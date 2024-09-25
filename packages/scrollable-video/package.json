@@ -1,6 +1,6 @@
 {
   "name": "@story-telling-reporter/react-scrollable-video",
-  "version": "2.2.1",
+  "version": "2.2.3",
   "description": "",
   "main": "lib/cjs/index.js",
   "module": "lib/esm/index.js",
@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/nickhsine/story-telling-reporter.git",
+    "url": "git+https://github.com/nickhsine/story-telling-reporter.git",
     "directory": "packages/scrollable-video"
   },
   "keywords": [

@@ -1,7 +1,7 @@
-import React, { useState } from 'react' // eslint-disable-line
+import React, { useCallback, useState } from 'react' // eslint-disable-line
 import styled from 'styled-components'
-import { ScrollableVideoForKeystoneEditorCMS } from '../src/index'
 import { createRoot } from 'react-dom/client'
+import { ScrollableVideoEditor } from '../src/cms-editor/index'
 
 const reactRootId = 'root'
 const container = document.getElementById(reactRootId)
@@ -324,29 +324,36 @@ const mocks = {
 }
 
 const Block = styled.div`
-  width: 100%;
+  width: 50%;
   margin-left: auto;
   margin-right: auto;
 `
 
-function Demo() {
+function Editor() {
+  const [editorProps, setEditorProps] = useState({
+    captions: mocks.captions,
+    theme: 'light_mode',
+    secondsPer100vh: 1,
+  })
+
+  const onChange = useCallback((nextEditorProps) => {
+    setEditorProps(nextEditorProps)
+  }, [])
+
   return (
-    <>
-      <div style={{ marginBottom: '50vh' }}></div>
-      <ScrollableVideoForKeystoneEditorCMS
-        name="test"
-        darkMode={mocks.darkMode}
-        captions={mocks.captions}
-        video={mocks.video}
-        readOnly={false}
-      />
-      <div style={{ marginTop: '50vh' }}></div>
-    </>
+    <ScrollableVideoEditor
+      captions={editorProps.captions}
+      videoSrc={mocks.video.src}
+      videoDuration={mocks.video.duration}
+      theme={editorProps.theme}
+      secondsPer100vh={editorProps.secondsPer100vh}
+      onChange={onChange}
+    />
   )
 }
 
 root.render(
   <Block>
-    <Demo />
+    <Editor />
   </Block>
 )

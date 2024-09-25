@@ -1,6 +1,9 @@
 import React from 'react'
 import styled from '../styled-components'
 
+const urlPrefix =
+  'https://cdn.jsdelivr.net/npm/@story-telling-reporter/react-scrollable-video/public/icons'
+
 const Icon = styled.div<{
   $bgImg?: string
   $hoverBgImg?: string
@@ -28,9 +31,9 @@ export function PlayButton(props: IconProps) {
     <Icon
       className={props?.className}
       onClick={props?.onClick}
-      $bgImg="/static/icons/play.svg"
-      $hoverBgImg="/static/icons/play.hover.svg"
-      $focusBgImg="/static/icons/play.hover.svg"
+      $bgImg={urlPrefix + '/play.svg'}
+      $hoverBgImg={urlPrefix + '/play.hover.svg'}
+      $focusBgImg={urlPrefix + '/play.hover.svg'}
     />
   )
 }
@@ -40,9 +43,9 @@ export function PauseButton(props: IconProps) {
     <Icon
       className={props?.className}
       onClick={props?.onClick}
-      $bgImg="/static/icons/pause.svg"
-      $hoverBgImg="/static/icons/pause.hover.svg"
-      $focusBgImg="/static/icons/pause.hover.svg"
+      $bgImg={urlPrefix + '/pause.svg'}
+      $hoverBgImg={urlPrefix + '/pause.hover.svg'}
+      $focusBgImg={urlPrefix + '/pause.hover.svg'}
     />
   )
 }
@@ -52,8 +55,8 @@ export function AddButton(props: IconProps) {
     <Icon
       className={props?.className}
       onClick={props?.onClick}
-      $bgImg="/static/icons/add-caption.svg"
-      $hoverBgImg="/static/icons/add-caption.hover.svg"
+      $bgImg={urlPrefix + '/add-caption.svg'}
+      $hoverBgImg={urlPrefix + '/add-caption.hover.svg'}
     />
   )
 }
@@ -63,17 +66,17 @@ export function ZoomInButton(props: IconProps) {
     <Icon
       className={props?.className}
       onClick={props?.onClick}
-      $bgImg="/static/icons/zoom-in.svg"
-      $hoverBgImg="/static/icons/zoom-in.hover.svg"
+      $bgImg={urlPrefix + '/zoom-in.svg'}
+      $hoverBgImg={urlPrefix + '/zoom-in.hover.svg'}
     />
   )
 }
 
 export function ZoomOutButton(props: IconProps) {
-  const svg = '/static/icons/zoom-out.svg'
-  const svgHover = '/static/icons/zoom-out.hover.svg'
-  const svgDark = '/static/icons/zoom-out.dark.svg'
-  const svgDarkHover = '/static/icons/zoom-out.dark.hover.svg'
+  const svg = urlPrefix + '/zoom-out.svg'
+  const svgHover = urlPrefix + '/zoom-out.hover.svg'
+  const svgDark = urlPrefix + '/zoom-out.dark.svg'
+  const svgDarkHover = urlPrefix + '/zoom-out.dark.hover.svg'
   return (
     <Icon
       className={props?.className}
@@ -89,14 +92,14 @@ export const MarkIcon = styled.div`
   width: 25px;
   height: 50px;
 
-  background-image: url(/static/icons/mark.svg);
+  background-image: url(${urlPrefix}/mark.svg);
 `
 
 export const EditMarkIcon = styled(MarkIcon)`
-  background-image: url(/static/icons/edit-mark.svg);
+  background-image: url(${urlPrefix}/edit-mark.svg);
 `
 
 export const DeleteMarkIcon = styled(MarkIcon)`
   height: 25px;
-  background-image: url(/static/icons/delete-mark.svg);
+  background-image: url(${urlPrefix}/delete-mark.svg);
 `
