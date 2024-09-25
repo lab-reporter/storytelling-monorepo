@@ -1,6 +1,6 @@
 {
   "name": "@story-telling-reporter/react-scrollable-video",
-  "version": "2.2.2",
+  "version": "2.2.3",
   "description": "",
   "main": "lib/cjs/index.js",
   "module": "lib/esm/index.js",
