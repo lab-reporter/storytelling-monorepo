@@ -119,6 +119,13 @@ function ScrollableVideoEditor({
     captionIdx: -1,
   })
 
+  const customCss = captions.reduce((_css, caption) => {
+    if (caption.customCss) {
+      return _css + caption.customCss
+    }
+    return _css
+  }, '')
+
   useEffect(() => {
     const video = videoRef.current
 
@@ -152,7 +159,26 @@ function ScrollableVideoEditor({
     return () => {
       video?.removeEventListener('loadedmetadata', onLoadedMetadata)
     }
-  }, [svProp])
+  }, [])
+
+  useEffect(() => {
+    const head = document.head
+    const fragment = document.createDocumentFragment()
+    const attrName = 'data-scrollable-video-editor-custom-css'
+
+    const styleEle = document.querySelector(`head > style[${attrName}]`)
+
+    if (styleEle) {
+      head.removeChild(styleEle)
+    }
+
+    const newStyleEle = document.createElement('style')
+    newStyleEle.setAttribute(attrName, '')
+    newStyleEle.innerText = customCss
+    fragment.appendChild(newStyleEle)
+    head.appendChild(fragment)
+  }),
+    [customCss]
 
   useEffect(() => {
     const video = videoRef.current
