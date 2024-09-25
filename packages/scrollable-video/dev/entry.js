@@ -1,4 +1,4 @@
-import React, { useState } from 'react' // eslint-disable-line
+import React, { useCallback, useState } from 'react' // eslint-disable-line
 import styled from 'styled-components'
 import { createRoot } from 'react-dom/client'
 import { ScrollableVideoEditor } from '../src/cms-editor/index'
@@ -336,9 +336,9 @@ function Editor() {
     secondsPer100vh: 1,
   })
 
-  const onChange = (nextEditorProps) => {
+  const onChange = useCallback((nextEditorProps) => {
     setEditorProps(nextEditorProps)
-  }
+  }, [])
 
   return (
     <ScrollableVideoEditor
