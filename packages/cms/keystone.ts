@@ -8,8 +8,6 @@ import { createAuth } from '@keystone-6/auth'
 import { statelessSessions } from '@keystone-6/core/session'
 import { InMemoryLRUCache } from '@apollo/utils.keyvaluecache'
 import bodyParser from 'body-parser'
-import express from 'express'
-import path from 'path'
 
 const { withAuth } = createAuth({
   listKey: 'User',
@@ -104,11 +102,6 @@ export default withAuth(
           // Otherwise, redirect them to login page
           res.redirect('/signin')
         }
-
-        app.use(
-          '/static',
-          express.static(path.resolve(process.cwd(), './static'))
-        )
 
         app.get(
           '/demo/scrollable-three-models/:id',
