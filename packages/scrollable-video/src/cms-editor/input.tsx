@@ -135,16 +135,19 @@ export function CaptionInput({
           <MarginTop />
           <FieldLabel>字幕出現秒數</FieldLabel>
           <TextInput
-            onChange={(e) =>
-              setInputValueState((prevState) => {
-                return Object.assign({}, prevState, {
-                  startTime: Number(e.target.value),
+            onChange={(e) => {
+              const value = parseFloat(e.target.value)
+              if (!isNaN(value)) {
+                setInputValueState((prevState) => {
+                  return Object.assign({}, prevState, {
+                    startTime: value,
+                  })
                 })
-              })
-            }
-            placeholder="0"
+              }
+            }}
             type="number"
-            value={inputValueState.startTime.toString()}
+            step="0.001"
+            defaultValue={inputValueState.startTime}
           />
           <MarginTop />
           <FieldLabel>字幕出現位置</FieldLabel>
@@ -326,16 +329,19 @@ export function ConfigInput({
       <MarginTop />
       <FieldLabel>每滑一個視窗的高度對應影片多少秒鐘</FieldLabel>
       <TextInput
-        onChange={(e) =>
-          onChange(
-            Object.assign({}, inputValue, {
-              secondsPer100vh: Number(e.target.value),
-            })
-          )
-        }
-        placeholder="0"
+        onChange={(e) => {
+          const value = parseFloat(e.target.value)
+          if (!isNaN(value)) {
+            onChange(
+              Object.assign({}, inputValue, {
+                secondsPer100vh: value,
+              })
+            )
+          }
+        }}
         type="number"
-        value={inputValue?.secondsPer100vh?.toString()}
+        step="0.001"
+        defaultValue={inputValue?.secondsPer100vh?.toString()}
       />
     </>
   )
