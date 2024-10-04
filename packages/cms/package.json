@@ -21,7 +21,7 @@
     "@story-telling-reporter/draft-editor": "^2.1.0",
     "@story-telling-reporter/react-embed-code-generator": "^2.1.0",
     "@story-telling-reporter/react-scrollable-video": "^2.2.4",
-    "@story-telling-reporter/react-three-story-controls": "^1.0.0-beta.2",
+    "@story-telling-reporter/react-three-story-controls": "^1.0.0",
     "@types/clean-css": "^4.2.11",
     "@types/react-beautiful-dnd": "^13.1.4",
     "body-parser": "^1.20.2",
