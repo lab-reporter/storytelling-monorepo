@@ -14,7 +14,7 @@ const webpackAssets = {
 
 const isProduction = process.env.NODE_ENV === 'production'
 const publicPath = isProduction
-  ? `https://unpkg.com/${pkg.name}@${pkg.version}/dist/`
+  ? `https://cdn.jsdelivr.net/npm/${pkg.name}@${pkg.version}/dist/`
   : `http://localhost:${port}/dist/`
 
 const distDir = './dist'
