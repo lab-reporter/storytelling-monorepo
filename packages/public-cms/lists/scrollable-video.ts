@@ -105,7 +105,11 @@ const listConfigurations = list({
               mobileSrc: item?.mobileVideoSrc,
               duration: editorState.videoDuration,
             },
-            captions,
+            captions: captions.map((caption) => {
+              // do not pass customCss to reduce embed code size
+              const {customCss, ...rest} = caption // eslint-disable-line
+              return rest
+            }),
             darkMode: editorState.theme === ThemeEnum.DARK_MODE,
             secondsPer100vh: editorState.secondsPer100vh,
           })
