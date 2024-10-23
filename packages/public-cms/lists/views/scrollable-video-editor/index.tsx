@@ -29,7 +29,9 @@ export const Field = ({
   return (
     <FieldContainer>
       <FieldLabel>{field.label}</FieldLabel>
-      <div style={{ position: 'relative', zIndex: 30 }}>
+      <div
+        style={{ position: 'relative', zIndex: 30, backgroundColor: '#fff' }}
+      >
         {' '}
         {/* add zIndex to be in front of list's save button */}
         <ScrollableVideoEditor {...svProp} onChange={onChange} />
