@@ -20,8 +20,6 @@ export function createLandingMiniApp({
     res.sendFile(filename, options, function (err: Error) {
       if (err) {
         next(err)
-      } else {
-        console.log('Sent:', filename)
       }
     })
   })
@@ -38,8 +36,6 @@ export function createLandingMiniApp({
       if (err) {
         console.log('err?')
         next(err)
-      } else {
-        console.log('Sent:', filename)
       }
     })
   })

@@ -4,7 +4,7 @@ import React from 'react'
 
 export default function CustomPage() {
   return (
-    <PageContainer header={<Heading type="h3">首頁</Heading>}>
+    <PageContainer header={<Heading type="h3">介紹</Heading>}>
       <div style={{ display: 'flex', width: '100%', height: '100%' }}>
         <iframe
           src="/landing"
