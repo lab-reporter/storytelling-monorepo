@@ -85,6 +85,7 @@ export default withAuth(
       },
     },
     server: {
+      maxFileSize: 25 * 1024 * 1024, // 25MiB
       healthCheck: {
         path: '/health_check',
         data: { status: 'healthy' },
