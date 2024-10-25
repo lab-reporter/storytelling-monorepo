@@ -271,6 +271,7 @@ type Photo {
   id: ID!
   name: String
   imageFile: ImageFieldOutput
+  url: String
   created_at: DateTime
   updated_at: DateTime
   created_by: User

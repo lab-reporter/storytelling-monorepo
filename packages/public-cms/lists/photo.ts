@@ -1,5 +1,12 @@
-import { list } from '@keystone-6/core'
-import { image, text, timestamp, relationship } from '@keystone-6/core/fields'
+import config from '../config'
+import { list, graphql } from '@keystone-6/core'
+import {
+  image,
+  text,
+  timestamp,
+  relationship,
+  virtual,
+} from '@keystone-6/core/fields'
 import {
   createdByFilter,
   createdByHooks,
@@ -16,6 +23,15 @@ const listConfigurations = list({
     }),
     imageFile: image({
       storage: 'images',
+    }),
+    url: virtual({
+      label: '照片網址',
+      field: graphql.field({
+        type: graphql.String,
+        resolve: (item: Record<string, unknown>): string => {
+          return `${config.gcs.urlPrefix}/images/${item?.imageFile_id}.${item?.imageFile_extension}`
+        },
+      }),
     }),
     created_at: timestamp({
       label: 'Created At',
