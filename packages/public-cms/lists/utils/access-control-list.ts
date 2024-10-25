@@ -111,3 +111,29 @@ export const createdByHooks: ListHooks<BaseListTypeInfo> = {
     return resolvedData
   },
 }
+
+export const createStorageHooks = (
+  listName: string,
+  limit: number
+): ListHooks<BaseListTypeInfo> => {
+  return {
+    validateInput: async ({ operation, context, addValidationError }) => {
+      if (operation === 'create') {
+        const userId = context.session?.itemId
+        const count = await context.query[listName]?.count({
+          where: {
+            created_by: {
+              id: {
+                equals: userId,
+              },
+            },
+          },
+        })
+
+        if (count >= limit) {
+          addValidationError('已達上傳上限。')
+        }
+      }
+    },
+  }
+}

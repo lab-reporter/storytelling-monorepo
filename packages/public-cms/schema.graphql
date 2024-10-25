@@ -133,8 +133,9 @@ type Audio {
   file: FileFieldOutput
   url: String
   description: String
-  createdAt: DateTime
-  updatedAt: DateTime
+  created_at: DateTime
+  updated_at: DateTime
+  created_by: User
 }
 
 type FileFieldOutput {
@@ -154,24 +155,26 @@ input AudioWhereInput {
   id: IDFilter
   name: StringFilter
   description: StringFilter
-  createdAt: DateTimeNullableFilter
-  updatedAt: DateTimeNullableFilter
+  created_at: DateTimeNullableFilter
+  updated_at: DateTimeNullableFilter
+  created_by: UserWhereInput
 }
 
 input AudioOrderByInput {
   id: OrderDirection
   name: OrderDirection
   description: OrderDirection
-  createdAt: OrderDirection
-  updatedAt: OrderDirection
+  created_at: OrderDirection
+  updated_at: OrderDirection
 }
 
 input AudioUpdateInput {
   name: String
   file: FileFieldInput
   description: String
-  createdAt: DateTime
-  updatedAt: DateTime
+  created_at: DateTime
+  updated_at: DateTime
+  created_by: UserRelateToOneForUpdateInput
 }
 
 input FileFieldInput {
@@ -180,6 +183,12 @@ input FileFieldInput {
 
 """The `Upload` scalar type represents a file upload."""
 scalar Upload
+
+input UserRelateToOneForUpdateInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
+  disconnect: Boolean
+}
 
 input AudioUpdateArgs {
   where: AudioWhereUniqueInput!
@@ -190,8 +199,14 @@ input AudioCreateInput {
   name: String
   file: FileFieldInput
   description: String
-  createdAt: DateTime
-  updatedAt: DateTime
+  created_at: DateTime
+  updated_at: DateTime
+  created_by: UserRelateToOneForCreateInput
+}
+
+input UserRelateToOneForCreateInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
 }
 
 type Video {
@@ -199,10 +214,10 @@ type Video {
   name: String
   file: FileFieldOutput
   url: String
-  coverPhoto: Photo
   description: String
-  createdAt: DateTime
-  updatedAt: DateTime
+  created_at: DateTime
+  updated_at: DateTime
+  created_by: User
 }
 
 input VideoWhereUniqueInput {
@@ -215,33 +230,27 @@ input VideoWhereInput {
   NOT: [VideoWhereInput!]
   id: IDFilter
   name: StringFilter
-  coverPhoto: PhotoWhereInput
   description: StringFilter
-  createdAt: DateTimeNullableFilter
-  updatedAt: DateTimeNullableFilter
+  created_at: DateTimeNullableFilter
+  updated_at: DateTimeNullableFilter
+  created_by: UserWhereInput
 }
 
 input VideoOrderByInput {
   id: OrderDirection
   name: OrderDirection
   description: OrderDirection
-  createdAt: OrderDirection
-  updatedAt: OrderDirection
+  created_at: OrderDirection
+  updated_at: OrderDirection
 }
 
 input VideoUpdateInput {
   name: String
   file: FileFieldInput
-  coverPhoto: PhotoRelateToOneForUpdateInput
   description: String
-  createdAt: DateTime
-  updatedAt: DateTime
-}
-
-input PhotoRelateToOneForUpdateInput {
-  create: PhotoCreateInput
-  connect: PhotoWhereUniqueInput
-  disconnect: Boolean
+  created_at: DateTime
+  updated_at: DateTime
+  created_by: UserRelateToOneForUpdateInput
 }
 
 input VideoUpdateArgs {
@@ -252,23 +261,19 @@ input VideoUpdateArgs {
 input VideoCreateInput {
   name: String
   file: FileFieldInput
-  coverPhoto: PhotoRelateToOneForCreateInput
   description: String
-  createdAt: DateTime
-  updatedAt: DateTime
-}
-
-input PhotoRelateToOneForCreateInput {
-  create: PhotoCreateInput
-  connect: PhotoWhereUniqueInput
+  created_at: DateTime
+  updated_at: DateTime
+  created_by: UserRelateToOneForCreateInput
 }
 
 type Photo {
   id: ID!
   name: String
   imageFile: ImageFieldOutput
-  createdAt: DateTime
-  updatedAt: DateTime
+  created_at: DateTime
+  updated_at: DateTime
+  created_by: User
 }
 
 type ImageFieldOutput {
@@ -297,22 +302,24 @@ input PhotoWhereInput {
   NOT: [PhotoWhereInput!]
   id: IDFilter
   name: StringFilter
-  createdAt: DateTimeNullableFilter
-  updatedAt: DateTimeNullableFilter
+  created_at: DateTimeNullableFilter
+  updated_at: DateTimeNullableFilter
+  created_by: UserWhereInput
 }
 
 input PhotoOrderByInput {
   id: OrderDirection
   name: OrderDirection
-  createdAt: OrderDirection
-  updatedAt: OrderDirection
+  created_at: OrderDirection
+  updated_at: OrderDirection
 }
 
 input PhotoUpdateInput {
   name: String
   imageFile: ImageFieldInput
-  createdAt: DateTime
-  updatedAt: DateTime
+  created_at: DateTime
+  updated_at: DateTime
+  created_by: UserRelateToOneForUpdateInput
 }
 
 input ImageFieldInput {
@@ -327,8 +334,9 @@ input PhotoUpdateArgs {
 input PhotoCreateInput {
   name: String
   imageFile: ImageFieldInput
-  createdAt: DateTime
-  updatedAt: DateTime
+  created_at: DateTime
+  updated_at: DateTime
+  created_by: UserRelateToOneForCreateInput
 }
 
 type ScrollToAudio {
@@ -376,12 +384,6 @@ input ScrollToAudioUpdateInput {
   created_by: UserRelateToOneForUpdateInput
 }
 
-input UserRelateToOneForUpdateInput {
-  create: UserCreateInput
-  connect: UserWhereUniqueInput
-  disconnect: Boolean
-}
-
 input ScrollToAudioUpdateArgs {
   where: ScrollToAudioWhereUniqueInput!
   data: ScrollToAudioUpdateInput!
@@ -393,11 +395,6 @@ input ScrollToAudioCreateInput {
   created_at: DateTime
   updated_at: DateTime
   created_by: UserRelateToOneForCreateInput
-}
-
-input UserRelateToOneForCreateInput {
-  create: UserCreateInput
-  connect: UserWhereUniqueInput
 }
 
 type ScrollableVideo {

@@ -19,6 +19,9 @@ model User {
   role                                 String
   createdAt                            DateTime?              @default(now())
   updatedAt                            DateTime?              @updatedAt
+  from_Audio_created_by                Audio[]                @relation("Audio_created_by")
+  from_Video_created_by                Video[]                @relation("Video_created_by")
+  from_Photo_created_by                Photo[]                @relation("Photo_created_by")
   from_ScrollToAudio_created_by        ScrollToAudio[]        @relation("ScrollToAudio_created_by")
   from_ScrollableVideo_created_by      ScrollableVideo[]      @relation("ScrollableVideo_created_by")
   from_ScrollableThreeModel_created_by ScrollableThreeModel[] @relation("ScrollableThreeModel_created_by")
@@ -30,8 +33,12 @@ model Audio {
   file_filesize Int?
   file_filename String?
   description   String    @default("")
-  createdAt     DateTime?
-  updatedAt     DateTime? @updatedAt
+  created_at    DateTime? @default(now())
+  updated_at    DateTime? @updatedAt
+  created_by    User?     @relation("Audio_created_by", fields: [created_byId], references: [id])
+  created_byId  Int?      @map("created_by")
+
+  @@index([created_byId])
 }
 
 model Video {
@@ -39,26 +46,29 @@ model Video {
   name          String    @default("")
   file_filesize Int?
   file_filename String?
-  coverPhoto    Photo?    @relation("Video_coverPhoto", fields: [coverPhotoId], references: [id])
-  coverPhotoId  Int?      @map("coverPhoto")
   description   String    @default("")
-  createdAt     DateTime?
-  updatedAt     DateTime? @updatedAt
+  created_at    DateTime? @default(now())
+  updated_at    DateTime? @updatedAt
+  created_by    User?     @relation("Video_created_by", fields: [created_byId], references: [id])
+  created_byId  Int?      @map("created_by")
 
-  @@index([coverPhotoId])
+  @@index([created_byId])
 }
 
 model Photo {
-  id                    Int       @id @default(autoincrement())
-  name                  String    @default("")
-  imageFile_filesize    Int?
-  imageFile_extension   String?
-  imageFile_width       Int?
-  imageFile_height      Int?
-  imageFile_id          String?
-  createdAt             DateTime? @default(now())
-  updatedAt             DateTime? @updatedAt
-  from_Video_coverPhoto Video[]   @relation("Video_coverPhoto")
+  id                  Int       @id @default(autoincrement())
+  name                String    @default("")
+  imageFile_filesize  Int?
+  imageFile_extension String?
+  imageFile_width     Int?
+  imageFile_height    Int?
+  imageFile_id        String?
+  created_at          DateTime? @default(now())
+  updated_at          DateTime? @updatedAt
+  created_by          User?     @relation("Photo_created_by", fields: [created_byId], references: [id])
+  created_byId        Int?      @map("created_by")
+
+  @@index([created_byId])
 }
 
 model ScrollToAudio {

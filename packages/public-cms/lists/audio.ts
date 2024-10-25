@@ -1,7 +1,20 @@
 import config from '../config'
 import { graphql, list } from '@keystone-6/core'
-import { timestamp, text, file, virtual } from '@keystone-6/core/fields'
-import { createdByFilter, createdByHooks } from './utils/access-control-list'
+import {
+  timestamp,
+  text,
+  file,
+  virtual,
+  relationship,
+} from '@keystone-6/core/fields'
+import {
+  createdByFilter,
+  createdByHooks,
+  createStorageHooks,
+} from './utils/access-control-list'
+
+const limit = 5
+const storageHooks = createStorageHooks('Audio', limit)
 
 const listConfigurations = list({
   graphql: {
@@ -31,10 +44,42 @@ const listConfigurations = list({
         displayMode: 'textarea',
       },
     }),
-    createdAt: timestamp(),
-    updatedAt: timestamp({
+    created_at: timestamp({
+      label: 'Created At',
+      defaultValue: { kind: 'now' },
+      ui: {
+        createView: {
+          fieldMode: 'hidden',
+        },
+        itemView: {
+          fieldMode: 'read',
+        },
+      },
+    }),
+    updated_at: timestamp({
+      label: 'Updated At',
       db: {
         updatedAt: true,
+      },
+      ui: {
+        createView: {
+          fieldMode: 'hidden',
+        },
+        itemView: {
+          fieldMode: 'read',
+        },
+      },
+    }),
+    created_by: relationship({
+      ref: 'User',
+      many: false,
+      ui: {
+        createView: {
+          fieldMode: 'hidden',
+        },
+        itemView: {
+          fieldMode: 'read',
+        },
       },
     }),
   },
@@ -58,6 +103,11 @@ const listConfigurations = list({
         return createdByHooks.resolveInput(args)
       }
       return args.resolvedData
+    },
+    validateInput: (args) => {
+      if (typeof storageHooks.validateInput === 'function') {
+        storageHooks?.validateInput(args)
+      }
     },
   },
 })

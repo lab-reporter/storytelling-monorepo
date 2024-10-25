@@ -7,7 +7,14 @@ import {
   relationship,
   virtual,
 } from '@keystone-6/core/fields'
-import { createdByFilter, createdByHooks } from './utils/access-control-list'
+import {
+  createdByFilter,
+  createdByHooks,
+  createStorageHooks,
+} from './utils/access-control-list'
+
+const limit = 5
+const storageHooks = createStorageHooks('Video', limit)
 
 const listConfigurations = list({
   fields: {
@@ -28,20 +35,48 @@ const listConfigurations = list({
         },
       }),
     }),
-    coverPhoto: relationship({
-      label: '首圖',
-      ref: 'Photo',
-    }),
     description: text({
       label: '描述',
       ui: {
         displayMode: 'textarea',
       },
     }),
-    createdAt: timestamp(),
-    updatedAt: timestamp({
+    created_at: timestamp({
+      label: 'Created At',
+      defaultValue: { kind: 'now' },
+      ui: {
+        createView: {
+          fieldMode: 'hidden',
+        },
+        itemView: {
+          fieldMode: 'read',
+        },
+      },
+    }),
+    updated_at: timestamp({
+      label: 'Updated At',
       db: {
         updatedAt: true,
+      },
+      ui: {
+        createView: {
+          fieldMode: 'hidden',
+        },
+        itemView: {
+          fieldMode: 'read',
+        },
+      },
+    }),
+    created_by: relationship({
+      ref: 'User',
+      many: false,
+      ui: {
+        createView: {
+          fieldMode: 'hidden',
+        },
+        itemView: {
+          fieldMode: 'read',
+        },
       },
     }),
   },
@@ -63,6 +98,11 @@ const listConfigurations = list({
         return createdByHooks.resolveInput(args)
       }
       return args.resolvedData
+    },
+    validateInput: (args) => {
+      if (typeof storageHooks.validateInput === 'function') {
+        storageHooks?.validateInput(args)
+      }
     },
   },
 })

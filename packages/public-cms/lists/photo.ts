@@ -1,6 +1,12 @@
 import { list } from '@keystone-6/core'
-import { image, text, timestamp } from '@keystone-6/core/fields'
-import { createdByFilter, createdByHooks } from './utils/access-control-list'
+import { image, text, timestamp, relationship } from '@keystone-6/core/fields'
+import {
+  createdByFilter,
+  createdByHooks,
+  createStorageHooks,
+} from './utils/access-control-list'
+const limit = 5
+const storageHooks = createStorageHooks('Photo', limit)
 
 const listConfigurations = list({
   fields: {
@@ -11,12 +17,42 @@ const listConfigurations = list({
     imageFile: image({
       storage: 'images',
     }),
-    createdAt: timestamp({
+    created_at: timestamp({
+      label: 'Created At',
       defaultValue: { kind: 'now' },
+      ui: {
+        createView: {
+          fieldMode: 'hidden',
+        },
+        itemView: {
+          fieldMode: 'read',
+        },
+      },
     }),
-    updatedAt: timestamp({
+    updated_at: timestamp({
+      label: 'Updated At',
       db: {
         updatedAt: true,
+      },
+      ui: {
+        createView: {
+          fieldMode: 'hidden',
+        },
+        itemView: {
+          fieldMode: 'read',
+        },
+      },
+    }),
+    created_by: relationship({
+      ref: 'User',
+      many: false,
+      ui: {
+        createView: {
+          fieldMode: 'hidden',
+        },
+        itemView: {
+          fieldMode: 'read',
+        },
       },
     }),
   },
@@ -39,6 +75,11 @@ const listConfigurations = list({
         return createdByHooks.resolveInput(args)
       }
       return args.resolvedData
+    },
+    validateInput: (args) => {
+      if (typeof storageHooks.validateInput === 'function') {
+        storageHooks?.validateInput(args)
+      }
     },
   },
 })
