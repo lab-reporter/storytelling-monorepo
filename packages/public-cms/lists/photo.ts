@@ -60,7 +60,7 @@ const listConfigurations = list({
     label: '上傳照片',
     listView: {
       initialColumns: ['name'],
-      initialSort: { field: 'updatedAt', direction: 'ASC' },
+      initialSort: { field: 'updated_at', direction: 'ASC' },
       pageSize: 50,
     },
   },
@@ -76,9 +76,9 @@ const listConfigurations = list({
       }
       return args.resolvedData
     },
-    validateInput: (args) => {
+    validateInput: async (args) => {
       if (typeof storageHooks.validateInput === 'function') {
-        storageHooks?.validateInput(args)
+        await storageHooks?.validateInput(args)
       }
     },
   },

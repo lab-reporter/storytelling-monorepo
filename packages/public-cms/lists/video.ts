@@ -99,9 +99,9 @@ const listConfigurations = list({
       }
       return args.resolvedData
     },
-    validateInput: (args) => {
+    validateInput: async (args) => {
       if (typeof storageHooks.validateInput === 'function') {
-        storageHooks?.validateInput(args)
+        await storageHooks?.validateInput(args)
       }
     },
   },
