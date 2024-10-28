@@ -19,6 +19,11 @@ export const Field = ({
   const [isValidUrl, setIsValidUrl] = useState(true)
 
   useEffect(() => {
+    // do not validate empty string
+    if (videoUrl === '') {
+      return
+    }
+
     const video = document.createElement('video')
     video.oncanplaythrough = () => {
       setIsValidUrl(true)

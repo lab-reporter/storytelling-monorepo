@@ -19,6 +19,11 @@ export const Field = ({
   const [isValidUrl, setIsValidUrl] = useState(true)
 
   useEffect(() => {
+    // do not validate empty string
+    if (audioUrl === '') {
+      return
+    }
+
     const audio = new Audio()
     audio.oncanplaythrough = () => {
       setIsValidUrl(true)
