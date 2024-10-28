@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { FieldProps } from '@keystone-6/core/types'
-import { FieldLabel, FieldContainer } from '@keystone-ui/fields'
-import { controller } from '@keystone-6/core/fields/types/text/views'
-import { TextInput } from '@keystone-ui/fields'
-import { Notice } from '@keystone-ui/notice'
+import {
+  Field as TextField,
+  controller,
+} from '@keystone-6/core/fields/types/text/views'
+import { Stack } from '@keystone-ui/core'
 
-export const Field = ({
-  field,
-  value,
-  onChange,
-}: FieldProps<typeof controller>) => {
+export const Field = (props: FieldProps<typeof controller>) => {
+  const value = props.value
   let audioUrl = ''
 
   if (value.inner.kind === 'value') {
@@ -21,6 +19,7 @@ export const Field = ({
   useEffect(() => {
     // do not validate empty string
     if (audioUrl === '') {
+      setIsValidUrl(true)
       return
     }
 
@@ -35,25 +34,13 @@ export const Field = ({
   }, [audioUrl])
 
   return (
-    <FieldContainer>
-      <FieldLabel>{field.label}</FieldLabel>
-      <TextInput
-        defaultValue={audioUrl}
-        onChange={(e) => {
-          onChange?.({
-            ...value,
-            inner: {
-              kind: 'value',
-              value: e.target.value,
-            },
-          })
-        }}
-      />
+    <Stack gap="small">
+      <TextField {...props} />
       {isValidUrl ? null : (
-        <Notice tone="negative" marginTop="xxsmall">
+        <span style={{ color: 'red' }}>
           我們找不到或無法存取於該網址的音檔。請檢查網址是否有錯字。
-        </Notice>
+        </span>
       )}
-    </FieldContainer>
+    </Stack>
   )
 }
