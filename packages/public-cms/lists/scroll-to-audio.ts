@@ -16,6 +16,10 @@ const listConfigurations = list({
       validation: {
         isRequired: true,
       },
+      ui: {
+        // A module path that is resolved from where `keystone start` is run
+        views: './lists/views/audio-url-field',
+      },
     }),
     startEmbedCode: virtual({
       label: '起始 embed code',

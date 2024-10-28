@@ -24,9 +24,17 @@ const listConfigurations = list({
       validation: {
         isRequired: true,
       },
+      ui: {
+        // A module path that is resolved from where `keystone start` is run
+        views: './lists/views/video-url-field',
+      },
     }),
     mobileVideoSrc: text({
       label: '手機版影片檔案 URL',
+      ui: {
+        // A module path that is resolved from where `keystone start` is run
+        views: './lists/views/video-url-field',
+      },
     }),
     editorState: json({
       label: '編輯字幕',
