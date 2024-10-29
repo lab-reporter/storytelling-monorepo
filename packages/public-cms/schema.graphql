@@ -272,6 +272,7 @@ type Photo {
   name: String
   imageFile: ImageFieldOutput
   url: String
+  description: String
   created_at: DateTime
   updated_at: DateTime
   created_by: User
@@ -303,6 +304,7 @@ input PhotoWhereInput {
   NOT: [PhotoWhereInput!]
   id: IDFilter
   name: StringFilter
+  description: StringFilter
   created_at: DateTimeNullableFilter
   updated_at: DateTimeNullableFilter
   created_by: UserWhereInput
@@ -311,6 +313,7 @@ input PhotoWhereInput {
 input PhotoOrderByInput {
   id: OrderDirection
   name: OrderDirection
+  description: OrderDirection
   created_at: OrderDirection
   updated_at: OrderDirection
 }
@@ -318,6 +321,7 @@ input PhotoOrderByInput {
 input PhotoUpdateInput {
   name: String
   imageFile: ImageFieldInput
+  description: String
   created_at: DateTime
   updated_at: DateTime
   created_by: UserRelateToOneForUpdateInput
@@ -335,6 +339,7 @@ input PhotoUpdateArgs {
 input PhotoCreateInput {
   name: String
   imageFile: ImageFieldInput
+  description: String
   created_at: DateTime
   updated_at: DateTime
   created_by: UserRelateToOneForCreateInput
