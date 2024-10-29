@@ -33,6 +33,12 @@ const listConfigurations = list({
         },
       }),
     }),
+    description: text({
+      label: '描述',
+      ui: {
+        displayMode: 'textarea',
+      },
+    }),
     created_at: timestamp({
       label: 'Created At',
       defaultValue: { kind: 'now' },

@@ -63,6 +63,7 @@ model Photo {
   imageFile_width     Int?
   imageFile_height    Int?
   imageFile_id        String?
+  description         String    @default("")
   created_at          DateTime? @default(now())
   updated_at          DateTime? @updatedAt
   created_by          User?     @relation("Photo_created_by", fields: [created_byId], references: [id])
