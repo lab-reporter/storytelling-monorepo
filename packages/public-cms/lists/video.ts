@@ -10,11 +10,11 @@ import {
 import {
   createdByFilter,
   createdByHooks,
-  createStorageHooks,
+  createFileFieldHooks,
 } from './utils/access-control-list'
 
 const limit = 5
-const storageHooks = createStorageHooks('Video', limit)
+const fileFieldHooks = createFileFieldHooks(limit, config.files.storagePath)
 
 const listConfigurations = list({
   fields: {
@@ -25,6 +25,13 @@ const listConfigurations = list({
     file: file({
       label: '檔案',
       storage: 'files',
+      hooks: {
+        validateInput: async (args) => {
+          if (typeof fileFieldHooks.validateInput === 'function') {
+            return await fileFieldHooks.validateInput(args)
+          }
+        },
+      },
     }),
     url: virtual({
       label: '影片網址',
@@ -98,11 +105,6 @@ const listConfigurations = list({
         return createdByHooks.resolveInput(args)
       }
       return args.resolvedData
-    },
-    validateInput: async (args) => {
-      if (typeof storageHooks.validateInput === 'function') {
-        await storageHooks?.validateInput(args)
-      }
     },
   },
 })

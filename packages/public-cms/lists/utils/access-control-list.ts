@@ -1,4 +1,12 @@
-import { BaseListTypeInfo, ListHooks } from '@keystone-6/core/types'
+import { BaseListTypeInfo } from '@keystone-6/core/types'
+import {
+  ListHooks,
+  FieldHooks,
+} from '@keystone-6/core/dist/declarations/src/types/config/hooks'
+import { unlink } from 'node:fs/promises'
+import path from 'node:path'
+// @ts-ignore @twreporter/errors does not provide definition files
+import errors from '@twreporter/errors'
 
 type Session = {
   data: {
@@ -112,15 +120,22 @@ export const createdByHooks: ListHooks<BaseListTypeInfo> = {
   },
 }
 
-export const createStorageHooks = (
-  listName: string,
-  limit: number
-): ListHooks<BaseListTypeInfo> => {
+export const createFileFieldHooks = (
+  limit: number,
+  storagePath: string
+): FieldHooks<BaseListTypeInfo> => {
   return {
-    validateInput: async ({ operation, context, addValidationError }) => {
+    validateInput: async ({
+      operation,
+      context,
+      listKey,
+      fieldKey,
+      addValidationError,
+      resolvedData,
+    }) => {
       if (operation === 'create') {
         const userId = context.session?.itemId
-        const count = await context.query[listName]?.count({
+        const count = await context.query[listKey]?.count({
           where: {
             created_by: {
               id: {
@@ -132,6 +147,122 @@ export const createStorageHooks = (
 
         if (count >= limit) {
           addValidationError('已達上傳上限。')
+
+          // We use `file` field, which are provided by Keystone,
+          // to handle file uploads.
+          // And, we also use `validateInput` hook to prevent users from uploading
+          // more than 5 items.
+          //
+          // But, there is a edge case we need to handle here:
+          // Although `validateInput` will prevent from writing 6th item into database,
+          // `file` field won't delete the uploaded file.
+          // Hence, we need to delete the file manually here.
+          const filename = resolvedData?.[fieldKey]?.filename
+          const filepath = path.join(process.cwd(), storagePath, filename)
+          try {
+            console.log(
+              JSON.stringify({
+                severity: 'INFO',
+                message:
+                  '(validateInput hook): delete dangling file due to reaching file upload limit: ' +
+                  filepath,
+              })
+            )
+            await unlink(filepath)
+          } catch (_err) {
+            const err = errors.helpers.wrap(
+              _err,
+              'ValidateInputHookError',
+              'error delete dangling file',
+              { filepath }
+            )
+            console.error(
+              JSON.stringify({
+                severity: 'Error',
+                message: errors.helpers.printAll(err, {
+                  withStack: true,
+                  withPayload: true,
+                }),
+              })
+            )
+          }
+        }
+      }
+    },
+  }
+}
+
+export const createImageFieldHooks = (
+  limit: number,
+  storagePath: string
+): FieldHooks<BaseListTypeInfo> => {
+  return {
+    validateInput: async ({
+      operation,
+      context,
+      listKey,
+      fieldKey,
+      addValidationError,
+      resolvedData,
+    }) => {
+      if (operation === 'create') {
+        const userId = context.session?.itemId
+        const count = await context.query[listKey]?.count({
+          where: {
+            created_by: {
+              id: {
+                equals: userId,
+              },
+            },
+          },
+        })
+
+        if (count >= limit) {
+          addValidationError('已達上傳上限。')
+
+          // We use `image` field, which are provided by Keystone,
+          // to handle image uploads.
+          // And, we also use `validateInput` hook to prevent users from uploading
+          // more than 5 items.
+          //
+          // But, there is a edge case we need to handle here:
+          // Although `validateInput` will prevent from writing 6th item into database,
+          // `image` field won't delete the uploaded image file.
+          // Hence, we need to delete the image file manually here.
+          const id = resolvedData?.[fieldKey]?.id
+          const extension = resolvedData?.[fieldKey]?.extension
+          const filepath = path.join(
+            process.cwd(),
+            storagePath,
+            `${id}.${extension}`
+          )
+          try {
+            console.log(
+              JSON.stringify({
+                severity: 'INFO',
+                message:
+                  '(validateInput hook): delete dangling file due to reaching image upload limit: ' +
+                  filepath,
+              })
+            )
+            await unlink(filepath)
+          } catch (_err) {
+            const err = errors.helpers.wrap(
+              _err,
+              'ValidateInputHookError',
+              'error delete dangling file',
+              { filepath }
+            )
+            console.error(
+              JSON.stringify({
+                severity: 'Error',
+                message: errors.helpers.printAll(err, {
+                  withStack: true,
+                  withPayload: true,
+                }),
+              })
+            )
+          }
         }
       }
     },
