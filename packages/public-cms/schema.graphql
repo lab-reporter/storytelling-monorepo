@@ -127,6 +127,219 @@ input UserCreateInput {
   updatedAt: DateTime
 }
 
+type Audio {
+  id: ID!
+  name: String
+  file: FileFieldOutput
+  url: String
+  description: String
+  created_at: DateTime
+  updated_at: DateTime
+  created_by: User
+}
+
+type FileFieldOutput {
+  filename: String!
+  filesize: Int!
+  url: String!
+}
+
+input AudioWhereUniqueInput {
+  id: ID
+}
+
+input AudioWhereInput {
+  AND: [AudioWhereInput!]
+  OR: [AudioWhereInput!]
+  NOT: [AudioWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  description: StringFilter
+  created_at: DateTimeNullableFilter
+  updated_at: DateTimeNullableFilter
+  created_by: UserWhereInput
+}
+
+input AudioOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  description: OrderDirection
+  created_at: OrderDirection
+  updated_at: OrderDirection
+}
+
+input AudioUpdateInput {
+  name: String
+  file: FileFieldInput
+  description: String
+  created_at: DateTime
+  updated_at: DateTime
+  created_by: UserRelateToOneForUpdateInput
+}
+
+input FileFieldInput {
+  upload: Upload!
+}
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
+input UserRelateToOneForUpdateInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
+  disconnect: Boolean
+}
+
+input AudioUpdateArgs {
+  where: AudioWhereUniqueInput!
+  data: AudioUpdateInput!
+}
+
+input AudioCreateInput {
+  name: String
+  file: FileFieldInput
+  description: String
+  created_at: DateTime
+  updated_at: DateTime
+  created_by: UserRelateToOneForCreateInput
+}
+
+input UserRelateToOneForCreateInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
+}
+
+type Video {
+  id: ID!
+  name: String
+  file: FileFieldOutput
+  url: String
+  description: String
+  created_at: DateTime
+  updated_at: DateTime
+  created_by: User
+}
+
+input VideoWhereUniqueInput {
+  id: ID
+}
+
+input VideoWhereInput {
+  AND: [VideoWhereInput!]
+  OR: [VideoWhereInput!]
+  NOT: [VideoWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  description: StringFilter
+  created_at: DateTimeNullableFilter
+  updated_at: DateTimeNullableFilter
+  created_by: UserWhereInput
+}
+
+input VideoOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  description: OrderDirection
+  created_at: OrderDirection
+  updated_at: OrderDirection
+}
+
+input VideoUpdateInput {
+  name: String
+  file: FileFieldInput
+  description: String
+  created_at: DateTime
+  updated_at: DateTime
+  created_by: UserRelateToOneForUpdateInput
+}
+
+input VideoUpdateArgs {
+  where: VideoWhereUniqueInput!
+  data: VideoUpdateInput!
+}
+
+input VideoCreateInput {
+  name: String
+  file: FileFieldInput
+  description: String
+  created_at: DateTime
+  updated_at: DateTime
+  created_by: UserRelateToOneForCreateInput
+}
+
+type Photo {
+  id: ID!
+  name: String
+  imageFile: ImageFieldOutput
+  url: String
+  created_at: DateTime
+  updated_at: DateTime
+  created_by: User
+}
+
+type ImageFieldOutput {
+  id: ID!
+  filesize: Int!
+  width: Int!
+  height: Int!
+  extension: ImageExtension!
+  url: String!
+}
+
+enum ImageExtension {
+  jpg
+  png
+  webp
+  gif
+}
+
+input PhotoWhereUniqueInput {
+  id: ID
+}
+
+input PhotoWhereInput {
+  AND: [PhotoWhereInput!]
+  OR: [PhotoWhereInput!]
+  NOT: [PhotoWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  created_at: DateTimeNullableFilter
+  updated_at: DateTimeNullableFilter
+  created_by: UserWhereInput
+}
+
+input PhotoOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  created_at: OrderDirection
+  updated_at: OrderDirection
+}
+
+input PhotoUpdateInput {
+  name: String
+  imageFile: ImageFieldInput
+  created_at: DateTime
+  updated_at: DateTime
+  created_by: UserRelateToOneForUpdateInput
+}
+
+input ImageFieldInput {
+  upload: Upload!
+}
+
+input PhotoUpdateArgs {
+  where: PhotoWhereUniqueInput!
+  data: PhotoUpdateInput!
+}
+
+input PhotoCreateInput {
+  name: String
+  imageFile: ImageFieldInput
+  created_at: DateTime
+  updated_at: DateTime
+  created_by: UserRelateToOneForCreateInput
+}
+
 type ScrollToAudio {
   id: ID!
   name: String
@@ -172,12 +385,6 @@ input ScrollToAudioUpdateInput {
   created_by: UserRelateToOneForUpdateInput
 }
 
-input UserRelateToOneForUpdateInput {
-  create: UserCreateInput
-  connect: UserWhereUniqueInput
-  disconnect: Boolean
-}
-
 input ScrollToAudioUpdateArgs {
   where: ScrollToAudioWhereUniqueInput!
   data: ScrollToAudioUpdateInput!
@@ -189,11 +396,6 @@ input ScrollToAudioCreateInput {
   created_at: DateTime
   updated_at: DateTime
   created_by: UserRelateToOneForCreateInput
-}
-
-input UserRelateToOneForCreateInput {
-  create: UserCreateInput
-  connect: UserWhereUniqueInput
 }
 
 type ScrollableVideo {
@@ -316,6 +518,24 @@ type Mutation {
   updateUsers(data: [UserUpdateArgs!]!): [User]
   deleteUser(where: UserWhereUniqueInput!): User
   deleteUsers(where: [UserWhereUniqueInput!]!): [User]
+  createAudio(data: AudioCreateInput!): Audio
+  createAudios(data: [AudioCreateInput!]!): [Audio]
+  updateAudio(where: AudioWhereUniqueInput!, data: AudioUpdateInput!): Audio
+  updateAudios(data: [AudioUpdateArgs!]!): [Audio]
+  deleteAudio(where: AudioWhereUniqueInput!): Audio
+  deleteAudios(where: [AudioWhereUniqueInput!]!): [Audio]
+  createVideo(data: VideoCreateInput!): Video
+  createVideos(data: [VideoCreateInput!]!): [Video]
+  updateVideo(where: VideoWhereUniqueInput!, data: VideoUpdateInput!): Video
+  updateVideos(data: [VideoUpdateArgs!]!): [Video]
+  deleteVideo(where: VideoWhereUniqueInput!): Video
+  deleteVideos(where: [VideoWhereUniqueInput!]!): [Video]
+  createPhoto(data: PhotoCreateInput!): Photo
+  createPhotos(data: [PhotoCreateInput!]!): [Photo]
+  updatePhoto(where: PhotoWhereUniqueInput!, data: PhotoUpdateInput!): Photo
+  updatePhotos(data: [PhotoUpdateArgs!]!): [Photo]
+  deletePhoto(where: PhotoWhereUniqueInput!): Photo
+  deletePhotos(where: [PhotoWhereUniqueInput!]!): [Photo]
   createScrollToAudio(data: ScrollToAudioCreateInput!): ScrollToAudio
   createScrollToAudios(data: [ScrollToAudioCreateInput!]!): [ScrollToAudio]
   updateScrollToAudio(where: ScrollToAudioWhereUniqueInput!, data: ScrollToAudioUpdateInput!): ScrollToAudio
@@ -361,6 +581,15 @@ type Query {
   users(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
   user(where: UserWhereUniqueInput!): User
   usersCount(where: UserWhereInput! = {}): Int
+  audios(where: AudioWhereInput! = {}, orderBy: [AudioOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AudioWhereUniqueInput): [Audio!]
+  audio(where: AudioWhereUniqueInput!): Audio
+  audiosCount(where: AudioWhereInput! = {}): Int
+  videos(where: VideoWhereInput! = {}, orderBy: [VideoOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: VideoWhereUniqueInput): [Video!]
+  video(where: VideoWhereUniqueInput!): Video
+  videosCount(where: VideoWhereInput! = {}): Int
+  photos(where: PhotoWhereInput! = {}, orderBy: [PhotoOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PhotoWhereUniqueInput): [Photo!]
+  photo(where: PhotoWhereUniqueInput!): Photo
+  photosCount(where: PhotoWhereInput! = {}): Int
   scrollToAudios(where: ScrollToAudioWhereInput! = {}, orderBy: [ScrollToAudioOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ScrollToAudioWhereUniqueInput): [ScrollToAudio!]
   scrollToAudio(where: ScrollToAudioWhereUniqueInput!): ScrollToAudio
   scrollToAudiosCount(where: ScrollToAudioWhereInput! = {}): Int

@@ -34,7 +34,7 @@ export const Field = ({
       >
         {' '}
         {/* add zIndex to be in front of list's save button */}
-        <ScrollableVideoEditor {...svProp} onChange={onChange} />
+        <ScrollableVideoEditor {...svProp} onChange={onChange} key={value} />
       </div>
     </FieldContainer>
   )

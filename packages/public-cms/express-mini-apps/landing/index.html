@@ -57,8 +57,15 @@
         footer .links{display: flex;flex-wrap:nowrap;justify-content:center;}
         footer .links a{margin: 0 15px;}
         footer .copyright p{color: #808080;font-size: 12px;font-weight: 300;margin: 20px 0 0;}
-        @keyframes goDown {0%{margin-top: 40px;} 100%{margin-top: calc(100vh - 200px);}
-  }
+        h3{margin-top: 40px;color: #231815;font-family: "Noto Serif TC", serif;font-size: 30px;}
+        #news .card{background: #F1F1F1;border: 1px solid #fff;}
+        #news .card .info .name .ch{color: #231815;font-size: 16px;}
+        #news .card .info .line{border: 1px solid #fff;border-bottom: 0}
+        .rightAd{position: fixed;right:35px;top:50vh;font-size: 12px;z-index: 700;cursor: pointer;animation-duration: 4s;animation-name:fat;animation-iteration-count: infinite;}
+        @keyframes fat {0%{font-weight: 700;} 50%{font-weight: 300;} 100%{font-weight: 700;}}
+        /* 2024.10.23 - 1/5 */
+        @keyframes goDown {0%{margin-top: 40px;} 100%{margin-top: calc(100vh - 200px);cursor: pointer;}}
+
         @media(max-width: 1024px) {
             .cards3{flex-wrap:wrap;}
             .cards4{max-width: 600px;flex-wrap:wrap;}
@@ -80,6 +87,8 @@
             .card .act button{font-size: 12px;}
             .card .act button.textPrimary{display: none;}
             .cards4{max-width: 400px;}
+            #news .card .info .name .ch{font-size: 14px;margin-top: 10px;}
+            .rightAd{right:20px;}
         }
         @media(max-width: 550px) {
             .openIntro h1{font-size: 42px;}
@@ -98,7 +107,7 @@
             .card .act{align-items: center;}
             .card .act button{font-size: 14px;}
             .card .act button.textPrimary{display: inherit;text-decoration-line:underline;text-underline-offset: 4px;text-decoration-thickness: 1px;}
-            
+            #news .card .info .name .ch{font-size: 16px;margin-top: 0px;}
         }
     </style>
 </head>
@@ -227,6 +236,39 @@
                 </div>
             </div>
         </div>
+        <div id="news">
+          <h3>最新消息</h3>
+          <div class="cards">
+            <div class="cards4">
+              <!-- TODO: uncomment if medium post is ready
+              <div class="card">
+                <div class="info">
+                  <div class="name">
+                    <p class="en">2024/10/25・新功能</p>
+                    <div class="line"></div>
+                    <p class="ch">零程式基礎指南：元件庫開放上傳音檔、影片和照片</p>
+                  </div>
+                </div>
+                <div class="act">
+                  <a target="_blank" href=""><button class="secondary">Read</button></a>
+                </div>
+              </div>
+              -->
+              <div class="card">
+                <div class="info">
+                  <div class="name">
+                    <p class="en">2024/9/16・使用說明</p>
+                    <div class="line"></div>
+                    <p class="ch">報導者數位敘事元件庫：一站完成元件的編輯與產出</p>
+                  </div>
+                </div>
+                <div class="act">
+                  <a target="_blank" href="https://medium.com/twreporter/d1931cde3133"><button class="secondary">Read</button></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         <footer>
             <div class="links">
                 <a target="_blank" href="https://www.twreporter.org/"><button class="textSecondary">前往《報導者》</button></a>
@@ -237,6 +279,8 @@
             <div class="copyright"><p>Copyright © 2024 The Reporter</p></div>
         </footer>
     </div>
-    
+    <div class="rightAd">
+      <a href="#news"><div>新<br/>消<br/>息<br/>！</div></a>
+    </div>
 </body>
 </html>

@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
 # Create mount directory for service
-# mkdir -p $MNT_DIR
+mkdir -p $MNT_DIR
 
-# echo "Mounting GCS Fuse."
+echo "Mounting GCS Fuse."
 # gcsfuse --debug_gcs --debug_fuse $GCS_BUCKET $MNT_DIR
-# gcsfuse --debug_gcs $GCS_BUCKET $MNT_DIR
-# echo "Mounting completed."
+gcsfuse --debug_gcs $GCS_BUCKET $MNT_DIR
+echo "Mounting completed."
 
 # Mirgate DB schema and data if needed
 yarn run db-migrate

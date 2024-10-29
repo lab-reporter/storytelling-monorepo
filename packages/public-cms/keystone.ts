@@ -54,6 +54,26 @@ export default withAuth(
     },
     lists,
     session,
+    storage: {
+      files: {
+        kind: 'local',
+        type: 'file',
+        storagePath: appConfig.files.storagePath,
+        serverRoute: {
+          path: '/files',
+        },
+        generateUrl: (path) => `/files${path}`,
+      },
+      images: {
+        kind: 'local',
+        type: 'image',
+        storagePath: appConfig.images.storagePath,
+        serverRoute: {
+          path: '/images',
+        },
+        generateUrl: (path) => `/images${path}`,
+      },
+    },
     graphql: {
       apolloConfig: {
         cache: new InMemoryLRUCache({
@@ -65,6 +85,7 @@ export default withAuth(
       },
     },
     server: {
+      maxFileSize: 25 * 1024 * 1024, // 25MiB
       healthCheck: {
         path: '/health_check',
         data: { status: 'healthy' },

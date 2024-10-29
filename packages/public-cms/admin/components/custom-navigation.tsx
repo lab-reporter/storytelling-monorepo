@@ -14,7 +14,8 @@ export function CustomNavigation({
 
   return (
     <NavigationContainer authenticatedItem={authenticatedItem}>
-      <NavItem href="/">首頁</NavItem>
+      <NavItem href="/">Dashboard</NavItem>
+      <NavItem href="/iframe/landing">介紹</NavItem>
       <ListNavItems lists={lists.slice(0, lists.length - 1)} />
       <NavItem href="/iframe/timeline">大事記</NavItem>
       <NavItem href="/iframe/dual-channel">左右互搏</NavItem>
