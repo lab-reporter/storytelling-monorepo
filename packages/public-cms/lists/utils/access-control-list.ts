@@ -120,6 +120,12 @@ export const createdByHooks: ListHooks<BaseListTypeInfo> = {
   },
 }
 
+const getAbsoluteFilePath = (storagePath: string) => {
+  const workingDir = process.cwd()
+  const relativePath = path.relative(workingDir, storagePath)
+  return path.resolve(workingDir, relativePath)
+}
+
 export const createFileFieldHooks = (
   limit: number,
   storagePath: string
@@ -158,7 +164,7 @@ export const createFileFieldHooks = (
           // `file` field won't delete the uploaded file.
           // Hence, we need to delete the file manually here.
           const filename = resolvedData?.[fieldKey]?.filename
-          const filepath = path.join(process.cwd(), storagePath, filename)
+          const filepath = path.join(getAbsoluteFilePath(storagePath), filename)
           try {
             console.log(
               JSON.stringify({
@@ -232,8 +238,7 @@ export const createImageFieldHooks = (
           const id = resolvedData?.[fieldKey]?.id
           const extension = resolvedData?.[fieldKey]?.extension
           const filepath = path.join(
-            process.cwd(),
-            storagePath,
+            getAbsoluteFilePath(storagePath),
             `${id}.${extension}`
           )
           try {
