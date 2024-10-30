@@ -10,10 +10,10 @@ import {
 import {
   createdByFilter,
   createdByHooks,
-  createStorageHooks,
+  createImageFieldHooks,
 } from './utils/access-control-list'
 const limit = 5
-const storageHooks = createStorageHooks('Photo', limit)
+const imageFieldHooks = createImageFieldHooks(limit, config.images.storagePath)
 
 const listConfigurations = list({
   fields: {
@@ -23,6 +23,13 @@ const listConfigurations = list({
     }),
     imageFile: image({
       storage: 'images',
+      hooks: {
+        validateInput: async (args) => {
+          if (typeof imageFieldHooks.validateInput === 'function') {
+            return await imageFieldHooks.validateInput(args)
+          }
+        },
+      },
     }),
     url: virtual({
       label: '照片網址',
@@ -97,11 +104,6 @@ const listConfigurations = list({
         return createdByHooks.resolveInput(args)
       }
       return args.resolvedData
-    },
-    validateInput: async (args) => {
-      if (typeof storageHooks.validateInput === 'function') {
-        await storageHooks?.validateInput(args)
-      }
     },
   },
 })
