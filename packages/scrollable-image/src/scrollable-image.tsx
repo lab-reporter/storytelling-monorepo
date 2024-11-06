@@ -78,6 +78,13 @@ export type ScrollableImageProps = {
   imgs: ImgObj[] // urls of image objects
   captions?: Caption[]
 
+  // minimum height of the images.
+  // Since `height` could be `100vh`,
+  // if the viewport height is very narrow,
+  // and the `ScrollableImage` will look very small.
+  // `minHeight` could be used to set minimum height of images.
+  minHeight?: string
+
   // height of the images.
   // If `height` is `100vh`, and then the images of the `ScrollableImage` will
   // cover the whole viewport.
@@ -97,6 +104,7 @@ export function ScrollableImage({
   className,
   imgs,
   captions = [],
+  minHeight = '',
   height = '100vh',
   maxHeight = '100vh',
 }: ScrollableImageProps) {
@@ -215,7 +223,7 @@ export function ScrollableImage({
       data-react-scrollable-image
     >
       <StickyBlock>
-        <ImgsBlock ref={imgsBlockRef} style={{ height, maxHeight }}>
+        <ImgsBlock ref={imgsBlockRef} style={{ height, maxHeight, minHeight }}>
           {imgs.map((imgObj, idx) => {
             return <Img key={idx} src={imgObj.url}></Img>
           })}

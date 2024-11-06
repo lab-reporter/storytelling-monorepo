@@ -9,6 +9,7 @@ const root = createRoot(container)
 root.render(
   <div style={{ marginTop: '100vh', marginBottom: '100vh' }}>
     <ScrollableImage
+      minHeight="600px"
       height="90vh"
       maxHeight="800px"
       imgs={[
