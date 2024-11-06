@@ -28,7 +28,7 @@ const StickyBlock = styled.div`
   background-color: transparent;
 `
 
-const ImgsBlock = styled.div<{ $maxHeight: string }>`
+const ImgsBlock = styled.div`
   position: relative;
   width: fit-content;
   height: 100%;
@@ -36,18 +36,16 @@ const ImgsBlock = styled.div<{ $maxHeight: string }>`
   display: flex;
   flex-wrap: nowrap;
   margin: auto;
-
-  ${({ $maxHeight }) => {
-    return `
-      max-height: ${$maxHeight};
-    `
-  }}
 `
 
 const Img = styled.img`
   vertical-align: middle;
   height: 100%;
   border: none;
+`
+
+const CaptionBlock = styled.div`
+  position: absolute;
 `
 
 const EmptyBlockForScrolling = styled.div`
@@ -71,6 +69,8 @@ type CaptionPosition = {
 type Caption = {
   data: string
   position: CaptionPosition
+  width?: string
+  height?: string
 }
 
 export type ScrollableImageProps = {
@@ -96,7 +96,8 @@ export type ScrollableImageProps = {
 export function ScrollableImage({
   className,
   imgs,
-  // captions,
+  captions = [],
+  height = '100vh',
   maxHeight = '100vh',
 }: ScrollableImageProps) {
   const [scrollDistance, setScrollDistance] = useState(0)
@@ -214,9 +215,23 @@ export function ScrollableImage({
       data-react-scrollable-image
     >
       <StickyBlock>
-        <ImgsBlock ref={imgsBlockRef} $maxHeight={maxHeight}>
+        <ImgsBlock ref={imgsBlockRef} style={{ height, maxHeight }}>
           {imgs.map((imgObj, idx) => {
             return <Img key={idx} src={imgObj.url}></Img>
+          })}
+          {captions.map((captionObj, idx) => {
+            return (
+              <CaptionBlock
+                key={idx}
+                style={{
+                  ...captionObj.position,
+                  width: captionObj.width,
+                  height: captionObj.height,
+                }}
+              >
+                {captionObj.data}
+              </CaptionBlock>
+            )
           })}
         </ImgsBlock>
       </StickyBlock>
