@@ -1,18 +1,22 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import styled from '../styled-components'
 import {
-  AddButton as _AddButton,
+  AddButton,
   DeleteButton,
   SwitchPrevButton,
   SwitchNextButton,
   ZoomInButton as _ZoomInButton,
+  CaptionButton,
+  SmallCaptionIcon,
   // ZoomOutButton as _ZoomOutButton
 } from './styled'
 import { Drawer, DrawerController, DrawerProvider } from '@keystone-ui/modals'
 import { FieldLabel, TextInput } from '@keystone-ui/fields'
-import { ImgObj } from '../type'
+import { ImgObj, Caption } from '../type'
 
-const Container = styled.div``
+const Container = styled.div`
+  background-color: #FAFBFC;
+`
 
 const CardsContainer = styled.div`
   width: 100%;
@@ -32,23 +36,30 @@ const ZoomInButton = styled(_ZoomInButton)`
   height: 50px;
 `
 
-const AddButton = styled(_AddButton)`
-  width: 50px;
-  height: 50px;
-`
-
 const Panel = styled.div`
   display: flex;
   gap: 5px;
   margin-top: 30px;
 `
 
-const Cards = styled.div`
+const Cards = styled.div<{$editStatus: string}>`
   display: flex;
   width: fit-content;
   min-width: 110vw;
   height: 300px;
   flex-wrap: nowrap;
+
+  position: relative;
+
+  ${({$editStatus}) => {
+    if ($editStatus === EditStatus.ADDING_TEXT) {
+      return `cursor: url(https://cdn.jsdelivr.net/npm/@story-telling-reporter/react-scrollable-image/public/icons/small-caption.svg), auto;`
+    }
+  }}
+`
+
+const CaptionIconBlock = styled.div`
+  position: absolute;
 `
 
 const Card = styled.div`
@@ -66,10 +77,67 @@ const CardPanel = styled.div`
   gap: 6px;
 `
 
-export function ScrollableImageEditor() {
-  const [imgObjs, setImgObjs] = useState<ImgObj[]>([])
+enum EditStatus {
+  DEFAULT = 'default',
+  ADDING_TEXT = 'adding_text',
+}
 
-  const cards = imgObjs.map((imgObj, idx) => {
+export function ScrollableImageEditor() {
+  const [imgObjs, setImgObjs] = useState<ImgObj[]>([{ url : '/static/img-6.jpg'}])
+  const [editStatus, setEditStatus] = useState(EditStatus.DEFAULT)
+  const [captions, setCaptions] = useState<Caption[]>([])
+  const [fullScreen, setFullScreen] = useState(false)
+  const cardsRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const cardsNode = cardsRef.current 
+
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        cardsNode?.contains(event.target as Node) &&
+        editStatus === EditStatus.ADDING_TEXT
+      ) {
+        // reset edit status
+        setEditStatus(EditStatus.DEFAULT)
+      }
+    }
+
+    function handleAddCaption(event: MouseEvent) {
+      if (cardsNode && editStatus === EditStatus.ADDING_TEXT) {
+        const cardsWidth = cardsNode.offsetWidth
+        const cardsHeight = cardsNode.offsetHeight
+        const x = event.offsetX
+        const y = event.offsetY
+        const caption : Caption = {
+          data: '',
+          position: {
+            left: `${parseFloat((x / cardsWidth).toFixed(4)) * 100}%`,
+            top: `${parseFloat((y / cardsHeight).toFixed(4)) * 100}%`,
+          },
+          width: `${parseFloat((200 / cardsWidth).toFixed(4)) * 100}%`,
+          height: `${parseFloat((200 / cardsHeight).toFixed(4)) * 100}%`,
+        }
+
+        const newCaptions = captions.concat([caption])
+        setCaptions(newCaptions)
+
+        // reset edit status
+        setEditStatus(EditStatus.DEFAULT)
+      }
+    }
+
+    // Bind the event listener
+    document.addEventListener('mousedown', handleClickOutside)
+    cardsNode?.addEventListener('mousedown', handleAddCaption)
+
+    return () => {
+      // Unbind the event listener on clean up
+      document.removeEventListener('mousedown', handleClickOutside)
+      cardsNode?.removeEventListener('mousedown', handleAddCaption)
+    }
+  }, [cardsRef, editStatus, captions])
+
+  const cardsJsx = imgObjs.map((imgObj, idx) => {
     return (
       <Card key={idx}>
         <CardImg src={imgObj.url} />
@@ -77,23 +145,6 @@ export function ScrollableImageEditor() {
           <span>{`${idx + 1}`.padStart(3, '00')}</span>
           <SwitchNextButton
             disabled={idx === imgObjs.length - 1}
-            onClick={() => {
-              // switch the target image with the previous one
-              const previousImg = imgObjs.slice(idx - 1, idx)[0]
-              if (previousImg) {
-                const currentImg = imgObjs.slice(idx, idx + 1)[0]
-                const newImgObjs = [
-                  ...imgObjs.slice(0, idx - 1),
-                  currentImg,
-                  previousImg,
-                  ...imgObjs.slice(idx + 1, imgObjs.length),
-                ]
-                setImgObjs(newImgObjs)
-              }
-            }}
-          />
-          <SwitchPrevButton
-            disabled={idx === 0}
             onClick={() => {
               // switch the target image with the next one
               const nextImg = imgObjs.slice(idx + 1, idx + 2)[0]
@@ -104,6 +155,23 @@ export function ScrollableImageEditor() {
                   nextImg,
                   currentImg,
                   ...imgObjs.slice(idx + 2, imgObjs.length),
+                ]
+                setImgObjs(newImgObjs)
+              }
+            }}
+          />
+          <SwitchPrevButton
+            disabled={idx === 0}
+            onClick={() => {
+              // switch the target image with the previous one
+              const previousImg = imgObjs.slice(idx - 1, idx)[0]
+              if (previousImg) {
+                const currentImg = imgObjs.slice(idx, idx + 1)[0]
+                const newImgObjs = [
+                  ...imgObjs.slice(0, idx - 1),
+                  currentImg,
+                  previousImg,
+                  ...imgObjs.slice(idx + 1, imgObjs.length),
                 ]
                 setImgObjs(newImgObjs)
               }
@@ -124,10 +192,33 @@ export function ScrollableImageEditor() {
       </Card>
     )
   })
+
+  let captionsJsx = null
+
+  if (!fullScreen) {
+    console.log('captions:', captions)
+    captionsJsx = captions.map((caption, idx) => {
+      return (
+        <CaptionIconBlock key={idx} style={
+          {
+            left: caption.position.left,
+            top: caption.position.top,
+          }}>
+          <SmallCaptionIcon style={{ cursor: 'auto' }}/>
+        </CaptionIconBlock>
+      )
+    })
+  }
+
   return (
-    <Container>
+    <Container >
       <CardsContainer>
-        <Cards>{cards}</Cards>
+        <Cards 
+          $editStatus={editStatus}
+          ref={cardsRef}
+        >
+          {captionsJsx}{cardsJsx}
+        </Cards>
         <Panel>
           <ZoomInButton />
           <AddImageButton
@@ -140,7 +231,10 @@ export function ScrollableImageEditor() {
               setImgObjs(newImgObjs)
             }}
           />
-          <div>新增文字區塊</div>
+          <CaptionButton 
+            focus={editStatus === EditStatus.ADDING_TEXT}
+            onClick={() => setEditStatus(EditStatus.ADDING_TEXT) } 
+          />
         </Panel>
       </CardsContainer>
     </Container>
