@@ -5,21 +5,35 @@ import {
   DeleteButton,
   SwitchPrevButton,
   SwitchNextButton,
-  ZoomInButton as _ZoomInButton,
+  ZoomInButton,
   CaptionButton,
   SmallCaptionIcon,
-  // ZoomOutButton as _ZoomOutButton
+  ZoomOutButton,
 } from './styled'
 import { Drawer, DrawerController, DrawerProvider } from '@keystone-ui/modals'
 import { FieldLabel, TextInput } from '@keystone-ui/fields'
 import { ImgObj, Caption } from '../type'
 
-const Container = styled.div`
-  background-color: #FAFBFC;
+const Container = styled.div<{ $fullScreen: boolean }>`
+  background-color: #fafbfc;
+  height: 400px;
+
+  ${({ $fullScreen }) => {
+    if ($fullScreen) {
+      return `
+        width: 100vw;
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        left: 0;
+      `
+    }
+  }}
 `
 
 const CardsContainer = styled.div`
   width: 100%;
+  height: 100%;
   overflow: scroll;
 
   position: relative;
@@ -31,27 +45,21 @@ const CardsContainer = styled.div`
   }
 `
 
-const ZoomInButton = styled(_ZoomInButton)`
-  width: 50px;
-  height: 50px;
-`
-
 const Panel = styled.div`
   display: flex;
   gap: 5px;
-  margin-top: 30px;
 `
 
-const Cards = styled.div<{$editStatus: string}>`
+const Cards = styled.div<{ $editStatus: string }>`
   display: flex;
   width: fit-content;
   min-width: 110vw;
-  height: 300px;
+  height: calc(100% - 80px);
   flex-wrap: nowrap;
 
   position: relative;
 
-  ${({$editStatus}) => {
+  ${({ $editStatus }) => {
     if ($editStatus === EditStatus.ADDING_TEXT) {
       return `cursor: url(https://cdn.jsdelivr.net/npm/@story-telling-reporter/react-scrollable-image/public/icons/small-caption.svg), auto;`
     }
@@ -67,11 +75,11 @@ const Card = styled.div`
 `
 
 const CardImg = styled.img`
-  height: 260px;
+  height: 90%;
 `
 
 const CardPanel = styled.div`
-  height: 40px;
+  height: 10%;
   display: flex;
   justify-content: center;
   gap: 6px;
@@ -83,14 +91,16 @@ enum EditStatus {
 }
 
 export function ScrollableImageEditor() {
-  const [imgObjs, setImgObjs] = useState<ImgObj[]>([{ url : '/static/img-6.jpg'}])
+  const [imgObjs, setImgObjs] = useState<ImgObj[]>([
+    { url: '/static/img-6.jpg' },
+  ])
   const [editStatus, setEditStatus] = useState(EditStatus.DEFAULT)
   const [captions, setCaptions] = useState<Caption[]>([])
   const [fullScreen, setFullScreen] = useState(false)
   const cardsRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const cardsNode = cardsRef.current 
+    const cardsNode = cardsRef.current
 
     function handleClickOutside(event: MouseEvent) {
       if (
@@ -108,7 +118,7 @@ export function ScrollableImageEditor() {
         const cardsHeight = cardsNode.offsetHeight
         const x = event.offsetX
         const y = event.offsetY
-        const caption : Caption = {
+        const caption: Caption = {
           data: '',
           position: {
             left: `${parseFloat((x / cardsWidth).toFixed(4)) * 100}%`,
@@ -196,31 +206,52 @@ export function ScrollableImageEditor() {
   let captionsJsx = null
 
   if (!fullScreen) {
-    console.log('captions:', captions)
     captionsJsx = captions.map((caption, idx) => {
       return (
-        <CaptionIconBlock key={idx} style={
-          {
+        <CaptionIconBlock
+          key={idx}
+          style={{
             left: caption.position.left,
             top: caption.position.top,
-          }}>
-          <SmallCaptionIcon style={{ cursor: 'auto' }}/>
+          }}
+        >
+          <SmallCaptionIcon style={{ cursor: 'auto' }} />
         </CaptionIconBlock>
       )
     })
   }
 
+  const zoomButtonJsx = fullScreen ? (
+    <ZoomOutButton
+      style={{
+        width: '50px',
+        height: '50px',
+      }}
+      onClick={() => {
+        setFullScreen(false)
+      }}
+    />
+  ) : (
+    <ZoomInButton
+      style={{
+        width: '50px',
+        height: '50px',
+      }}
+      onClick={() => {
+        setFullScreen(true)
+      }}
+    />
+  )
+
   return (
-    <Container >
+    <Container $fullScreen={fullScreen}>
       <CardsContainer>
-        <Cards 
-          $editStatus={editStatus}
-          ref={cardsRef}
-        >
-          {captionsJsx}{cardsJsx}
+        <Cards $editStatus={editStatus} ref={cardsRef}>
+          {captionsJsx}
+          {cardsJsx}
         </Cards>
         <Panel>
-          <ZoomInButton />
+          {zoomButtonJsx}
           <AddImageButton
             onChange={(imgUrl) => {
               const newImgObjs = imgObjs.concat([
@@ -231,9 +262,9 @@ export function ScrollableImageEditor() {
               setImgObjs(newImgObjs)
             }}
           />
-          <CaptionButton 
+          <CaptionButton
             focus={editStatus === EditStatus.ADDING_TEXT}
-            onClick={() => setEditStatus(EditStatus.ADDING_TEXT) } 
+            onClick={() => setEditStatus(EditStatus.ADDING_TEXT)}
           />
         </Panel>
       </CardsContainer>
