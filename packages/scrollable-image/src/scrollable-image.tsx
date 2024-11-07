@@ -4,6 +4,7 @@ import { gsap } from 'gsap/dist/gsap'
 import styled from './styled-components'
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger'
 import { useGSAP } from '@gsap/react'
+import { ImgObj, Caption } from './type'
 
 const _ = {
   debounce,
@@ -51,27 +52,6 @@ const CaptionBlock = styled.div`
 const EmptyBlockForScrolling = styled.div`
   margin-top: -100vh;
 `
-
-type URL = string
-
-type ImgObj = {
-  url: URL
-}
-
-type CaptionPosition = {
-  // distance from `ScrollableImage` block's left/top/right/bottom border to the caption text
-  left?: string
-  top?: string
-  right?: string
-  bottom?: string
-}
-
-type Caption = {
-  data: string
-  position: CaptionPosition
-  width?: string
-  height?: string
-}
 
 export type ScrollableImageProps = {
   className?: string
