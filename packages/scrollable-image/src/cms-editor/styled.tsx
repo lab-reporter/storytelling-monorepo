@@ -1,5 +1,6 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled from '../styled-components'
+import { CSSProperties } from 'styled-components'
 
 const urlPrefix =
   'https://cdn.jsdelivr.net/npm/@story-telling-reporter/react-scrollable-image/public/icons'
@@ -29,6 +30,7 @@ type IconProps = {
   darkMode?: boolean
   disabled?: boolean
   focus?: boolean
+  style?: CSSProperties
 }
 
 export function ZoomInButton(props: IconProps) {
@@ -36,6 +38,7 @@ export function ZoomInButton(props: IconProps) {
     <Icon
       className={props?.className}
       onClick={props?.onClick}
+      style={props.style}
       $bgImg={urlPrefix + '/zoom-in.svg'}
       $hoverBgImg={urlPrefix + '/zoom-in.hover.svg'}
     />
@@ -47,6 +50,7 @@ export function ZoomOutButton(props: IconProps) {
     <Icon
       className={props?.className}
       onClick={props?.onClick}
+      style={props.style}
       $bgImg={urlPrefix + '/zoom-out.svg'}
       $hoverBgImg={urlPrefix + '/zoom-out.hover.svg'}
     />
@@ -61,6 +65,7 @@ export function AddButton(props: IconProps) {
       style={{
         width: '50px',
         height: '50px',
+        ...props?.style,
       }}
       $bgImg={urlPrefix + '/add.svg'}
       $hoverBgImg={urlPrefix + '/add.hover.svg'}
@@ -80,6 +85,7 @@ export function CaptionButton(props: IconProps) {
       style={{
         width: '50px',
         height: '50px',
+        ...props.style,
       }}
       $bgImg={bgImg}
       $hoverBgImg={urlPrefix + '/caption.hover.svg'}
@@ -115,7 +121,10 @@ export function SwitchPrevButton(props: IconProps) {
         className={props?.className}
         $bgImg={urlPrefix + '/switch-prev.disabled.svg'}
         $hoverBgImg={urlPrefix + '/switch-prev.disabled.svg'}
-        style={{ cursor: 'default' }}
+        style={{
+          cursor: 'default',
+          ...props.style,
+        }}
       />
     )
   }
@@ -136,7 +145,10 @@ export function SwitchNextButton(props: IconProps) {
         className={props?.className}
         $bgImg={urlPrefix + '/switch-next.disabled.svg'}
         $hoverBgImg={urlPrefix + '/switch-next.disabled.svg'}
-        style={{ cursor: 'default' }}
+        style={{
+          cursor: 'default',
+          ...props.style,
+        }}
       />
     )
   }
