@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 const urlPrefix =
-  'https://www.unpkg.com/@story-telling-reporter/react-three-story-controls/public/icons'
+  'https://cdn.jsdelivr.net/npm/@story-telling-reporter/react-scrollable-image/public/icons'
 
 const Icon = styled.div<{
   $bgImg?: string
@@ -14,6 +14,9 @@ const Icon = styled.div<{
   height: 25px;
 
   background-image: url(${(props) => props.$bgImg || ''});
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 
   &:hover {
     background-image: url(${(props) => props.$hoverBgImg || ''});
@@ -33,7 +36,7 @@ export function ZoomInButton(props: IconProps) {
     <Icon
       className={props?.className}
       onClick={props?.onClick}
-      $bgImg={urlPrefix + '/zoom-in.normal.svg'}
+      $bgImg={urlPrefix + '/zoom-in.svg'}
       $hoverBgImg={urlPrefix + '/zoom-in.hover.svg'}
     />
   )
@@ -44,30 +47,8 @@ export function ZoomOutButton(props: IconProps) {
     <Icon
       className={props?.className}
       onClick={props?.onClick}
-      $bgImg={urlPrefix + '/zoom-out.normal.svg'}
+      $bgImg={urlPrefix + '/zoom-out.svg'}
       $hoverBgImg={urlPrefix + '/zoom-out.hover.svg'}
-    />
-  )
-}
-
-export function OpenPreviewButton(props: IconProps) {
-  return (
-    <Icon
-      className={props?.className}
-      onClick={props?.onClick}
-      $bgImg={urlPrefix + '/open-preview.normal.svg'}
-      $hoverBgImg={urlPrefix + '/open-preview.hover.svg'}
-    />
-  )
-}
-
-export function ClosePreviewButton(props: IconProps) {
-  return (
-    <Icon
-      className={props?.className}
-      onClick={props?.onClick}
-      $bgImg={urlPrefix + '/close-preview.normal.svg'}
-      $hoverBgImg={urlPrefix + '/close-preview.hover.svg'}
     />
   )
 }
@@ -77,40 +58,51 @@ export function AddButton(props: IconProps) {
     <Icon
       className={props?.className}
       onClick={props?.onClick}
-      $bgImg={urlPrefix + '/add.normal.svg'}
+      style={{
+        width: '50px',
+        height: '50px',
+      }}
+      $bgImg={urlPrefix + '/add.svg'}
       $hoverBgImg={urlPrefix + '/add.hover.svg'}
     />
   )
 }
 
-export function HideButton(props: IconProps) {
+export function CaptionButton(props: IconProps) {
+  const bgImg = props.focus
+    ? urlPrefix + '/caption.hover.svg'
+    : urlPrefix + '/caption.svg'
+
   return (
     <Icon
       className={props?.className}
       onClick={props?.onClick}
-      $bgImg={urlPrefix + '/hide.normal.svg'}
-      $hoverBgImg={urlPrefix + '/hide.hover.svg'}
+      style={{
+        width: '50px',
+        height: '50px',
+      }}
+      $bgImg={bgImg}
+      $hoverBgImg={urlPrefix + '/caption.hover.svg'}
     />
   )
 }
 
-export function ExpandButton(props: IconProps) {
-  return (
-    <Icon
-      className={props?.className}
-      onClick={props?.onClick}
-      $bgImg={urlPrefix + '/expand.normal.svg'}
-      $hoverBgImg={urlPrefix + '/expand.hover.svg'}
-    />
-  )
-}
+export const SmallCaptionIcon = styled(Icon)`
+  width: '20px';
+  height: '20px';
+
+  background-image: url(${urlPrefix + '/small-caption.svg'});
+  &:hover {
+    background-image: url(${urlPrefix + '/small-caption.svg'});
+  }
+`
 
 export function DeleteButton(props: IconProps) {
   return (
     <Icon
       className={props?.className}
       onClick={props?.onClick}
-      $bgImg={urlPrefix + '/delete.normal.svg'}
+      $bgImg={urlPrefix + '/delete.svg'}
       $hoverBgImg={urlPrefix + '/delete.hover.svg'}
     />
   )
@@ -131,7 +123,7 @@ export function SwitchPrevButton(props: IconProps) {
     <Icon
       className={props?.className}
       onClick={props?.onClick}
-      $bgImg={urlPrefix + '/switch-prev.normal.svg'}
+      $bgImg={urlPrefix + '/switch-prev.svg'}
       $hoverBgImg={urlPrefix + '/switch-prev.hover.svg'}
     />
   )
@@ -152,39 +144,8 @@ export function SwitchNextButton(props: IconProps) {
     <Icon
       className={props?.className}
       onClick={props?.onClick}
-      $bgImg={urlPrefix + '/switch-next.normal.svg'}
+      $bgImg={urlPrefix + '/switch-next.svg'}
       $hoverBgImg={urlPrefix + '/switch-next.hover.svg'}
-    />
-  )
-}
-
-export function FocusButton(props: IconProps) {
-  return (
-    <Icon
-      className={props?.className}
-      onClick={props?.onClick}
-      $bgImg={urlPrefix + '/focus.normal.svg'}
-      $hoverBgImg={urlPrefix + '/focus.hover.svg'}
-    />
-  )
-}
-
-export function EditButton(props: IconProps) {
-  if (props.focus) {
-    return (
-      <Icon
-        className={props?.className}
-        onClick={props?.onClick}
-        $bgImg={urlPrefix + '/edit.hover.svg'}
-      />
-    )
-  }
-  return (
-    <Icon
-      className={props?.className}
-      onClick={props?.onClick}
-      $bgImg={urlPrefix + '/edit.normal.svg'}
-      $hoverBgImg={urlPrefix + '/edit.hover.svg'}
     />
   )
 }
