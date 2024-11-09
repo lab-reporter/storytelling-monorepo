@@ -13,6 +13,7 @@ import {
 import { Drawer, DrawerController, DrawerProvider } from '@keystone-ui/modals'
 import { FieldLabel, TextInput } from '@keystone-ui/fields'
 import { ImgObj, Caption } from '../type'
+import { EditStatus } from './type'
 
 const Container = styled.div<{ $fullScreen: boolean }>`
   background-color: #fafbfc;
@@ -85,11 +86,6 @@ const CardPanel = styled.div`
   gap: 6px;
 `
 
-enum EditStatus {
-  DEFAULT = 'default',
-  ADDING_TEXT = 'adding_text',
-}
-
 export function ScrollableImageEditor() {
   const [imgObjs, setImgObjs] = useState<ImgObj[]>([
     { url: '/static/img-6.jpg' },
@@ -124,8 +120,8 @@ export function ScrollableImageEditor() {
             left: `${parseFloat((x / cardsWidth).toFixed(4)) * 100}%`,
             top: `${parseFloat((y / cardsHeight).toFixed(4)) * 100}%`,
           },
-          width: `${parseFloat((200 / cardsWidth).toFixed(4)) * 100}%`,
-          height: `${parseFloat((200 / cardsHeight).toFixed(4)) * 100}%`,
+          width: '100px',
+          height: '80px',
         }
 
         const newCaptions = captions.concat([caption])
@@ -136,13 +132,22 @@ export function ScrollableImageEditor() {
       }
     }
 
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Escape' || event.keyCode === 27) {
+        setEditStatus(EditStatus.DEFAULT)
+        return
+      }
+    }
+
     // Bind the event listener
     document.addEventListener('mousedown', handleClickOutside)
+    document.addEventListener('keydown', handleKeyDown)
     cardsNode?.addEventListener('mousedown', handleAddCaption)
 
     return () => {
       // Unbind the event listener on clean up
       document.removeEventListener('mousedown', handleClickOutside)
+      document.removeEventListener('keydown', handleKeyDown)
       cardsNode?.removeEventListener('mousedown', handleAddCaption)
     }
   }, [cardsRef, editStatus, captions])
@@ -205,6 +210,20 @@ export function ScrollableImageEditor() {
 
   let captionsJsx = null
 
+  const handleCaptionChange = (changedCaption: Caption | null, idx: number) => {
+    setCaptions((prevCaptions) => {
+      if (changedCaption === null) {
+        return [...prevCaptions.slice(0, idx), ...prevCaptions.slice(idx + 1)]
+      }
+
+      return [
+        ...prevCaptions.slice(0, idx),
+        changedCaption,
+        ...prevCaptions.slice(idx + 1),
+      ]
+    })
+  }
+
   if (!fullScreen) {
     captionsJsx = captions.map((caption, idx) => {
       return (
@@ -217,6 +236,18 @@ export function ScrollableImageEditor() {
         >
           <SmallCaptionIcon style={{ cursor: 'auto' }} />
         </CaptionIconBlock>
+      )
+    })
+  } else {
+    captionsJsx = captions.map((caption, idx) => {
+      return (
+        <CaptionTextArea
+          key={idx}
+          caption={caption}
+          onChange={(changedCaption) =>
+            handleCaptionChange(changedCaption, idx)
+          }
+        />
       )
     })
   }
@@ -272,7 +303,215 @@ export function ScrollableImageEditor() {
   )
 }
 
-export function AddImageButton({
+const TextArea = styled.textarea``
+
+function CaptionTextArea({
+  className,
+  caption,
+  onChange,
+}: {
+  className?: string
+  caption: Caption
+  onChange: (caption: Caption | null) => void
+}) {
+  const [editStatus, setEditStatus] = useState(EditStatus.DEFAULT)
+  const textAreaRef = useRef<HTMLTextAreaElement>(null)
+
+  let cursorStyle = 'default'
+  switch (editStatus) {
+    case EditStatus.EDIT_TEXT:
+      cursorStyle = 'auto'
+      break
+    case EditStatus.DELETABLE:
+    case EditStatus.DEFAULT:
+    default: {
+      cursorStyle = 'default'
+      break
+    }
+  }
+
+  // handle `editStatus` changes
+  useEffect(() => {
+    const textAreaNode = textAreaRef.current
+
+    function handleClickOutside(event: MouseEvent) {
+      if (!textAreaNode?.contains(event.target as Node)) {
+        // reset edit status
+        setEditStatus(EditStatus.DEFAULT)
+      }
+    }
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (
+        event.key === 'Delete' ||
+        (event.key === 'Backspace' && editStatus === EditStatus.DELETABLE)
+      ) {
+        onChange(null)
+        setEditStatus(EditStatus.DEFAULT)
+        return
+      }
+    }
+
+    // Bind the event listener
+    document.addEventListener('mousedown', handleClickOutside)
+    document.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      // Unbind the event listener on clean up
+      document.removeEventListener('mousedown', handleClickOutside)
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [editStatus])
+
+  // handle drag and drop
+  useEffect(() => {
+    const textAreaNode = textAreaRef.current
+
+    if (!textAreaNode) {
+      return
+    }
+
+    let isDragging = false
+    let startX = 0
+    let startY = 0
+    let deltaX = 0
+    let deltaY = 0
+
+    function drag(event: MouseEvent) {
+      console.log('drag is calling:', textAreaNode)
+      if (
+        (editStatus === EditStatus.DELETABLE ||
+          editStatus === EditStatus.DEFAULT) &&
+        textAreaNode
+      ) {
+        isDragging = true
+        startX = event.clientX
+        startY = event.clientY
+        event.preventDefault()
+      }
+    }
+
+    function dragging(event: MouseEvent) {
+      if (isDragging && textAreaNode) {
+        deltaX = event.clientX - startX
+        deltaY = event.clientY - startY
+        textAreaNode.style.transform = `translate(${deltaX}px, ${deltaY}px)`
+      }
+    }
+
+    function drop() {
+      if (isDragging && textAreaNode) {
+        isDragging = false
+
+        const left = textAreaNode.offsetLeft + deltaX
+        const top = textAreaNode.offsetTop + deltaY
+
+        const parentElement = textAreaNode.parentElement
+        if (parentElement) {
+          const parentWidth = parentElement.offsetWidth
+          const parentHeight = parentElement.offsetHeight
+
+          textAreaNode.style.transform = 'none'
+
+          onChange(
+            Object.assign({}, caption, {
+              position: {
+                left: `${parseFloat((left / parentWidth).toFixed(4)) * 100}%`,
+                top: `${parseFloat((top / parentHeight).toFixed(4)) * 100}%`,
+              },
+            })
+          )
+        }
+      }
+    }
+
+    textAreaNode.addEventListener('mousedown', drag)
+    document.addEventListener('mousemove', dragging)
+    document.addEventListener('mouseup', drop)
+
+    return () => {
+      textAreaNode.removeEventListener('mousedown', drag)
+      document.removeEventListener('mousemove', dragging)
+      document.removeEventListener('mouseup', drop)
+    }
+  }, [editStatus, caption])
+
+  // handle textarea element resize
+  useEffect(() => {
+    const textAreaNode = textAreaRef.current
+
+    if (!textAreaNode) {
+      return
+    }
+
+    const resizeObserver = new ResizeObserver((entries) => {
+      const entry = entries?.[0]
+      if (entry) {
+        const rect = entry.target.getBoundingClientRect()
+        const width = `${rect.width}px`
+        const height = `${rect.height}px`
+
+        //const parentElement = entry.target.parentElement
+        //const referenceWidth = parentElement?.offsetWidth || window.innerWidth
+        //const referenceHeight = parentElement?.offsetHeight || window.innerHeight
+        //const width = `${_width / referenceWidth * 100}%`
+        //const height = `${_height / referenceHeight  * 100}%`
+
+        if (caption.width !== width || caption.height !== height) {
+          onChange({
+            ...caption,
+            width,
+            height,
+          })
+        }
+      }
+    })
+
+    resizeObserver.observe(textAreaNode)
+
+    return () => {
+      resizeObserver.unobserve(textAreaNode)
+      resizeObserver.disconnect()
+    }
+  }, [caption])
+
+  return (
+    <TextArea
+      ref={textAreaRef}
+      className={className}
+      readOnly={editStatus !== EditStatus.EDIT_TEXT}
+      style={{
+        position: 'absolute',
+        ...caption.position,
+        width: caption.width,
+        height: caption.height,
+        cursor: cursorStyle,
+      }}
+      onClick={(e) => {
+        if (editStatus === EditStatus.DEFAULT) {
+          e.preventDefault()
+          e.stopPropagation()
+          setEditStatus(EditStatus.DELETABLE)
+          return
+        }
+
+        if (editStatus === EditStatus.DELETABLE) {
+          return setEditStatus(EditStatus.EDIT_TEXT)
+        }
+      }}
+      onChange={(e) => {
+        const data = e.target.value
+        onChange({
+          ...caption,
+          data,
+        })
+      }}
+      value={caption.data}
+    />
+  )
+}
+
+function AddImageButton({
   className,
   onChange,
 }: {
