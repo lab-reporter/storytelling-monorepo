@@ -55,7 +55,7 @@ const EmptyBlockForScrolling = styled.div`
 
 export type ScrollableImageProps = {
   className?: string
-  imgs: ImgObj[] // urls of image objects
+  imgObjs: ImgObj[] // urls of image objects
   captions?: Caption[]
 
   // minimum height of the images.
@@ -78,15 +78,17 @@ export type ScrollableImageProps = {
   // and the `ScrollableImage` will look very big.
   // `maxHeight` could be used to restrict the height of images.
   maxHeight?: string
+  scrollerRef?: React.RefObject<HTMLElement>
 }
 
 export function ScrollableImage({
   className,
-  imgs,
+  imgObjs,
   captions = [],
   minHeight = '',
   height = '100vh',
   maxHeight = '100vh',
+  scrollerRef,
 }: ScrollableImageProps) {
   const [scrollDistance, setScrollDistance] = useState(0)
   const scrollTriggerInstance = useRef<ScrollTrigger | null>(null)
@@ -114,7 +116,7 @@ export function ScrollableImage({
         trigger: scrollTriggerRef.current,
         start: 'top 0%',
         end: 'bottom 100%',
-        scroller: window,
+        scroller: scrollerRef?.current || window,
         onUpdate: ({ progress }: { progress: number }) => {
           const height = scrollTriggerRef.current?.offsetHeight
           if (height) {
@@ -204,7 +206,7 @@ export function ScrollableImage({
     >
       <StickyBlock>
         <ImgsBlock ref={imgsBlockRef} style={{ height, maxHeight, minHeight }}>
-          {imgs.map((imgObj, idx) => {
+          {imgObjs.map((imgObj, idx) => {
             return <Img key={idx} src={imgObj.url}></Img>
           })}
           {captions.map((captionObj, idx) => {
