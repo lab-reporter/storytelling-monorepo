@@ -9,11 +9,24 @@ import {
   CaptionButton,
   SmallCaptionIcon,
   ZoomOutButton,
+  OpenPreviewButton,
+  ClosePreviewButton,
 } from './styled'
 import { Drawer, DrawerController, DrawerProvider } from '@keystone-ui/modals'
 import { FieldLabel, TextInput } from '@keystone-ui/fields'
 import { ImgObj, Caption } from '../type'
-import { EditStatus } from './type'
+import { EditState } from './type'
+import { ScrollableImage } from '../scrollable-image'
+
+const PreviewContainer = styled.div`
+  width: 100vw;
+  height: 100vh;
+  overflow: scroll;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #fafbfc;
+`
 
 const Container = styled.div<{ $fullScreen: boolean }>`
   background-color: #fafbfc;
@@ -51,7 +64,7 @@ const Panel = styled.div`
   gap: 5px;
 `
 
-const Cards = styled.div<{ $editStatus: string }>`
+const Cards = styled.div<{ $editState: string }>`
   display: flex;
   width: fit-content;
   min-width: 110vw;
@@ -60,8 +73,8 @@ const Cards = styled.div<{ $editStatus: string }>`
 
   position: relative;
 
-  ${({ $editStatus }) => {
-    if ($editStatus === EditStatus.ADDING_TEXT) {
+  ${({ $editState }) => {
+    if ($editState === EditState.ADDING_TEXT) {
       return `cursor: url(https://cdn.jsdelivr.net/npm/@story-telling-reporter/react-scrollable-image/public/icons/small-caption.svg), auto;`
     }
   }}
@@ -86,14 +99,24 @@ const CardPanel = styled.div`
   gap: 6px;
 `
 
-export function ScrollableImageEditor() {
-  const [imgObjs, setImgObjs] = useState<ImgObj[]>([
-    { url: '/static/img-6.jpg' },
-  ])
-  const [editStatus, setEditStatus] = useState(EditStatus.DEFAULT)
-  const [captions, setCaptions] = useState<Caption[]>([])
+export type ScrollableImageEditorProps = {
+  imgObjs: ImgObj[]
+  captions: Caption[]
+}
+
+export function ScrollableImageEditor({
+  onChange,
+  ...siProps
+}: ScrollableImageEditorProps & {
+  onChange: (arg: ScrollableImageEditorProps) => void
+}) {
+  const [imgObjs, setImgObjs] = useState<ImgObj[]>(siProps.imgObjs)
+  const [editState, setEditState] = useState(EditState.DEFAULT)
+  const [captions, setCaptions] = useState<Caption[]>(siProps.captions)
   const [fullScreen, setFullScreen] = useState(false)
+  const [preview, setPreview] = useState(false)
   const cardsRef = useRef<HTMLDivElement>(null)
+  const scrollerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const cardsNode = cardsRef.current
@@ -101,15 +124,15 @@ export function ScrollableImageEditor() {
     function handleClickOutside(event: MouseEvent) {
       if (
         cardsNode?.contains(event.target as Node) &&
-        editStatus === EditStatus.ADDING_TEXT
+        editState === EditState.ADDING_TEXT
       ) {
         // reset edit status
-        setEditStatus(EditStatus.DEFAULT)
+        setEditState(EditState.DEFAULT)
       }
     }
 
     function handleAddCaption(event: MouseEvent) {
-      if (cardsNode && editStatus === EditStatus.ADDING_TEXT) {
+      if (cardsNode && editState === EditState.ADDING_TEXT) {
         const cardsWidth = cardsNode.offsetWidth
         const cardsHeight = cardsNode.offsetHeight
         const x = event.offsetX
@@ -126,15 +149,20 @@ export function ScrollableImageEditor() {
 
         const newCaptions = captions.concat([caption])
         setCaptions(newCaptions)
+        onChange(
+          Object.assign({}, siProps, {
+            captions: newCaptions,
+          })
+        )
 
         // reset edit status
-        setEditStatus(EditStatus.DEFAULT)
+        setEditState(EditState.DEFAULT)
       }
     }
 
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === 'Escape' || event.keyCode === 27) {
-        setEditStatus(EditStatus.DEFAULT)
+        setEditState(EditState.DEFAULT)
         return
       }
     }
@@ -150,7 +178,7 @@ export function ScrollableImageEditor() {
       document.removeEventListener('keydown', handleKeyDown)
       cardsNode?.removeEventListener('mousedown', handleAddCaption)
     }
-  }, [cardsRef, editStatus, captions])
+  }, [cardsRef, editState, captions])
 
   const cardsJsx = imgObjs.map((imgObj, idx) => {
     return (
@@ -172,6 +200,11 @@ export function ScrollableImageEditor() {
                   ...imgObjs.slice(idx + 2, imgObjs.length),
                 ]
                 setImgObjs(newImgObjs)
+                onChange(
+                  Object.assign({}, siProps, {
+                    imgObjs: newImgObjs,
+                  })
+                )
               }
             }}
           />
@@ -189,6 +222,11 @@ export function ScrollableImageEditor() {
                   ...imgObjs.slice(idx + 1, imgObjs.length),
                 ]
                 setImgObjs(newImgObjs)
+                onChange(
+                  Object.assign({}, siProps, {
+                    imgObjs: newImgObjs,
+                  })
+                )
               }
             }}
           />
@@ -201,6 +239,11 @@ export function ScrollableImageEditor() {
               ]
 
               setImgObjs(newImgObjs)
+              onChange(
+                Object.assign({}, siProps, {
+                  imgObjs: newImgObjs,
+                })
+              )
             }}
           />
         </CardPanel>
@@ -216,11 +259,19 @@ export function ScrollableImageEditor() {
         return [...prevCaptions.slice(0, idx), ...prevCaptions.slice(idx + 1)]
       }
 
-      return [
+      const newCaptions = [
         ...prevCaptions.slice(0, idx),
         changedCaption,
         ...prevCaptions.slice(idx + 1),
       ]
+
+      onChange(
+        Object.assign({}, siProps, {
+          captions: newCaptions,
+        })
+      )
+
+      return newCaptions
     })
   }
 
@@ -254,35 +305,57 @@ export function ScrollableImageEditor() {
 
   const zoomButtonJsx = fullScreen ? (
     <ZoomOutButton
-      style={{
-        width: '50px',
-        height: '50px',
-      }}
       onClick={() => {
         setFullScreen(false)
       }}
     />
   ) : (
     <ZoomInButton
-      style={{
-        width: '50px',
-        height: '50px',
-      }}
       onClick={() => {
         setFullScreen(true)
       }}
     />
   )
 
+  if (preview) {
+    return (
+      <PreviewContainer ref={scrollerRef}>
+        <ClosePreviewButton
+          style={{
+            position: 'fixed',
+            top: '20px',
+            right: '20px',
+            zIndex: '10',
+          }}
+          onClick={() => {
+            setPreview(false)
+          }}
+        />
+        <div style={{ height: '50vh', width: '1px' }} />
+        <ScrollableImage
+          imgObjs={imgObjs}
+          captions={captions}
+          scrollerRef={scrollerRef}
+        />
+        <div style={{ height: '50vh', width: '1px' }} />
+      </PreviewContainer>
+    )
+  }
+
   return (
     <Container $fullScreen={fullScreen}>
       <CardsContainer>
-        <Cards $editStatus={editStatus} ref={cardsRef}>
+        <Cards $editState={editState} ref={cardsRef}>
           {captionsJsx}
           {cardsJsx}
         </Cards>
         <Panel>
           {zoomButtonJsx}
+          <OpenPreviewButton
+            onClick={() => {
+              setPreview(true)
+            }}
+          />
           <AddImageButton
             onChange={(imgUrl) => {
               const newImgObjs = imgObjs.concat([
@@ -294,8 +367,8 @@ export function ScrollableImageEditor() {
             }}
           />
           <CaptionButton
-            focus={editStatus === EditStatus.ADDING_TEXT}
-            onClick={() => setEditStatus(EditStatus.ADDING_TEXT)}
+            focus={editState === EditState.ADDING_TEXT}
+            onClick={() => setEditState(EditState.ADDING_TEXT)}
           />
         </Panel>
       </CardsContainer>
@@ -314,40 +387,40 @@ function CaptionTextArea({
   caption: Caption
   onChange: (caption: Caption | null) => void
 }) {
-  const [editStatus, setEditStatus] = useState(EditStatus.DEFAULT)
+  const [editState, setEditState] = useState(EditState.DEFAULT)
   const textAreaRef = useRef<HTMLTextAreaElement>(null)
 
   let cursorStyle = 'default'
-  switch (editStatus) {
-    case EditStatus.EDIT_TEXT:
+  switch (editState) {
+    case EditState.EDIT_TEXT:
       cursorStyle = 'auto'
       break
-    case EditStatus.DELETABLE:
-    case EditStatus.DEFAULT:
+    case EditState.DELETABLE:
+    case EditState.DEFAULT:
     default: {
       cursorStyle = 'default'
       break
     }
   }
 
-  // handle `editStatus` changes
+  // handle `editState` changes
   useEffect(() => {
     const textAreaNode = textAreaRef.current
 
     function handleClickOutside(event: MouseEvent) {
       if (!textAreaNode?.contains(event.target as Node)) {
         // reset edit status
-        setEditStatus(EditStatus.DEFAULT)
+        setEditState(EditState.DEFAULT)
       }
     }
 
     function handleKeyDown(event: KeyboardEvent) {
       if (
         event.key === 'Delete' ||
-        (event.key === 'Backspace' && editStatus === EditStatus.DELETABLE)
+        (event.key === 'Backspace' && editState === EditState.DELETABLE)
       ) {
         onChange(null)
-        setEditStatus(EditStatus.DEFAULT)
+        setEditState(EditState.DEFAULT)
         return
       }
     }
@@ -361,7 +434,7 @@ function CaptionTextArea({
       document.removeEventListener('mousedown', handleClickOutside)
       document.removeEventListener('keydown', handleKeyDown)
     }
-  }, [editStatus])
+  }, [editState])
 
   // handle drag and drop
   useEffect(() => {
@@ -380,8 +453,8 @@ function CaptionTextArea({
     function drag(event: MouseEvent) {
       console.log('drag is calling:', textAreaNode)
       if (
-        (editStatus === EditStatus.DELETABLE ||
-          editStatus === EditStatus.DEFAULT) &&
+        (editState === EditState.DELETABLE ||
+          editState === EditState.DEFAULT) &&
         textAreaNode
       ) {
         isDragging = true
@@ -434,7 +507,7 @@ function CaptionTextArea({
       document.removeEventListener('mousemove', dragging)
       document.removeEventListener('mouseup', drop)
     }
-  }, [editStatus, caption])
+  }, [editState, caption])
 
   // handle textarea element resize
   useEffect(() => {
@@ -479,7 +552,7 @@ function CaptionTextArea({
     <TextArea
       ref={textAreaRef}
       className={className}
-      readOnly={editStatus !== EditStatus.EDIT_TEXT}
+      readOnly={editState !== EditState.EDIT_TEXT}
       style={{
         position: 'absolute',
         ...caption.position,
@@ -488,15 +561,15 @@ function CaptionTextArea({
         cursor: cursorStyle,
       }}
       onClick={(e) => {
-        if (editStatus === EditStatus.DEFAULT) {
+        if (editState === EditState.DEFAULT) {
           e.preventDefault()
           e.stopPropagation()
-          setEditStatus(EditStatus.DELETABLE)
+          setEditState(EditState.DELETABLE)
           return
         }
 
-        if (editStatus === EditStatus.DELETABLE) {
-          return setEditStatus(EditStatus.EDIT_TEXT)
+        if (editState === EditState.DELETABLE) {
+          return setEditState(EditState.EDIT_TEXT)
         }
       }}
       onChange={(e) => {
