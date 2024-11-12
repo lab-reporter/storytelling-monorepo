@@ -33,29 +33,25 @@ type IconProps = {
   style?: CSSProperties
 }
 
-export function ZoomInButton(props: IconProps) {
-  return (
-    <Icon
-      className={props?.className}
-      onClick={props?.onClick}
-      style={props.style}
-      $bgImg={urlPrefix + '/zoom-in.svg'}
-      $hoverBgImg={urlPrefix + '/zoom-in.hover.svg'}
-    />
-  )
-}
+export const ZoomInButton = styled(Icon)`
+  width: 50px;
+  height: 50px;
 
-export function ZoomOutButton(props: IconProps) {
-  return (
-    <Icon
-      className={props?.className}
-      onClick={props?.onClick}
-      style={props.style}
-      $bgImg={urlPrefix + '/zoom-out.svg'}
-      $hoverBgImg={urlPrefix + '/zoom-out.hover.svg'}
-    />
-  )
-}
+  background-image: url(${urlPrefix + '/zoom-in.svg'});
+  &:hover {
+    background-image: url(${urlPrefix + '/zoom-in.hover.svg'});
+  }
+`
+
+export const ZoomOutButton = styled(Icon)`
+  width: 50px;
+  height: 50px;
+
+  background-image: url(${urlPrefix + '/zoom-out.svg'});
+  &:hover {
+    background-image: url(${urlPrefix + '/zoom-out.hover.svg'});
+  }
+`
 
 export function AddButton(props: IconProps) {
   return (
@@ -161,3 +157,23 @@ export function SwitchNextButton(props: IconProps) {
     />
   )
 }
+
+export const OpenPreviewButton = styled(Icon)`
+  width: 50px;
+  height: 50px;
+
+  background-image: url(${urlPrefix + '/open-preview.svg'});
+  &:hover {
+    background-image: url(${urlPrefix + '/open-preview.hover.svg'});
+  }
+`
+
+export const ClosePreviewButton = styled(Icon)`
+  width: 50px;
+  height: 50px;
+
+  background-image: url(${urlPrefix + '/close-preview.svg'});
+  &:hover {
+    background-image: url(${urlPrefix + '/close-preview.hover.svg'});
+  }
+`
