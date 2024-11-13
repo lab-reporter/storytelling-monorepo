@@ -135,10 +135,13 @@ export function ScrollableImageEditor({
 
     function handleAddCaption(event: MouseEvent) {
       if (cardsNode && editState === EditState.ADDING_TEXT) {
+        const rect = (
+          event.currentTarget as HTMLElement
+        ).getBoundingClientRect()
+        const x = event.clientX - rect.left
+        const y = event.clientY - rect.top
         const cardsWidth = cardsNode.offsetWidth
         const cardsHeight = cardsNode.offsetHeight
-        const x = event.offsetX
-        const y = event.offsetY
         const caption: Caption = {
           data: '',
           position: {
