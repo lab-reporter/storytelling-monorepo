@@ -438,7 +438,8 @@ function CaptionTextArea({
     }
   }, [editState])
 
-  // handle drag and drop
+  // Handle drag and drop,
+  // and re-calculate `CaptionTextArea` positions.
   useEffect(() => {
     const textAreaNode = textAreaRef.current
 
@@ -453,7 +454,6 @@ function CaptionTextArea({
     let deltaY = 0
 
     function drag(event: MouseEvent) {
-      console.log('drag is calling:', textAreaNode)
       if (
         (editState === EditState.DELETABLE ||
           editState === EditState.DEFAULT) &&
@@ -481,7 +481,7 @@ function CaptionTextArea({
         const left = textAreaNode.offsetLeft + deltaX
         const top = textAreaNode.offsetTop + deltaY
 
-        const parentElement = textAreaNode.parentElement
+        const parentElement = textAreaNode.parentElement // `parentElement` should be `Cards` element
         if (parentElement) {
           const parentWidth = parentElement.offsetWidth
           const parentHeight = parentElement.offsetHeight
@@ -490,6 +490,7 @@ function CaptionTextArea({
 
           onChange(
             Object.assign({}, caption, {
+              // re-calculate caption positions.
               position: {
                 left: `${parseFloat((left / parentWidth).toFixed(4)) * 100}%`,
                 top: `${parseFloat((top / parentHeight).toFixed(4)) * 100}%`,
@@ -523,14 +524,12 @@ function CaptionTextArea({
       const entry = entries?.[0]
       if (entry) {
         const rect = entry.target.getBoundingClientRect()
+
+        // @TODO to support RWD.
+        // Currently unit is `px`, which is not responsive.
+        // We might need to change the unit to `vh`.
         const width = `${rect.width}px`
         const height = `${rect.height}px`
-
-        //const parentElement = entry.target.parentElement
-        //const referenceWidth = parentElement?.offsetWidth || window.innerWidth
-        //const referenceHeight = parentElement?.offsetHeight || window.innerHeight
-        //const width = `${_width / referenceWidth * 100}%`
-        //const height = `${_height / referenceHeight  * 100}%`
 
         if (caption.width !== width || caption.height !== height) {
           onChange({
