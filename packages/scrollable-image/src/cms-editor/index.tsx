@@ -51,27 +51,27 @@ const CardsContainer = styled.div`
   overflow: scroll;
 
   position: relative;
-
-  > div:last-child {
-    position: sticky;
-    bottom: 15px;
-    left: 30px;
-  }
 `
 
 const Panel = styled.div`
   display: flex;
   gap: 5px;
+  position: sticky;
+  left: 30px;
 `
 
 const Cards = styled.div<{ $editState: string }>`
   display: flex;
   width: fit-content;
-  min-width: 110vw;
-  height: calc(100% - 80px);
+  min-width: calc(100% + 1px);
+  height: calc(
+    100% - 110px
+  ); /* 110px is sticky Panel's height (50px) + its margins (60px) */
   flex-wrap: nowrap;
 
   position: relative;
+
+  margin-bottom: 50px;
 
   ${({ $editState }) => {
     if ($editState === EditState.ADDING_TEXT) {
@@ -86,10 +86,12 @@ const CaptionIconBlock = styled.div`
 
 const Card = styled.div`
   width: fit-content;
+  height: 100%;
 `
 
 const CardImg = styled.img`
-  height: 90%;
+  width: auto;
+  height: 100%;
 `
 
 const CardPanel = styled.div`
