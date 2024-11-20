@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import debounce from 'lodash/debounce'
 import { gsap } from 'gsap/dist/gsap'
-import styled from './styled-components'
+import styled, { ThemeProvider } from './styled-components'
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger'
 import { useGSAP } from '@gsap/react'
 import { ImgObj, Caption } from './type'
@@ -47,6 +47,7 @@ const Img = styled.img`
 
 const CaptionBlock = styled.div`
   position: absolute;
+  color: ${(props) => (props.theme.darkMode ? '#fff' : '#000')};
 `
 
 const EmptyBlockForScrolling = styled.div`
@@ -78,6 +79,7 @@ export type ScrollableImageProps = {
   // and the `ScrollableImage` will look very big.
   // `maxHeight` could be used to restrict the height of images.
   maxHeight?: string
+  darkMode?: boolean
   scrollerRef?: React.RefObject<HTMLElement>
 }
 
@@ -87,7 +89,8 @@ export function ScrollableImage({
   captions = [],
   minHeight = '',
   height = '100vh',
-  maxHeight = '100vh',
+  maxHeight = '',
+  darkMode = false,
   scrollerRef,
 }: ScrollableImageProps) {
   const [scrollDistance, setScrollDistance] = useState(0)
@@ -199,36 +202,45 @@ export function ScrollableImage({
   }, [])
 
   return (
-    <Container
-      className={className}
-      data-twreporter-story-telling
-      data-react-scrollable-image
+    <ThemeProvider
+      theme={{
+        darkMode,
+      }}
     >
-      <StickyBlock>
-        <ImgsBlock ref={imgsBlockRef} style={{ height, maxHeight, minHeight }}>
-          {imgObjs.map((imgObj, idx) => {
-            return <Img key={idx} src={imgObj.url}></Img>
-          })}
-          {captions.map((captionObj, idx) => {
-            return (
-              <CaptionBlock
-                key={idx}
-                style={{
-                  ...captionObj.position,
-                  width: captionObj.width,
-                  height: captionObj.height,
-                }}
-              >
-                {captionObj.data}
-              </CaptionBlock>
-            )
-          })}
-        </ImgsBlock>
-      </StickyBlock>
-      <EmptyBlockForScrolling
-        ref={scrollTriggerRef}
-        style={{ height: scrollDistance }}
-      />
-    </Container>
+      <Container
+        className={className}
+        data-twreporter-story-telling
+        data-react-scrollable-image
+      >
+        <StickyBlock>
+          <ImgsBlock
+            ref={imgsBlockRef}
+            style={{ height, maxHeight, minHeight }}
+          >
+            {imgObjs.map((imgObj, idx) => {
+              return <Img key={idx} src={imgObj.url}></Img>
+            })}
+            {captions.map((captionObj, idx) => {
+              return (
+                <CaptionBlock
+                  key={idx}
+                  style={{
+                    ...captionObj.position,
+                    width: captionObj.width,
+                    height: captionObj.height,
+                  }}
+                >
+                  {captionObj.data}
+                </CaptionBlock>
+              )
+            })}
+          </ImgsBlock>
+        </StickyBlock>
+        <EmptyBlockForScrolling
+          ref={scrollTriggerRef}
+          style={{ height: scrollDistance }}
+        />
+      </Container>
+    </ThemeProvider>
   )
 }
