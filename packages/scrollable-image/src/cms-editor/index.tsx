@@ -21,7 +21,7 @@ import {
   TextInput,
 } from '@keystone-ui/fields'
 import { ImgObj, Caption } from '../type'
-import { EditState, ThemeEnum } from './type'
+import { CaptionStateEnum, EditorStateEnum, ThemeEnum } from './type'
 import { ScrollableImage } from '../scrollable-image'
 
 const PreviewContainer = styled.div`
@@ -67,7 +67,7 @@ const Panel = styled.div`
   left: 30px;
 `
 
-const Cards = styled.div<{ $editState: string }>`
+const Cards = styled.div<{ $editorState: string }>`
   display: flex;
   width: fit-content;
   min-width: calc(100% + 1px);
@@ -80,8 +80,8 @@ const Cards = styled.div<{ $editState: string }>`
 
   margin-bottom: 50px;
 
-  ${({ $editState }) => {
-    if ($editState === EditState.ADDING_TEXT) {
+  ${({ $editorState }) => {
+    if ($editorState === EditorStateEnum.ADDING_TEXT) {
       return `cursor: url(https://cdn.jsdelivr.net/npm/@story-telling-reporter/react-scrollable-image/public/icons/small-caption.svg), auto;`
     }
   }}
@@ -164,7 +164,7 @@ export function ScrollableImageEditor({
 }: ScrollableImageEditorProps & {
   onChange: (arg: ScrollableImageEditorProps) => void
 }) {
-  const [editState, setEditState] = useState(EditState.DEFAULT)
+  const [editorState, setEditorState] = useState(EditorStateEnum.DEFAULT)
   const [fullScreen, setFullScreen] = useState(false)
   const [preview, setPreview] = useState(false)
   const [history, dispatch] = useImmerReducer(historyReducer, {
@@ -191,15 +191,15 @@ export function ScrollableImageEditor({
     function handleClickOutside(event: MouseEvent) {
       if (
         cardsNode?.contains(event.target as Node) &&
-        editState === EditState.ADDING_TEXT
+        editorState === EditorStateEnum.ADDING_TEXT
       ) {
         // reset edit status
-        setEditState(EditState.DEFAULT)
+        setEditorState(EditorStateEnum.DEFAULT)
       }
     }
 
     function handleAddCaption(event: MouseEvent) {
-      if (cardsNode && editState === EditState.ADDING_TEXT) {
+      if (cardsNode && editorState === EditorStateEnum.ADDING_TEXT) {
         const rect = (
           event.currentTarget as HTMLElement
         ).getBoundingClientRect()
@@ -230,13 +230,13 @@ export function ScrollableImageEditor({
         })
 
         // reset edit status
-        setEditState(EditState.DEFAULT)
+        setEditorState(EditorStateEnum.DEFAULT)
       }
     }
 
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === 'Escape' || event.keyCode === 27) {
-        setEditState(EditState.DEFAULT)
+        setEditorState(EditorStateEnum.DEFAULT)
         return
       }
     }
@@ -252,7 +252,7 @@ export function ScrollableImageEditor({
       document.removeEventListener('keydown', handleKeyDown)
       cardsNode?.removeEventListener('mousedown', handleAddCaption)
     }
-  }, [cardsRef, editState, siProps, onChange])
+  }, [cardsRef, editorState, siProps, onChange])
 
   // Add event listeners for undo and redo
   useEffect(() => {
@@ -463,7 +463,7 @@ export function ScrollableImageEditor({
     <div>
       <Container $fullScreen={fullScreen}>
         <CardsContainer>
-          <Cards $editState={editState} ref={cardsRef}>
+          <Cards $editorState={editorState} ref={cardsRef}>
             {captionsJsx}
             {cardsJsx}
           </Cards>
@@ -492,8 +492,8 @@ export function ScrollableImageEditor({
               }}
             />
             <CaptionButton
-              focus={editState === EditState.ADDING_TEXT}
-              onClick={() => setEditState(EditState.ADDING_TEXT)}
+              focus={editorState === EditorStateEnum.ADDING_TEXT}
+              onClick={() => setEditorState(EditorStateEnum.ADDING_TEXT)}
             />
           </Panel>
         </CardsContainer>
@@ -529,40 +529,41 @@ function CaptionTextArea({
   caption: Caption
   onChange: (caption: Caption | null) => void
 }) {
-  const [editState, setEditState] = useState(EditState.DEFAULT)
+  const [captionState, setCaptionState] = useState(CaptionStateEnum.DEFAULT)
   const textAreaRef = useRef<HTMLTextAreaElement>(null)
 
   let cursorStyle = 'default'
-  switch (editState) {
-    case EditState.EDIT_TEXT:
+  switch (captionState) {
+    case CaptionStateEnum.EDIT_TEXT:
       cursorStyle = 'auto'
       break
-    case EditState.DELETABLE:
-    case EditState.DEFAULT:
+    case CaptionStateEnum.DELETABLE:
+    case CaptionStateEnum.DEFAULT:
     default: {
       cursorStyle = 'default'
       break
     }
   }
 
-  // handle `editState` changes
+  // handle `captionState` changes
   useEffect(() => {
     const textAreaNode = textAreaRef.current
 
     function handleClickOutside(event: MouseEvent) {
       if (!textAreaNode?.contains(event.target as Node)) {
         // reset edit status
-        setEditState(EditState.DEFAULT)
+        setCaptionState(CaptionStateEnum.DEFAULT)
       }
     }
 
     function handleKeyDown(event: KeyboardEvent) {
       if (
         event.key === 'Delete' ||
-        (event.key === 'Backspace' && editState === EditState.DELETABLE)
+        (event.key === 'Backspace' &&
+          captionState === CaptionStateEnum.DELETABLE)
       ) {
         onChange(null)
-        setEditState(EditState.DEFAULT)
+        setCaptionState(CaptionStateEnum.DEFAULT)
         return
       }
     }
@@ -576,7 +577,7 @@ function CaptionTextArea({
       document.removeEventListener('mousedown', handleClickOutside)
       document.removeEventListener('keydown', handleKeyDown)
     }
-  }, [editState, onChange])
+  }, [captionState, onChange])
 
   // Handle drag and drop,
   // and re-calculate `CaptionTextArea` positions.
@@ -595,8 +596,8 @@ function CaptionTextArea({
 
     function drag(event: MouseEvent) {
       if (
-        (editState === EditState.DELETABLE ||
-          editState === EditState.DEFAULT) &&
+        (captionState === CaptionStateEnum.DELETABLE ||
+          captionState === CaptionStateEnum.DEFAULT) &&
         textAreaNode
       ) {
         isDragging = true
@@ -650,7 +651,7 @@ function CaptionTextArea({
       document.removeEventListener('mousemove', dragging)
       document.removeEventListener('mouseup', drop)
     }
-  }, [editState, caption, onChange])
+  }, [captionState, caption, onChange])
 
   // handle textarea element resize
   useEffect(() => {
@@ -693,7 +694,7 @@ function CaptionTextArea({
     <TextArea
       ref={textAreaRef}
       className={className}
-      readOnly={editState !== EditState.EDIT_TEXT}
+      readOnly={captionState !== CaptionStateEnum.EDIT_TEXT}
       style={{
         position: 'absolute',
         ...caption.position,
@@ -702,15 +703,15 @@ function CaptionTextArea({
         cursor: cursorStyle,
       }}
       onClick={(e) => {
-        if (editState === EditState.DEFAULT) {
+        if (captionState === CaptionStateEnum.DEFAULT) {
           e.preventDefault()
           e.stopPropagation()
-          setEditState(EditState.DELETABLE)
+          setCaptionState(CaptionStateEnum.DELETABLE)
           return
         }
 
-        if (editState === EditState.DELETABLE) {
-          return setEditState(EditState.EDIT_TEXT)
+        if (captionState === CaptionStateEnum.DELETABLE) {
+          return setCaptionState(CaptionStateEnum.EDIT_TEXT)
         }
       }}
       onChange={(e) => {
