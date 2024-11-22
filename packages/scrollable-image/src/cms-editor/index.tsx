@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { useImmerReducer } from 'use-immer'
 import styled from '../styled-components'
 import {
   AddButton,
@@ -107,6 +108,51 @@ const CardPanel = styled.div`
   gap: 6px;
 `
 
+type HistoryDraft = {
+  past: ScrollableImageEditorProps[]
+  present: ScrollableImageEditorProps
+  future: ScrollableImageEditorProps[]
+}
+
+type HistoryAction = {
+  type: 'edit' | 'undo' | 'redo'
+  payload?: ScrollableImageEditorProps
+}
+
+function historyReducer(draft: HistoryDraft, action: HistoryAction) {
+  switch (action.type) {
+    case 'edit': {
+      if (!action.payload) {
+        return
+      }
+
+      draft.past.push(draft.present)
+      draft.present = action.payload
+      draft.future = []
+      return
+    }
+    case 'undo': {
+      if (draft.past.length === 0) {
+        return
+      }
+
+      const previous = draft.past.pop()
+      draft.future.unshift(draft.present)
+      draft.present = previous!
+      return
+    }
+    case 'redo': {
+      if (draft.future.length === 0) {
+        return
+      }
+      const next = draft.future.shift()
+      draft.past.push(draft.present)
+      draft.present = next!
+      return
+    }
+  }
+}
+
 export type ScrollableImageEditorProps = {
   imgObjs: ImgObj[]
   captions: Caption[]
@@ -121,13 +167,27 @@ export function ScrollableImageEditor({
   const [editState, setEditState] = useState(EditState.DEFAULT)
   const [fullScreen, setFullScreen] = useState(false)
   const [preview, setPreview] = useState(false)
+  const [history, dispatch] = useImmerReducer(historyReducer, {
+    past: [],
+    present: siProps,
+    future: [],
+  })
   const cardsRef = useRef<HTMLDivElement>(null)
   const scrollerRef = useRef<HTMLDivElement>(null)
   const imgObjs = siProps.imgObjs
 
+  // Handle `history` changed.
+  // When users redo, undo or add a new record of history,
+  // we should tell the parent element to update the editor state via `onChange` function.
+  useEffect(() => {
+    onChange(history.present)
+  }, [history.present])
+
+  // Bind event listeners to add captions
   useEffect(() => {
     const cardsNode = cardsRef.current
 
+    // When user clicks other places rather than the editor
     function handleClickOutside(event: MouseEvent) {
       if (
         cardsNode?.contains(event.target as Node) &&
@@ -158,11 +218,16 @@ export function ScrollableImageEditor({
         }
 
         const newCaptions = siProps.captions.concat([caption])
-        onChange(
-          Object.assign({}, siProps, {
-            captions: newCaptions,
-          })
-        )
+        const payload = Object.assign({}, siProps, {
+          captions: newCaptions,
+        })
+
+        onChange(payload)
+
+        dispatch({
+          type: 'edit',
+          payload,
+        })
 
         // reset edit status
         setEditState(EditState.DEFAULT)
@@ -189,6 +254,39 @@ export function ScrollableImageEditor({
     }
   }, [cardsRef, editState, siProps, onChange])
 
+  // Add event listeners for undo and redo
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
+      const isCtrlOrCmd = event.ctrlKey || event.metaKey
+
+      // handle redo keys: ctrl + shift + z
+      if (isCtrlOrCmd && event.shiftKey && event.key.toLowerCase() === 'z') {
+        event.preventDefault()
+        return dispatch({
+          type: 'redo',
+        })
+      }
+
+      // handle undo keys: ctrl + z
+      if (isCtrlOrCmd && event.key.toLowerCase() === 'z') {
+        event.preventDefault()
+        return dispatch({
+          type: 'undo',
+        })
+      }
+    }
+
+    if (fullScreen) {
+      // Bind the event listener
+      document.addEventListener('keydown', handleKeyDown)
+    }
+
+    return () => {
+      // Unbind the event listener on clean up
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [fullScreen, dispatch])
+
   const cardsJsx = imgObjs.map((imgObj, idx) => {
     return (
       <Card key={idx}>
@@ -208,11 +306,14 @@ export function ScrollableImageEditor({
                   currentImg,
                   ...imgObjs.slice(idx + 2, imgObjs.length),
                 ]
-                onChange(
-                  Object.assign({}, siProps, {
-                    imgObjs: newImgObjs,
-                  })
-                )
+                const payload = Object.assign({}, siProps, {
+                  imgObjs: newImgObjs,
+                })
+                onChange(payload)
+                dispatch({
+                  type: 'edit',
+                  payload,
+                })
               }
             }}
           />
@@ -229,11 +330,14 @@ export function ScrollableImageEditor({
                   previousImg,
                   ...imgObjs.slice(idx + 1, imgObjs.length),
                 ]
-                onChange(
-                  Object.assign({}, siProps, {
-                    imgObjs: newImgObjs,
-                  })
-                )
+                const payload = Object.assign({}, siProps, {
+                  imgObjs: newImgObjs,
+                })
+                onChange(payload)
+                dispatch({
+                  type: 'edit',
+                  payload,
+                })
               }
             }}
           />
@@ -245,11 +349,14 @@ export function ScrollableImageEditor({
                 ...imgObjs.slice(idx + 1, imgObjs.length),
               ]
 
-              onChange(
-                Object.assign({}, siProps, {
-                  imgObjs: newImgObjs,
-                })
-              )
+              const payload = Object.assign({}, siProps, {
+                imgObjs: newImgObjs,
+              })
+              onChange(payload)
+              dispatch({
+                type: 'edit',
+                payload,
+              })
             }}
           />
         </CardPanel>
@@ -271,11 +378,14 @@ export function ScrollableImageEditor({
       ...prevCaptions.slice(idx + 1),
     ]
 
-    onChange(
-      Object.assign({}, siProps, {
-        captions: newCaptions,
-      })
-    )
+    const payload = Object.assign({}, siProps, {
+      captions: newCaptions,
+    })
+    onChange(payload)
+    dispatch({
+      type: 'edit',
+      payload,
+    })
   }
 
   if (!fullScreen) {
@@ -371,11 +481,14 @@ export function ScrollableImageEditor({
                     url: imgUrl,
                   },
                 ])
-                onChange(
-                  Object.assign({}, siProps, {
-                    imgObjs: newImgObjs,
-                  })
-                )
+                const payload = Object.assign({}, siProps, {
+                  imgObjs: newImgObjs,
+                })
+                onChange(payload)
+                dispatch({
+                  type: 'edit',
+                  payload,
+                })
               }}
             />
             <CaptionButton
@@ -393,7 +506,12 @@ export function ScrollableImageEditor({
           theme: siProps.theme,
         }}
         onChange={(updated) => {
-          onChange(Object.assign({}, siProps, updated))
+          const payload = Object.assign({}, siProps, updated)
+          onChange(payload)
+          dispatch({
+            type: 'edit',
+            payload,
+          })
         }}
       />
     </div>
