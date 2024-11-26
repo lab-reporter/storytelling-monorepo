@@ -23,6 +23,11 @@ import {
 import { ImgObj, Caption } from '../type'
 import { CaptionStateEnum, EditorStateEnum, ThemeEnum } from './type'
 import { ScrollableImage } from '../scrollable-image'
+import throttle from 'lodash/throttle'
+
+const _ = {
+  throttle,
+}
 
 const PreviewContainer = styled.div`
   width: 100vw;
@@ -367,20 +372,25 @@ export function ScrollableImageEditor({
   let captionsJsx = null
 
   const handleCaptionChange = (changedCaption: Caption | null, idx: number) => {
+    let newCaptions = []
     const prevCaptions = siProps.captions
     if (changedCaption === null) {
-      return [...prevCaptions.slice(0, idx), ...prevCaptions.slice(idx + 1)]
+      newCaptions = [
+        ...prevCaptions.slice(0, idx),
+        ...prevCaptions.slice(idx + 1),
+      ]
+    } else {
+      newCaptions = [
+        ...prevCaptions.slice(0, idx),
+        changedCaption,
+        ...prevCaptions.slice(idx + 1),
+      ]
     }
-
-    const newCaptions = [
-      ...prevCaptions.slice(0, idx),
-      changedCaption,
-      ...prevCaptions.slice(idx + 1),
-    ]
 
     const payload = Object.assign({}, siProps, {
       captions: newCaptions,
     })
+
     onChange(payload)
     dispatch({
       type: 'edit',
@@ -508,10 +518,11 @@ export function ScrollableImageEditor({
         onChange={(updated) => {
           const payload = Object.assign({}, siProps, updated)
           onChange(payload)
-          dispatch({
-            type: 'edit',
-            payload,
-          })
+          // Uncomment the follwing lines if we need to undo/redo configure settings
+          //dispatch({
+          //  type: 'edit',
+          //  payload,
+          //})
         }}
       />
     </div>
@@ -661,26 +672,28 @@ function CaptionTextArea({
       return
     }
 
-    const resizeObserver = new ResizeObserver((entries) => {
-      const entry = entries?.[0]
-      if (entry) {
-        const rect = entry.target.getBoundingClientRect()
+    const resizeObserver = new ResizeObserver(
+      _.throttle((entries) => {
+        const entry = entries?.[0]
+        if (entry) {
+          const rect = entry.target.getBoundingClientRect()
 
-        // @TODO to support RWD.
-        // Currently unit is `px`, which is not responsive.
-        // We might need to change the unit to `vh`.
-        const width = `${rect.width}px`
-        const height = `${rect.height}px`
+          // @TODO to support RWD.
+          // Currently unit is `px`, which is not responsive.
+          // We might need to change the unit to `vh`.
+          const width = `${rect.width}px`
+          const height = `${rect.height}px`
 
-        if (caption.width !== width || caption.height !== height) {
-          onChange({
-            ...caption,
-            width,
-            height,
-          })
+          if (caption.width !== width || caption.height !== height) {
+            onChange({
+              ...caption,
+              width,
+              height,
+            })
+          }
         }
-      }
-    })
+      }, 2000)
+    )
 
     resizeObserver.observe(textAreaNode)
 
@@ -701,6 +714,10 @@ function CaptionTextArea({
         width: caption.width,
         height: caption.height,
         cursor: cursorStyle,
+        border:
+          captionState === CaptionStateEnum.DELETABLE
+            ? '1px solid blue'
+            : 'inherit',
       }}
       onClick={(e) => {
         if (captionState === CaptionStateEnum.DEFAULT) {
