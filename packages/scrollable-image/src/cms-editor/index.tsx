@@ -372,20 +372,25 @@ export function ScrollableImageEditor({
   let captionsJsx = null
 
   const handleCaptionChange = (changedCaption: Caption | null, idx: number) => {
+    let newCaptions = []
     const prevCaptions = siProps.captions
     if (changedCaption === null) {
-      return [...prevCaptions.slice(0, idx), ...prevCaptions.slice(idx + 1)]
+      newCaptions = [
+        ...prevCaptions.slice(0, idx),
+        ...prevCaptions.slice(idx + 1),
+      ]
+    } else {
+      newCaptions = [
+        ...prevCaptions.slice(0, idx),
+        changedCaption,
+        ...prevCaptions.slice(idx + 1),
+      ]
     }
-
-    const newCaptions = [
-      ...prevCaptions.slice(0, idx),
-      changedCaption,
-      ...prevCaptions.slice(idx + 1),
-    ]
 
     const payload = Object.assign({}, siProps, {
       captions: newCaptions,
     })
+
     onChange(payload)
     dispatch({
       type: 'edit',
