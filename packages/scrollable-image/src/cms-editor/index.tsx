@@ -23,6 +23,11 @@ import {
 import { ImgObj, Caption } from '../type'
 import { CaptionStateEnum, EditorStateEnum, ThemeEnum } from './type'
 import { ScrollableImage } from '../scrollable-image'
+import throttle from 'lodash/throttle'
+
+const _ = {
+  throttle,
+}
 
 const PreviewContainer = styled.div`
   width: 100vw;
@@ -661,26 +666,28 @@ function CaptionTextArea({
       return
     }
 
-    const resizeObserver = new ResizeObserver((entries) => {
-      const entry = entries?.[0]
-      if (entry) {
-        const rect = entry.target.getBoundingClientRect()
+    const resizeObserver = new ResizeObserver(
+      _.throttle((entries) => {
+        const entry = entries?.[0]
+        if (entry) {
+          const rect = entry.target.getBoundingClientRect()
 
-        // @TODO to support RWD.
-        // Currently unit is `px`, which is not responsive.
-        // We might need to change the unit to `vh`.
-        const width = `${rect.width}px`
-        const height = `${rect.height}px`
+          // @TODO to support RWD.
+          // Currently unit is `px`, which is not responsive.
+          // We might need to change the unit to `vh`.
+          const width = `${rect.width}px`
+          const height = `${rect.height}px`
 
-        if (caption.width !== width || caption.height !== height) {
-          onChange({
-            ...caption,
-            width,
-            height,
-          })
+          if (caption.width !== width || caption.height !== height) {
+            onChange({
+              ...caption,
+              width,
+              height,
+            })
+          }
         }
-      }
-    })
+      }, 2000)
+    )
 
     resizeObserver.observe(textAreaNode)
 
