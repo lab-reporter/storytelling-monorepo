@@ -16,6 +16,10 @@ const Root = () => {
       { url: '/static/img-5.png' },
     ],
     captions: [],
+    height: '100vh',
+    maxHeight: '',
+    minHeight: '',
+    theme: 'light_mode',
   })
 
   return (
@@ -29,9 +33,11 @@ const Root = () => {
       <ScrollableImageEditor
         imgObjs={editorState.imgObjs}
         captions={editorState.captions}
-        onChange={(newEditorState) => {
-          setEditorState(newEditorState)
-        }}
+        height={editorState.height}
+        maxHeight={editorState.maxHeight}
+        minHeight={editorState.minHeight}
+        theme={editorState.theme}
+        onChange={setEditorState}
       />
     </div>
   )
