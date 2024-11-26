@@ -631,6 +631,44 @@ input ScrollableVideoCreateInput {
   customCss: String
 }
 
+type ScrollableImage {
+  id: ID!
+  name: String
+  editorState: JSON
+}
+
+input ScrollableImageWhereUniqueInput {
+  id: ID
+}
+
+input ScrollableImageWhereInput {
+  AND: [ScrollableImageWhereInput!]
+  OR: [ScrollableImageWhereInput!]
+  NOT: [ScrollableImageWhereInput!]
+  id: IDFilter
+  name: StringFilter
+}
+
+input ScrollableImageOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+}
+
+input ScrollableImageUpdateInput {
+  name: String
+  editorState: JSON
+}
+
+input ScrollableImageUpdateArgs {
+  where: ScrollableImageWhereUniqueInput!
+  data: ScrollableImageUpdateInput!
+}
+
+input ScrollableImageCreateInput {
+  name: String
+  editorState: JSON
+}
+
 type ThreeModel {
   id: ID!
   name: String
@@ -745,6 +783,12 @@ type Mutation {
   updateScrollableVideos(data: [ScrollableVideoUpdateArgs!]!): [ScrollableVideo]
   deleteScrollableVideo(where: ScrollableVideoWhereUniqueInput!): ScrollableVideo
   deleteScrollableVideos(where: [ScrollableVideoWhereUniqueInput!]!): [ScrollableVideo]
+  createScrollableImage(data: ScrollableImageCreateInput!): ScrollableImage
+  createScrollableImages(data: [ScrollableImageCreateInput!]!): [ScrollableImage]
+  updateScrollableImage(where: ScrollableImageWhereUniqueInput!, data: ScrollableImageUpdateInput!): ScrollableImage
+  updateScrollableImages(data: [ScrollableImageUpdateArgs!]!): [ScrollableImage]
+  deleteScrollableImage(where: ScrollableImageWhereUniqueInput!): ScrollableImage
+  deleteScrollableImages(where: [ScrollableImageWhereUniqueInput!]!): [ScrollableImage]
   createThreeModel(data: ThreeModelCreateInput!): ThreeModel
   createThreeModels(data: [ThreeModelCreateInput!]!): [ThreeModel]
   updateThreeModel(where: ThreeModelWhereUniqueInput!, data: ThreeModelUpdateInput!): ThreeModel
@@ -802,6 +846,9 @@ type Query {
   scrollableVideos(where: ScrollableVideoWhereInput! = {}, orderBy: [ScrollableVideoOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ScrollableVideoWhereUniqueInput): [ScrollableVideo!]
   scrollableVideo(where: ScrollableVideoWhereUniqueInput!): ScrollableVideo
   scrollableVideosCount(where: ScrollableVideoWhereInput! = {}): Int
+  scrollableImages(where: ScrollableImageWhereInput! = {}, orderBy: [ScrollableImageOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ScrollableImageWhereUniqueInput): [ScrollableImage!]
+  scrollableImage(where: ScrollableImageWhereUniqueInput!): ScrollableImage
+  scrollableImagesCount(where: ScrollableImageWhereInput! = {}): Int
   threeModels(where: ThreeModelWhereInput! = {}, orderBy: [ThreeModelOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ThreeModelWhereUniqueInput): [ThreeModel!]
   threeModel(where: ThreeModelWhereUniqueInput!): ThreeModel
   threeModelsCount(where: ThreeModelWhereInput! = {}): Int
