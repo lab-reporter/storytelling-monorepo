@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { useImmerReducer } from 'use-immer'
 import styled from '../styled-components'
 import {
   AddButton,
@@ -13,9 +14,14 @@ import {
   ClosePreviewButton,
 } from './styled'
 import { Drawer, DrawerController, DrawerProvider } from '@keystone-ui/modals'
-import { FieldLabel, TextInput } from '@keystone-ui/fields'
+import {
+  FieldLabel,
+  FieldDescription,
+  Select,
+  TextInput,
+} from '@keystone-ui/fields'
 import { ImgObj, Caption } from '../type'
-import { EditState } from './type'
+import { CaptionStateEnum, EditorStateEnum, ThemeEnum } from './type'
 import { ScrollableImage } from '../scrollable-image'
 
 const PreviewContainer = styled.div`
@@ -40,6 +46,7 @@ const Container = styled.div<{ $fullScreen: boolean }>`
         position: fixed;
         top: 0;
         left: 0;
+        z-index: 1;
       `
     }
   }}
@@ -60,7 +67,7 @@ const Panel = styled.div`
   left: 30px;
 `
 
-const Cards = styled.div<{ $editState: string }>`
+const Cards = styled.div<{ $editorState: string }>`
   display: flex;
   width: fit-content;
   min-width: calc(100% + 1px);
@@ -73,8 +80,8 @@ const Cards = styled.div<{ $editState: string }>`
 
   margin-bottom: 50px;
 
-  ${({ $editState }) => {
-    if ($editState === EditState.ADDING_TEXT) {
+  ${({ $editorState }) => {
+    if ($editorState === EditorStateEnum.ADDING_TEXT) {
       return `cursor: url(https://cdn.jsdelivr.net/npm/@story-telling-reporter/react-scrollable-image/public/icons/small-caption.svg), auto;`
     }
   }}
@@ -101,10 +108,55 @@ const CardPanel = styled.div`
   gap: 6px;
 `
 
+type HistoryDraft = {
+  past: ScrollableImageEditorProps[]
+  present: ScrollableImageEditorProps
+  future: ScrollableImageEditorProps[]
+}
+
+type HistoryAction = {
+  type: 'edit' | 'undo' | 'redo'
+  payload?: ScrollableImageEditorProps
+}
+
+function historyReducer(draft: HistoryDraft, action: HistoryAction) {
+  switch (action.type) {
+    case 'edit': {
+      if (!action.payload) {
+        return
+      }
+
+      draft.past.push(draft.present)
+      draft.present = action.payload
+      draft.future = []
+      return
+    }
+    case 'undo': {
+      if (draft.past.length === 0) {
+        return
+      }
+
+      const previous = draft.past.pop()
+      draft.future.unshift(draft.present)
+      draft.present = previous!
+      return
+    }
+    case 'redo': {
+      if (draft.future.length === 0) {
+        return
+      }
+      const next = draft.future.shift()
+      draft.past.push(draft.present)
+      draft.present = next!
+      return
+    }
+  }
+}
+
 export type ScrollableImageEditorProps = {
   imgObjs: ImgObj[]
   captions: Caption[]
-}
+} & ConfigProp
 
 export function ScrollableImageEditor({
   onChange,
@@ -112,29 +164,42 @@ export function ScrollableImageEditor({
 }: ScrollableImageEditorProps & {
   onChange: (arg: ScrollableImageEditorProps) => void
 }) {
-  const [imgObjs, setImgObjs] = useState<ImgObj[]>(siProps.imgObjs)
-  const [editState, setEditState] = useState(EditState.DEFAULT)
-  const [captions, setCaptions] = useState<Caption[]>(siProps.captions)
+  const [editorState, setEditorState] = useState(EditorStateEnum.DEFAULT)
   const [fullScreen, setFullScreen] = useState(false)
   const [preview, setPreview] = useState(false)
+  const [history, dispatch] = useImmerReducer(historyReducer, {
+    past: [],
+    present: siProps,
+    future: [],
+  })
   const cardsRef = useRef<HTMLDivElement>(null)
   const scrollerRef = useRef<HTMLDivElement>(null)
+  const imgObjs = siProps.imgObjs
 
+  // Handle `history` changed.
+  // When users redo, undo or add a new record of history,
+  // we should tell the parent element to update the editor state via `onChange` function.
+  useEffect(() => {
+    onChange(history.present)
+  }, [history.present])
+
+  // Bind event listeners to add captions
   useEffect(() => {
     const cardsNode = cardsRef.current
 
+    // When user clicks other places rather than the editor
     function handleClickOutside(event: MouseEvent) {
       if (
         cardsNode?.contains(event.target as Node) &&
-        editState === EditState.ADDING_TEXT
+        editorState === EditorStateEnum.ADDING_TEXT
       ) {
         // reset edit status
-        setEditState(EditState.DEFAULT)
+        setEditorState(EditorStateEnum.DEFAULT)
       }
     }
 
     function handleAddCaption(event: MouseEvent) {
-      if (cardsNode && editState === EditState.ADDING_TEXT) {
+      if (cardsNode && editorState === EditorStateEnum.ADDING_TEXT) {
         const rect = (
           event.currentTarget as HTMLElement
         ).getBoundingClientRect()
@@ -152,22 +217,26 @@ export function ScrollableImageEditor({
           height: '80px',
         }
 
-        const newCaptions = captions.concat([caption])
-        setCaptions(newCaptions)
-        onChange(
-          Object.assign({}, siProps, {
-            captions: newCaptions,
-          })
-        )
+        const newCaptions = siProps.captions.concat([caption])
+        const payload = Object.assign({}, siProps, {
+          captions: newCaptions,
+        })
+
+        onChange(payload)
+
+        dispatch({
+          type: 'edit',
+          payload,
+        })
 
         // reset edit status
-        setEditState(EditState.DEFAULT)
+        setEditorState(EditorStateEnum.DEFAULT)
       }
     }
 
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === 'Escape' || event.keyCode === 27) {
-        setEditState(EditState.DEFAULT)
+        setEditorState(EditorStateEnum.DEFAULT)
         return
       }
     }
@@ -183,7 +252,40 @@ export function ScrollableImageEditor({
       document.removeEventListener('keydown', handleKeyDown)
       cardsNode?.removeEventListener('mousedown', handleAddCaption)
     }
-  }, [cardsRef, editState, captions])
+  }, [cardsRef, editorState, siProps, onChange])
+
+  // Add event listeners for undo and redo
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
+      const isCtrlOrCmd = event.ctrlKey || event.metaKey
+
+      // handle redo keys: ctrl + shift + z
+      if (isCtrlOrCmd && event.shiftKey && event.key.toLowerCase() === 'z') {
+        event.preventDefault()
+        return dispatch({
+          type: 'redo',
+        })
+      }
+
+      // handle undo keys: ctrl + z
+      if (isCtrlOrCmd && event.key.toLowerCase() === 'z') {
+        event.preventDefault()
+        return dispatch({
+          type: 'undo',
+        })
+      }
+    }
+
+    if (fullScreen) {
+      // Bind the event listener
+      document.addEventListener('keydown', handleKeyDown)
+    }
+
+    return () => {
+      // Unbind the event listener on clean up
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [fullScreen, dispatch])
 
   const cardsJsx = imgObjs.map((imgObj, idx) => {
     return (
@@ -204,12 +306,14 @@ export function ScrollableImageEditor({
                   currentImg,
                   ...imgObjs.slice(idx + 2, imgObjs.length),
                 ]
-                setImgObjs(newImgObjs)
-                onChange(
-                  Object.assign({}, siProps, {
-                    imgObjs: newImgObjs,
-                  })
-                )
+                const payload = Object.assign({}, siProps, {
+                  imgObjs: newImgObjs,
+                })
+                onChange(payload)
+                dispatch({
+                  type: 'edit',
+                  payload,
+                })
               }
             }}
           />
@@ -226,12 +330,14 @@ export function ScrollableImageEditor({
                   previousImg,
                   ...imgObjs.slice(idx + 1, imgObjs.length),
                 ]
-                setImgObjs(newImgObjs)
-                onChange(
-                  Object.assign({}, siProps, {
-                    imgObjs: newImgObjs,
-                  })
-                )
+                const payload = Object.assign({}, siProps, {
+                  imgObjs: newImgObjs,
+                })
+                onChange(payload)
+                dispatch({
+                  type: 'edit',
+                  payload,
+                })
               }
             }}
           />
@@ -243,12 +349,14 @@ export function ScrollableImageEditor({
                 ...imgObjs.slice(idx + 1, imgObjs.length),
               ]
 
-              setImgObjs(newImgObjs)
-              onChange(
-                Object.assign({}, siProps, {
-                  imgObjs: newImgObjs,
-                })
-              )
+              const payload = Object.assign({}, siProps, {
+                imgObjs: newImgObjs,
+              })
+              onChange(payload)
+              dispatch({
+                type: 'edit',
+                payload,
+              })
             }}
           />
         </CardPanel>
@@ -259,29 +367,29 @@ export function ScrollableImageEditor({
   let captionsJsx = null
 
   const handleCaptionChange = (changedCaption: Caption | null, idx: number) => {
-    setCaptions((prevCaptions) => {
-      if (changedCaption === null) {
-        return [...prevCaptions.slice(0, idx), ...prevCaptions.slice(idx + 1)]
-      }
+    const prevCaptions = siProps.captions
+    if (changedCaption === null) {
+      return [...prevCaptions.slice(0, idx), ...prevCaptions.slice(idx + 1)]
+    }
 
-      const newCaptions = [
-        ...prevCaptions.slice(0, idx),
-        changedCaption,
-        ...prevCaptions.slice(idx + 1),
-      ]
+    const newCaptions = [
+      ...prevCaptions.slice(0, idx),
+      changedCaption,
+      ...prevCaptions.slice(idx + 1),
+    ]
 
-      onChange(
-        Object.assign({}, siProps, {
-          captions: newCaptions,
-        })
-      )
-
-      return newCaptions
+    const payload = Object.assign({}, siProps, {
+      captions: newCaptions,
+    })
+    onChange(payload)
+    dispatch({
+      type: 'edit',
+      payload,
     })
   }
 
   if (!fullScreen) {
-    captionsJsx = captions.map((caption, idx) => {
+    captionsJsx = siProps.captions.map((caption, idx) => {
       return (
         <CaptionIconBlock
           key={idx}
@@ -295,7 +403,7 @@ export function ScrollableImageEditor({
       )
     })
   } else {
-    captionsJsx = captions.map((caption, idx) => {
+    captionsJsx = siProps.captions.map((caption, idx) => {
       return (
         <CaptionTextArea
           key={idx}
@@ -339,7 +447,11 @@ export function ScrollableImageEditor({
         <div style={{ height: '50vh', width: '1px' }} />
         <ScrollableImage
           imgObjs={imgObjs}
-          captions={captions}
+          captions={siProps.captions}
+          height={siProps.height}
+          minHeight={siProps.minHeight}
+          maxHeight={siProps.maxHeight}
+          darkMode={siProps.theme === ThemeEnum.DARK_MODE}
           scrollerRef={scrollerRef}
         />
         <div style={{ height: '50vh', width: '1px' }} />
@@ -348,36 +460,61 @@ export function ScrollableImageEditor({
   }
 
   return (
-    <Container $fullScreen={fullScreen}>
-      <CardsContainer>
-        <Cards $editState={editState} ref={cardsRef}>
-          {captionsJsx}
-          {cardsJsx}
-        </Cards>
-        <Panel>
-          {zoomButtonJsx}
-          <OpenPreviewButton
-            onClick={() => {
-              setPreview(true)
-            }}
-          />
-          <AddImageButton
-            onChange={(imgUrl) => {
-              const newImgObjs = imgObjs.concat([
-                {
-                  url: imgUrl,
-                },
-              ])
-              setImgObjs(newImgObjs)
-            }}
-          />
-          <CaptionButton
-            focus={editState === EditState.ADDING_TEXT}
-            onClick={() => setEditState(EditState.ADDING_TEXT)}
-          />
-        </Panel>
-      </CardsContainer>
-    </Container>
+    <div>
+      <Container $fullScreen={fullScreen}>
+        <CardsContainer>
+          <Cards $editorState={editorState} ref={cardsRef}>
+            {captionsJsx}
+            {cardsJsx}
+          </Cards>
+          <Panel>
+            {zoomButtonJsx}
+            <OpenPreviewButton
+              onClick={() => {
+                setPreview(true)
+              }}
+            />
+            <AddImageButton
+              onChange={(imgUrl) => {
+                const newImgObjs = imgObjs.concat([
+                  {
+                    url: imgUrl,
+                  },
+                ])
+                const payload = Object.assign({}, siProps, {
+                  imgObjs: newImgObjs,
+                })
+                onChange(payload)
+                dispatch({
+                  type: 'edit',
+                  payload,
+                })
+              }}
+            />
+            <CaptionButton
+              focus={editorState === EditorStateEnum.ADDING_TEXT}
+              onClick={() => setEditorState(EditorStateEnum.ADDING_TEXT)}
+            />
+          </Panel>
+        </CardsContainer>
+      </Container>
+      <ConfigInput
+        inputValue={{
+          height: siProps.height,
+          maxHeight: siProps.maxHeight,
+          minHeight: siProps.minHeight,
+          theme: siProps.theme,
+        }}
+        onChange={(updated) => {
+          const payload = Object.assign({}, siProps, updated)
+          onChange(payload)
+          dispatch({
+            type: 'edit',
+            payload,
+          })
+        }}
+      />
+    </div>
   )
 }
 
@@ -392,40 +529,41 @@ function CaptionTextArea({
   caption: Caption
   onChange: (caption: Caption | null) => void
 }) {
-  const [editState, setEditState] = useState(EditState.DEFAULT)
+  const [captionState, setCaptionState] = useState(CaptionStateEnum.DEFAULT)
   const textAreaRef = useRef<HTMLTextAreaElement>(null)
 
   let cursorStyle = 'default'
-  switch (editState) {
-    case EditState.EDIT_TEXT:
+  switch (captionState) {
+    case CaptionStateEnum.EDIT_TEXT:
       cursorStyle = 'auto'
       break
-    case EditState.DELETABLE:
-    case EditState.DEFAULT:
+    case CaptionStateEnum.DELETABLE:
+    case CaptionStateEnum.DEFAULT:
     default: {
       cursorStyle = 'default'
       break
     }
   }
 
-  // handle `editState` changes
+  // handle `captionState` changes
   useEffect(() => {
     const textAreaNode = textAreaRef.current
 
     function handleClickOutside(event: MouseEvent) {
       if (!textAreaNode?.contains(event.target as Node)) {
         // reset edit status
-        setEditState(EditState.DEFAULT)
+        setCaptionState(CaptionStateEnum.DEFAULT)
       }
     }
 
     function handleKeyDown(event: KeyboardEvent) {
       if (
         event.key === 'Delete' ||
-        (event.key === 'Backspace' && editState === EditState.DELETABLE)
+        (event.key === 'Backspace' &&
+          captionState === CaptionStateEnum.DELETABLE)
       ) {
         onChange(null)
-        setEditState(EditState.DEFAULT)
+        setCaptionState(CaptionStateEnum.DEFAULT)
         return
       }
     }
@@ -439,7 +577,7 @@ function CaptionTextArea({
       document.removeEventListener('mousedown', handleClickOutside)
       document.removeEventListener('keydown', handleKeyDown)
     }
-  }, [editState])
+  }, [captionState, onChange])
 
   // Handle drag and drop,
   // and re-calculate `CaptionTextArea` positions.
@@ -458,8 +596,8 @@ function CaptionTextArea({
 
     function drag(event: MouseEvent) {
       if (
-        (editState === EditState.DELETABLE ||
-          editState === EditState.DEFAULT) &&
+        (captionState === CaptionStateEnum.DELETABLE ||
+          captionState === CaptionStateEnum.DEFAULT) &&
         textAreaNode
       ) {
         isDragging = true
@@ -513,7 +651,7 @@ function CaptionTextArea({
       document.removeEventListener('mousemove', dragging)
       document.removeEventListener('mouseup', drop)
     }
-  }, [editState, caption])
+  }, [captionState, caption, onChange])
 
   // handle textarea element resize
   useEffect(() => {
@@ -550,13 +688,13 @@ function CaptionTextArea({
       resizeObserver.unobserve(textAreaNode)
       resizeObserver.disconnect()
     }
-  }, [caption])
+  }, [caption, onChange])
 
   return (
     <TextArea
       ref={textAreaRef}
       className={className}
-      readOnly={editState !== EditState.EDIT_TEXT}
+      readOnly={captionState !== CaptionStateEnum.EDIT_TEXT}
       style={{
         position: 'absolute',
         ...caption.position,
@@ -565,15 +703,15 @@ function CaptionTextArea({
         cursor: cursorStyle,
       }}
       onClick={(e) => {
-        if (editState === EditState.DEFAULT) {
+        if (captionState === CaptionStateEnum.DEFAULT) {
           e.preventDefault()
           e.stopPropagation()
-          setEditState(EditState.DELETABLE)
+          setCaptionState(CaptionStateEnum.DELETABLE)
           return
         }
 
-        if (editState === EditState.DELETABLE) {
-          return setEditState(EditState.EDIT_TEXT)
+        if (captionState === CaptionStateEnum.DELETABLE) {
+          return setCaptionState(CaptionStateEnum.EDIT_TEXT)
         }
       }}
       onChange={(e) => {
@@ -641,6 +779,104 @@ function AddImageButton({
         }}
       />
     </React.Fragment>
+  )
+}
+
+type ConfigProp = {
+  height?: string
+  maxHeight?: string
+  minHeight?: string
+  theme?: ThemeEnum
+}
+
+const themeOptions = [
+  {
+    label: 'Light Mode',
+    value: ThemeEnum.LIGHT_MODE,
+  },
+  {
+    label: 'Dark Mode',
+    value: ThemeEnum.DARK_MODE,
+  },
+]
+
+function ConfigInput({
+  inputValue,
+  onChange,
+}: {
+  inputValue: ConfigProp
+  onChange: (arg: ConfigProp) => void
+}) {
+  const selectedThemeValue =
+    themeOptions.find((option) => option.value === inputValue.theme) ?? null
+
+  return (
+    <>
+      <MarginTop />
+      <FieldLabel>圖片高度</FieldLabel>
+      <FieldDescription id="height">
+        預設值為100vh，圖片的高度會與視窗等高（滿版）。
+      </FieldDescription>
+      <TextInput
+        onChange={(e) => {
+          onChange(
+            Object.assign({}, inputValue, {
+              height: e.target.value,
+            })
+          )
+        }}
+        type="text"
+        defaultValue={inputValue?.height}
+      />
+      <MarginTop />
+      <FieldLabel>圖片最大高度</FieldLabel>
+      <FieldDescription id="config-max-height">
+        預設為不設定。此設定適用於大螢幕，當「圖片高度」設定成100vh時，圖片會與螢幕等高，可能造成圖片過大；而此設定可以限制圖片高度。例如：設定「圖片最大高度」為800px時，螢幕若高於800px，則圖片不會跟著一起變大，而是停留在800px高。
+      </FieldDescription>
+      <TextInput
+        onChange={(e) => {
+          onChange(
+            Object.assign({}, inputValue, {
+              maxHeight: e.target.value,
+            })
+          )
+        }}
+        type="text"
+        defaultValue={inputValue?.maxHeight}
+      />
+      <MarginTop />
+      <FieldLabel>圖片最小高度</FieldLabel>
+      <FieldDescription id="config-min-height">
+        預設為不設定。此設定適用於螢幕高度太小的情況，當「圖片高度」設定成100vh時，圖片會與螢幕等高，可能造成圖片過小；而此設定可以限制圖片高度。例如：設定「圖片最小高度」為500px時，螢幕高度若低於500px，則圖片不會跟著一起變小，而是停留在500px高。
+      </FieldDescription>
+      <TextInput
+        onChange={(e) => {
+          onChange(
+            Object.assign({}, inputValue, {
+              minHeight: e.target.value,
+            })
+          )
+        }}
+        type="text"
+        defaultValue={inputValue?.minHeight}
+      />
+      <MarginTop />
+      <FieldLabel>主題色</FieldLabel>
+      <Select
+        isClearable
+        options={themeOptions}
+        onChange={(option) => {
+          if (option) {
+            onChange(
+              Object.assign({}, inputValue, {
+                theme: option.value,
+              })
+            )
+          }
+        }}
+        value={selectedThemeValue}
+      />
+    </>
   )
 }
 
