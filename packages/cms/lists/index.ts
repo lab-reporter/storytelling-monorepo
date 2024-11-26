@@ -7,6 +7,7 @@ import SubtitledAudio from './subtitled-audio'
 import ScrollToAudio from './scroll-to-audio'
 import ScrollableThreeModel from './scrollable-three-model'
 import ScrollableVideo from './scrollable-video'
+import ScrollableImage from './scrollable-image'
 import ThreeModel from './three-model'
 
 export const listDefinition = {
@@ -19,5 +20,6 @@ export const listDefinition = {
   ScrollToAudio,
   ScrollableThreeModel,
   ScrollableVideo,
+  ScrollableImage,
   ThreeModel,
 }
