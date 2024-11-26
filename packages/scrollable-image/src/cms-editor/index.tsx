@@ -713,6 +713,10 @@ function CaptionTextArea({
         width: caption.width,
         height: caption.height,
         cursor: cursorStyle,
+        border:
+          captionState === CaptionStateEnum.DELETABLE
+            ? '1px solid blue'
+            : 'inherit',
       }}
       onClick={(e) => {
         if (captionState === CaptionStateEnum.DEFAULT) {
