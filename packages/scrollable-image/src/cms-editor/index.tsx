@@ -518,10 +518,11 @@ export function ScrollableImageEditor({
         onChange={(updated) => {
           const payload = Object.assign({}, siProps, updated)
           onChange(payload)
-          dispatch({
-            type: 'edit',
-            payload,
-          })
+          // Uncomment the follwing lines if we need to undo/redo configure settings
+          //dispatch({
+          //  type: 'edit',
+          //  payload,
+          //})
         }}
       />
     </div>
