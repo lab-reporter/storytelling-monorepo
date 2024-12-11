@@ -1,9 +1,7 @@
 import React from 'react'
 import styled from '../styled-components'
 import { CSSProperties } from 'styled-components'
-
-const urlPrefix =
-  'https://cdn.jsdelivr.net/npm/@story-telling-reporter/react-scrollable-image/public/icons'
+import { cdnPrefixForIcons as cdnPrefix } from './constants'
 
 const Icon = styled.div<{
   $bgImg?: string
@@ -37,9 +35,9 @@ export const ZoomInButton = styled(Icon)`
   width: 50px;
   height: 50px;
 
-  background-image: url(${urlPrefix + '/zoom-in.svg'});
+  background-image: url(${cdnPrefix + '/zoom-in.svg'});
   &:hover {
-    background-image: url(${urlPrefix + '/zoom-in.hover.svg'});
+    background-image: url(${cdnPrefix + '/zoom-in.hover.svg'});
   }
 `
 
@@ -47,9 +45,9 @@ export const ZoomOutButton = styled(Icon)`
   width: 50px;
   height: 50px;
 
-  background-image: url(${urlPrefix + '/zoom-out.svg'});
+  background-image: url(${cdnPrefix + '/zoom-out.svg'});
   &:hover {
-    background-image: url(${urlPrefix + '/zoom-out.hover.svg'});
+    background-image: url(${cdnPrefix + '/zoom-out.hover.svg'});
   }
 `
 
@@ -63,16 +61,16 @@ export function AddButton(props: IconProps) {
         height: '50px',
         ...props?.style,
       }}
-      $bgImg={urlPrefix + '/add.svg'}
-      $hoverBgImg={urlPrefix + '/add.hover.svg'}
+      $bgImg={cdnPrefix + '/add.svg'}
+      $hoverBgImg={cdnPrefix + '/add.hover.svg'}
     />
   )
 }
 
 export function CaptionButton(props: IconProps) {
   const bgImg = props.focus
-    ? urlPrefix + '/caption.hover.svg'
-    : urlPrefix + '/caption.svg'
+    ? cdnPrefix + '/caption.hover.svg'
+    : cdnPrefix + '/caption.svg'
 
   return (
     <Icon
@@ -84,7 +82,7 @@ export function CaptionButton(props: IconProps) {
         ...props.style,
       }}
       $bgImg={bgImg}
-      $hoverBgImg={urlPrefix + '/caption.hover.svg'}
+      $hoverBgImg={cdnPrefix + '/caption.hover.svg'}
     />
   )
 }
@@ -93,9 +91,9 @@ export const SmallCaptionIcon = styled(Icon)`
   width: '20px';
   height: '20px';
 
-  background-image: url(${urlPrefix + '/small-caption.svg'});
+  background-image: url(${cdnPrefix + '/small-caption.svg'});
   &:hover {
-    background-image: url(${urlPrefix + '/small-caption.svg'});
+    background-image: url(${cdnPrefix + '/small-caption.svg'});
   }
 `
 
@@ -104,8 +102,8 @@ export function DeleteButton(props: IconProps) {
     <Icon
       className={props?.className}
       onClick={props?.onClick}
-      $bgImg={urlPrefix + '/delete.svg'}
-      $hoverBgImg={urlPrefix + '/delete.hover.svg'}
+      $bgImg={cdnPrefix + '/delete.svg'}
+      $hoverBgImg={cdnPrefix + '/delete.hover.svg'}
     />
   )
 }
@@ -115,8 +113,8 @@ export function SwitchPrevButton(props: IconProps) {
     return (
       <Icon
         className={props?.className}
-        $bgImg={urlPrefix + '/switch-prev.disabled.svg'}
-        $hoverBgImg={urlPrefix + '/switch-prev.disabled.svg'}
+        $bgImg={cdnPrefix + '/switch-prev.disabled.svg'}
+        $hoverBgImg={cdnPrefix + '/switch-prev.disabled.svg'}
         style={{
           cursor: 'default',
           ...props.style,
@@ -128,8 +126,8 @@ export function SwitchPrevButton(props: IconProps) {
     <Icon
       className={props?.className}
       onClick={props?.onClick}
-      $bgImg={urlPrefix + '/switch-prev.svg'}
-      $hoverBgImg={urlPrefix + '/switch-prev.hover.svg'}
+      $bgImg={cdnPrefix + '/switch-prev.svg'}
+      $hoverBgImg={cdnPrefix + '/switch-prev.hover.svg'}
     />
   )
 }
@@ -139,8 +137,8 @@ export function SwitchNextButton(props: IconProps) {
     return (
       <Icon
         className={props?.className}
-        $bgImg={urlPrefix + '/switch-next.disabled.svg'}
-        $hoverBgImg={urlPrefix + '/switch-next.disabled.svg'}
+        $bgImg={cdnPrefix + '/switch-next.disabled.svg'}
+        $hoverBgImg={cdnPrefix + '/switch-next.disabled.svg'}
         style={{
           cursor: 'default',
           ...props.style,
@@ -152,8 +150,8 @@ export function SwitchNextButton(props: IconProps) {
     <Icon
       className={props?.className}
       onClick={props?.onClick}
-      $bgImg={urlPrefix + '/switch-next.svg'}
-      $hoverBgImg={urlPrefix + '/switch-next.hover.svg'}
+      $bgImg={cdnPrefix + '/switch-next.svg'}
+      $hoverBgImg={cdnPrefix + '/switch-next.hover.svg'}
     />
   )
 }
@@ -162,9 +160,9 @@ export const OpenPreviewButton = styled(Icon)`
   width: 50px;
   height: 50px;
 
-  background-image: url(${urlPrefix + '/open-preview.svg'});
+  background-image: url(${cdnPrefix + '/open-preview.svg'});
   &:hover {
-    background-image: url(${urlPrefix + '/open-preview.hover.svg'});
+    background-image: url(${cdnPrefix + '/open-preview.hover.svg'});
   }
 `
 
@@ -172,8 +170,8 @@ export const ClosePreviewButton = styled(Icon)`
   width: 50px;
   height: 50px;
 
-  background-image: url(${urlPrefix + '/close-preview.svg'});
+  background-image: url(${cdnPrefix + '/close-preview.svg'});
   &:hover {
-    background-image: url(${urlPrefix + '/close-preview.hover.svg'});
+    background-image: url(${cdnPrefix + '/close-preview.hover.svg'});
   }
 `

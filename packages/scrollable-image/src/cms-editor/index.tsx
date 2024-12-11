@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { useImmerReducer } from 'use-immer'
+import throttle from 'lodash/throttle'
 import styled from '../styled-components'
 import {
   AddButton,
@@ -13,6 +13,7 @@ import {
   OpenPreviewButton,
   ClosePreviewButton,
 } from './styled'
+import { CaptionStateEnum, EditorStateEnum, ThemeEnum } from './type'
 import { Drawer, DrawerController, DrawerProvider } from '@keystone-ui/modals'
 import {
   FieldLabel,
@@ -21,9 +22,12 @@ import {
   TextInput,
 } from '@keystone-ui/fields'
 import { ImgObj, Caption } from '../type'
-import { CaptionStateEnum, EditorStateEnum, ThemeEnum } from './type'
+import {
+  LexicalTextEditor,
+  emptyEditorStateJSONString,
+} from './lexical-text-editor/index'
 import { ScrollableImage } from '../scrollable-image'
-import throttle from 'lodash/throttle'
+import { useImmerReducer } from 'use-immer'
 
 const _ = {
   throttle,
@@ -143,7 +147,9 @@ function historyReducer(draft: HistoryDraft, action: HistoryAction) {
 
       const previous = draft.past.pop()
       draft.future.unshift(draft.present)
-      draft.present = previous!
+      if (previous) {
+        draft.present = previous
+      }
       return
     }
     case 'redo': {
@@ -152,7 +158,9 @@ function historyReducer(draft: HistoryDraft, action: HistoryAction) {
       }
       const next = draft.future.shift()
       draft.past.push(draft.present)
-      draft.present = next!
+      if (next) {
+        draft.present = next
+      }
       return
     }
   }
@@ -186,7 +194,7 @@ export function ScrollableImageEditor({
   // we should tell the parent element to update the editor state via `onChange` function.
   useEffect(() => {
     onChange(history.present)
-  }, [history.present])
+  }, [history.present, onChange])
 
   // Bind event listeners to add captions
   useEffect(() => {
@@ -213,13 +221,13 @@ export function ScrollableImageEditor({
         const cardsWidth = cardsNode.offsetWidth
         const cardsHeight = cardsNode.offsetHeight
         const caption: Caption = {
-          data: '',
+          data: emptyEditorStateJSONString,
           position: {
             left: `${parseFloat((x / cardsWidth).toFixed(4)) * 100}%`,
             top: `${parseFloat((y / cardsHeight).toFixed(4)) * 100}%`,
           },
           width: '100px',
-          height: '80px',
+          height: '152px',
         }
 
         const newCaptions = siProps.captions.concat([caption])
@@ -257,7 +265,7 @@ export function ScrollableImageEditor({
       document.removeEventListener('keydown', handleKeyDown)
       cardsNode?.removeEventListener('mousedown', handleAddCaption)
     }
-  }, [cardsRef, editorState, siProps, onChange])
+  }, [cardsRef, editorState, siProps, onChange, dispatch])
 
   // Add event listeners for undo and redo
   useEffect(() => {
@@ -290,7 +298,7 @@ export function ScrollableImageEditor({
       // Unbind the event listener on clean up
       document.removeEventListener('keydown', handleKeyDown)
     }
-  }, [fullScreen, dispatch])
+  }, [fullScreen, dispatch, onChange])
 
   const cardsJsx = imgObjs.map((imgObj, idx) => {
     return (
@@ -529,8 +537,6 @@ export function ScrollableImageEditor({
   )
 }
 
-const TextArea = styled.textarea``
-
 function CaptionTextArea({
   className,
   caption,
@@ -541,7 +547,7 @@ function CaptionTextArea({
   onChange: (caption: Caption | null) => void
 }) {
   const [captionState, setCaptionState] = useState(CaptionStateEnum.DEFAULT)
-  const textAreaRef = useRef<HTMLTextAreaElement>(null)
+  const textAreaRef = useRef<HTMLDivElement>(null)
 
   let cursorStyle = 'default'
   switch (captionState) {
@@ -614,7 +620,6 @@ function CaptionTextArea({
         isDragging = true
         startX = event.clientX
         startY = event.clientY
-        event.preventDefault()
       }
     }
 
@@ -704,10 +709,9 @@ function CaptionTextArea({
   }, [caption, onChange])
 
   return (
-    <TextArea
+    <div
       ref={textAreaRef}
       className={className}
-      readOnly={captionState !== CaptionStateEnum.EDIT_TEXT}
       style={{
         position: 'absolute',
         ...caption.position,
@@ -718,11 +722,11 @@ function CaptionTextArea({
           captionState === CaptionStateEnum.DELETABLE
             ? '1px solid blue'
             : 'inherit',
+        resize: captionState === CaptionStateEnum.EDIT_TEXT ? 'both' : 'none',
+        overflow: 'auto',
       }}
-      onClick={(e) => {
+      onClick={() => {
         if (captionState === CaptionStateEnum.DEFAULT) {
-          e.preventDefault()
-          e.stopPropagation()
           setCaptionState(CaptionStateEnum.DELETABLE)
           return
         }
@@ -731,15 +735,18 @@ function CaptionTextArea({
           return setCaptionState(CaptionStateEnum.EDIT_TEXT)
         }
       }}
-      onChange={(e) => {
-        const data = e.target.value
-        onChange({
-          ...caption,
-          data,
-        })
-      }}
-      value={caption.data}
-    />
+    >
+      <LexicalTextEditor
+        readOnly={captionState === CaptionStateEnum.DEFAULT}
+        onChange={(lexcialEditorStateJSONString) => {
+          onChange({
+            ...caption,
+            data: lexcialEditorStateJSONString,
+          })
+        }}
+        editorStateJSONString={caption.data}
+      />
+    </div>
   )
 }
 
