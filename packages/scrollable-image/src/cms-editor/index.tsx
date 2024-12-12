@@ -67,6 +67,8 @@ const CardsContainer = styled.div`
   overflow: scroll;
 
   position: relative;
+
+  user-select: none;
 `
 
 const Panel = styled.div`
