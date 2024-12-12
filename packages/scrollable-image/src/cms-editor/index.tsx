@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { useImmerReducer } from 'use-immer'
+import throttle from 'lodash/throttle'
 import styled from '../styled-components'
 import {
   AddButton,
@@ -13,6 +13,7 @@ import {
   OpenPreviewButton,
   ClosePreviewButton,
 } from './styled'
+import { CaptionStateEnum, EditorStateEnum, ThemeEnum } from './type'
 import { Drawer, DrawerController, DrawerProvider } from '@keystone-ui/modals'
 import {
   FieldLabel,
@@ -21,9 +22,12 @@ import {
   TextInput,
 } from '@keystone-ui/fields'
 import { ImgObj, Caption } from '../type'
-import { CaptionStateEnum, EditorStateEnum, ThemeEnum } from './type'
+import {
+  LexicalTextEditor,
+  emptyEditorStateJSONString,
+} from './lexical-text-editor/index'
 import { ScrollableImage } from '../scrollable-image'
-import throttle from 'lodash/throttle'
+import { useImmerReducer } from 'use-immer'
 
 const _ = {
   throttle,
@@ -63,6 +67,8 @@ const CardsContainer = styled.div`
   overflow: scroll;
 
   position: relative;
+
+  user-select: none;
 `
 
 const Panel = styled.div`
@@ -143,7 +149,9 @@ function historyReducer(draft: HistoryDraft, action: HistoryAction) {
 
       const previous = draft.past.pop()
       draft.future.unshift(draft.present)
-      draft.present = previous!
+      if (previous) {
+        draft.present = previous
+      }
       return
     }
     case 'redo': {
@@ -152,7 +160,9 @@ function historyReducer(draft: HistoryDraft, action: HistoryAction) {
       }
       const next = draft.future.shift()
       draft.past.push(draft.present)
-      draft.present = next!
+      if (next) {
+        draft.present = next
+      }
       return
     }
   }
@@ -186,7 +196,7 @@ export function ScrollableImageEditor({
   // we should tell the parent element to update the editor state via `onChange` function.
   useEffect(() => {
     onChange(history.present)
-  }, [history.present])
+  }, [history.present, onChange])
 
   // Bind event listeners to add captions
   useEffect(() => {
@@ -213,13 +223,13 @@ export function ScrollableImageEditor({
         const cardsWidth = cardsNode.offsetWidth
         const cardsHeight = cardsNode.offsetHeight
         const caption: Caption = {
-          data: '',
+          data: emptyEditorStateJSONString,
           position: {
             left: `${parseFloat((x / cardsWidth).toFixed(4)) * 100}%`,
             top: `${parseFloat((y / cardsHeight).toFixed(4)) * 100}%`,
           },
           width: '100px',
-          height: '80px',
+          height: '152px',
         }
 
         const newCaptions = siProps.captions.concat([caption])
@@ -257,7 +267,7 @@ export function ScrollableImageEditor({
       document.removeEventListener('keydown', handleKeyDown)
       cardsNode?.removeEventListener('mousedown', handleAddCaption)
     }
-  }, [cardsRef, editorState, siProps, onChange])
+  }, [cardsRef, editorState, siProps, onChange, dispatch])
 
   // Add event listeners for undo and redo
   useEffect(() => {
@@ -290,7 +300,7 @@ export function ScrollableImageEditor({
       // Unbind the event listener on clean up
       document.removeEventListener('keydown', handleKeyDown)
     }
-  }, [fullScreen, dispatch])
+  }, [fullScreen, dispatch, onChange])
 
   const cardsJsx = imgObjs.map((imgObj, idx) => {
     return (
@@ -529,8 +539,6 @@ export function ScrollableImageEditor({
   )
 }
 
-const TextArea = styled.textarea``
-
 function CaptionTextArea({
   className,
   caption,
@@ -541,14 +549,15 @@ function CaptionTextArea({
   onChange: (caption: Caption | null) => void
 }) {
   const [captionState, setCaptionState] = useState(CaptionStateEnum.DEFAULT)
-  const textAreaRef = useRef<HTMLTextAreaElement>(null)
+  const clickTsRef = useRef<number>(0)
+  const textAreaRef = useRef<HTMLDivElement>(null)
 
   let cursorStyle = 'default'
   switch (captionState) {
     case CaptionStateEnum.EDIT_TEXT:
       cursorStyle = 'auto'
       break
-    case CaptionStateEnum.DELETABLE:
+    case CaptionStateEnum.FOCUS:
     case CaptionStateEnum.DEFAULT:
     default: {
       cursorStyle = 'default'
@@ -570,8 +579,7 @@ function CaptionTextArea({
     function handleKeyDown(event: KeyboardEvent) {
       if (
         event.key === 'Delete' ||
-        (event.key === 'Backspace' &&
-          captionState === CaptionStateEnum.DELETABLE)
+        (event.key === 'Backspace' && captionState === CaptionStateEnum.FOCUS)
       ) {
         onChange(null)
         setCaptionState(CaptionStateEnum.DEFAULT)
@@ -606,15 +614,10 @@ function CaptionTextArea({
     let deltaY = 0
 
     function drag(event: MouseEvent) {
-      if (
-        (captionState === CaptionStateEnum.DELETABLE ||
-          captionState === CaptionStateEnum.DEFAULT) &&
-        textAreaNode
-      ) {
+      if (captionState === CaptionStateEnum.FOCUS && textAreaNode) {
         isDragging = true
         startX = event.clientX
         startY = event.clientY
-        event.preventDefault()
       }
     }
 
@@ -676,13 +679,17 @@ function CaptionTextArea({
       _.throttle((entries) => {
         const entry = entries?.[0]
         if (entry) {
+          const minWidth = 20
+          const minHeight = 20
           const rect = entry.target.getBoundingClientRect()
 
           // @TODO to support RWD.
           // Currently unit is `px`, which is not responsive.
           // We might need to change the unit to `vh`.
-          const width = `${rect.width}px`
-          const height = `${rect.height}px`
+          const width =
+            rect.width > minWidth ? `${rect.width}px` : `${minWidth}px`
+          const height =
+            rect.height > minHeight ? `${rect.height}px` : `${minHeight}px`
 
           if (caption.width !== width || caption.height !== height) {
             onChange({
@@ -704,10 +711,9 @@ function CaptionTextArea({
   }, [caption, onChange])
 
   return (
-    <TextArea
+    <div
       ref={textAreaRef}
       className={className}
-      readOnly={captionState !== CaptionStateEnum.EDIT_TEXT}
       style={{
         position: 'absolute',
         ...caption.position,
@@ -715,31 +721,42 @@ function CaptionTextArea({
         height: caption.height,
         cursor: cursorStyle,
         border:
-          captionState === CaptionStateEnum.DELETABLE
+          captionState === CaptionStateEnum.FOCUS
             ? '1px solid blue'
             : 'inherit',
+        resize: captionState === CaptionStateEnum.EDIT_TEXT ? 'both' : 'none',
+        overflow: 'auto',
       }}
-      onClick={(e) => {
+      onClick={() => {
         if (captionState === CaptionStateEnum.DEFAULT) {
-          e.preventDefault()
-          e.stopPropagation()
-          setCaptionState(CaptionStateEnum.DELETABLE)
+          clickTsRef.current = Date.now()
+          setCaptionState(CaptionStateEnum.FOCUS)
           return
         }
 
-        if (captionState === CaptionStateEnum.DELETABLE) {
+        const timeElapsed = 300
+        // Double click to enter EDIT_TEXT state
+        if (
+          captionState === CaptionStateEnum.FOCUS &&
+          Date.now() - clickTsRef.current < timeElapsed
+        ) {
           return setCaptionState(CaptionStateEnum.EDIT_TEXT)
+        } else {
+          clickTsRef.current = Date.now()
         }
       }}
-      onChange={(e) => {
-        const data = e.target.value
-        onChange({
-          ...caption,
-          data,
-        })
-      }}
-      value={caption.data}
-    />
+    >
+      <LexicalTextEditor
+        readOnly={captionState !== CaptionStateEnum.EDIT_TEXT}
+        onChange={(lexcialEditorStateJSONString) => {
+          onChange({
+            ...caption,
+            data: lexcialEditorStateJSONString,
+          })
+        }}
+        editorStateJSONString={caption.data}
+      />
+    </div>
   )
 }
 

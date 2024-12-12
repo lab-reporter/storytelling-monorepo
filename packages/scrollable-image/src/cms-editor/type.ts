@@ -5,7 +5,7 @@ export enum EditorStateEnum {
 
 export enum CaptionStateEnum {
   DEFAULT = 'default',
-  DELETABLE = 'deletable',
+  FOCUS = 'focus',
   EDIT_TEXT = 'edit_text',
 }
 
