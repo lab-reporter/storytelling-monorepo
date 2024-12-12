@@ -102,6 +102,20 @@ export function LexicalTextEditor({
     const editor = editorRef.current
     if (editor) {
       editor.setEditable(!readOnly)
+      editor.registerEditableListener((editable) => {
+        if (editable) {
+          // The use of `setTimeout` is a workaround to ensure `editor.focus()` works correctly.
+          // When `editor.setEditable(true)` is called, Lexical re-renders the `ContentEditable` component
+          // and updates the DOM element's `contentEditable` attribute to `true`.
+          // Since this process is asynchronous, calling `editor.focus()` too early may fail because
+          // the DOM element might still have `contentEditable=false`.
+          // Wrapping `editor.focus()` in a `setTimeout` ensures that the `contentEditable` attribute
+          // has been updated to `true` before attempting to set focus on the editor.
+          setTimeout(() => {
+            editor.focus()
+          }, 0)
+        }
+      })
     }
   }, [editorRef, readOnly])
 

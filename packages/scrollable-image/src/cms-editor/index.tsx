@@ -549,6 +549,7 @@ function CaptionTextArea({
   onChange: (caption: Caption | null) => void
 }) {
   const [captionState, setCaptionState] = useState(CaptionStateEnum.DEFAULT)
+  const clickTsRef = useRef<number>(0)
   const textAreaRef = useRef<HTMLDivElement>(null)
 
   let cursorStyle = 'default'
@@ -556,7 +557,7 @@ function CaptionTextArea({
     case CaptionStateEnum.EDIT_TEXT:
       cursorStyle = 'auto'
       break
-    case CaptionStateEnum.DELETABLE:
+    case CaptionStateEnum.FOCUS:
     case CaptionStateEnum.DEFAULT:
     default: {
       cursorStyle = 'default'
@@ -578,8 +579,7 @@ function CaptionTextArea({
     function handleKeyDown(event: KeyboardEvent) {
       if (
         event.key === 'Delete' ||
-        (event.key === 'Backspace' &&
-          captionState === CaptionStateEnum.DELETABLE)
+        (event.key === 'Backspace' && captionState === CaptionStateEnum.FOCUS)
       ) {
         onChange(null)
         setCaptionState(CaptionStateEnum.DEFAULT)
@@ -614,11 +614,7 @@ function CaptionTextArea({
     let deltaY = 0
 
     function drag(event: MouseEvent) {
-      if (
-        (captionState === CaptionStateEnum.DELETABLE ||
-          captionState === CaptionStateEnum.DEFAULT) &&
-        textAreaNode
-      ) {
+      if (captionState === CaptionStateEnum.FOCUS && textAreaNode) {
         isDragging = true
         startX = event.clientX
         startY = event.clientY
@@ -725,7 +721,7 @@ function CaptionTextArea({
         height: caption.height,
         cursor: cursorStyle,
         border:
-          captionState === CaptionStateEnum.DELETABLE
+          captionState === CaptionStateEnum.FOCUS
             ? '1px solid blue'
             : 'inherit',
         resize: captionState === CaptionStateEnum.EDIT_TEXT ? 'both' : 'none',
@@ -733,17 +729,25 @@ function CaptionTextArea({
       }}
       onClick={() => {
         if (captionState === CaptionStateEnum.DEFAULT) {
-          setCaptionState(CaptionStateEnum.DELETABLE)
+          clickTsRef.current = Date.now()
+          setCaptionState(CaptionStateEnum.FOCUS)
           return
         }
 
-        if (captionState === CaptionStateEnum.DELETABLE) {
+        const timeElapsed = 300
+        // Double click to enter EDIT_TEXT state
+        if (
+          captionState === CaptionStateEnum.FOCUS &&
+          Date.now() - clickTsRef.current < timeElapsed
+        ) {
           return setCaptionState(CaptionStateEnum.EDIT_TEXT)
+        } else {
+          clickTsRef.current = Date.now()
         }
       }}
     >
       <LexicalTextEditor
-        readOnly={captionState === CaptionStateEnum.DEFAULT}
+        readOnly={captionState !== CaptionStateEnum.EDIT_TEXT}
         onChange={(lexcialEditorStateJSONString) => {
           onChange({
             ...caption,
