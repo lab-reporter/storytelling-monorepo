@@ -31,12 +31,13 @@ import { sanitizeUrl } from '../../utils/url'
 
 const LinkEditor = styled.div`
   display: flex;
+  align-items: center;
 
   width: 100%;
   max-width: 400px;
   background-color: #fff;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
-  border-radius: 0 0 8px 8px;
+  border-radius: 8px;
 
   position: absolute;
   top: 0;
@@ -63,7 +64,7 @@ const LinkView = styled.div`
 
 const LinkInput = styled.input`
   flex-grow: 1;
-  margin: 12px;
+  margin: 12px 0px;
   padding: 8px 12px;
   border-radius: 15px;
   background-color: #eee;
