@@ -22,10 +22,10 @@ import {
   TextInput,
 } from '@keystone-ui/fields'
 import { ImgObj, Caption } from '../type'
-import {
-  LexicalTextEditor,
-  emptyEditorStateJSONString,
-} from './lexical-text-editor/index'
+//import {
+//  LexicalTextEditor,
+//  emptyEditorStateJSONString,
+//} from './lexical-text-editor/index'
 import { ScrollableImage } from '../scrollable-image'
 import { useImmerReducer } from 'use-immer'
 
@@ -223,7 +223,7 @@ export function ScrollableImageEditor({
         const cardsWidth = cardsNode.offsetWidth
         const cardsHeight = cardsNode.offsetHeight
         const caption: Caption = {
-          data: emptyEditorStateJSONString,
+          data: '',
           position: {
             left: `${parseFloat((x / cardsWidth).toFixed(4)) * 100}%`,
             top: `${parseFloat((y / cardsHeight).toFixed(4)) * 100}%`,
@@ -539,6 +539,8 @@ export function ScrollableImageEditor({
   )
 }
 
+const TextArea = styled.textarea``
+
 function CaptionTextArea({
   className,
   caption,
@@ -550,7 +552,7 @@ function CaptionTextArea({
 }) {
   const [captionState, setCaptionState] = useState(CaptionStateEnum.DEFAULT)
   const clickTsRef = useRef<number>(0)
-  const textAreaRef = useRef<HTMLDivElement>(null)
+  const textAreaRef = useRef<HTMLTextAreaElement>(null)
 
   let cursorStyle = 'default'
   switch (captionState) {
@@ -711,9 +713,10 @@ function CaptionTextArea({
   }, [caption, onChange])
 
   return (
-    <div
+    <TextArea
       ref={textAreaRef}
       className={className}
+      readOnly={captionState !== CaptionStateEnum.EDIT_TEXT}
       style={{
         position: 'absolute',
         ...caption.position,
@@ -724,8 +727,6 @@ function CaptionTextArea({
           captionState === CaptionStateEnum.FOCUS
             ? '1px solid blue'
             : 'inherit',
-        resize: captionState === CaptionStateEnum.EDIT_TEXT ? 'both' : 'none',
-        overflow: 'auto',
       }}
       onClick={() => {
         if (captionState === CaptionStateEnum.DEFAULT) {
@@ -745,18 +746,15 @@ function CaptionTextArea({
           clickTsRef.current = Date.now()
         }
       }}
-    >
-      <LexicalTextEditor
-        readOnly={captionState !== CaptionStateEnum.EDIT_TEXT}
-        onChange={(lexcialEditorStateJSONString) => {
-          onChange({
-            ...caption,
-            data: lexcialEditorStateJSONString,
-          })
-        }}
-        editorStateJSONString={caption.data}
-      />
-    </div>
+      onChange={(e) => {
+        const data = e.target.value
+        onChange({
+          ...caption,
+          data,
+        })
+      }}
+      value={caption.data}
+    />
   )
 }
 

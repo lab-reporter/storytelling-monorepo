@@ -5,7 +5,7 @@ import styled, { ThemeProvider } from './styled-components'
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger'
 import { useGSAP } from '@gsap/react'
 import { ImgObj, Caption } from './type'
-import { LexicalTextRenderer } from './lexical-text-renderer/index'
+// import { LexicalTextRenderer } from './lexical-text-renderer/index'
 
 const _ = {
   debounce,
@@ -230,11 +230,8 @@ export function ScrollableImage({
                     width: captionObj.width,
                     height: captionObj.height,
                   }}
-                >
-                  <LexicalTextRenderer
-                    editorStateJSONString={captionObj.data}
-                  />
-                </CaptionBlock>
+                  dangerouslySetInnerHTML={{ __html: captionObj.data }}
+                ></CaptionBlock>
               )
             })}
           </ImgsBlock>
