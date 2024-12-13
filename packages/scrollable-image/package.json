@@ -1,0 +1,57 @@
+{
+  "name": "@story-telling-reporter/react-scrollable-image",
+  "version": "0.1.2",
+  "description": "",
+  "main": "lib/cjs/index.js",
+  "module": "lib/esm/index.js",
+  "type": "module",
+  "types": "types/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "make dev",
+    "build": "make build",
+    "clean": "make clean",
+    "build-lib": "make build-lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nickhsine/story-telling-reporter.git",
+    "directory": "packages/scrollable-image"
+  },
+  "keywords": [
+    "react",
+    "scroll",
+    "horizontally scroll",
+    "scrollable image"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@gsap/react": "^2.1.0",
+    "@lexical/react": "^0.20.0",
+    "gsap": "^3.12.5",
+    "immer": "^10.1.1",
+    "lexical": "^0.20.0",
+    "lodash": "^4.17.15",
+    "use-immer": "^0.10.0"
+  },
+  "devDependencies": {
+    "@keystone-ui/fields": "^7.2.0",
+    "@keystone-ui/modals": "^6.0.3",
+    "@story-telling-reporter/draft-editor": "^2.1.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "styled-components": "5.3.5"
+  },
+  "peerDependencies": {
+    "@keystone-ui/fields": "^7.2.0",
+    "@keystone-ui/modals": "^6.0.3",
+    "@story-telling-reporter/draft-editor": "^2.1.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "styled-components": "5.3.5"
+  },
+  "files": [
+    "lib",
+    "public"
+  ]
+}
