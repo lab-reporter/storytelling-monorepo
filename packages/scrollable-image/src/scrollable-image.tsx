@@ -5,6 +5,7 @@ import styled, { ThemeProvider } from './styled-components'
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger'
 import { useGSAP } from '@gsap/react'
 import { ImgObj, Caption } from './type'
+import { EmbeddedCodeBlock } from './embedded-code-block'
 // import { LexicalTextRenderer } from './lexical-text-renderer/index'
 
 const _ = {
@@ -230,8 +231,9 @@ export function ScrollableImage({
                     width: captionObj.width,
                     height: captionObj.height,
                   }}
-                  dangerouslySetInnerHTML={{ __html: captionObj.data }}
-                ></CaptionBlock>
+                >
+                  <EmbeddedCodeBlock embeddedCode={captionObj.data} />
+                </CaptionBlock>
               )
             })}
           </ImgsBlock>
