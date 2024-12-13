@@ -681,17 +681,17 @@ function CaptionTextArea({
       _.throttle((entries) => {
         const entry = entries?.[0]
         if (entry) {
-          const minWidth = 20
-          const minHeight = 20
           const rect = entry.target.getBoundingClientRect()
 
           // @TODO to support RWD.
           // Currently unit is `px`, which is not responsive.
           // We might need to change the unit to `vh`.
-          const width =
-            rect.width > minWidth ? `${rect.width}px` : `${minWidth}px`
-          const height =
-            rect.height > minHeight ? `${rect.height}px` : `${minHeight}px`
+          const width = rect.width
+          const height = rect.height
+
+          if (width === 0 || height === 0) {
+            return
+          }
 
           if (caption.width !== width || caption.height !== height) {
             onChange({
