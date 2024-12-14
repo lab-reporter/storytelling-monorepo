@@ -228,8 +228,8 @@ export function ScrollableImageEditor({
             left: `${parseFloat((x / cardsWidth).toFixed(4)) * 100}%`,
             top: `${parseFloat((y / cardsHeight).toFixed(4)) * 100}%`,
           },
-          width: '100px',
-          height: '152px',
+          width: `${parseFloat((100 / cardsWidth).toFixed(4)) * 100}%`,
+          height: `${parseFloat((100 / cardsHeight).toFixed(4)) * 100}%`,
         }
 
         const newCaptions = siProps.captions.concat([caption])
@@ -683,9 +683,6 @@ function CaptionTextArea({
         if (entry) {
           const rect = entry.target.getBoundingClientRect()
 
-          // @TODO to support RWD.
-          // Currently unit is `px`, which is not responsive.
-          // We might need to change the unit to `vh`.
           const width = rect.width
           const height = rect.height
 
@@ -693,12 +690,22 @@ function CaptionTextArea({
             return
           }
 
-          if (caption.width !== width || caption.height !== height) {
-            onChange({
-              ...caption,
-              width,
-              height,
-            })
+          const parentElement = textAreaNode.parentElement // `parentElement` should be `Cards` element
+          if (parentElement) {
+            const newWidth = `${
+              parseFloat((width / parentElement.offsetWidth).toFixed(4)) * 100
+            }%`
+            const newHeight = `${
+              parseFloat((height / parentElement.offsetHeight).toFixed(4)) * 100
+            }%`
+
+            if (caption.width !== newWidth || caption.height !== newHeight) {
+              onChange({
+                ...caption,
+                width: newWidth,
+                height: newHeight,
+              })
+            }
           }
         }
       }, 2000)
