@@ -44,6 +44,7 @@ const Img = styled.img`
   vertical-align: middle;
   height: 100%;
   border: none;
+  user-select: none;
 `
 
 const CaptionBlock = styled.div`
