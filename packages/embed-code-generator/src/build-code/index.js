@@ -31,6 +31,14 @@ export function buildSubtitledAudioEmbedCode(data) {
  *  @param {Object} data
  *  @returns string
  */
+export function buildScrollableImageEmbedCode(data) {
+  return buildEmbedCode(data, pkgNames.scrollableImage, null)
+}
+
+/**
+ *  @param {Object} data
+ *  @returns string
+ */
 export function buildScrollableVideoEmbedCode(data) {
   return buildEmbedCode(data, pkgNames.scrollableVideo, null)
 }
