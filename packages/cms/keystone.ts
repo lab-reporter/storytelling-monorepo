@@ -174,6 +174,28 @@ export default withAuth(
             )
           }
         )
+
+        app.get(
+          '/demo/scrollable-images/:id',
+          authenticationMw,
+          async (req, res) => {
+            const itemId = req.params.id
+
+            const context = await commonContext.withRequest(req, res)
+            const item = await context.query.ScrollableImage.findOne({
+              where: { id: itemId },
+              query: 'embedCode',
+            })
+
+            if (!item) {
+              return res
+                .status(404)
+                .send(`ScrollableImage ${itemId} is not found`)
+            }
+
+            res.send(renderScrollableVideoHtml(item?.embedCode))
+          }
+        )
       },
     },
   })
