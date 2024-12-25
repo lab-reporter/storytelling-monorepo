@@ -105,6 +105,7 @@ model ScrollableImage {
   id          Int    @id @default(autoincrement())
   name        String @default("")
   editorState Json?  @default("{\"captions\":[],\"imgObjs\":[]}")
+  customCss   String @default("\n  /* 將捲動式影片往上移動，使其與上一個區塊連接在一起。*/\n  /* 使用情境範例：想要兩個捲動式影片連在一起，讓第二個捲動式影片與第一個影片沒有間隔。 */\n  /* 刪除下方註解即可使用。 */\n  .storytelling-react-scrollable-image-container {\n    margin-top: -40px;\n  }\n\n  /* 將捲動式影片向左移動，撐滿文章頁 */\n  @media (max-width: 767px) {\n    .storytelling-react-scrollable-image-container {\n      margin-left: -3.4vw;\n    }\n  }\n\n  @media (min-width: 768px) and (max-width: 1023px) {\n    .storytelling-react-scrollable-image-container {\n      margin-left: calc((100vw - 512px)/2 * -1);\n    }\n  }\n\n  @media (min-width: 1024px) and (max-width: 1439px) {\n    .storytelling-react-scrollable-image-container {\n      margin-left: calc((100vw - 550px)/2 * -1);\n    }\n  }\n\n  @media (min-width: 1440px) {\n    .storytelling-react-scrollable-image-container {\n      margin-left: calc((100vw - 730px)/2 * -1);\n    }\n  }\n}\n      ")
 }
 
 model ThreeModel {
