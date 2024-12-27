@@ -16,6 +16,21 @@ const listConfigurations = list({
     imageFile: image({
       storage: 'images',
     }),
+    url: virtual({
+      label: '網址',
+      field: graphql.field({
+        type: graphql.String,
+        resolve: (item: Record<string, unknown>): string => {
+          const filename = item?.imageFile_id
+
+          const extension = item?.imageFile_extension
+            ? '.' + item.imageFile_extension
+            : ''
+
+          return `${config.gcs.urlPrefix}/images/${filename}${extension}`
+        },
+      }),
+    }),
     createdAt: timestamp({
       defaultValue: { kind: 'now' },
     }),
@@ -86,6 +101,15 @@ const listConfigurations = list({
         },
       }),
       ui: {
+        createView: {
+          fieldMode: 'hidden',
+        },
+        itemView: {
+          fieldMode: 'hidden',
+        },
+        listView: {
+          fieldMode: 'hidden',
+        },
         query: '{ original tiny small medium large }',
       },
     }),

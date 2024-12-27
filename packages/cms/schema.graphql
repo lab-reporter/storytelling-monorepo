@@ -267,6 +267,7 @@ type Photo {
   id: ID!
   name: String
   imageFile: ImageFieldOutput
+  url: String
   createdAt: DateTime
   updatedAt: DateTime
   resized: ResizedImages
@@ -336,6 +337,60 @@ input PhotoUpdateArgs {
 input PhotoCreateInput {
   name: String
   imageFile: ImageFieldInput
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type Asset {
+  id: ID!
+  name: String
+  file: FileFieldOutput
+  url: String
+  description: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input AssetWhereUniqueInput {
+  id: ID
+}
+
+input AssetWhereInput {
+  AND: [AssetWhereInput!]
+  OR: [AssetWhereInput!]
+  NOT: [AssetWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  description: StringFilter
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input AssetOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  description: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input AssetUpdateInput {
+  name: String
+  file: FileFieldInput
+  description: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input AssetUpdateArgs {
+  where: AssetWhereUniqueInput!
+  data: AssetUpdateInput!
+}
+
+input AssetCreateInput {
+  name: String
+  file: FileFieldInput
+  description: String
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -759,6 +814,12 @@ type Mutation {
   updatePhotos(data: [PhotoUpdateArgs!]!): [Photo]
   deletePhoto(where: PhotoWhereUniqueInput!): Photo
   deletePhotos(where: [PhotoWhereUniqueInput!]!): [Photo]
+  createAsset(data: AssetCreateInput!): Asset
+  createAssets(data: [AssetCreateInput!]!): [Asset]
+  updateAsset(where: AssetWhereUniqueInput!, data: AssetUpdateInput!): Asset
+  updateAssets(data: [AssetUpdateArgs!]!): [Asset]
+  deleteAsset(where: AssetWhereUniqueInput!): Asset
+  deleteAssets(where: [AssetWhereUniqueInput!]!): [Asset]
   createKaraoke(data: KaraokeCreateInput!): Karaoke
   createKaraokes(data: [KaraokeCreateInput!]!): [Karaoke]
   updateKaraoke(where: KaraokeWhereUniqueInput!, data: KaraokeUpdateInput!): Karaoke
@@ -837,6 +898,9 @@ type Query {
   photos(where: PhotoWhereInput! = {}, orderBy: [PhotoOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PhotoWhereUniqueInput): [Photo!]
   photo(where: PhotoWhereUniqueInput!): Photo
   photosCount(where: PhotoWhereInput! = {}): Int
+  assets(where: AssetWhereInput! = {}, orderBy: [AssetOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AssetWhereUniqueInput): [Asset!]
+  asset(where: AssetWhereUniqueInput!): Asset
+  assetsCount(where: AssetWhereInput! = {}): Int
   karaokes(where: KaraokeWhereInput! = {}, orderBy: [KaraokeOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: KaraokeWhereUniqueInput): [Karaoke!]
   karaoke(where: KaraokeWhereUniqueInput!): Karaoke
   karaokesCount(where: KaraokeWhereInput! = {}): Int
