@@ -8,9 +8,6 @@ import {
 } from './utils/access-control-list'
 
 const listConfigurations = list({
-  graphql: {
-    plural: 'Audios',
-  },
   fields: {
     name: text({
       label: '標題',
@@ -21,7 +18,7 @@ const listConfigurations = list({
       storage: 'files',
     }),
     url: virtual({
-      label: '音檔網址',
+      label: '網址',
       field: graphql.field({
         type: graphql.String,
         resolve: (item: Record<string, unknown>): string => {
@@ -54,9 +51,8 @@ const listConfigurations = list({
       },
     }),
   },
-
   ui: {
-    label: 'Audio（音檔）',
+    label: 'Asset（其他資源）',
     labelField: 'name',
     listView: {
       initialColumns: ['name', 'url'],
