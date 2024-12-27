@@ -35,10 +35,22 @@ const listConfigurations = list({
         displayMode: 'textarea',
       },
     }),
-    createdAt: timestamp(),
+    createdAt: timestamp({
+      defaultValue: { kind: 'now' },
+      ui: {
+        itemView: {
+          fieldMode: 'read',
+        },
+      },
+    }),
     updatedAt: timestamp({
       db: {
         updatedAt: true,
+      },
+      ui: {
+        itemView: {
+          fieldMode: 'read',
+        },
       },
     }),
   },
