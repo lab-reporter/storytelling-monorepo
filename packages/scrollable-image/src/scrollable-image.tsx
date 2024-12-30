@@ -98,7 +98,7 @@ export function ScrollableImage({
   const scrollTriggerInstance = useRef<ScrollTrigger | null>(null)
   const scrollTriggerRef = useRef<HTMLDivElement>(null)
   const imgsBlockRef = useRef<HTMLDivElement>(null)
-  const [debugMode, setDebugMode] = useState(true)
+  const [debugMode, setDebugMode] = useState(false)
 
   // use gsap ScrollTrigger to check if
   // `ScrollableImage` is in the viewport or not,
