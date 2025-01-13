@@ -7,7 +7,7 @@ Promise.all([
   import('./utils'),
   import(
     /* webpackChunkName: "react-scrollable-image" */
-    '@story-telling-reporter/react-scrollable-image/lib/esm/scrollable-image-for-keystone-editor.js'
+    '@story-telling-reporter/react-scrollable-image/lib/scrollable-image-for-keystone-editor.js'
   ),
   import('./constants'),
   import('regenerator-runtime/runtime'),
