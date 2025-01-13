@@ -2,9 +2,7 @@
   "name": "@story-telling-reporter/react-scrollable-video",
   "version": "2.2.4",
   "description": "",
-  "main": "lib/cjs/index.js",
-  "module": "lib/esm/index.js",
-  "type": "module",
+  "main": "lib/index.js",
   "types": "types/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

@@ -2,9 +2,7 @@
   "name": "@story-telling-reporter/react-three-story-controls",
   "version": "1.0.0",
   "description": "",
-  "main": "lib/cjs/index.js",
-  "module": "lib/esm/index.js",
-  "type": "module",
+  "main": "lib/index.js",
   "types": "types/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
