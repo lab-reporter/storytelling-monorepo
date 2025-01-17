@@ -4,8 +4,8 @@ import { gsap } from 'gsap/dist/gsap'
 import styled, { ThemeProvider } from './styled-components'
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger'
 import { useGSAP } from '@gsap/react'
-import { ImgObj, Caption } from './type'
-import { LexicalTextRenderer } from './lexical-text-renderer/index'
+import { ImgObj, CaptionData } from './type'
+import { DraftRenderer } from './draft-renderer/index'
 
 const _ = {
   debounce,
@@ -59,7 +59,7 @@ const EmptyBlockForScrolling = styled.div`
 export type ScrollableImageProps = {
   className?: string
   imgObjs: ImgObj[] // urls of image objects
-  captions?: Caption[]
+  captions?: CaptionData[]
 
   // minimum height of the images.
   // Since `height` could be `100vh`,
@@ -232,9 +232,7 @@ export function ScrollableImage({
                     height: captionObj.height,
                   }}
                 >
-                  <LexicalTextRenderer
-                    editorStateJSONString={captionObj.data}
-                  />
+                  <DraftRenderer rawContentState={captionObj.rawContentState} />
                 </CaptionBlock>
               )
             })}
