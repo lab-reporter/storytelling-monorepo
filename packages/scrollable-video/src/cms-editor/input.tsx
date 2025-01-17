@@ -27,7 +27,6 @@ const nanoid = customAlphabet('abcdefghiklmnopq', 10)
 const disabledButtons = [
   buttonNames.code,
   buttonNames.codeBlock,
-  buttonNames.newsReading,
   buttonNames.slideshow,
   buttonNames.divider,
   buttonNames.infoBox,
