@@ -9,9 +9,9 @@ dev:
 	NODE_ENV=development yarn webpack serve -c dev/webpack.config.mjs
 
 build-lib:
-	@echo "$(P) Transpile source codes to commonjs syntax"
+	@echo "$(P) Transpile source codes to commonjs and esmodule"
 	mkdir -p lib
-	NODE_ENV=production yarn babel src --out-dir lib --extensions '.ts,.tsx,.js,.jsx' --copy-files --root-mode upward
+	yarn rollup -c rollup.config.mjs
 
 build: clean build-lib
 
