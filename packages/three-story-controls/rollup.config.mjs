@@ -9,10 +9,6 @@ export default {
       file: 'lib/index.esm.js', // output esmodule
       format: 'es',
     },
-    {
-      file: 'lib/index.cjs.js', // output commonjs
-      format: 'cjs',
-    },
   ],
   plugins: [
     resolve(),

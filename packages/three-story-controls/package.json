@@ -2,7 +2,7 @@
   "name": "@story-telling-reporter/react-three-story-controls",
   "version": "2.1.0",
   "description": "",
-  "main": "lib/index.cjs.js",
+  "main": "lib/index.js",
   "module": "lib/index.esm.js",
   "types": "types/index.d.ts",
   "scripts": {

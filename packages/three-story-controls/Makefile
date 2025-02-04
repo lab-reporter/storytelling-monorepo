@@ -8,15 +8,20 @@ dev:
 	@echo "$(P) Start webpack dev server"
 	NODE_ENV=development yarn webpack serve -c dev/webpack.config.mjs
 
-build-lib:
-	@echo "$(P) Transpile source codes to commonjs and esmodule"
+build-commonjs: 
+	@echo "$(P) use babel to transpile typescript into commonjs"
+	mkdir -p lib
+	NODE_ENV=production yarn babel src --out-dir lib --extensions '.ts,.tsx,.js,.jsx' --copy-files --root-mode upward
+
+build-esmodule:
+	@echo "$(P) use rollup to transpile typescript into esmodule"
 	mkdir -p lib
 	yarn rollup -c rollup.config.mjs
 
-build: clean build-lib
+build: clean build-commonjs build-esmodule
 
 clean:
 	@echo "$(P) Clean lib/"
 	rm -rf lib/
 
-.PHONY: build clean dev build-lib
+.PHONY: build clean dev build-commonjs build-esmodule
