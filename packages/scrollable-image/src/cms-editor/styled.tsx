@@ -97,13 +97,39 @@ export const SmallCaptionIcon = styled(Icon)`
   }
 `
 
-export function DeleteButton(props: IconProps) {
+export const DeleteImgButton = styled(Icon)`
+  background-image: url(${cdnPrefix + '/delete-img.svg'});
+  &:hover {
+    background-image: url(${cdnPrefix + '/delete-img.hover.svg'});
+  }
+`
+
+export function DeleteCaptionButton(props: IconProps) {
+  const svg = cdnPrefix + '/delete-caption.svg'
+  const svgHover = cdnPrefix + '/delete-caption.hover.svg'
+  const svgDark = cdnPrefix + '/delete-caption.dark.svg'
+  const svgDarkHover = cdnPrefix + '/delete-caption.dark.hover.svg'
   return (
     <Icon
       className={props?.className}
       onClick={props?.onClick}
-      $bgImg={cdnPrefix + '/delete.svg'}
-      $hoverBgImg={cdnPrefix + '/delete.hover.svg'}
+      $bgImg={props?.darkMode ? svgDark : svg}
+      $hoverBgImg={props?.darkMode ? svgDarkHover : svgHover}
+    />
+  )
+}
+
+export function EditCaptionButton(props: IconProps) {
+  const svg = cdnPrefix + '/edit-caption.svg'
+  const svgHover = cdnPrefix + '/edit-caption.hover.svg'
+  const svgDark = cdnPrefix + '/edit-caption.dark.svg'
+  const svgDarkHover = cdnPrefix + '/edit-caption.dark.hover.svg'
+  return (
+    <Icon
+      className={props?.className}
+      onClick={props?.onClick}
+      $bgImg={props?.darkMode ? svgDark : svg}
+      $hoverBgImg={props?.darkMode ? svgDarkHover : svgHover}
     />
   )
 }

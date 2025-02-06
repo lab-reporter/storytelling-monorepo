@@ -4,8 +4,8 @@ import { gsap } from 'gsap/dist/gsap'
 import styled, { ThemeProvider } from './styled-components'
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger'
 import { useGSAP } from '@gsap/react'
-import { ImgObj, Caption } from './type'
-import { LexicalTextRenderer } from './lexical-text-renderer/index'
+import { ImgObj, CaptionData } from './type'
+import { DraftRenderer } from './draft-renderer/index'
 
 const _ = {
   debounce,
@@ -44,6 +44,7 @@ const Img = styled.img`
   vertical-align: middle;
   height: 100%;
   border: none;
+  user-select: none;
 `
 
 const CaptionBlock = styled.div`
@@ -58,7 +59,7 @@ const EmptyBlockForScrolling = styled.div`
 export type ScrollableImageProps = {
   className?: string
   imgObjs: ImgObj[] // urls of image objects
-  captions?: Caption[]
+  captions?: CaptionData[]
 
   // minimum height of the images.
   // Since `height` could be `100vh`,
@@ -98,7 +99,7 @@ export function ScrollableImage({
   const scrollTriggerInstance = useRef<ScrollTrigger | null>(null)
   const scrollTriggerRef = useRef<HTMLDivElement>(null)
   const imgsBlockRef = useRef<HTMLDivElement>(null)
-  const [debugMode, setDebugMode] = useState(true)
+  const [debugMode, setDebugMode] = useState(false)
 
   // use gsap ScrollTrigger to check if
   // `ScrollableImage` is in the viewport or not,
@@ -231,9 +232,7 @@ export function ScrollableImage({
                     height: captionObj.height,
                   }}
                 >
-                  <LexicalTextRenderer
-                    editorStateJSONString={captionObj.data}
-                  />
+                  <DraftRenderer rawContentState={captionObj.rawContentState} />
                 </CaptionBlock>
               )
             })}
