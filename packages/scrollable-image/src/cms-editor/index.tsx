@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useEffect, useRef } from 'react'
-import styled from '../styled-components'
+import styled, { ThemeProvider } from '../styled-components'
 import {
   AddButton,
   DeleteImgButton,
@@ -176,6 +176,7 @@ export function ScrollableImageEditor({
   const [editorState, setEditorState] = useState(EditorStateEnum.DEFAULT)
   const [fullScreen, setFullScreen] = useState(false)
   const [preview, setPreview] = useState(false)
+  const [paragraphFontSize, setParagraphFontSize] = useState('16px')
   const [history, dispatch] = useImmerReducer(historyReducer, {
     past: [],
     present: siProps,
@@ -186,6 +187,7 @@ export function ScrollableImageEditor({
   const imgObjs = siProps.imgObjs
   const className =
     siProps.className || 'storytelling-react-scrollable-image-container'
+  const fontToImgRatio = siProps.fontToImgRatio ?? 0
   const customCss =
     siProps.customCss ||
     `
@@ -357,6 +359,29 @@ export function ScrollableImageEditor({
       head.appendChild(fragment)
     }
   }, [preview, customCss])
+
+  useEffect(() => {
+    const calculateFontSize = () => {
+      const cardsEle = cardsRef.current
+      const cardsHeight = cardsEle?.clientHeight
+
+      if (!fullScreen || !cardsHeight || !fontToImgRatio) {
+        return
+      }
+
+      const fontSize = (cardsHeight * fontToImgRatio).toFixed(2) + 'px'
+
+      setParagraphFontSize(fontSize)
+    }
+
+    calculateFontSize()
+
+    window.addEventListener('resize', calculateFontSize)
+
+    return () => {
+      window.removeEventListener('resize', calculateFontSize)
+    }
+  }, [fullScreen, cardsRef, fontToImgRatio])
 
   const cardsJsx = imgObjs.map((imgObj, idx) => {
     return (
@@ -549,6 +574,7 @@ export function ScrollableImageEditor({
           maxHeight={siProps.maxHeight}
           darkMode={siProps.theme === ThemeEnum.DARK_MODE}
           scrollerRef={scrollerRef}
+          fontToImgRatio={fontToImgRatio}
         />
         <div style={{ height: '50vh', width: '1px' }} />
       </PreviewContainer>
@@ -556,7 +582,12 @@ export function ScrollableImageEditor({
   }
 
   return (
-    <>
+    <ThemeProvider
+      theme={{
+        darkMode: siProps.theme === ThemeEnum.DARK_MODE,
+        paragraphFontSize,
+      }}
+    >
       <Container $fullScreen={fullScreen}>
         <CardsContainer>
           <Cards $editorState={editorState} ref={cardsRef}>
@@ -602,6 +633,7 @@ export function ScrollableImageEditor({
             minHeight: siProps.minHeight,
             theme: siProps.theme,
             customCss,
+            fontToImgRatio,
           }}
           onChange={(updated) => {
             const payload = Object.assign({}, siProps, updated)
@@ -614,7 +646,7 @@ export function ScrollableImageEditor({
           }}
         />
       )}
-    </>
+    </ThemeProvider>
   )
 }
 
@@ -680,6 +712,7 @@ type ConfigProp = {
   minHeight?: string
   theme?: ThemeEnum
   customCss?: string
+  fontToImgRatio?: number
 }
 
 const themeOptions = [
@@ -781,6 +814,25 @@ function ConfigInput({
         }
         type="text"
         defaultValue={inputValue.customCss}
+      />
+      <MarginTop />
+      <FieldLabel>字體大小與圖片高度的比例</FieldLabel>
+      <FieldDescription id="config-font-to-img-ratio">
+        預設值為0，代表不隨著圖片縮放調整字體大小。若值為非0，字體大小會隨著圖片縮放等比例調整；舉例：若值為0.02，而圖片高度為800px，則字體大小會是16px（800
+        *
+        0.02）。若使用者調整視窗大小，圖片高度變成1200px，則字體大小也會隨之變成24px（1200
+        * 0.02）。
+      </FieldDescription>
+      <TextInput
+        onChange={(e) => {
+          onChange(
+            Object.assign({}, inputValue, {
+              fontToImgRatio: parseFloat(e.target.value),
+            })
+          )
+        }}
+        type="text"
+        defaultValue={inputValue?.fontToImgRatio}
       />
       <MarginTop />
     </div>

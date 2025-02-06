@@ -21,6 +21,7 @@ const Root = () => {
     minHeight: '',
     theme: 'light_mode',
     customCss: '',
+    fontToImgRatio: 0,
   })
 
   return (
@@ -39,6 +40,7 @@ const Root = () => {
         minHeight={editorState.minHeight}
         theme={editorState.theme}
         customCss={editorState.customCss}
+        fontToImgRatio={editorState.fontToImgRatio}
         onChange={setEditorState}
       />
     </div>

@@ -83,7 +83,11 @@ export type ScrollableImageProps = {
   maxHeight?: string
   darkMode?: boolean
   scrollerRef?: React.RefObject<HTMLElement>
+  fontToImgRatio?: number
 }
+
+// @TODO get value from draft-renderer
+const defaultParagraphFontSize = 16 // px
 
 export function ScrollableImage({
   className,
@@ -94,12 +98,16 @@ export function ScrollableImage({
   maxHeight = '',
   darkMode = false,
   scrollerRef,
+  fontToImgRatio,
 }: ScrollableImageProps) {
   const [scrollDistance, setScrollDistance] = useState(0)
   const scrollTriggerInstance = useRef<ScrollTrigger | null>(null)
   const scrollTriggerRef = useRef<HTMLDivElement>(null)
   const imgsBlockRef = useRef<HTMLDivElement>(null)
   const [debugMode, setDebugMode] = useState(false)
+  const [paragraphFontSize, setParagraphFontSize] = useState(
+    defaultParagraphFontSize + 'px'
+  )
 
   // use gsap ScrollTrigger to check if
   // `ScrollableImage` is in the viewport or not,
@@ -203,10 +211,32 @@ export function ScrollableImage({
     }
   }, [])
 
+  useEffect(() => {
+    const calculateFontSize = () => {
+      const imgsBlockEle = imgsBlockRef.current
+
+      if (imgsBlockEle && fontToImgRatio) {
+        const scrollableImageHeight = imgsBlockEle.clientHeight
+
+        const paragraphFontSize = scrollableImageHeight * fontToImgRatio + 'px'
+
+        setParagraphFontSize(paragraphFontSize)
+      }
+    }
+
+    calculateFontSize()
+
+    window.addEventListener('resize', calculateFontSize)
+    return () => {
+      window.removeEventListener('resize', calculateFontSize)
+    }
+  }, [imgsBlockRef, fontToImgRatio])
+
   return (
     <ThemeProvider
       theme={{
         darkMode,
+        paragraphFontSize: paragraphFontSize,
       }}
     >
       <Container
