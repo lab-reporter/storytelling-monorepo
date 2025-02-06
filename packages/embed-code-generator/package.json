@@ -32,7 +32,7 @@
     "@story-telling-reporter/react-scrollable-image": "0.2.0",
     "@story-telling-reporter/react-scrollable-video": "3.0.0",
     "@story-telling-reporter/react-subtitled-audio": "1.1.1",
-    "@story-telling-reporter/react-three-story-controls": "2.0.0",
+    "@story-telling-reporter/react-three-story-controls": "2.2.0",
     "lodash": "^4.17.21",
     "serialize-javascript": "^6.0.0"
   },
