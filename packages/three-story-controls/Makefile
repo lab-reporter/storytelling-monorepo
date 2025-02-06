@@ -10,12 +10,12 @@ dev:
 
 build-commonjs: 
 	@echo "$(P) use babel to transpile typescript into commonjs"
-	mkdir -p lib
-	NODE_ENV=production yarn babel src --out-dir lib --extensions '.ts,.tsx,.js,.jsx' --copy-files --root-mode upward
+	mkdir -p lib/cjs
+	NODE_ENV=production yarn babel src --out-dir lib/cjs --extensions '.ts,.tsx,.js,.jsx' --copy-files --root-mode upward
 
 build-esmodule:
 	@echo "$(P) use rollup to transpile typescript into esmodule"
-	mkdir -p lib
+	mkdir -p lib/esm
 	yarn rollup -c rollup.config.mjs
 
 build: clean build-commonjs build-esmodule
