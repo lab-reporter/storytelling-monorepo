@@ -17,7 +17,7 @@ export {
   ThreePOI,
   GTLFModelObject,
   GLTF,
-} from '../src/type'
+} from '../src/types'
 
 export {
   CameraHelper,

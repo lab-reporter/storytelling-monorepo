@@ -10,7 +10,7 @@ Promise.all([
      * Directly import file to avoid bundling redundant files.
      */
     /* webpackChunkName: "react-three-story-controls" */
-    '@story-telling-reporter/react-three-story-controls/lib/react-components/scrollable-three-model'
+    '@story-telling-reporter/react-three-story-controls/lib/esm/react-components/scrollable-three-model.js'
   ),
   import('./constants'),
   import('regenerator-runtime/runtime'),
