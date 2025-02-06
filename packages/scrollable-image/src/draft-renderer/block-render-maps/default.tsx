@@ -40,7 +40,7 @@ export const Paragraph = styled.div`
     margin-bottom: 0px;
   }
 
-  font-size: 16px;
+  font-size: ${({ theme }) => theme.paragraphFontSize || '16px'};
   font-weight: 400;
   line-height: 1.75;
   letter-spacing: 0.6px;

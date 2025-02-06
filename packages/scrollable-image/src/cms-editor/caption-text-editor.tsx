@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import styled from 'styled-components'
+import styled, { ThemeProvider } from 'styled-components'
 import throttle from 'lodash/throttle'
 import { AlertDialog } from '@keystone-ui/modals'
 import { CaptionData } from '../type'
@@ -267,6 +267,8 @@ const disabledButtons = [
   buttonNames.h3,
   buttonNames.h4,
   buttonNames.h5,
+  buttonNames.ol,
+  buttonNames.ul,
 ]
 
 type CaptionInputValue = {
@@ -321,17 +323,24 @@ function CaptionInput({
         >
           <MarginTop />
           <FieldLabel>字幕內容</FieldLabel>
-          <RichTextEditor
-            disabledButtons={disabledButtons}
-            editorState={inputValueState.editorState}
-            onChange={(editorState: EditorState) => {
-              setInputValueState((prevState) => {
-                return Object.assign({}, prevState, {
-                  editorState,
-                })
-              })
+          <ThemeProvider
+            theme={{
+              darkMode: false,
+              paragraphFontSize: '16px',
             }}
-          />
+          >
+            <RichTextEditor
+              disabledButtons={disabledButtons}
+              editorState={inputValueState.editorState}
+              onChange={(editorState: EditorState) => {
+                setInputValueState((prevState) => {
+                  return Object.assign({}, prevState, {
+                    editorState,
+                  })
+                })
+              }}
+            />
+          </ThemeProvider>
           {/*
           <MarginTop />
           <FieldLabel>客製化 CSS</FieldLabel>
