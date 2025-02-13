@@ -45,6 +45,7 @@ const Img = styled.img`
   height: 100%;
   border: none;
   user-select: none;
+  max-width: none;
 `
 
 const CaptionBlock = styled.div`
