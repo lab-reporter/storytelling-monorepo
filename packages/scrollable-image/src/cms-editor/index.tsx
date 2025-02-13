@@ -191,8 +191,8 @@ export function ScrollableImageEditor({
   const customCss =
     siProps.customCss ||
     `
-  /* 將捲動式影片往上移動，使其與上一個區塊連接在一起。*/
-  /* 使用情境範例：想要兩個捲動式影片連在一起，讓第二個捲動式影片與第一個影片沒有間隔。 */
+  /* 給報導者文章頁使用 */
+  /* 將元件往上移動，使其與上一個區塊連接在一起。*/
   /* 刪除下方註解即可使用。 */
   /*
   .${className} {
@@ -200,7 +200,8 @@ export function ScrollableImageEditor({
   }
   */
 
-  /* 將捲動式影片向左移動，撐滿文章頁 */
+  /* 給報導者文章頁使用 */
+  /* 將元件向左移動，撐滿文章頁 */
   /* 刪除下方註解即可使用。 */
   /*
   @media (max-width: 767px) {
@@ -224,6 +225,23 @@ export function ScrollableImageEditor({
   @media (min-width: 1440px) {
     .${className} {
       margin-left: calc((100vw - 730px)/2 * -1);
+    }
+  }
+  */
+
+  /* 給少年報導者文章頁使用 */
+  /* 將元件向左移動，撐滿文章頁 */
+  /* 刪除下方註解即可使用。 */
+  /*
+  @media (max-width: 767px) {
+    .${className} {
+      margin-left: -5vw;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .${className} {
+      margin-left: calc((100vw - 700px)/2 * -1);
     }
   }
   */
