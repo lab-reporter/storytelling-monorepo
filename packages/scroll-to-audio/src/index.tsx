@@ -160,6 +160,13 @@ function ScrollToAudio({
 
     // pause audio if muted, otherwise play the audio
     setPaused(nextMuted)
+
+    // Through this user interaction,
+    // trigger other scroll-to-audio elements to play sound as well,
+    // to prevent the browser from blocking playback later.
+    hooks.testPlayOtherMediaElements({
+      excludeElement: audioRef.current,
+    })
   }
 
   const bottomEntryId = id + '-bottom-entry-point'

@@ -101,7 +101,8 @@ export function useMuted(
     )
     otherMediaElements.forEach((ele) => {
       console.log(
-        `[react-ui-toolkit] set story telling element attribute 'data-muted=${muted.toString()}'`
+        `[react-ui-toolkit] set attribute 'data-muted=${muted.toString()}' on media element:`,
+        ele
       )
       ele.setAttribute('data-muted', muted.toString())
     })
@@ -139,13 +140,61 @@ export function useMuted(
     window['__twreporter_story_telling_ui_toolkit'] = {
       muted: _muted,
     }
+
     _setMuted(_muted)
   }
 
   return [muted, setMuted]
 }
 
+export const testPlayOtherMediaElements = ({
+  excludeElement,
+}: { excludeElement?: HTMLMediaElement } = {}) => {
+  const otherMediaElements: NodeListOf<HTMLMediaElement> =
+    document.querySelectorAll(
+      `[data-twreporter-story-telling][data-played="false"]`
+    )
+
+  if (otherMediaElements.length > 0) {
+    console.log('[react-ui-toolkit] plays other media elements.')
+  }
+
+  otherMediaElements.forEach((ele) => {
+    if (ele === excludeElement) {
+      return
+    }
+
+    console.log(`[react-ui-toolkit] plays media element:`, ele)
+    const startPlayPromise = ele.play()
+    if (startPlayPromise !== undefined) {
+      startPlayPromise
+        // play successfully
+        .then(() => {
+          console.log(
+            `[react-ui-toolkit] media element: `,
+            ele,
+            'plays successfully.'
+          )
+          ele.setAttribute('data-played', 'true')
+          // `pause()` video after `play()` successfully
+          ele.pause()
+        })
+        // fail to play
+        .catch((error) => {
+          // browser prevent from playing audio before user interactions
+          console.log(
+            `[react-ui-toolkit] unable to play media element:`,
+            ele,
+            'Error:',
+            error
+          )
+        })
+    }
+  })
+}
+
 export default {
   useIOSCornerCaseFix,
   useMuted,
+  testPlayOtherMediaElements,
 }
