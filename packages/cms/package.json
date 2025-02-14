@@ -19,7 +19,7 @@
     "@keystone-6/auth": "7.0.0",
     "@keystone-6/core": "5.2.0",
     "@story-telling-reporter/draft-editor": "^2.1.0",
-    "@story-telling-reporter/react-embed-code-generator": "2.2.7",
+    "@story-telling-reporter/react-embed-code-generator": "2.2.8",
     "@story-telling-reporter/react-scrollable-image": "0.3.3",
     "@story-telling-reporter/react-scrollable-video": "3.0.0",
     "@story-telling-reporter/react-three-story-controls": "2.2.0",
