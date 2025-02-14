@@ -41,6 +41,10 @@ function ScrollToAudio({
   }, [])
 
   useEffect(() => {
+    if (hintOnly) {
+      return
+    }
+
     const handleScroll = _.debounce(() => {
       const topEntryElement = topEntryPointRef.current
       const bottomEntryElement = bottomEntryPointRef.current
@@ -51,7 +55,7 @@ function ScrollToAudio({
         topEntryElement.getBoundingClientRect().height == 0
       ) {
         console.log(
-          '[react-scroll-to-audio] `topEntryElement` is not available. Remove scroll event listener.'
+          `[react-scroll-to-audio][${id}] \`topEntryElement\` is not available. Remove scroll event listener.`
         )
         window.removeEventListener('scroll', handleScroll)
         return
@@ -102,17 +106,17 @@ function ScrollToAudio({
     }, 50)
 
     console.log(
-      `[react-scroll-to-audio] add scroll event listener. \`muted\` state is ${muted}`
+      `[react-scroll-to-audio][${id}] add scroll event listener. \`muted\` state is ${muted}`
     )
     window.addEventListener('scroll', handleScroll)
 
     return () => {
       console.log(
-        '[react-scroll-to-audio] useEffect cleanup function. Remove scroll event listener.'
+        `[react-scroll-to-audio][${id}] useEffect cleanup function. Remove scroll event listener.`
       )
       window.removeEventListener('scroll', handleScroll)
     }
-  }, [muted])
+  }, [muted, hintOnly])
 
   // set audio muted attribute according to browser muted state
   useEffect(() => {
@@ -131,21 +135,23 @@ function ScrollToAudio({
 
     if (paused) {
       audioElement.pause()
-      console.log('[react-scroll-to-audio] audio paused.')
+      console.log(`[react-scroll-to-audio][${id}] audio paused.`)
     } else {
       const startPlayPromise = audioElement.play()
       if (startPlayPromise !== undefined) {
         startPlayPromise
           // play successfully
           .then(() => {
-            console.log('[react-scroll-to-audio] audio plays successfully.')
+            console.log(
+              `[react-scroll-to-audio][${id}] audio plays successfully.`
+            )
             audioElement.setAttribute('data-played', 'true')
           })
           // fail to play
           .catch((error) => {
             // browser prevent from playing audio before user interactions
-            console.log('[react-scroll-to-audio] unable to play audio')
-            console.log('[react-scroll-to-audio] error: ', error)
+            console.log(`[react-scroll-to-audio][${id}] unable to play audio`)
+            console.log(`[react-scroll-to-audio][${id}] error: `, error)
 
             // pause audio since browser does not allow to play it
             setPaused(true)
