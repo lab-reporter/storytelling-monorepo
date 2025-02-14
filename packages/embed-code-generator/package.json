@@ -1,6 +1,6 @@
 {
   "name": "@story-telling-reporter/react-embed-code-generator",
-  "version": "2.2.7",
+  "version": "2.2.8",
   "description": "",
   "main": "lib/index.js",
   "scripts": {
@@ -29,7 +29,7 @@
   "license": "MIT",
   "dependencies": {
     "@story-telling-reporter/react-karaoke": "1.0.0",
-    "@story-telling-reporter/react-scroll-to-audio": "3.0.0",
+    "@story-telling-reporter/react-scroll-to-audio": "3.0.1",
     "@story-telling-reporter/react-scrollable-image": "0.3.3",
     "@story-telling-reporter/react-scrollable-video": "3.0.0",
     "@story-telling-reporter/react-subtitled-audio": "1.1.1",
