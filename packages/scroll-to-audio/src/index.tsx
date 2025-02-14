@@ -153,8 +153,9 @@ function ScrollToAudio({
             console.log(`[react-scroll-to-audio][${id}] unable to play audio`)
             console.log(`[react-scroll-to-audio][${id}] error: `, error)
 
-            // pause audio since browser does not allow to play it
+            // pause and mute audio since browser does not allow to play it
             setPaused(true)
+            setMuted(true)
           })
       }
     }
@@ -166,13 +167,6 @@ function ScrollToAudio({
 
     // pause audio if muted, otherwise play the audio
     setPaused(nextMuted)
-
-    // Through this user interaction,
-    // trigger other scroll-to-audio elements to play sound as well,
-    // to prevent the browser from blocking playback later.
-    hooks.testPlayOtherMediaElements({
-      excludeElement: audioRef.current,
-    })
   }
 
   const bottomEntryId = id + '-bottom-entry-point'
