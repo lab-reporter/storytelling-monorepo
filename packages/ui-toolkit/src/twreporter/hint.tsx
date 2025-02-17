@@ -1,5 +1,5 @@
 import React, { useRef } from 'react'
-import styled from './styled-components'
+import styled from 'styled-components'
 import { MuteIcon, SoundIcon, SeparationLine } from './icons'
 import { mediaQuery } from './utils/media-query'
 import { useMuted } from '../hooks'
