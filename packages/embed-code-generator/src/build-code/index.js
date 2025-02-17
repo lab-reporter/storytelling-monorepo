@@ -123,9 +123,7 @@ export function buildEmbedCode(data, pkgName, Component) {
         }
       })()
     </script>
-    <div id="${uuid}">
-      ${jsx}
-    </div>
+    <div id="${uuid}">${jsx}</div>
     <script type="text/javascript" defer crossorigin src="${
       manifest?.[pkgName]
     }"></script>
