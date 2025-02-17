@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import styled from './styled-components'
+import styled from 'styled-components'
 import { MuteIcon, SoundIcon } from './icons'
 import debounce from 'lodash/debounce'
 import { hooks, twreporter } from '@story-telling-reporter/react-ui-toolkit'
