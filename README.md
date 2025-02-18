@@ -14,6 +14,9 @@
 - [@story-telling-reporter/react-three-story-controls](./packages/three-story-controls): see `packages/three-story-controls`
 - [@story-telling-reporter/react-ui-toolkit](./packages/ui-toolkit): see `packages/ui-toolkit`
 
+註：
+1. `packages/three-hong-kong-project` 並非元件，而是使用 `@story-telling-reporter/react-three-story-controls` 元件產生的 demo 網頁。因此 monorepo workspaces 並沒有包含 `packages/three-hong-kong-project`。
+
 ### Installation
 我們使用 yarn v1 來管理 workspaces 和 dependencies。
 因此，在安裝 dependecies 之前，請先確認 yarn 的版本。
