@@ -10,7 +10,7 @@
     "clean": "make clean",
     "build-dist": "make build-dist",
     "build-lib": "make build-lib",
-    "postinstall": "make build-lib"
+    "postinstall": "make build"
   },
   "repository": {
     "type": "git",
