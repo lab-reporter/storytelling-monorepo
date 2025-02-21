@@ -1,8 +1,8 @@
 import React, { useRef } from 'react'
-import styled from '../styled-components'
+import styled from 'styled-components'
 import { MuteIcon, SoundIcon } from './icons'
 import { mediaQuery } from './utils/media-query'
-import { useMuted, testPlayOtherMediaElements } from '../hooks'
+import { useMuted } from '../hooks'
 
 export function Hint({
   className,
@@ -30,11 +30,6 @@ export function Hint({
       <Button
         onClick={() => {
           setMuted(!muted)
-
-          // Through this user interaction,
-          // trigger other scroll-to-audio elements to play sound as well,
-          // to prevent the browser from blocking playback later.
-          testPlayOtherMediaElements()
         }}
       >
         <Icon>{muted ? <MuteIcon /> : <SoundIcon />}</Icon>

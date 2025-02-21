@@ -4813,33 +4813,6 @@
     "@smithy/types" "^2.8.0"
     tslib "^2.5.0"
 
-"@story-telling-reporter/react-embed-code-generator@2.2.3":
-  version "2.2.3"
-  resolved "https://registry.yarnpkg.com/@story-telling-reporter/react-embed-code-generator/-/react-embed-code-generator-2.2.3.tgz#365cb92e14b8747ee5c13ff89fc7db52ca845570"
-  integrity sha512-CaTIRql0vhzesdRAqkrGC/gQg0uduVHAZ7+aoJQxp5wZj52VbKLdDFGbBE2CE27EloM9GahOoJWA8CAmu0Yndw==
-  dependencies:
-    "@story-telling-reporter/react-karaoke" "1.0.0"
-    "@story-telling-reporter/react-scroll-to-audio" "3.0.0"
-    "@story-telling-reporter/react-scrollable-image" "0.2.0"
-    "@story-telling-reporter/react-scrollable-video" "3.0.0"
-    "@story-telling-reporter/react-subtitled-audio" "1.1.1"
-    "@story-telling-reporter/react-three-story-controls" "2.0.0"
-    lodash "^4.17.21"
-    serialize-javascript "^6.0.0"
-
-"@story-telling-reporter/react-scrollable-image@0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@story-telling-reporter/react-scrollable-image/-/react-scrollable-image-0.2.0.tgz#535dc829160cdfa4b25ff12e26493db9ad75c051"
-  integrity sha512-fJ4htlNvtg5BZz2J18XCcZz08Fiv/wAHKtinVh8torZUMFgik7hgOYM7arrgoCxi1dkg8U56dKFvn9NstZ81+Q==
-  dependencies:
-    "@gsap/react" "^2.1.0"
-    "@lexical/react" "^0.20.0"
-    gsap "^3.12.5"
-    immer "^10.1.1"
-    lexical "^0.20.0"
-    lodash "^4.17.15"
-    use-immer "^0.10.0"
-
 "@story-telling-reporter/react-three-story-controls@2.0.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@story-telling-reporter/react-three-story-controls/-/react-three-story-controls-2.0.0.tgz#82f533189e44383448ee5584e1ab81f24bd76608"

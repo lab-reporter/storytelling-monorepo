@@ -1,8 +1,8 @@
 import React, { useRef } from 'react'
-import styled from '../styled-components'
+import styled from 'styled-components'
 import { MuteIcon, SoundIcon, SeparationLine } from './icons'
 import { mediaQuery } from './utils/media-query'
-import { useMuted, testPlayOtherMediaElements } from '../hooks'
+import { useMuted } from '../hooks'
 
 export function Hint({ className, id }: { className?: string; id: string }) {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -27,11 +27,6 @@ export function Hint({ className, id }: { className?: string; id: string }) {
         className={muted ? 'dark' : 'light'}
         onClick={() => {
           setMuted(!muted)
-
-          // Through this user interaction,
-          // trigger other scroll-to-audio elements to play sound as well,
-          // to prevent the browser from blocking playback later.
-          testPlayOtherMediaElements()
         }}
       >
         {muted ? <span>開啟聲音</span> : <span>關閉聲音</span>}
