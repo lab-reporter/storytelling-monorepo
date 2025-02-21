@@ -690,7 +690,6 @@ type ScrollableImage {
   id: ID!
   name: String
   editorState: JSON
-  customCss: String
   embedCode: String
 }
 
@@ -704,19 +703,16 @@ input ScrollableImageWhereInput {
   NOT: [ScrollableImageWhereInput!]
   id: IDFilter
   name: StringFilter
-  customCss: StringFilter
 }
 
 input ScrollableImageOrderByInput {
   id: OrderDirection
   name: OrderDirection
-  customCss: OrderDirection
 }
 
 input ScrollableImageUpdateInput {
   name: String
   editorState: JSON
-  customCss: String
 }
 
 input ScrollableImageUpdateArgs {
@@ -727,7 +723,6 @@ input ScrollableImageUpdateArgs {
 input ScrollableImageCreateInput {
   name: String
   editorState: JSON
-  customCss: String
 }
 
 type ThreeModel {
