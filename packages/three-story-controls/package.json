@@ -1,6 +1,6 @@
 {
   "name": "@story-telling-reporter/react-three-story-controls",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "",
   "main": "lib/cjs/index.js",
   "module": "lib/esm/index.js",
@@ -10,7 +10,7 @@
     "dev": "make dev",
     "clean": "make clean",
     "build": "make build",
-    "postinstall": "make build"
+    "postinstall": "[ -d ./lib ] || make build"
   },
   "repository": {
     "type": "git",

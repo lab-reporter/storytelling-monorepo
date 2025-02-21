@@ -1,6 +1,6 @@
 {
   "name": "@story-telling-reporter/draft-editor",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "",
   "main": "lib/index.js",
   "scripts": {
@@ -8,8 +8,7 @@
     "dev": "make dev",
     "build": "make build",
     "clean": "make clean",
-    "build-lib": "make build-lib",
-    "postinstall": "make build"
+    "postinstall": "[ -d ./lib ] || make build"
   },
   "repository": {
     "type": "git",
