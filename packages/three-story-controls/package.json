@@ -10,7 +10,7 @@
     "dev": "make dev",
     "clean": "make clean",
     "build": "make build",
-    "postinstall": "make build"
+    "postinstall": "[ -d ./lib ] || make build"
   },
   "repository": {
     "type": "git",

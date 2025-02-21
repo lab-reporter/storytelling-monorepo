@@ -8,9 +8,7 @@
     "dev": "make dev",
     "build": "make build",
     "clean": "make clean",
-    "build-dist": "make build-dist",
-    "build-lib": "make build-lib",
-    "postinstall": "make build"
+    "postinstall": "[ -d ./lib ] || make build"
   },
   "repository": {
     "type": "git",
