@@ -99,7 +99,7 @@ const listConfigurations = list({
           })
           const css = (editorState.customCss as string) ?? ''
 
-          return `<!-- 捲動式影片：${item.name} --><style>${css}</style>${code}`
+          return `<!-- 橫著滾吧！：${item.name} --><style>${css}</style>${code}`
         },
       }),
       ui: {
