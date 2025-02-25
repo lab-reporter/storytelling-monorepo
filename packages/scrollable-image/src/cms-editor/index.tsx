@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react'
-import throttle from 'lodash/throttle'
-import styled from '../styled-components'
+import React, { useCallback, useState, useEffect, useRef } from 'react'
+import styled, { ThemeProvider } from '../styled-components'
 import {
   AddButton,
-  DeleteButton,
+  DeleteImgButton,
   SwitchPrevButton,
   SwitchNextButton,
   ZoomInButton,
@@ -13,25 +12,19 @@ import {
   OpenPreviewButton,
   ClosePreviewButton,
 } from './styled'
-import { CaptionStateEnum, EditorStateEnum, ThemeEnum } from './type'
+import { EditorStateEnum, ThemeEnum } from './type'
+import { CaptionTextEditor } from './caption-text-editor'
 import { Drawer, DrawerController, DrawerProvider } from '@keystone-ui/modals'
 import {
   FieldLabel,
   FieldDescription,
   Select,
+  TextArea,
   TextInput,
 } from '@keystone-ui/fields'
-import { ImgObj, Caption } from '../type'
-import {
-  LexicalTextEditor,
-  emptyEditorStateJSONString,
-} from './lexical-text-editor/index'
+import { ImgObj, CaptionData } from '../type'
 import { ScrollableImage } from '../scrollable-image'
 import { useImmerReducer } from 'use-immer'
-
-const _ = {
-  throttle,
-}
 
 const PreviewContainer = styled.div`
   width: 100vw;
@@ -55,7 +48,7 @@ const Container = styled.div<{ $fullScreen: boolean }>`
         position: fixed;
         top: 0;
         left: 0;
-        z-index: 1;
+        z-index: 0;
       `
     }
   }}
@@ -169,8 +162,9 @@ function historyReducer(draft: HistoryDraft, action: HistoryAction) {
 }
 
 export type ScrollableImageEditorProps = {
+  className?: string
   imgObjs: ImgObj[]
-  captions: Caption[]
+  captions: CaptionData[]
 } & ConfigProp
 
 export function ScrollableImageEditor({
@@ -182,6 +176,7 @@ export function ScrollableImageEditor({
   const [editorState, setEditorState] = useState(EditorStateEnum.DEFAULT)
   const [fullScreen, setFullScreen] = useState(false)
   const [preview, setPreview] = useState(false)
+  const [paragraphFontSize, setParagraphFontSize] = useState('16px')
   const [history, dispatch] = useImmerReducer(historyReducer, {
     past: [],
     present: siProps,
@@ -190,6 +185,10 @@ export function ScrollableImageEditor({
   const cardsRef = useRef<HTMLDivElement>(null)
   const scrollerRef = useRef<HTMLDivElement>(null)
   const imgObjs = siProps.imgObjs
+  const className =
+    siProps.className || 'storytelling-react-scrollable-image-container'
+  const fontToImgRatio = siProps.fontToImgRatio ?? 0
+  const customCss = siProps.customCss
 
   // Handle `history` changed.
   // When users redo, undo or add a new record of history,
@@ -222,14 +221,14 @@ export function ScrollableImageEditor({
         const y = event.clientY - rect.top
         const cardsWidth = cardsNode.offsetWidth
         const cardsHeight = cardsNode.offsetHeight
-        const caption: Caption = {
-          data: emptyEditorStateJSONString,
+        const caption: CaptionData = {
           position: {
             left: `${parseFloat((x / cardsWidth).toFixed(4)) * 100}%`,
             top: `${parseFloat((y / cardsHeight).toFixed(4)) * 100}%`,
           },
-          width: '100px',
-          height: '152px',
+          width: `${parseFloat((100 / cardsWidth).toFixed(4)) * 100}%`,
+          height: `${parseFloat((100 / cardsHeight).toFixed(4)) * 100}%`,
+          rawContentState: { blocks: [], entityMap: {} },
         }
 
         const newCaptions = siProps.captions.concat([caption])
@@ -302,6 +301,49 @@ export function ScrollableImageEditor({
     }
   }, [fullScreen, dispatch, onChange])
 
+  useEffect(() => {
+    if (preview && customCss) {
+      const attrName = 'data-scrollable-image-preview'
+      // add pdf custom styles
+      const head = document.head
+      const fragment = document.createDocumentFragment()
+      const styleEle = document.querySelector(`head > style[${attrName}]`)
+
+      if (styleEle) {
+        head.removeChild(styleEle)
+      }
+
+      const newStyleEle = document.createElement('style')
+      newStyleEle.setAttribute(attrName, '')
+      newStyleEle.textContent = customCss
+      fragment.appendChild(newStyleEle)
+      head.appendChild(fragment)
+    }
+  }, [preview, customCss])
+
+  useEffect(() => {
+    const calculateFontSize = () => {
+      const cardsEle = cardsRef.current
+      const cardsHeight = cardsEle?.clientHeight
+
+      if (!fullScreen || !cardsHeight || !fontToImgRatio) {
+        return
+      }
+
+      const fontSize = (cardsHeight * fontToImgRatio).toFixed(2) + 'px'
+
+      setParagraphFontSize(fontSize)
+    }
+
+    calculateFontSize()
+
+    window.addEventListener('resize', calculateFontSize)
+
+    return () => {
+      window.removeEventListener('resize', calculateFontSize)
+    }
+  }, [fullScreen, cardsRef, fontToImgRatio])
+
   const cardsJsx = imgObjs.map((imgObj, idx) => {
     return (
       <Card key={idx}>
@@ -356,7 +398,7 @@ export function ScrollableImageEditor({
               }
             }}
           />
-          <DeleteButton
+          <DeleteImgButton
             onClick={() => {
               // delete the image
               const newImgObjs = [
@@ -381,7 +423,10 @@ export function ScrollableImageEditor({
 
   let captionsJsx = null
 
-  const handleCaptionChange = (changedCaption: Caption | null, idx: number) => {
+  const handleCaptionChange = (
+    changedCaption: CaptionData | null,
+    idx: number
+  ) => {
     let newCaptions = []
     const prevCaptions = siProps.captions
     if (changedCaption === null) {
@@ -408,6 +453,21 @@ export function ScrollableImageEditor({
     })
   }
 
+  const getParentElementWidthAndHeight = useCallback(() => {
+    const cardsNode = cardsRef.current
+    if (!cardsNode) {
+      return {
+        width: window.innerWidth,
+        height: window.innerHeight,
+      }
+    }
+
+    return {
+      width: cardsNode.offsetWidth,
+      height: cardsNode.offsetHeight,
+    }
+  }, [cardsRef])
+
   if (!fullScreen) {
     captionsJsx = siProps.captions.map((caption, idx) => {
       return (
@@ -425,12 +485,13 @@ export function ScrollableImageEditor({
   } else {
     captionsJsx = siProps.captions.map((caption, idx) => {
       return (
-        <CaptionTextArea
+        <CaptionTextEditor
           key={idx}
           caption={caption}
           onChange={(changedCaption) =>
             handleCaptionChange(changedCaption, idx)
           }
+          getParentElementWidthAndHeight={getParentElementWidthAndHeight}
         />
       )
     })
@@ -466,6 +527,7 @@ export function ScrollableImageEditor({
         />
         <div style={{ height: '50vh', width: '1px' }} />
         <ScrollableImage
+          className={className}
           imgObjs={imgObjs}
           captions={siProps.captions}
           height={siProps.height}
@@ -473,6 +535,7 @@ export function ScrollableImageEditor({
           maxHeight={siProps.maxHeight}
           darkMode={siProps.theme === ThemeEnum.DARK_MODE}
           scrollerRef={scrollerRef}
+          fontToImgRatio={fontToImgRatio}
         />
         <div style={{ height: '50vh', width: '1px' }} />
       </PreviewContainer>
@@ -480,7 +543,12 @@ export function ScrollableImageEditor({
   }
 
   return (
-    <div>
+    <ThemeProvider
+      theme={{
+        darkMode: siProps.theme === ThemeEnum.DARK_MODE,
+        paragraphFontSize,
+      }}
+    >
       <Container $fullScreen={fullScreen}>
         <CardsContainer>
           <Cards $editorState={editorState} ref={cardsRef}>
@@ -518,245 +586,28 @@ export function ScrollableImageEditor({
           </Panel>
         </CardsContainer>
       </Container>
-      <ConfigInput
-        inputValue={{
-          height: siProps.height,
-          maxHeight: siProps.maxHeight,
-          minHeight: siProps.minHeight,
-          theme: siProps.theme,
-        }}
-        onChange={(updated) => {
-          const payload = Object.assign({}, siProps, updated)
-          onChange(payload)
-          // Uncomment the follwing lines if we need to undo/redo configure settings
-          //dispatch({
-          //  type: 'edit',
-          //  payload,
-          //})
-        }}
-      />
-    </div>
-  )
-}
-
-function CaptionTextArea({
-  className,
-  caption,
-  onChange,
-}: {
-  className?: string
-  caption: Caption
-  onChange: (caption: Caption | null) => void
-}) {
-  const [captionState, setCaptionState] = useState(CaptionStateEnum.DEFAULT)
-  const clickTsRef = useRef<number>(0)
-  const textAreaRef = useRef<HTMLDivElement>(null)
-
-  let cursorStyle = 'default'
-  switch (captionState) {
-    case CaptionStateEnum.EDIT_TEXT:
-      cursorStyle = 'auto'
-      break
-    case CaptionStateEnum.FOCUS:
-    case CaptionStateEnum.DEFAULT:
-    default: {
-      cursorStyle = 'default'
-      break
-    }
-  }
-
-  // handle `captionState` changes
-  useEffect(() => {
-    const textAreaNode = textAreaRef.current
-
-    function handleClickOutside(event: MouseEvent) {
-      if (!textAreaNode?.contains(event.target as Node)) {
-        // reset edit status
-        setCaptionState(CaptionStateEnum.DEFAULT)
-      }
-    }
-
-    function handleKeyDown(event: KeyboardEvent) {
-      if (
-        event.key === 'Delete' ||
-        (event.key === 'Backspace' && captionState === CaptionStateEnum.FOCUS)
-      ) {
-        onChange(null)
-        setCaptionState(CaptionStateEnum.DEFAULT)
-        return
-      }
-    }
-
-    // Bind the event listener
-    document.addEventListener('mousedown', handleClickOutside)
-    document.addEventListener('keydown', handleKeyDown)
-
-    return () => {
-      // Unbind the event listener on clean up
-      document.removeEventListener('mousedown', handleClickOutside)
-      document.removeEventListener('keydown', handleKeyDown)
-    }
-  }, [captionState, onChange])
-
-  // Handle drag and drop,
-  // and re-calculate `CaptionTextArea` positions.
-  useEffect(() => {
-    const textAreaNode = textAreaRef.current
-
-    if (!textAreaNode) {
-      return
-    }
-
-    let isDragging = false
-    let startX = 0
-    let startY = 0
-    let deltaX = 0
-    let deltaY = 0
-
-    function drag(event: MouseEvent) {
-      if (captionState === CaptionStateEnum.FOCUS && textAreaNode) {
-        isDragging = true
-        startX = event.clientX
-        startY = event.clientY
-      }
-    }
-
-    function dragging(event: MouseEvent) {
-      if (isDragging && textAreaNode) {
-        deltaX = event.clientX - startX
-        deltaY = event.clientY - startY
-        textAreaNode.style.transform = `translate(${deltaX}px, ${deltaY}px)`
-      }
-    }
-
-    function drop() {
-      if (isDragging && textAreaNode) {
-        isDragging = false
-
-        const left = textAreaNode.offsetLeft + deltaX
-        const top = textAreaNode.offsetTop + deltaY
-
-        const parentElement = textAreaNode.parentElement // `parentElement` should be `Cards` element
-        if (parentElement) {
-          const parentWidth = parentElement.offsetWidth
-          const parentHeight = parentElement.offsetHeight
-
-          textAreaNode.style.transform = 'none'
-
-          onChange(
-            Object.assign({}, caption, {
-              // re-calculate caption positions.
-              position: {
-                left: `${parseFloat((left / parentWidth).toFixed(4)) * 100}%`,
-                top: `${parseFloat((top / parentHeight).toFixed(4)) * 100}%`,
-              },
-            })
-          )
-        }
-      }
-    }
-
-    textAreaNode.addEventListener('mousedown', drag)
-    document.addEventListener('mousemove', dragging)
-    document.addEventListener('mouseup', drop)
-
-    return () => {
-      textAreaNode.removeEventListener('mousedown', drag)
-      document.removeEventListener('mousemove', dragging)
-      document.removeEventListener('mouseup', drop)
-    }
-  }, [captionState, caption, onChange])
-
-  // handle textarea element resize
-  useEffect(() => {
-    const textAreaNode = textAreaRef.current
-
-    if (!textAreaNode) {
-      return
-    }
-
-    const resizeObserver = new ResizeObserver(
-      _.throttle((entries) => {
-        const entry = entries?.[0]
-        if (entry) {
-          const minWidth = 20
-          const minHeight = 20
-          const rect = entry.target.getBoundingClientRect()
-
-          // @TODO to support RWD.
-          // Currently unit is `px`, which is not responsive.
-          // We might need to change the unit to `vh`.
-          const width =
-            rect.width > minWidth ? `${rect.width}px` : `${minWidth}px`
-          const height =
-            rect.height > minHeight ? `${rect.height}px` : `${minHeight}px`
-
-          if (caption.width !== width || caption.height !== height) {
-            onChange({
-              ...caption,
-              width,
-              height,
-            })
-          }
-        }
-      }, 2000)
-    )
-
-    resizeObserver.observe(textAreaNode)
-
-    return () => {
-      resizeObserver.unobserve(textAreaNode)
-      resizeObserver.disconnect()
-    }
-  }, [caption, onChange])
-
-  return (
-    <div
-      ref={textAreaRef}
-      className={className}
-      style={{
-        position: 'absolute',
-        ...caption.position,
-        width: caption.width,
-        height: caption.height,
-        cursor: cursorStyle,
-        border:
-          captionState === CaptionStateEnum.FOCUS
-            ? '1px solid blue'
-            : 'inherit',
-        resize: captionState === CaptionStateEnum.EDIT_TEXT ? 'both' : 'none',
-        overflow: 'auto',
-      }}
-      onClick={() => {
-        if (captionState === CaptionStateEnum.DEFAULT) {
-          clickTsRef.current = Date.now()
-          setCaptionState(CaptionStateEnum.FOCUS)
-          return
-        }
-
-        const timeElapsed = 300
-        // Double click to enter EDIT_TEXT state
-        if (
-          captionState === CaptionStateEnum.FOCUS &&
-          Date.now() - clickTsRef.current < timeElapsed
-        ) {
-          return setCaptionState(CaptionStateEnum.EDIT_TEXT)
-        } else {
-          clickTsRef.current = Date.now()
-        }
-      }}
-    >
-      <LexicalTextEditor
-        readOnly={captionState !== CaptionStateEnum.EDIT_TEXT}
-        onChange={(lexcialEditorStateJSONString) => {
-          onChange({
-            ...caption,
-            data: lexcialEditorStateJSONString,
-          })
-        }}
-        editorStateJSONString={caption.data}
-      />
-    </div>
+      {!fullScreen && (
+        <ConfigInput
+          inputValue={{
+            height: siProps.height,
+            maxHeight: siProps.maxHeight,
+            minHeight: siProps.minHeight,
+            theme: siProps.theme,
+            customCss,
+            fontToImgRatio,
+          }}
+          onChange={(updated) => {
+            const payload = Object.assign({}, siProps, updated)
+            onChange(payload)
+            // Uncomment the follwing lines if we need to undo/redo configure settings
+            //dispatch({
+            //  type: 'edit',
+            //  payload,
+            //})
+          }}
+        />
+      )}
+    </ThemeProvider>
   )
 }
 
@@ -821,6 +672,8 @@ type ConfigProp = {
   maxHeight?: string
   minHeight?: string
   theme?: ThemeEnum
+  customCss?: string
+  fontToImgRatio?: number
 }
 
 const themeOptions = [
@@ -845,7 +698,7 @@ function ConfigInput({
     themeOptions.find((option) => option.value === inputValue.theme) ?? null
 
   return (
-    <>
+    <div>
       <MarginTop />
       <FieldLabel>圖片高度</FieldLabel>
       <FieldDescription id="height">
@@ -910,7 +763,40 @@ function ConfigInput({
         }}
         value={selectedThemeValue}
       />
-    </>
+      <MarginTop />
+      <FieldLabel>客製化 CSS</FieldLabel>
+      <TextArea
+        onChange={(e) =>
+          onChange(
+            Object.assign({}, inputValue, {
+              customCss: e.target.value,
+            })
+          )
+        }
+        type="text"
+        defaultValue={inputValue.customCss}
+      />
+      <MarginTop />
+      <FieldLabel>字體大小與圖片高度的比例</FieldLabel>
+      <FieldDescription id="config-font-to-img-ratio">
+        預設值為0，代表不隨著圖片縮放調整字體大小。若值為非0，字體大小會隨著圖片縮放等比例調整；舉例：若值為0.02，而圖片高度為800px，則字體大小會是16px（800
+        *
+        0.02）。若使用者調整視窗大小，圖片高度變成1200px，則字體大小也會隨之變成24px（1200
+        * 0.02）。
+      </FieldDescription>
+      <TextInput
+        onChange={(e) => {
+          onChange(
+            Object.assign({}, inputValue, {
+              fontToImgRatio: parseFloat(e.target.value),
+            })
+          )
+        }}
+        type="text"
+        defaultValue={inputValue?.fontToImgRatio}
+      />
+      <MarginTop />
+    </div>
   )
 }
 

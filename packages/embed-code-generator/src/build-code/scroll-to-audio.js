@@ -11,6 +11,6 @@ Promise.all([
   ),
   import('./constants'),
   import('regenerator-runtime/runtime'),
-]).then(([{ render }, { ScrollToAudio }, { pkgNames }]) => {
-  render(namespace, pkgNames.scrollToAudio, ScrollToAudio)
+]).then(([{ hydrate }, { ScrollToAudio }, { pkgNames }]) => {
+  hydrate(namespace, pkgNames.scrollToAudio, ScrollToAudio)
 })

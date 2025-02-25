@@ -4,7 +4,10 @@ import serialize from 'serialize-javascript'
 import { ServerStyleSheet } from 'styled-components'
 import { Karaoke } from '@story-telling-reporter/react-karaoke'
 import { KidsSubtitledAudio } from '@story-telling-reporter/react-subtitled-audio'
-import { buildBottomEntryPointStaticMarkup } from '@story-telling-reporter/react-scroll-to-audio'
+import {
+  ScrollToAudio,
+  buildBottomEntryPointStaticMarkup,
+} from '@story-telling-reporter/react-scroll-to-audio'
 import { v4 as uuidv4 } from 'uuid'
 import { pkgNames } from './constants'
 
@@ -56,7 +59,7 @@ export function buildScrollToAudioEmbedCode(
   if (bottomEntryPointOnly) {
     return buildBottomEntryPointStaticMarkup({ id: data?.id })
   }
-  return buildEmbedCode(data, pkgNames.scrollToAudio, null)
+  return buildEmbedCode(data, pkgNames.scrollToAudio, ScrollToAudio)
 }
 
 /**
@@ -120,9 +123,7 @@ export function buildEmbedCode(data, pkgName, Component) {
         }
       })()
     </script>
-    <div id="${uuid}">
-      ${jsx}
-    </div>
+    <div id="${uuid}">${jsx}</div>
     <script type="text/javascript" defer crossorigin src="${
       manifest?.[pkgName]
     }"></script>

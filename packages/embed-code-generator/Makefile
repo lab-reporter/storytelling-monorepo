@@ -17,10 +17,28 @@ build-lib:
 	@echo "$(P) Transpile es6, jsx and (typescript) to es5"
 	NODE_ENV=production yarn babel src --out-dir lib --copy-files --root-mode upward
 
+build-deps:
+	@echo "$(P) Build packages/draft-editor"
+	make -s -C ../draft-editor build;
+	@echo "$(P) Build packages/ui-toolkit"
+	make -s -C ../ui-toolkit build;
+	@echo "$(P) Build packages/three-story-controls"
+	make -s -C ../three-story-controls build;
+	@echo "$(P) Build packages/subtitled-audio"
+	make -s -C ../subtitled-audio build;
+	@echo "$(P) Build packages/scrollable-video"
+	make -s -C ../scrollable-video build;
+	@echo "$(P) Build packages/scrollable-image"
+	make -s -C ../scrollable-image build;
+	@echo "$(P) Build packages/scroll-to-audio"
+	make -s -C ../scroll-to-audio build;
+	@echo "$(P) Build packages/karaoke"
+	make -s -C ../karaoke build;
+
 build: clean build-dist build-lib
 
 clean:
 	@echo "$(P) Clean lib/ dist/"
 	rm -rf lib/ dist/
 
-.PHONY: build clean dev build-dist build-lib
+.PHONY: build clean dev build-dist build-lib build-deps

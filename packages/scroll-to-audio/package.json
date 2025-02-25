@@ -1,16 +1,14 @@
 {
   "name": "@story-telling-reporter/react-scroll-to-audio",
-  "version": "2.0.5",
+  "version": "3.0.3",
   "description": "",
-  "main": "lib/cjs/index.js",
-  "module": "lib/esm/index.js",
-  "type": "module",
+  "main": "lib/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "make dev",
     "build": "make build",
     "clean": "make clean",
-    "build-lib": "make build-lib"
+    "postinstall": "[ -d ./lib ] || make build"
   },
   "repository": {
     "type": "git",
@@ -26,7 +24,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@story-telling-reporter/react-ui-toolkit": "^0.0.1-alpha.3",
+    "@story-telling-reporter/react-ui-toolkit": "^1.1.2",
     "lodash": "^4.17.21",
     "react-intersection-observer": "^9.3.5"
   },

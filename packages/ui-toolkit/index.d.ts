@@ -1,10 +1,15 @@
-import { useMuted, useIOSCornerCaseFix } from './src/hooks'
+import {
+  useMuted,
+  useIOSCornerCaseFix,
+  testPlayOtherMediaElements,
+} from './src/hooks'
 import { Hint } from './src/twreporter/index'
 import { Hint as KidsHint } from './src/kids/index'
 
 export type Hooks = {
   useMuted: useMuted
   useIOSCornerCaseFix: useIOSCornerCaseFix
+  testPlayOtherMediaElements: testPlayOtherMediaElements
 }
 
 export type Twreporter = {

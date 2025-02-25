@@ -33,7 +33,8 @@ export const Paragraph = styled.div`
   width: 100%;
   margin-bottom: 16px;
 
-  font-size: 16px;
+  // font-size: 16px;
+  font-size: ${({ theme }) => theme.paragraphFontSize ?? '16px'};
   font-weight: 400;
   line-height: 1.75;
   letter-spacing: 0.6px;

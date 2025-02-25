@@ -4,32 +4,9 @@ import { graphql, list } from '@keystone-6/core'
 import { text, json, virtual } from '@keystone-6/core/fields'
 
 const className = 'storytelling-react-scrollable-image-container'
-
-const listConfigurations = list({
-  fields: {
-    name: text({
-      label: 'Scorllable Image 名稱',
-      validation: { isRequired: true },
-    }),
-    editorState: json({
-      label: '編輯圖片和字幕',
-      defaultValue: {
-        captions: [],
-        imgObjs: [],
-      },
-      ui: {
-        // A module path that is resolved from where `keystone start` is run
-        views: './lists/views/scrollable-image-editor/index',
-        createView: {
-          fieldMode: 'hidden',
-        },
-      },
-    }),
-    customCss: text({
-      label: '客製化 CSS',
-      defaultValue: `
-  /* 將捲動式影片往上移動，使其與上一個區塊連接在一起。*/
-  /* 使用情境範例：想要兩個捲動式影片連在一起，讓第二個捲動式影片與第一個影片沒有間隔。 */
+const customCss = `
+  /* 給報導者文章頁使用 */
+  /* 將元件往上移動，使其與上一個區塊連接在一起。*/
   /* 刪除下方註解即可使用。 */
   /*
   .${className} {
@@ -37,7 +14,10 @@ const listConfigurations = list({
   }
   */
 
-  /* 將捲動式影片向左移動，撐滿文章頁 */
+  /* 給報導者文章頁使用 */
+  /* 將元件向左移動，撐滿文章頁 */
+  /* 刪除下方註解即可使用。 */
+  /*
   @media (max-width: 767px) {
     .${className} {
       margin-left: -3.4vw;
@@ -61,10 +41,46 @@ const listConfigurations = list({
       margin-left: calc((100vw - 730px)/2 * -1);
     }
   }
-}
-      `,
+  */
+
+  /* 給少年報導者文章頁使用 */
+  /* 將元件向左移動，撐滿文章頁 */
+  /* 刪除下方註解即可使用。 */
+  /*
+  @media (max-width: 767px) {
+    .${className} {
+      margin-left: -5vw;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .${className} {
+      margin-left: calc((100vw - 700px)/2 * -1);
+    }
+  }
+  */
+`
+
+const listConfigurations = list({
+  fields: {
+    name: text({
+      label: 'Scorllable Image 名稱',
+      validation: { isRequired: true },
+    }),
+    editorState: json({
+      label: '編輯圖片和字幕',
+      defaultValue: {
+        captions: [],
+        imgObjs: [],
+        customCss,
+        className,
+      },
       ui: {
-        displayMode: 'textarea',
+        // A module path that is resolved from where `keystone start` is run
+        views: './lists/views/scrollable-image-editor/index',
+        createView: {
+          fieldMode: 'hidden',
+        },
       },
     }),
     embedCode: virtual({
@@ -81,7 +97,7 @@ const listConfigurations = list({
             minHeight: editorState.minHeight,
             maxHeight: editorState.maxHeight,
           })
-          const css = (item.customCss as string) ?? ''
+          const css = (editorState.customCss as string) ?? ''
 
           return `<!-- 捲動式影片：${item.name} --><style>${css}</style>${code}`
         },
