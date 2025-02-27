@@ -3,6 +3,7 @@ import Photo from './photo'
 import ScrollToAudio from './scroll-to-audio'
 import ScrollableThreeModel from './scrollable-three-model'
 import ScrollableVideo from './scrollable-video'
+import ScrollableImage from './scrollable-image'
 import User from './user'
 import Video from './video'
 
@@ -13,5 +14,6 @@ export const listDefinition = {
   Photo,
   ScrollToAudio,
   ScrollableVideo,
+  ScrollableImage,
   ScrollableThreeModel,
 }

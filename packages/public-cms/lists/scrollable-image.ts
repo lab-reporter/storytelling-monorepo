@@ -115,6 +115,7 @@ const listConfigurations = list({
     }),
   },
   ui: {
+    label: '橫著滾吧！',
     listView: {
       initialSort: { field: 'id', direction: 'DESC' },
       initialColumns: ['name'],
