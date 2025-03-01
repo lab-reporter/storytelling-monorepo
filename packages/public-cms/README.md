@@ -161,9 +161,9 @@ A1: 如果錯誤訊息與 `@story-telling-reporter/draft-editor` 有關，可以
 這組帳號就會被寫入透過 docker 所架設的 PostgreSQL 中，並可以透過 GraphQL 存取。
 
 登入後看見的是透過 [`./admin/config.tsx`](./admin/config.tsx) 設定的管理介面，可以在這裡上傳建立元件所需要的物件（如音檔、照片）和建立元件物件。
-我們能夠透過 [`./lists/`](./lists/) 定義的物件的結構，例如 [`./lists/audio.ts`](./lists/audio.ts) 定義了音檔的所需的 fields 和它們在頁面（[http://localhost:3000/audio](http://localhost:3000/audio)）上會如何呈現。而新增或修改這些物件是怎麼影響資料庫的，可以參考 [Database Migration](###database-migration) 章節。
+我們能夠透過 [`./lists/`](./lists/) 定義物件的結構，例如 [`./lists/audio.ts`](./lists/audio.ts) 定義了音檔的所需的 fields 和它們在頁面（[http://localhost:3000/audio](http://localhost:3000/audio)）上會如何呈現。而新增或修改這些物件是怎麼影響資料庫的，可以參考 [Database Migration](#database-migration-建議同步參考-keystone-文件) 章節。
 
-目前可以產生的元件包含：
+元件庫目前可以產生的元件包含：
 - 捲到式聲音
 - 捲動式影片
 - 橫著滾吧！
@@ -172,11 +172,12 @@ A1: 如果錯誤訊息與 `@story-telling-reporter/draft-editor` 有關，可以
 - 大圖點我
 - 捲動式3D（測試版）
 
-其中，大事記、左右互搏、大圖點我為第一版元件，是透過 iframe 嵌入的，可以在 [`./admin/pages/iframe/`](./admin/pages/iframe/) 資料夾找到它們。
+其中，「大事記」、「左右互搏」、「大圖點我」為第一版元件，是透過 iframe 嵌入的，可以在 [`./admin/pages/iframe/`](./admin/pages/iframe/) 資料夾找到它們。
 而剩下的為第二版的元件，我們可以透過 CMS 建立這些元件物件，它們的結構定義一樣可以在 [`./lists/`](./lists/) 資料夾下找到。
 
-當我們建立元件物件時就呼叫 [@story-telling-reporter/react-embed-code-generator](../embed-code-generator) package 中並載入相對應的 packages 達成元件程式 source code 和 embed code 的產生。
-以「[捲到式聲音](http://localhost:3000/scroll-to-audios)」元件為例，[`./lists/scroll-to-audio.ts`](./lists/scroll-to-audio.ts) 當中的 `startEmbedCode`、`endEmbedCode` 和 `hintEmbedCode` 都會用到 [@story-telling-reporter/react-embed-code-generator](../embed-code-generator) package 所 export 的 `buildScrollToAudioEmbedCode` function（定義在 [`../packages/embed-code-generator/src/index.js`](../packages/embed-code-generator/src/index.js) 下），而該 function 實際上是在 [`../packages/embed-code-generator/src/build-code/index.js`](../packages/embed-code-generator/src/build-code/index.js) 中，呼叫了 [@story-telling-reporter/react-scroll-to-audio](../scroll-to-audio) package 產生 source code，再利用 `buildEmbedCode` function 產生 embed code。
+當我們建立元件物件時會呼叫 [@story-telling-reporter/react-embed-code-generator](../embed-code-generator) package 中並載入相對應的 packages 達成元件程式 source code 和 embed code 的產生。
+
+以「[捲到式聲音](http://localhost:3000/scroll-to-audios)」元件為例，[`./lists/scroll-to-audio.ts`](./lists/scroll-to-audio.ts) 當中的 `startEmbedCode`、`endEmbedCode` 和 `hintEmbedCode` 都會用到 [@story-telling-reporter/react-embed-code-generator](../embed-code-generator) package 所 export 的 `buildScrollToAudioEmbedCode` function（定義在 [`../packages/embed-code-generator/src/build-code/index.js`](../packages/embed-code-generator/src/build-code/index.js) 中），而該 function 透過呼叫 [@story-telling-reporter/react-scroll-to-audio](../scroll-to-audio) package 產生 source code，並利用 `buildEmbedCode` function 產生 embed code。
 
 個別元件的 source code 產生可參考個別元件 packages 下的 `src` 資料夾。
 - 捲到式聲音：[`../scroll-to-audio/src/`](../scroll-to-audio/src/)
