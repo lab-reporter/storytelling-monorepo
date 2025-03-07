@@ -20,8 +20,8 @@ export const listDefinition = {
   Karaoke,
   SubtitledAudio,
   ScrollToAudio,
-  ScrollableThreeModel,
   ScrollableVideo,
   ScrollableImage,
+  ScrollableThreeModel,
   ThreeModel,
 }

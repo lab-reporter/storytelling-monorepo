@@ -64,7 +64,7 @@ const customCss = `
 const listConfigurations = list({
   fields: {
     name: text({
-      label: 'Scorllable Image 名稱',
+      label: '名稱',
       validation: { isRequired: true },
     }),
     editorState: json({
@@ -115,6 +115,7 @@ const listConfigurations = list({
     }),
   },
   ui: {
+    label: '橫著滾吧！',
     listView: {
       initialSort: { field: 'id', direction: 'DESC' },
       initialColumns: ['name'],
