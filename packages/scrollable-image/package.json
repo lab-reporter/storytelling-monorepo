@@ -36,7 +36,7 @@
   "devDependencies": {
     "@keystone-ui/fields": "^7.2.0",
     "@keystone-ui/modals": "^6.0.3",
-    "@story-telling-reporter/draft-editor": "^2.1.0",
+    "@story-telling-reporter/draft-editor": "^2.1.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "styled-components": "5.3.5"
@@ -44,7 +44,7 @@
   "peerDependencies": {
     "@keystone-ui/fields": "^7.2.0",
     "@keystone-ui/modals": "^6.0.3",
-    "@story-telling-reporter/draft-editor": "^2.1.0",
+    "@story-telling-reporter/draft-editor": "^2.1.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "styled-components": "5.3.5"
