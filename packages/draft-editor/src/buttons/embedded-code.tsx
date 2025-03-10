@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { AtomicBlockUtils, EditorState } from 'draft-js'
 import { Drawer, DrawerController } from '@keystone-ui/modals'
 import { TextInput, TextArea } from '@keystone-ui/fields'
+import DOMPurify from 'dompurify'
 
 export type EmbeddedCodeInputValue = {
   caption?: string
@@ -22,7 +23,8 @@ export function EmbeddedCodeInput({
   const [inputValueState, setInputValue] = useState(inputValue)
 
   const confirmInput = () => {
-    onConfirm(inputValueState)
+    const sanitizedCode = DOMPurify.sanitize(inputValueState.embeddedCode)
+    onConfirm({ caption: inputValueState.caption, embeddedCode: sanitizedCode })
   }
 
   return (
