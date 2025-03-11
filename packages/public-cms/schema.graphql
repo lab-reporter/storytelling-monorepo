@@ -550,6 +550,56 @@ input ScrollableThreeModelCreateInput {
   created_by: UserRelateToOneForCreateInput
 }
 
+type PuzzlePhotoInfra {
+  id: ID!
+  name: String
+  preview: JSON
+  created_at: DateTime
+  updated_at: DateTime
+  created_by: User
+}
+
+input PuzzlePhotoInfraWhereUniqueInput {
+  id: ID
+}
+
+input PuzzlePhotoInfraWhereInput {
+  AND: [PuzzlePhotoInfraWhereInput!]
+  OR: [PuzzlePhotoInfraWhereInput!]
+  NOT: [PuzzlePhotoInfraWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  created_at: DateTimeNullableFilter
+  updated_at: DateTimeNullableFilter
+  created_by: UserWhereInput
+}
+
+input PuzzlePhotoInfraOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  created_at: OrderDirection
+  updated_at: OrderDirection
+}
+
+input PuzzlePhotoInfraUpdateInput {
+  name: String
+  created_at: DateTime
+  updated_at: DateTime
+  created_by: UserRelateToOneForUpdateInput
+}
+
+input PuzzlePhotoInfraUpdateArgs {
+  where: PuzzlePhotoInfraWhereUniqueInput!
+  data: PuzzlePhotoInfraUpdateInput!
+}
+
+input PuzzlePhotoInfraCreateInput {
+  name: String
+  created_at: DateTime
+  updated_at: DateTime
+  created_by: UserRelateToOneForCreateInput
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -604,6 +654,12 @@ type Mutation {
   updateScrollableThreeModels(data: [ScrollableThreeModelUpdateArgs!]!): [ScrollableThreeModel]
   deleteScrollableThreeModel(where: ScrollableThreeModelWhereUniqueInput!): ScrollableThreeModel
   deleteScrollableThreeModels(where: [ScrollableThreeModelWhereUniqueInput!]!): [ScrollableThreeModel]
+  createPuzzlePhotoInfra(data: PuzzlePhotoInfraCreateInput!): PuzzlePhotoInfra
+  createPuzzlePhotoInfras(data: [PuzzlePhotoInfraCreateInput!]!): [PuzzlePhotoInfra]
+  updatePuzzlePhotoInfra(where: PuzzlePhotoInfraWhereUniqueInput!, data: PuzzlePhotoInfraUpdateInput!): PuzzlePhotoInfra
+  updatePuzzlePhotoInfras(data: [PuzzlePhotoInfraUpdateArgs!]!): [PuzzlePhotoInfra]
+  deletePuzzlePhotoInfra(where: PuzzlePhotoInfraWhereUniqueInput!): PuzzlePhotoInfra
+  deletePuzzlePhotoInfras(where: [PuzzlePhotoInfraWhereUniqueInput!]!): [PuzzlePhotoInfra]
   endSession: Boolean!
   authenticateUserWithPassword(email: String!, password: String!): UserAuthenticationWithPasswordResult
   createInitialUser(data: CreateInitialUserInput!): UserAuthenticationWithPasswordSuccess!
@@ -652,6 +708,9 @@ type Query {
   scrollableThreeModels(where: ScrollableThreeModelWhereInput! = {}, orderBy: [ScrollableThreeModelOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ScrollableThreeModelWhereUniqueInput): [ScrollableThreeModel!]
   scrollableThreeModel(where: ScrollableThreeModelWhereUniqueInput!): ScrollableThreeModel
   scrollableThreeModelsCount(where: ScrollableThreeModelWhereInput! = {}): Int
+  puzzlePhotoInfras(where: PuzzlePhotoInfraWhereInput! = {}, orderBy: [PuzzlePhotoInfraOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PuzzlePhotoInfraWhereUniqueInput): [PuzzlePhotoInfra!]
+  puzzlePhotoInfra(where: PuzzlePhotoInfraWhereUniqueInput!): PuzzlePhotoInfra
+  puzzlePhotoInfrasCount(where: PuzzlePhotoInfraWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
 }

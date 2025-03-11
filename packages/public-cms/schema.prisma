@@ -25,6 +25,7 @@ model User {
   from_ScrollToAudio_created_by        ScrollToAudio[]        @relation("ScrollToAudio_created_by")
   from_ScrollableVideo_created_by      ScrollableVideo[]      @relation("ScrollableVideo_created_by")
   from_ScrollableThreeModel_created_by ScrollableThreeModel[] @relation("ScrollableThreeModel_created_by")
+  from_PuzzlePhotoInfra_created_by     PuzzlePhotoInfra[]     @relation("PuzzlePhotoInfra_created_by")
 }
 
 model Audio {
@@ -110,6 +111,17 @@ model ScrollableThreeModel {
   cameraHelperData Json?  @default("{\"plainPois\":[],\"animationClip\":null,\"modelObjs\":[]}")
   created_by       User?  @relation("ScrollableThreeModel_created_by", fields: [created_byId], references: [id])
   created_byId     Int?   @map("created_by")
+
+  @@index([created_byId])
+}
+
+model PuzzlePhotoInfra {
+  id           Int       @id @default(autoincrement())
+  name         String    @default("")
+  created_at   DateTime? @default(now())
+  updated_at   DateTime? @updatedAt
+  created_by   User?     @relation("PuzzlePhotoInfra_created_by", fields: [created_byId], references: [id])
+  created_byId Int?      @map("created_by")
 
   @@index([created_byId])
 }
