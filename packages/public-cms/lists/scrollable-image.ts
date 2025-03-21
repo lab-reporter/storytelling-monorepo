@@ -116,6 +116,8 @@ const listConfigurations = list({
   },
   ui: {
     label: '橫著滾吧！',
+    singular: '橫著滾吧！',
+    plural: '橫著滾吧！',
     listView: {
       initialSort: { field: 'id', direction: 'DESC' },
       initialColumns: ['name'],

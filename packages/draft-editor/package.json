@@ -1,6 +1,6 @@
 {
   "name": "@story-telling-reporter/draft-editor",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "",
   "main": "lib/index.js",
   "scripts": {
@@ -27,6 +27,7 @@
     "@keystone-ui/fields": "^7.2.0",
     "@keystone-ui/modals": "^6.0.3",
     "@twreporter/errors": "^1.1.2",
+    "dompurify": "^3.2.4",
     "draft-js": "^0.11.7"
   },
   "peerDependencies": {

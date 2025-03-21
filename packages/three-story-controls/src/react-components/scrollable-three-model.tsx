@@ -153,7 +153,7 @@ type WindowObject = {
 export type ScrollableThreeModelProps = CameraData & {
   debugMode?: boolean
   modelObjs: GTLFModelObject[]
-  scrollerRef?: React.RefObject<HTMLElement>
+  scrollerRef?: React.RefObject<HTMLElement | null>
   durationPer100vh?: number
 }
 
