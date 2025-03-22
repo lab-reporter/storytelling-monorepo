@@ -8,6 +8,7 @@ import {
   ScrollToAudio,
   buildBottomEntryPointStaticMarkup,
 } from '@story-telling-reporter/react-scroll-to-audio'
+import { PuzzlePhotoInfra } from '@story-telling-reporter/react-puzzle-photo-infra'
 import { v4 as uuidv4 } from 'uuid'
 import { pkgNames } from './constants'
 
@@ -68,6 +69,10 @@ export function buildScrollToAudioEmbedCode(
  */
 export function buildScrollableThreeModelEmbedCode(data) {
   return buildEmbedCode(data, pkgNames.scrollableThreeModel, null)
+}
+
+export function buildPuzzlePhotoInfraEmbedCode(data) {
+  return buildEmbedCode(data, pkgNames.puzzlePhotoInfra, PuzzlePhotoInfra)
 }
 
 /**

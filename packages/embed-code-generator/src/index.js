@@ -6,6 +6,7 @@ import {
   buildScrollableThreeModelEmbedCode,
   buildScrollableVideoEmbedCode,
   buildSubtitledAudioEmbedCode,
+  buildPuzzlePhotoInfraEmbedCode,
 } from './build-code/index'
 
 import { pkgNames } from './build-code/constants'
@@ -18,6 +19,7 @@ export {
   buildScrollableThreeModelEmbedCode,
   buildScrollableVideoEmbedCode,
   buildSubtitledAudioEmbedCode,
+  buildPuzzlePhotoInfraEmbedCode,
   pkgNames,
 }
 
@@ -29,5 +31,6 @@ export default {
   buildScrollableThreeModelEmbedCode,
   buildScrollableVideoEmbedCode,
   buildSubtitledAudioEmbedCode,
+  buildPuzzlePhotoInfraEmbedCode,
   pkgNames,
 }

@@ -553,10 +553,34 @@ input ScrollableThreeModelCreateInput {
 type PuzzlePhotoInfra {
   id: ID!
   name: String
+  size: PuzzlePhotoInfraSizeType
+  layout: PuzzlePhotoInfraLayoutType
+  photo1: String
+  photo2: String
+  photo3: String
+  photo4: String
+  embedCode: String
   preview: JSON
-  created_at: DateTime
-  updated_at: DateTime
-  created_by: User
+}
+
+enum PuzzlePhotoInfraSizeType {
+  square
+  horizontalRectangle
+  verticalRectangle
+}
+
+enum PuzzlePhotoInfraLayoutType {
+  LAYOUT_A_1
+  LAYOUT_B_1
+  LAYOUT_A_2
+  LAYOUT_B_2
+  LAYOUT_A_3
+  LAYOUT_B_3
+  LAYOUT_C_3
+  LAYOUT_D_3
+  LAYOUT_A_4
+  LAYOUT_B_4
+  LAYOUT_C_4
 }
 
 input PuzzlePhotoInfraWhereUniqueInput {
@@ -569,23 +593,47 @@ input PuzzlePhotoInfraWhereInput {
   NOT: [PuzzlePhotoInfraWhereInput!]
   id: IDFilter
   name: StringFilter
-  created_at: DateTimeNullableFilter
-  updated_at: DateTimeNullableFilter
-  created_by: UserWhereInput
+  size: PuzzlePhotoInfraSizeTypeNullableFilter
+  layout: PuzzlePhotoInfraLayoutTypeNullableFilter
+  photo1: StringFilter
+  photo2: StringFilter
+  photo3: StringFilter
+  photo4: StringFilter
+}
+
+input PuzzlePhotoInfraSizeTypeNullableFilter {
+  equals: PuzzlePhotoInfraSizeType
+  in: [PuzzlePhotoInfraSizeType!]
+  notIn: [PuzzlePhotoInfraSizeType!]
+  not: PuzzlePhotoInfraSizeTypeNullableFilter
+}
+
+input PuzzlePhotoInfraLayoutTypeNullableFilter {
+  equals: PuzzlePhotoInfraLayoutType
+  in: [PuzzlePhotoInfraLayoutType!]
+  notIn: [PuzzlePhotoInfraLayoutType!]
+  not: PuzzlePhotoInfraLayoutTypeNullableFilter
 }
 
 input PuzzlePhotoInfraOrderByInput {
   id: OrderDirection
   name: OrderDirection
-  created_at: OrderDirection
-  updated_at: OrderDirection
+  size: OrderDirection
+  layout: OrderDirection
+  photo1: OrderDirection
+  photo2: OrderDirection
+  photo3: OrderDirection
+  photo4: OrderDirection
 }
 
 input PuzzlePhotoInfraUpdateInput {
   name: String
-  created_at: DateTime
-  updated_at: DateTime
-  created_by: UserRelateToOneForUpdateInput
+  size: PuzzlePhotoInfraSizeType
+  layout: PuzzlePhotoInfraLayoutType
+  photo1: String
+  photo2: String
+  photo3: String
+  photo4: String
 }
 
 input PuzzlePhotoInfraUpdateArgs {
@@ -595,9 +643,12 @@ input PuzzlePhotoInfraUpdateArgs {
 
 input PuzzlePhotoInfraCreateInput {
   name: String
-  created_at: DateTime
-  updated_at: DateTime
-  created_by: UserRelateToOneForCreateInput
+  size: PuzzlePhotoInfraSizeType
+  layout: PuzzlePhotoInfraLayoutType
+  photo1: String
+  photo2: String
+  photo3: String
+  photo4: String
 }
 
 """

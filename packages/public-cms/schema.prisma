@@ -25,7 +25,6 @@ model User {
   from_ScrollToAudio_created_by        ScrollToAudio[]        @relation("ScrollToAudio_created_by")
   from_ScrollableVideo_created_by      ScrollableVideo[]      @relation("ScrollableVideo_created_by")
   from_ScrollableThreeModel_created_by ScrollableThreeModel[] @relation("ScrollableThreeModel_created_by")
-  from_PuzzlePhotoInfra_created_by     PuzzlePhotoInfra[]     @relation("PuzzlePhotoInfra_created_by")
 }
 
 model Audio {
@@ -116,12 +115,32 @@ model ScrollableThreeModel {
 }
 
 model PuzzlePhotoInfra {
-  id           Int       @id @default(autoincrement())
-  name         String    @default("")
-  created_at   DateTime? @default(now())
-  updated_at   DateTime? @updatedAt
-  created_by   User?     @relation("PuzzlePhotoInfra_created_by", fields: [created_byId], references: [id])
-  created_byId Int?      @map("created_by")
+  id     Int                        @id @default(autoincrement())
+  name   String                     @default("")
+  size   PuzzlePhotoInfraSizeType   @default(square)
+  layout PuzzlePhotoInfraLayoutType @default(LAYOUT_A_1)
+  photo1 String                     @default("")
+  photo2 String                     @default("")
+  photo3 String                     @default("")
+  photo4 String                     @default("")
+}
 
-  @@index([created_byId])
+enum PuzzlePhotoInfraSizeType {
+  square
+  horizontalRectangle
+  verticalRectangle
+}
+
+enum PuzzlePhotoInfraLayoutType {
+  LAYOUT_A_1
+  LAYOUT_B_1
+  LAYOUT_A_2
+  LAYOUT_B_2
+  LAYOUT_A_3
+  LAYOUT_B_3
+  LAYOUT_C_3
+  LAYOUT_D_3
+  LAYOUT_A_4
+  LAYOUT_B_4
+  LAYOUT_C_4
 }

@@ -1,7 +1,7 @@
-// import { } from '@story-telling-reporter/react-embed-code-generator'
-import { list } from '@keystone-6/core'
-import { text, select } from '@keystone-6/core/fields'
-// import { createdByFilter, createdByHooks } from './utils/access-control-list'
+import { buildPuzzlePhotoInfraEmbedCode } from '@story-telling-reporter/react-embed-code-generator'
+import { list, graphql } from '@keystone-6/core'
+import { text, virtual, select } from '@keystone-6/core/fields'
+import { createdByHooks } from './utils/access-control-list'
 
 const layoutToPhotoCount = (layoutValue: string) => {
   const layout = layoutValue.split('_')
@@ -55,7 +55,7 @@ const listConfigurations = list({
         },
       },
     }),
-    photot1: text({
+    photo1: text({
       label: '第一張照片檔案URL',
       ui: {
         createView: {
@@ -66,7 +66,7 @@ const listConfigurations = list({
         },
       },
     }),
-    photot2: text({
+    photo2: text({
       label: '第二張照片檔案URL',
       ui: {
         createView: {
@@ -80,7 +80,7 @@ const listConfigurations = list({
         },
       },
     }),
-    photot3: text({
+    photo3: text({
       label: '第三張照片檔案URL',
       ui: {
         createView: {
@@ -94,7 +94,7 @@ const listConfigurations = list({
         },
       },
     }),
-    photot4: text({
+    photo4: text({
       label: '第四張照片檔案URL',
       ui: {
         createView: {
@@ -105,6 +105,59 @@ const listConfigurations = list({
             const layout = (item as { layout: string }).layout // Type assertion to tell TypeScript it's of the correct shape
             return layoutToPhotoCount(layout) >= 4 ? 'edit' : 'hidden'
           },
+        },
+      },
+    }),
+    embedCode: virtual({
+      label: 'embed code',
+      field: graphql.field({
+        type: graphql.String,
+        resolve: async (item: Record<string, unknown>): Promise<string> => {
+          const photoSrc = [item.photo1, item.photo2, item.photo3, item.photo4]
+          const code = buildPuzzlePhotoInfraEmbedCode({
+            id: 'puzzle-photo-infra',
+            size: 'square',
+            layout: 'square',
+            photoUrls: photoSrc,
+          })
+          return `<!-- Puzzle Photo：${item.name} -->` + code
+        },
+      }),
+      ui: {
+        views: './lists/views/embed-code',
+        createView: {
+          fieldMode: 'hidden',
+        },
+      },
+    }),
+    preview: virtual({
+      field: graphql.field({
+        type: graphql.JSON,
+        resolve(item: Record<string, unknown>): Record<string, string> {
+          return {
+            href: `/demo/puzzle-photo-infras/${item.id}`,
+            label: '拼圖照片-基礎建設預覽',
+            buttonLabel: 'Preview',
+          }
+        },
+      }),
+      ui: {
+        // A module path that is resolved from where `keystone start` is run
+        views: './lists/views/link-button',
+        createView: {
+          fieldMode: 'hidden',
+        },
+        itemView: {
+          fieldPosition: 'sidebar',
+        },
+        listView: {
+          fieldMode: 'hidden',
+        },
+      },
+      graphql: {
+        omit: {
+          create: true,
+          update: true,
         },
       },
     }),
@@ -122,6 +175,14 @@ const listConfigurations = list({
   access: {
     operation: () => true,
     // filter: createdByFilter,
+  },
+  hooks: {
+    resolveInput: (args) => {
+      if (typeof createdByHooks.resolveInput === 'function') {
+        return createdByHooks.resolveInput(args)
+      }
+      return args.resolvedData
+    },
   },
 })
 

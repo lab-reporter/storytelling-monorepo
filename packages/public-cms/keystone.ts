@@ -12,6 +12,7 @@ import { statelessSessions } from '@keystone-6/core/session'
 import bodyParser from 'body-parser'
 import express from 'express'
 import path from 'path'
+import { isNaN } from 'lodash'
 
 const { withAuth } = createAuth({
   listKey: 'User',
@@ -172,6 +173,7 @@ export default withAuth(
           authenticationMw,
           async (req, res) => {
             const itemId = req.params.id
+            console.log('ID received:', itemId, typeof itemId)
 
             const context = await commonContext.withRequest(req, res)
             const item = await context.query.ScrollToAudio.findOne({
@@ -192,6 +194,37 @@ export default withAuth(
                 item?.endEmbedCode
               )
             )
+          }
+        )
+
+        app.get(
+          '/demo/puzzle-photo-infras/:id',
+          authenticationMw,
+          async (req, res) => {
+            const itemId = req.params.id
+            if (isNaN(Number(itemId))) {
+              return res
+                .status(404)
+                .send(`PuzzlePhotoInfra ${itemId} is not found`)
+            }
+
+            console.log('ID received:', itemId, typeof itemId)
+            const context = await commonContext.withRequest(req, res)
+            const item = await context.query.PuzzlePhotoInfra.findOne({
+              where: { id: itemId },
+              query: 'embedCode',
+            })
+
+            if (!item) {
+              return res
+                .status(404)
+                .send(`PuzzlePhotoInfra ${itemId} is not found`)
+            }
+            // return res
+            //   .status(200)
+            //   .send(`ID received:, ${itemId}, ${typeof itemId}`)
+            res.send(renderPuzzlePhotoInfraHtml(item?.embedCode))
+            // res.send(`<html><body><p>test</p></body></html>`)
           }
         )
 
@@ -272,6 +305,18 @@ const renderScrollToAudioHtml = (
     <div style="text-align: center;">捲到式聲音結束點</div>
     ${endEmbedCode}
   </div>
+</body>
+</html>
+`
+}
+
+const renderPuzzlePhotoInfraHtml = (embedCode: string) => {
+  return `
+<html>
+<head>
+</head>
+<body>
+    ${embedCode}
 </body>
 </html>
 `
