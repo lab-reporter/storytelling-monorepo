@@ -172,7 +172,6 @@ export default withAuth(
           authenticationMw,
           async (req, res) => {
             const itemId = req.params.id
-            console.log('ID received:', itemId, typeof itemId)
 
             const context = await commonContext.withRequest(req, res)
             const item = await context.query.ScrollToAudio.findOne({
@@ -202,7 +201,6 @@ export default withAuth(
           async (req, res) => {
             const itemId = req.params.id
 
-            console.log('ID received:', itemId, typeof itemId)
             const context = await commonContext.withRequest(req, res)
             const item = await context.query.PuzzlePhotoInfra.findOne({
               where: { id: itemId },
