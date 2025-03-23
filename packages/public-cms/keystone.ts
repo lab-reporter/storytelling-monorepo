@@ -12,7 +12,6 @@ import { statelessSessions } from '@keystone-6/core/session'
 import bodyParser from 'body-parser'
 import express from 'express'
 import path from 'path'
-import { isNaN } from 'lodash'
 
 const { withAuth } = createAuth({
   listKey: 'User',
@@ -198,15 +197,10 @@ export default withAuth(
         )
 
         app.get(
-          '/demo/puzzle-photo-infras/:id',
+          '/demo/puzzle-photo-infras/:id(\\d+)',
           authenticationMw,
           async (req, res) => {
             const itemId = req.params.id
-            if (isNaN(Number(itemId))) {
-              return res
-                .status(404)
-                .send(`PuzzlePhotoInfra ${itemId} is not found`)
-            }
 
             console.log('ID received:', itemId, typeof itemId)
             const context = await commonContext.withRequest(req, res)
