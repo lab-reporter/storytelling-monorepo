@@ -24,8 +24,7 @@ export const RoleEnum = {
   Developer: 'developer',
   Editor: 'editor',
   Contributor: 'contributor',
-  FrontendHeadlessAccount: 'frontend_headless_account',
-  PreviewHeadlessAccount: 'preview_headless_account',
+  CloudRunHeadlessAccount: 'cloud_run_headless_account',
 }
 
 export const allowRoles = (roles: string[]) => {
@@ -49,8 +48,7 @@ export const allowAllRoles = () => {
     RoleEnum.Developer,
     RoleEnum.Editor,
     RoleEnum.Contributor,
-    RoleEnum.FrontendHeadlessAccount,
-    RoleEnum.PreviewHeadlessAccount,
+    RoleEnum.CloudRunHeadlessAccount,
   ]
   return allowRoles(roles)
 }
