@@ -38,7 +38,6 @@
     "react-beautiful-dnd": "^13.1.1"
   },
   "resolutions": {
-    "**/next": "13.3.4",
     "**/react": "18.2.0",
     "**/react-dom": "18.2.0"
   },
