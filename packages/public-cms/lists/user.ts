@@ -51,12 +51,8 @@ const listConfigurations = list({
           value: RoleEnum.Contributor,
         },
         {
-          label: RoleEnum.FrontendHeadlessAccount,
-          value: RoleEnum.FrontendHeadlessAccount,
-        },
-        {
-          label: RoleEnum.PreviewHeadlessAccount,
-          value: RoleEnum.PreviewHeadlessAccount,
+          label: RoleEnum.CloudRunHeadlessAccount,
+          value: RoleEnum.CloudRunHeadlessAccount,
         },
       ],
       validation: { isRequired: true },
@@ -94,7 +90,11 @@ const listConfigurations = list({
     },
     operation: {
       query: allowAllRoles(),
-      create: allowRoles([RoleEnum.Owner, RoleEnum.Admin]),
+      create: allowRoles([
+        RoleEnum.Owner,
+        RoleEnum.Admin,
+        RoleEnum.CloudRunHeadlessAccount,
+      ]),
       update: allowAllRoles(),
       delete: allowRoles([RoleEnum.Owner, RoleEnum.Admin]),
     },
