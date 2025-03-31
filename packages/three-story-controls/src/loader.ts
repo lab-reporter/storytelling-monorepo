@@ -7,7 +7,7 @@ import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
  */
 const dracoLoader = new DRACOLoader()
 dracoLoader.setDecoderPath(
-  'https://unpkg.com/three@0.165.0/examples/jsm/libs/draco/'
+  'https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/libs/draco/'
 )
 const gltfLoader = new GLTFLoader()
 gltfLoader.setDRACOLoader(dracoLoader)
