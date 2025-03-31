@@ -17,12 +17,12 @@
   "license": "MIT",
   "dependencies": {
     "@keystone-6/auth": "7.0.0",
-    "@keystone-6/core": "5.2.0",
+    "@keystone-6/core": "5.8.0",
     "@story-telling-reporter/draft-editor": "^2.1.2",
-    "@story-telling-reporter/react-embed-code-generator": "^2.2.11",
+    "@story-telling-reporter/react-embed-code-generator": "^2.2.12",
     "@story-telling-reporter/react-scrollable-image": "^0.3.4",
     "@story-telling-reporter/react-scrollable-video": "^3.0.1",
-    "@story-telling-reporter/react-three-story-controls": "^2.2.2",
+    "@story-telling-reporter/react-three-story-controls": "^2.2.3",
     "@types/clean-css": "^4.2.11",
     "@types/react-beautiful-dnd": "^13.1.4",
     "body-parser": "^1.20.2",
@@ -38,7 +38,6 @@
     "react-beautiful-dnd": "^13.1.1"
   },
   "resolutions": {
-    "**/next": "13.3.4",
     "**/react": "18.2.0",
     "**/react-dom": "18.2.0"
   },

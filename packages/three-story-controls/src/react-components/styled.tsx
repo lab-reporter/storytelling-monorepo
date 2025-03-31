@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 const urlPrefix =
-  'https://www.unpkg.com/@story-telling-reporter/react-three-story-controls/public/icons'
+  'https://cdn.jsdelivr.net/npm/@story-telling-reporter/react-three-story-controls/public/icons'
 
 const Icon = styled.div<{
   $bgImg?: string
