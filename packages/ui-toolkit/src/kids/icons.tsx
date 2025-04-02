@@ -1,7 +1,7 @@
 import React from 'react'
 
 const iconURLPath =
-  'https://www.unpkg.com/@story-telling-reporter/react-ui-toolkit/public/icons/kids'
+  'https://storytelling-storage.twreporter.org/npm/@story-telling-reporter/react-ui-toolkit/public/icons/kids'
 
 type IconProps = {
   className?: string
