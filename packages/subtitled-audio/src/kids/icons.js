@@ -1,7 +1,7 @@
 import React/* eslint-disable-line */ from 'react'
 
 const iconURLPath =
-  'https://www.unpkg.com/@story-telling-reporter/react-subtitled-audio/public/icons/kids'
+  'https://storytelling-storage.twreporter.org/npm/@story-telling-reporter/react-subtitled-audio/public/icons/kids'
 
 export function SoundIcon({ className, onClick, style }) {
   return (
