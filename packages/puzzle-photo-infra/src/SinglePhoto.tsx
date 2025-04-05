@@ -1,32 +1,23 @@
 import styled from 'styled-components'
 import React from 'react'
+import { LayoutType } from './types'
 
 export function SinglePhoto({
   photoUrls,
+  layout,
   hasPadding = false,
 }: {
   photoUrls: string[]
+  layout: LayoutType
   hasPadding?: boolean
 }) {
   // hasPadding = false
   return (
-    <>
-      <Container>
-        <Square hasPadding={hasPadding}>
-          <Img src={photoUrls[0]} alt="Puzzle Photo" />
-        </Square>
-      </Container>
-      <Container>
-        <HorizontalRectangle hasPadding={hasPadding}>
-          <Img src={photoUrls[0]} alt="Puzzle Photo" />
-        </HorizontalRectangle>
-      </Container>
-      <Container>
-        <VerticalRectangle hasPadding={hasPadding}>
-          <Img src={photoUrls[0]} alt="Puzzle Photo" />
-        </VerticalRectangle>
-      </Container>
-    </>
+    <Container>
+      <PhotoGroup hasPadding={hasPadding} layout={layout}>
+        <Img src={photoUrls[0]} alt="Puzzle Photo" />
+      </PhotoGroup>
+    </Container>
   )
 }
 
@@ -39,29 +30,32 @@ const Container = styled.div`
   overflow: hidden; /* Prevents any unwanted scrollbars */
 `
 
-const Square = styled.div<{ hasPadding: boolean }>`
+const PhotoGroup = styled.div<{ layout: LayoutType; hasPadding: boolean }>`
   box-sizing: border-box;
-  display: flex;
-  width: 100vh;
-  height: 100vh;
   padding: ${({ hasPadding }) => (hasPadding ? '50px' : '0')};
-  // object-fit: contain; /* Optional: Keeps aspect ratio */
-`
-
-const HorizontalRectangle = styled.div<{ hasPadding: boolean }>`
-  // box-sizing: border-box;
-  width: 100vw;
-  height: calc(100vw / 3 * 2);
-  padding: ${({ hasPadding }) => (hasPadding ? '50px' : '0')};
-  // object-fit: contain; /* Optional: Keeps aspect ratio */
-`
-
-const VerticalRectangle = styled.div<{ hasPadding: boolean }>`
-  box-sizing: border-box;
-  width: calc(100vh / 3 * 2);
-  height: 100vh;
-  padding: ${({ hasPadding }) => (hasPadding ? '50px' : '0')};
-  // object-fit: contain; /* Optional: Keeps aspect ratio */
+  ${({ layout }) => {
+    if (layout === 'square') {
+      return `
+        width: 100vh;
+        height: 100vh;
+        display: flex;
+      `
+    } else if (layout === 'horizontalRectangle') {
+      return `
+        width: 100vw;
+        aspect-ratio: 3 / 2; 
+      `
+    } else if (layout === 'verticalRectangle') {
+      return `
+        // width: calc(100vh / 3 * 2);
+        // height: 100vh;
+        
+        height: 100vh;
+        // width: calc(100vh / 3 * 2);
+        aspect-ratio: 2 / 3; 
+      `
+    }
+  }}
 `
 
 const Img = styled.img`

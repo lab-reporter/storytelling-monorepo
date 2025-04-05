@@ -9,7 +9,6 @@ const root = createRoot(container)
 
 root.render(
   <div>
-    {/* <PuzzlePhotoInfra photoUrls={['./img-1.png']} /> */}
     <PuzzlePhotoInfra photoUrls={['./photo-1.jpg']} />
   </div>
 )
