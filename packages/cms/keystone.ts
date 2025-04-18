@@ -12,7 +12,7 @@ import bodyParser from 'body-parser'
 const { withAuth } = createAuth({
   listKey: 'User',
   identityField: 'email',
-  sessionData: 'name role',
+  sessionData: 'id name role email',
   secretField: 'password',
   initFirstItem: {
     // If there are no items in the database, keystone will ask you to create
