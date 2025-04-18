@@ -25,13 +25,17 @@
   "license": "MIT",
   "dependencies": {
     "@story-telling-reporter/react-ui-toolkit": "^1.1.2",
+    "framer-motion": "^12.6.3",
     "lodash": "^4.17.21",
-    "react-intersection-observer": "^9.3.5"
+    "react-intersection-observer": "^9.3.5",
+    "react-medium-image-zoom": "^5.2.14"
   },
   "devDependencies": {
     "@types/react-dom": "^18.2.19",
+    "css-loader": "^7.1.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "style-loader": "^4.0.0",
     "styled-components": "5.3.5"
   },
   "peerDependencies": {
@@ -43,4 +47,3 @@
     "lib"
   ]
 }
-

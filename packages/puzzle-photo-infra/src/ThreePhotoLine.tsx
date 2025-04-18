@@ -1,46 +1,42 @@
 import styled from 'styled-components'
-import { RectangleContainer } from './RectangleContainer'
 import { ShapeType } from './types'
+import { RectangleContainer } from './RectangleContainer'
 
 export const PhotoGroup = styled(RectangleContainer)<{ isVertical: boolean }>`
   flex-direction: ${({ isVertical }) => (isVertical ? 'column' : 'row')};
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: ${({ isVertical, shape: shape }) =>
-    !isVertical && shape === 'verticalRectangle' ? '30px' : '50px'};
-  padding: ${({ isVertical, shape: shape }) =>
-    !isVertical && shape === 'verticalRectangle' ? '30px' : '50px'};
+  gap: 30px;
+  padding: 30px;
   overflow: hidden;
   box-sizing: border-box;
+  // @media (max-width: 768px) {
+  //   flex-direction: column;
+  // }
 `
 
 export const PhotoLayout = styled.div<{
   shape: ShapeType
   isVertical: boolean
 }>`
-  // flex: 1;
   box-sizing: border-box;
   ${({ isVertical, shape }) => {
     if (shape === 'square') {
       return `
-            width: ${isVertical ? 'auto' : 'calc((100vh - 150px) / 2)'};
-            height: ${isVertical ? 'calc((100vh - 150px) / 2)' : 'auto'};
+        width: ${isVertical ? 'auto' : 'calc((100vh - 120px) / 3)'};
+        height: ${isVertical ? 'calc((100vh - 120px) / 3)' : 'auto'};
       `
     } else if (shape === 'horizontalRectangle') {
       return `
-            width: ${
-              isVertical ? 'auto' : 'calc(((100vw / 3 * 2) - 100px) / 3 * 2)'
-            };
-            height: ${isVertical ? 'calc((100vw / 3 * 2) - 100px)' : 'auto'};
-        `
+        width: ${isVertical ? 'auto' : 'calc((100vw - 120px) / 3)'};
+        height: ${isVertical ? 'calc(((100vw / 3 * 2) - 120px) /3)' : 'auto'};
+      `
     } else if (shape === 'verticalRectangle') {
       return `
-            width: ${
-              isVertical ? 'auto' : 'calc(((100vh / 3 * 2) - 90px) / 2)'
-            };
-            height: ${isVertical ? 'calc((100vh - 150px) / 2)' : 'auto'};
-        `
+        width: ${isVertical ? 'auto' : 'calc(((100vh / 3 * 2) - 120px) / 3)'};
+        height: ${isVertical ? 'calc((100vh - 120px) / 3)' : 'auto'};
+      `
     }
   }}
 
@@ -52,6 +48,6 @@ export const PhotoLayout = styled.div<{
   align-items: center;
   justify-content: center;
   display: flex;
-  flex: 0 1 1;
+  // flex: 0 1 1;
   overflow: hidden;
 `

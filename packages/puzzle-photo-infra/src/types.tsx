@@ -1,3 +1,5 @@
-export type LayoutType = 'square' | 'verticalRectangle' | 'horizontalRectangle'
-export type AlignmentType = 'start' | 'center' | 'end'
+export type ShapeType = 'square' | 'verticalRectangle' | 'horizontalRectangle'
+export type VariantType = 'line' | 'grid'
+export type GridType = 'leftBig' | 'topBig' | 'uniform' | 'mixed'
 export type FitModeType = 'width' | 'height'
+export type FocusPositionType = 'left' | 'center' | 'right'

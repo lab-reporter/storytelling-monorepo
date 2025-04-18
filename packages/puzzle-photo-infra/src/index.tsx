@@ -1,11 +1,8 @@
 // import React, { useState, useEffect, useRef } from 'react'
 // import styled from 'styled-components'
 import React from 'react'
-import { SinglePhoto } from './SinglePhoto'
-import { TwoPhotoLayout } from './TwoPhotoLayout'
-import { ThreePhotoLayout } from './ThreePhotoLineLayout'
-import { ThreePhotoGridLayout } from './ThreePhotoGrid'
-import { LayoutType, AlignmentType, FitModeType } from './types'
+import { ShapeType, FitModeType, FocusPositionType } from './types'
+import { PhotoGroup } from './Photo'
 
 /* function Sqaure() {
   return <div></div>
@@ -16,14 +13,17 @@ function PuzzlePhotoInfra({
   // layout = 'A',
   // className,
   // alignment,
+  focusPositions,
+  fitModes,
   photoUrls,
+  isVertical,
 }: {
   id: string
   photoUrls: string[]
-  layout: LayoutType
+  shape: ShapeType
   isVertical?: boolean
-  aligment?: AlignmentType
-  fitMode?: FitModeType
+  fitModes?: FitModeType[]
+  focusPositions: FocusPositionType[]
   className?: string
 }) {
   photoUrls = [
@@ -32,23 +32,48 @@ function PuzzlePhotoInfra({
     './photo-3.jpg',
     './photo-4.jpg',
   ]
+  fitModes = ['width', 'height', 'width']
+  focusPositions = ['left', 'center', 'right']
+  isVertical = false
   return (
     <>
-      <SinglePhoto photoUrls={photoUrls} layout="square" />
-      {/* <SinglePhoto photoUrls={photoUrls} layout="horizontalRectangle" /> */}
-      {/* <SinglePhoto photoUrls={photoUrls} layout="verticalRectangle" /> */}
-      <TwoPhotoLayout photoUrls={photoUrls} layout="square" />
-      {/* <TwoPhotoLayout photoUrls={photoUrls} layout="horizontalRectangle" /> */}
-      {/* <TwoPhotoLayout photoUrls={photoUrls} layout="verticalRectangle" /> */}
-      <ThreePhotoLayout photoUrls={photoUrls} layout="square" />
-      <ThreePhotoLayout photoUrls={photoUrls} layout="horizontalRectangle" />
-      <ThreePhotoLayout photoUrls={photoUrls} layout="verticalRectangle" />
-      <ThreePhotoGridLayout photoUrls={photoUrls} layout="square" />
-      <ThreePhotoGridLayout
-        photoUrls={photoUrls}
-        layout="horizontalRectangle"
+      <PhotoGroup
+        shape="square"
+        photoCount={1}
+        photoUrls={photoUrls.slice(0, 1)}
+        fitModes={fitModes}
+        focusPositions={focusPositions}
       />
-      <ThreePhotoGridLayout photoUrls={photoUrls} layout="verticalRectangle" />
+      <PhotoGroup
+        shape="horizontalRectangle"
+        photoCount={1}
+        photoUrls={photoUrls.slice(0, 1)}
+        fitModes={fitModes}
+        focusPositions={focusPositions}
+      />
+      <PhotoGroup
+        shape="verticalRectangle"
+        photoCount={1}
+        photoUrls={photoUrls.slice(0, 1)}
+        fitModes={fitModes}
+        focusPositions={focusPositions}
+      />
+      <PhotoGroup
+        shape="square"
+        photoCount={2}
+        photoUrls={photoUrls.slice(0, 2)}
+        fitModes={fitModes}
+        focusPositions={focusPositions}
+        isVertical={isVertical}
+      />
+      <PhotoGroup
+        shape="square"
+        photoCount={3}
+        photoUrls={photoUrls.slice(0, 3)}
+        fitModes={fitModes}
+        focusPositions={focusPositions}
+        isVertical={isVertical}
+      />
     </>
   )
 }
