@@ -76,8 +76,35 @@ const listConfigurations = list({
     operation: {
       query: allowAllRoles(),
       create: allowRoles([RoleEnum.Owner, RoleEnum.Admin]),
-      update: allowRoles([RoleEnum.Owner, RoleEnum.Admin]),
+      update: allowAllRoles(),
       delete: allowRoles([RoleEnum.Owner, RoleEnum.Admin]),
+    },
+    item: {
+      update: ({ session, inputData, item }) => {
+        const userRole = session?.data?.role
+        const userEmail = session?.data?.email
+        console.log('session:', session)
+
+        // only owner and admin roles can update the items without further checking
+        if ([RoleEnum.Owner, RoleEnum.Admin].indexOf(userRole) > -1) {
+          return true
+        }
+        console.log('item:', item)
+        console.log('inputData:', inputData)
+        console.log('userEmail:', userEmail)
+
+        if (
+          // session user updates her/his password
+          item?.email === userEmail &&
+          // `inputData` only contains `password` property
+          Object.keys(inputData).length === 1 &&
+          inputData?.password
+        ) {
+          return true
+        }
+
+        return false
+      },
     },
   },
   hooks: {},
