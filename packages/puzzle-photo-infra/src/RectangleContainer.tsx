@@ -9,20 +9,20 @@ export const RectangleContainer = styled.div<{
     if (shape === 'square') {
       return `
         width: 100vh;
-        height: auto;
+        height: 100vh;
         aspect-ratio: 1; 
       `
     } else if (shape === 'horizontalRectangle') {
       return `
-        width: 100%;
+        width: 100vw;
         height: auto;
-        max-height: 100%;
+        max-height: 100vh;
         aspect-ratio: 3 / 2; 
       `
     } else if (shape === 'verticalRectangle') {
       return `
         width: auto;
-        height: 100%;
+        height: 100vh;
         aspect-ratio: 2 / 3; 
       `
     }
