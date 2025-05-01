@@ -132,6 +132,8 @@ model PuzzlePhotoInfra {
   photo4         String                     @default("")
   fitMode4       String?                    @default("width")
   focusPosition4 String?                    @default("center")
+  created_at     DateTime?                  @default(now())
+  updated_at     DateTime?                  @updatedAt
   created_by     User?                      @relation("PuzzlePhotoInfra_created_by", fields: [created_byId], references: [id])
   created_byId   Int?                       @map("created_by")
 

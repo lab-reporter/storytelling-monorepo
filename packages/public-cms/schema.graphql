@@ -569,6 +569,8 @@ type PuzzlePhotoInfra {
   focusPosition4: String
   embedCode: String
   preview: JSON
+  created_at: DateTime
+  updated_at: DateTime
   created_by: User
 }
 
@@ -616,6 +618,8 @@ input PuzzlePhotoInfraWhereInput {
   photo4: StringFilter
   fitMode4: StringNullableFilter
   focusPosition4: StringNullableFilter
+  created_at: DateTimeNullableFilter
+  updated_at: DateTimeNullableFilter
   created_by: UserWhereInput
 }
 
@@ -679,6 +683,8 @@ input PuzzlePhotoInfraOrderByInput {
   photo4: OrderDirection
   fitMode4: OrderDirection
   focusPosition4: OrderDirection
+  created_at: OrderDirection
+  updated_at: OrderDirection
 }
 
 input PuzzlePhotoInfraUpdateInput {
@@ -697,6 +703,8 @@ input PuzzlePhotoInfraUpdateInput {
   photo4: String
   fitMode4: String
   focusPosition4: String
+  created_at: DateTime
+  updated_at: DateTime
   created_by: UserRelateToOneForUpdateInput
 }
 
@@ -721,6 +729,8 @@ input PuzzlePhotoInfraCreateInput {
   photo4: String
   fitMode4: String
   focusPosition4: String
+  created_at: DateTime
+  updated_at: DateTime
   created_by: UserRelateToOneForCreateInput
 }
 
