@@ -34,7 +34,6 @@ function PuzzlePhotoInfra({
   variant?: VariantType
   // className?: string
 }) {
-  console.log(shape)
   return (
     <>
       <PhotoGallery
