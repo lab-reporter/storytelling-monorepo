@@ -51,7 +51,7 @@ export const Field = ({
     // Keystone uses Webpack and its related loaders, such as babel-loader, to transpile the source codes (this file).
     // But, Webpack cannot handle the import well.
     // The following is a workaround to solve this error.
-    const {CameraHelper} = require('@story-telling-reporter/react-three-story-controls')  // eslint-disable-line
+    const {CameraHelper} = require('@story-telling-reporter/react-three-story-controls/lib/esm/index')  // eslint-disable-line
     CameraHelperRef.current =
       CameraHelper as React.ComponentType<CameraHelperProps>
 

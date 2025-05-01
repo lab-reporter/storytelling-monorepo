@@ -59,11 +59,11 @@ model Video {
 model Photo {
   id                  Int       @id @default(autoincrement())
   name                String    @default("")
+  imageFile_id        String?
   imageFile_filesize  Int?
-  imageFile_extension String?
   imageFile_width     Int?
   imageFile_height    Int?
-  imageFile_id        String?
+  imageFile_extension String?
   description         String    @default("")
   created_at          DateTime? @default(now())
   updated_at          DateTime? @updatedAt

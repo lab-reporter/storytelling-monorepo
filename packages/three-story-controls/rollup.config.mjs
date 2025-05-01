@@ -21,7 +21,8 @@ export default {
   ),
   output: {
     format: 'es',
-    dir: 'lib/esm'
+    dir: 'lib/esm',
+    preserveModules: true,
   },
   plugins: [
     resolve(),
