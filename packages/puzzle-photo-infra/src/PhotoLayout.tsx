@@ -2,14 +2,32 @@
 import styled, { css } from 'styled-components'
 import { LayoutProps } from './types'
 
+import {
+  square as hdSquare,
+  horizRect as hdHorizRect,
+  vertRect as hdVertRect,
+} from './PhotoLayouts/HD'
+import {
+  square as desktopSquare,
+  horizRect as desktopHorizRect,
+  vertRect as desktopVertRect,
+} from './PhotoLayouts/Desktop'
+import {
+  square as tabletSquarer,
+  horizRect as tabletHorizRect,
+  vertRect as tabletVertRect,
+} from './PhotoLayouts/Tablet'
+import {
+  square as mobileSquarer,
+  horizRect as mobileHorizRect,
+  vertRect as mobileVertRect,
+} from './PhotoLayouts/Mobile'
+
 export const PhotoLayout = styled.div<LayoutProps>`
   box-sizing: border-box;
   display: flex;
-  // justify-content: center;
   align-items: center;
-  // align-content: center;
   overflow: hidden;
-  background-color: green;
 
   ${({ variant, index }) => {
     const AREA_MAP = ['a', 'b', 'c', 'd']
@@ -19,110 +37,76 @@ export const PhotoLayout = styled.div<LayoutProps>`
       `
     }
   }}
-  /* compute width/height/aspect-ratio for every combination */
-  ${({ photoCount, shape, hasPadding, variant, grid, isVertical, index }) => {
-    // helper blocks for each shape+count
-    const square = () => {
-      if (photoCount == 1) {
-        return `width: 100%; height: 100%;`
-      }
-      if (photoCount === 2) {
-        return isVertical
-          ? `height:calc((100vh - 150px) / 2); aspect-ratio: 3/2;`
-          : `width: calc((100vh - 150px) / 2); aspect-ratio: 2/3;`
-      }
-      if (photoCount === 3 && variant === 'line') {
-        return isVertical
-          ? `height:calc((100vh - 120px) / 3); aspect-ratio:3/2;`
-          : `width: calc((100vh - 120px) / 3); aspect-ratio:2/3;`
-      }
-      if (grid === 'leftBig') {
-        return index == 0
-          ? `height: calc((100vh - 130px) / 3 * 2 + 30px); aspect-ratio: 2/3;`
-          : `width: calc((100vh - 130px) / 2 ); aspect-ratio: 3/2;`
-      }
-      if (grid === 'topBig') {
-        return index == 0
-          ? `width: calc((100vh - 100px) / 3 * 2 + 30px); aspect-ratio: 3/2;`
-          : `height: calc((100vh - 100px) / 2 ); aspect-ratio: 2/3;`
-      }
-      return `width:100%; height:100%;`
-    }
 
-    const horizRect = () => {
-      if (photoCount === 1) {
-        return hasPadding
-          ? `height: calc(100vw / 3 * 2 - 100px); aspect-ratio: 3 / 2`
-          : `width: 100%; height: 100%`
-      }
-      if (photoCount === 2) {
-        return isVertical
-          ? `height:calc((100vw / 3 * 2) - 100px); aspect-ratio: 3/2;`
-          : `width: calc(((100vw / 3 * 2) - 100px) / 3 * 2); aspect-ratio: 2/3;`
-      }
-      if (photoCount === 3 && variant === 'line') {
-        return isVertical
-          ? `height:calc(((100vw / 3 * 2) - 120px)/ 3); aspect-ratio: 3/2;`
-          : `width: calc((100vw - 120px) / 3); aspect-ratio: 2/3;`
-      }
-      if (grid === 'leftBig') {
-        return index == 0
-          ? `height: calc(100vw / 3 * 2 - 100px); aspect-ratio: 2/3;`
-          : `height: calc((100vw / 3 * 2 - 130px) / 2 ); aspect-ratio: 3/2;`
-      }
-      if (grid === 'topBig') {
-        return index == 0
-          ? `width: calc((100vw / 3 * 2 - 100px) / 3 * 2 + 30px); aspect-ratio: 3/2;`
-          : `height: calc((100vw / 3 * 2 - 100px) / 2); aspect-ratio: 2/3;`
-      }
-      return `width:100%; height:100%;`
-    }
+  @media (min-width: 1440px) {
+    ${({ shape, ...props }) => {
+      if (shape === 'square')
+        return css`
+          ${hdSquare(props)}
+        `
+      if (shape === 'horizontalRectangle')
+        return css`
+          ${hdHorizRect(props)}
+        `
+      if (shape === 'verticalRectangle')
+        return css`
+          ${hdVertRect(props)}
+        `
+      return ``
+    }}
+  }
 
-    const vertRect = () => {
-      if (photoCount === 1) {
-        return hasPadding
-          ? `width: calc(100vh / 3 * 2 - 100px); aspect-ratio: 2 / 3`
-          : `width: 100%; height: 100%`
-      }
-      if (photoCount === 2) {
-        return isVertical
-          ? `height: calc((100vh - 150 px) / 2); aspect-ratio: 3/2;`
-          : `width: calc(((100vh / 3 * 2) - 90px) / 2); aspect-ratio: 2/3;`
-      }
-      if (photoCount === 3 && variant === 'line') {
-        return isVertical
-          ? `height: calc((100vh - 120px) / 3); aspect-ratio: 3/2;`
-          : `width: calc(((100vh / 3 * 2) - 120px) / 3); aspect-ratio: 2/3;`
-      }
-      if (grid === 'leftBig') {
-        return index == 0
-          ? `height: calc((100vh / 3 * 2 - 90px) / 3 * 2 + 30px ); aspect-ratio: 2/3;`
-          : `width: calc((100vh / 3 * 2 - 90px) / 2 ); aspect-ratio: 3/2;`
-      }
-      if (grid === 'topBig') {
-        return index == 0
-          ? `width: calc(100vh / 3 * 2 - 60px) ; aspect-ratio: 3/2;`
-          : `width: calc((100vh / 3 * 2 - 90px) / 2); aspect-ratio: 2/3;`
-      }
-      return `width:100%; height:100%;`
-    }
+  @media (min-width: 1024px) and (max-width: 1439px) {
+    ${({ shape, ...props }) => {
+      if (shape === 'square')
+        return css`
+          ${desktopSquare(props)}
+        `
+      if (shape === 'horizontalRectangle')
+        return css`
+          ${desktopHorizRect(props)}
+        `
+      if (shape === 'verticalRectangle')
+        return css`
+          ${desktopVertRect(props)}
+        `
+      return ``
+    }}
+  }
 
-    // dispatch by shape
-    switch (shape) {
-      case 'square':
+  @media (min-width: 768px) and (max-width: 1023px) {
+    ${({ shape, ...props }) => {
+      if (shape === 'square')
         return css`
-          ${square()}
+          ${tabletSquarer(props)}
         `
-      case 'horizontalRectangle':
+      if (shape === 'horizontalRectangle')
         return css`
-          ${horizRect()}
+          ${tabletHorizRect(props)}
         `
-      case 'verticalRectangle':
+      if (shape === 'verticalRectangle')
         return css`
-          ${vertRect()}
+          ${tabletVertRect(props)}
         `
-      default:
-        return ``
-    }
-  }}
+      return ``
+    }}
+  }
+
+  @media (max-width: 767px) {
+    ${({ shape, ...props }) => {
+      if (shape === 'square')
+        return css`
+          ${mobileSquarer(props)}
+        `
+      if (shape === 'horizontalRectangle')
+        return css`
+          ${mobileHorizRect(props)}
+        `
+      if (shape === 'verticalRectangle')
+        return css`
+          ${mobileVertRect(props)}
+        `
+      return ``
+    }}
+  }
 `

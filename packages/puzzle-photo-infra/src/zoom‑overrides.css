@@ -1,9 +1,0 @@
-[data-rmiz],
-[data-rmiz-content] {
-    /* force the cloned/zoomed img to fill its dialog container */
-    width: 100% !important;
-    height: 100% !important;
-    display: flex;
-    justify-content: center;
-    box-sizing: border-box !important;
-}

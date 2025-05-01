@@ -1,14 +1,14 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
-// import { Controlled as ControlledZoom } from 'react-medium-image-zoom'
-import Zoom from 'react-medium-image-zoom'
-
-import 'react-medium-image-zoom/dist/styles.css'
-import './zoom‑overrides.css'
 import { FitModeType, FocusPositionType, LayoutProps } from './types'
 import { PhotoGroupWrapper } from './PhotoGroupWrapper' // whatever you called it
 
-export function PhotoGroup({
+import mediumZoom from 'medium-zoom'
+
+if (typeof window !== 'undefined') {
+  mediumZoom('[data-zoomable]')
+}
+export function PhotoGallery({
   photoUrls,
   alts = [],
   fitModes,
@@ -21,22 +21,28 @@ export function PhotoGroup({
   focusPositions: FocusPositionType[]
   config: LayoutProps
 }) {
+  useEffect(() => {
+    mediumZoom('[data-zoomable]', {
+      scrollOffset: 40,
+    })
+  }, [])
   return (
-    <Container>
-      <PhotoGroupWrapper config={config}>
-        {photoUrls.map((url, i) => (
-          <Zoom key={i}>
+    <>
+      <Container>
+        <PhotoGroupWrapper config={config}>
+          {photoUrls.map((url, i) => (
             <Img
               key={i}
               src={url}
               alt={alts[i] || ''}
               fitMode={fitModes[i]}
               focusPosition={focusPositions[i]}
+              data-zoomable
             />
-          </Zoom>
-        ))}
-      </PhotoGroupWrapper>
-    </Container>
+          ))}
+        </PhotoGroupWrapper>
+      </Container>
+    </>
   )
 }
 
@@ -47,7 +53,6 @@ const Container = styled.div`
   width: 100vw;
   overflow: hidden; /* Prevents any unwanted scrollbars */
   box-sizing: border-box;
-  background-color: red;
   justify-content: start;
   align-items: center;
 `

@@ -1,7 +1,7 @@
 // import React, { useState, useEffect, useRef } from 'react'
 // import styled from 'styled-components'
 import React from 'react'
-import { PhotoGroup } from './Photo'
+import { PhotoGallery } from './PhotoGallery'
 import {
   ShapeType,
   FitModeType,
@@ -18,6 +18,7 @@ function PuzzlePhotoInfra({
   // layout = 'A',
   // className,
   // alignment,
+  id,
   shape,
   hasPadding,
   focusPositions,
@@ -38,17 +39,19 @@ function PuzzlePhotoInfra({
   grid?: GridType
   variant: VariantType
 }) {
-  photoUrls = [
-    './photo-1.jpg',
-    './photo-2.jpg',
-    './photo-3.jpg',
-    './photo-4.jpg',
-  ]
+  // photoUrls = [
+  //   './photo-1.jpg',
+  //   './photo-2.jpg',
+  //   './photo-3.jpg',
+  //   './photo-4.jpg',
+  // ]
   fitModes = ['width', 'height', 'width']
   focusPositions = ['left', 'center', 'right']
+  console.log(`[react-puzzle-photo-infra][${id}]`)
+
   return (
     <>
-      <PhotoGroup
+      <PhotoGallery
         photoUrls={photoUrls.slice(0, 1)}
         fitModes={fitModes}
         focusPositions={focusPositions}
@@ -61,37 +64,7 @@ function PuzzlePhotoInfra({
           grid: grid,
         }}
       />
-      <PhotoGroup
-        photoUrls={photoUrls.slice(0, 1)}
-        fitModes={fitModes}
-        focusPositions={focusPositions}
-        config={{
-          photoCount: 1,
-          shape: 'square',
-          hasPadding: false,
-        }}
-      />
-      <PhotoGroup
-        photoUrls={photoUrls.slice(0, 1)}
-        fitModes={fitModes}
-        focusPositions={focusPositions}
-        config={{
-          photoCount: 1,
-          shape: 'horizontalRectangle',
-          hasPadding: false,
-        }}
-      />
-      <PhotoGroup
-        photoUrls={photoUrls.slice(0, 1)}
-        fitModes={fitModes}
-        focusPositions={focusPositions}
-        config={{
-          photoCount: 1,
-          shape: 'verticalRectangle',
-          hasPadding: false,
-        }}
-      />
-      <PhotoGroup
+      <PhotoGallery
         photoUrls={photoUrls.slice(0, 1)}
         fitModes={fitModes}
         focusPositions={focusPositions}
@@ -99,198 +72,11 @@ function PuzzlePhotoInfra({
           photoCount: 1,
           shape: 'square',
           hasPadding: true,
+          isVertical: false,
+          // variant: 'grid',
+          // grid: 'mixed',
         }}
       />
-      <PhotoGroup
-        photoUrls={photoUrls.slice(0, 1)}
-        fitModes={fitModes}
-        focusPositions={focusPositions}
-        config={{
-          photoCount: 1,
-          shape: 'horizontalRectangle',
-          hasPadding: true,
-        }}
-      />
-      <PhotoGroup
-        photoUrls={photoUrls.slice(0, 1)}
-        fitModes={fitModes}
-        focusPositions={focusPositions}
-        config={{
-          photoCount: 1,
-          shape: 'verticalRectangle',
-          hasPadding: true,
-        }}
-      />
-      <PhotoGroup
-        photoUrls={photoUrls.slice(0, 3)}
-        fitModes={fitModes}
-        focusPositions={focusPositions}
-        config={{
-          photoCount: 3,
-          shape: 'verticalRectangle',
-          variant: 'grid',
-          grid: 'leftBig',
-        }}
-      />
-      {/* <PhotoGroup */}
-      {/*   shape="horizontalRectangle" */}
-      {/*   photoCount={1} */}
-      {/*   photoUrls={photoUrls.slice(0, 1)} */}
-      {/*   hasPadding={false} */}
-      {/*   fitModes={fitModes} */}
-      {/*   focusPositions={focusPositions} */}
-      {/*   variant="line" */}
-      {/* /> */}
-      {/* <PhotoGroup */}
-      {/*   shape="verticalRectangle" */}
-      {/*   photoCount={1} */}
-      {/*   photoUrls={photoUrls.slice(0, 1)} */}
-      {/*   hasPadding={false} */}
-      {/*   fitModes={fitModes} */}
-      {/*   focusPositions={focusPositions} */}
-      {/*   variant="line" */}
-      {/* /> */}
-      {/* <PhotoGroup */}
-      {/*   shape="square" */}
-      {/*   photoCount={1} */}
-      {/*   photoUrls={photoUrls.slice(0, 1)} */}
-      {/*   hasPadding={true} */}
-      {/*   fitModes={fitModes} */}
-      {/*   focusPositions={focusPositions} */}
-      {/*   variant="line" */}
-      {/* /> */}
-      {/* <PhotoGroup */}
-      {/*   shape="horizontalRectangle" */}
-      {/*   photoCount={1} */}
-      {/*   photoUrls={photoUrls.slice(0, 1)} */}
-      {/*   hasPadding={true} */}
-      {/*   fitModes={fitModes} */}
-      {/*   focusPositions={focusPositions} */}
-      {/*   variant="line" */}
-      {/* /> */}
-      {/* <PhotoGroup */}
-      {/*   shape="verticalRectangle" */}
-      {/*   photoCount={1} */}
-      {/*   photoUrls={photoUrls.slice(0, 1)} */}
-      {/*   hasPadding={true} */}
-      {/*   fitModes={fitModes} */}
-      {/*   focusPositions={focusPositions} */}
-      {/*   variant="line" */}
-      {/* /> */}
-      {/* <PhotoGroup */}
-      {/*   shape="square" */}
-      {/*   photoCount={2} */}
-      {/*   photoUrls={photoUrls.slice(0, 2)} */}
-      {/*   fitModes={fitModes} */}
-      {/*   focusPositions={focusPositions} */}
-      {/*   isVertical={isVertical} */}
-      {/*   variant="line" */}
-      {/* /> */}
-      {/* <PhotoGroup */}
-      {/*   shape="horizontalRectangle" */}
-      {/*   photoCount={2} */}
-      {/*   photoUrls={photoUrls.slice(0, 2)} */}
-      {/*   fitModes={fitModes} */}
-      {/*   focusPositions={focusPositions} */}
-      {/*   isVertical={isVertical} */}
-      {/*   variant="line" */}
-      {/* /> */}
-      {/* <PhotoGroup */}
-      {/*   shape="verticalRectangle" */}
-      {/*   photoCount={2} */}
-      {/*   photoUrls={photoUrls.slice(0, 2)} */}
-      {/*   fitModes={fitModes} */}
-      {/*   focusPositions={focusPositions} */}
-      {/*   isVertical={isVertical} */}
-      {/*   variant="line" */}
-      {/* /> */}
-      {/* <PhotoGroup */}
-      {/*   shape="square" */}
-      {/*   photoCount={3} */}
-      {/*   photoUrls={photoUrls.slice(0, 3)} */}
-      {/*   fitModes={fitModes} */}
-      {/*   focusPositions={focusPositions} */}
-      {/*   isVertical={isVertical} */}
-      {/*   variant="line" */}
-      {/* /> */}
-      {/* <PhotoGroup */}
-      {/*   shape="horizontalRectangle" */}
-      {/*   photoCount={3} */}
-      {/*   photoUrls={photoUrls.slice(0, 3)} */}
-      {/*   fitModes={fitModes} */}
-      {/*   focusPositions={focusPositions} */}
-      {/*   isVertical={isVertical} */}
-      {/*   variant="line" */}
-      {/* /> */}
-      {/* <PhotoGroup */}
-      {/*   shape="verticalRectangle" */}
-      {/*   photoCount={3} */}
-      {/*   photoUrls={photoUrls.slice(0, 3)} */}
-      {/*   fitModes={fitModes} */}
-      {/*   focusPositions={focusPositions} */}
-      {/*   isVertical={isVertical} */}
-      {/*   variant="line" */}
-      {/* /> */}
-      {/* <PhotoGroup */}
-      {/*   shape="square" */}
-      {/*   photoCount={3} */}
-      {/*   photoUrls={photoUrls.slice(1, 4)} */}
-      {/*   fitModes={fitModes} */}
-      {/*   focusPositions={focusPositions} */}
-      {/*   isVertical={isVertical} */}
-      {/*   variant="grid" */}
-      {/*   grid="leftBig" */}
-      {/* /> */}
-      {/* <PhotoGroup */}
-      {/*   shape="horizontalRectangle" */}
-      {/*   photoCount={3} */}
-      {/*   photoUrls={photoUrls.slice(0, 3)} */}
-      {/*   fitModes={fitModes} */}
-      {/*   focusPositions={focusPositions} */}
-      {/*   isVertical={isVertical} */}
-      {/*   variant="grid" */}
-      {/*   grid="leftBig" */}
-      {/* /> */}
-      {/* <PhotoGroup */}
-      {/*   shape="verticalRectangle" */}
-      {/*   photoCount={3} */}
-      {/*   photoUrls={photoUrls.slice(0, 3)} */}
-      {/*   fitModes={fitModes} */}
-      {/*   focusPositions={focusPositions} */}
-      {/*   isVertical={isVertical} */}
-      {/*   variant="grid" */}
-      {/*   grid="leftBig" */}
-      {/* /> */}
-      {/* <PhotoGroup */}
-      {/*   shape="square" */}
-      {/*   photoCount={3} */}
-      {/*   photoUrls={photoUrls.slice(1, 4)} */}
-      {/*   fitModes={fitModes} */}
-      {/*   focusPositions={focusPositions} */}
-      {/*   isVertical={isVertical} */}
-      {/*   variant="grid" */}
-      {/*   grid="topBig" */}
-      {/* /> */}
-      {/* <PhotoGroup */}
-      {/*   shape="horizontalRectangle" */}
-      {/*   photoCount={3} */}
-      {/*   photoUrls={photoUrls.slice(0, 3)} */}
-      {/*   fitModes={fitModes} */}
-      {/*   focusPositions={focusPositions} */}
-      {/*   isVertical={isVertical} */}
-      {/*   variant="grid" */}
-      {/*   grid="topBig" */}
-      {/* /> */}
-      {/* <PhotoGroup */}
-      {/*   shape="verticalRectangle" */}
-      {/*   photoCount={3} */}
-      {/*   photoUrls={photoUrls.slice(0, 3)} */}
-      {/*   fitModes={fitModes} */}
-      {/*   focusPositions={focusPositions} */}
-      {/*   isVertical={isVertical} */}
-      {/*   variant="grid" */}
-      {/*   grid="topBig" */}
-      {/* /> */}
     </>
   )
 }
