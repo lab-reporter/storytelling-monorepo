@@ -13,7 +13,7 @@ export function PhotoGroupWrapper({
 }) {
   return (
     <PhotoGroup {...config}>
-      {children.map((c, i) => (
+      {children?.map((c, i) => (
         <PhotoLayout key={i} {...config} index={i}>
           {c}
         </PhotoLayout>

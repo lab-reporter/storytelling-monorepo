@@ -14,45 +14,31 @@ import {
 } */
 
 function PuzzlePhotoInfra({
-  // id = 'puzzle-photo-infra-id',
-  // layout = 'A',
-  // className,
-  // alignment,
-  id,
+  photoUrls,
   shape,
   hasPadding,
   focusPositions,
+  isVertical = true,
   fitModes,
-  photoUrls,
-  isVertical,
   grid,
-  variant,
-}: {
-  id: string
+  variant = 'line',
+}: // className,
+{
   photoUrls: string[]
   shape: ShapeType
-  hasPadding: boolean
-  isVertical?: boolean
-  fitModes?: FitModeType[]
+  hasPadding?: boolean
   focusPositions: FocusPositionType[]
-  className?: string
+  isVertical?: boolean
+  fitModes: FitModeType[]
   grid?: GridType
-  variant: VariantType
+  variant?: VariantType
+  // className?: string
 }) {
-  // photoUrls = [
-  //   './photo-1.jpg',
-  //   './photo-2.jpg',
-  //   './photo-3.jpg',
-  //   './photo-4.jpg',
-  // ]
-  fitModes = ['width', 'height', 'width']
-  focusPositions = ['left', 'center', 'right']
-  console.log(`[react-puzzle-photo-infra][${id}]`)
-
+  console.log(shape)
   return (
     <>
       <PhotoGallery
-        photoUrls={photoUrls.slice(0, 1)}
+        photoUrls={photoUrls}
         fitModes={fitModes}
         focusPositions={focusPositions}
         config={{
@@ -62,19 +48,6 @@ function PuzzlePhotoInfra({
           isVertical: isVertical,
           variant: variant,
           grid: grid,
-        }}
-      />
-      <PhotoGallery
-        photoUrls={photoUrls.slice(0, 1)}
-        fitModes={fitModes}
-        focusPositions={focusPositions}
-        config={{
-          photoCount: 1,
-          shape: 'square',
-          hasPadding: true,
-          isVertical: false,
-          // variant: 'grid',
-          // grid: 'mixed',
         }}
       />
     </>

@@ -4,39 +4,42 @@ import { FitModeType, FocusPositionType, LayoutProps } from './types'
 import { PhotoGroupWrapper } from './PhotoGroupWrapper' // whatever you called it
 
 import mediumZoom from 'medium-zoom'
+import { ZoomGlobalStyle } from './ZoomGlobalStyle'
 
-if (typeof window !== 'undefined') {
-  mediumZoom('[data-zoomable]')
-}
 export function PhotoGallery({
   photoUrls,
-  alts = [],
   fitModes,
   focusPositions,
   config,
 }: {
   photoUrls: string[]
-  alts?: string[]
   fitModes: FitModeType[]
   focusPositions: FocusPositionType[]
   config: LayoutProps
 }) {
   useEffect(() => {
-    mediumZoom('[data-zoomable]', {
-      scrollOffset: 40,
+    const zoom = mediumZoom('[data-zoomable]', {
+      background: '#fff',
+      margin: 24,
+      scrollOffset: 30,
     })
-  }, [])
+
+    return () => {
+      zoom.detach()
+    }
+  }, [photoUrls])
+
   return (
     <>
+      <ZoomGlobalStyle />
       <Container>
         <PhotoGroupWrapper config={config}>
-          {photoUrls.map((url, i) => (
+          {photoUrls?.map((url, i) => (
             <Img
               key={i}
               src={url}
-              alt={alts[i] || ''}
-              fitMode={fitModes[i]}
-              focusPosition={focusPositions[i]}
+              fitMode={fitModes?.[i] ?? 'width'} // fallback to 'width'
+              focusPosition={focusPositions?.[i] ?? 'center'} // fallback to 'center'
               data-zoomable
             />
           ))}
