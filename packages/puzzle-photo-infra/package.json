@@ -27,8 +27,8 @@
     "@story-telling-reporter/react-ui-toolkit": "^1.1.2",
     "framer-motion": "^12.6.3",
     "lodash": "^4.17.21",
-    "react-intersection-observer": "^9.3.5",
-    "react-medium-image-zoom": "^5.2.14"
+    "medium-zoom": "^1.1.0",
+    "react-intersection-observer": "^9.3.5"
   },
   "devDependencies": {
     "@types/react-dom": "^18.2.19",

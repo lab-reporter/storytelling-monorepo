@@ -9,6 +9,12 @@ const root = createRoot(container)
 
 root.render(
   <div>
-    <PuzzlePhotoInfra photoUrls={['./photo-1.jpg']} />
+    <PuzzlePhotoInfra
+      photoUrls={['./photo-1.jpg']}
+      shape={'horizontalRectangle'}
+      hasPadding={false}
+      fitModes={['height']}
+      focusPositions={['center']}
+    />
   </div>
 )
