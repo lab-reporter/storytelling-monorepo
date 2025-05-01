@@ -212,9 +212,10 @@ export default withAuth(
                 .status(404)
                 .send(`PuzzlePhotoInfra ${itemId} is not found`)
             }
+
             // return res
-            //   .status(200)
-            //   .send(`ID received:, ${itemId}, ${typeof itemId}`)
+            // .status(200)
+            // .send(`ID received:, ${itemId}, ${typeof itemId}`)
             res.send(renderPuzzlePhotoInfraHtml(item?.embedCode))
             // res.send(`<html><body><p>test</p></body></html>`)
           }

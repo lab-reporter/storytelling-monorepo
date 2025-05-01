@@ -25,6 +25,7 @@ model User {
   from_ScrollToAudio_created_by        ScrollToAudio[]        @relation("ScrollToAudio_created_by")
   from_ScrollableVideo_created_by      ScrollableVideo[]      @relation("ScrollableVideo_created_by")
   from_ScrollableThreeModel_created_by ScrollableThreeModel[] @relation("ScrollableThreeModel_created_by")
+  from_PuzzlePhotoInfra_created_by     PuzzlePhotoInfra[]     @relation("PuzzlePhotoInfra_created_by")
 }
 
 model Audio {
@@ -115,32 +116,44 @@ model ScrollableThreeModel {
 }
 
 model PuzzlePhotoInfra {
-  id     Int                        @id @default(autoincrement())
-  name   String                     @default("")
-  size   PuzzlePhotoInfraSizeType   @default(square)
-  layout PuzzlePhotoInfraLayoutType @default(LAYOUT_A_1)
-  photo1 String                     @default("")
-  photo2 String                     @default("")
-  photo3 String                     @default("")
-  photo4 String                     @default("")
+  id             Int                        @id @default(autoincrement())
+  name           String                     @default("")
+  shape          PuzzlePhotoInfraShapeType  @default(square)
+  layout         PuzzlePhotoInfraLayoutType @default(A1)
+  photo1         String                     @default("")
+  fitMode1       String?                    @default("width")
+  focusPosition1 String?                    @default("center")
+  photo2         String                     @default("")
+  fitMode2       String?                    @default("width")
+  focusPosition2 String?                    @default("center")
+  photo3         String                     @default("")
+  fitMode3       String?                    @default("width")
+  focusPosition3 String?                    @default("center")
+  photo4         String                     @default("")
+  fitMode4       String?                    @default("width")
+  focusPosition4 String?                    @default("center")
+  created_by     User?                      @relation("PuzzlePhotoInfra_created_by", fields: [created_byId], references: [id])
+  created_byId   Int?                       @map("created_by")
+
+  @@index([created_byId])
 }
 
-enum PuzzlePhotoInfraSizeType {
+enum PuzzlePhotoInfraShapeType {
   square
   horizontalRectangle
   verticalRectangle
 }
 
 enum PuzzlePhotoInfraLayoutType {
-  LAYOUT_A_1
-  LAYOUT_B_1
-  LAYOUT_A_2
-  LAYOUT_B_2
-  LAYOUT_A_3
-  LAYOUT_B_3
-  LAYOUT_C_3
-  LAYOUT_D_3
-  LAYOUT_A_4
-  LAYOUT_B_4
-  LAYOUT_C_4
+  A1
+  B1
+  A2
+  B2
+  A3
+  B3
+  C3
+  D3
+  A4
+  B4
+  C4
 }

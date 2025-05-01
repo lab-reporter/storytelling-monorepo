@@ -553,34 +553,43 @@ input ScrollableThreeModelCreateInput {
 type PuzzlePhotoInfra {
   id: ID!
   name: String
-  size: PuzzlePhotoInfraSizeType
+  shape: PuzzlePhotoInfraShapeType
   layout: PuzzlePhotoInfraLayoutType
   photo1: String
+  fitMode1: String
+  focusPosition1: String
   photo2: String
+  fitMode2: String
+  focusPosition2: String
   photo3: String
+  fitMode3: String
+  focusPosition3: String
   photo4: String
+  fitMode4: String
+  focusPosition4: String
   embedCode: String
   preview: JSON
+  created_by: User
 }
 
-enum PuzzlePhotoInfraSizeType {
+enum PuzzlePhotoInfraShapeType {
   square
   horizontalRectangle
   verticalRectangle
 }
 
 enum PuzzlePhotoInfraLayoutType {
-  LAYOUT_A_1
-  LAYOUT_B_1
-  LAYOUT_A_2
-  LAYOUT_B_2
-  LAYOUT_A_3
-  LAYOUT_B_3
-  LAYOUT_C_3
-  LAYOUT_D_3
-  LAYOUT_A_4
-  LAYOUT_B_4
-  LAYOUT_C_4
+  A1
+  B1
+  A2
+  B2
+  A3
+  B3
+  C3
+  D3
+  A4
+  B4
+  C4
 }
 
 input PuzzlePhotoInfraWhereUniqueInput {
@@ -593,19 +602,28 @@ input PuzzlePhotoInfraWhereInput {
   NOT: [PuzzlePhotoInfraWhereInput!]
   id: IDFilter
   name: StringFilter
-  size: PuzzlePhotoInfraSizeTypeNullableFilter
+  shape: PuzzlePhotoInfraShapeTypeNullableFilter
   layout: PuzzlePhotoInfraLayoutTypeNullableFilter
   photo1: StringFilter
+  fitMode1: StringNullableFilter
+  focusPosition1: StringNullableFilter
   photo2: StringFilter
+  fitMode2: StringNullableFilter
+  focusPosition2: StringNullableFilter
   photo3: StringFilter
+  fitMode3: StringNullableFilter
+  focusPosition3: StringNullableFilter
   photo4: StringFilter
+  fitMode4: StringNullableFilter
+  focusPosition4: StringNullableFilter
+  created_by: UserWhereInput
 }
 
-input PuzzlePhotoInfraSizeTypeNullableFilter {
-  equals: PuzzlePhotoInfraSizeType
-  in: [PuzzlePhotoInfraSizeType!]
-  notIn: [PuzzlePhotoInfraSizeType!]
-  not: PuzzlePhotoInfraSizeTypeNullableFilter
+input PuzzlePhotoInfraShapeTypeNullableFilter {
+  equals: PuzzlePhotoInfraShapeType
+  in: [PuzzlePhotoInfraShapeType!]
+  notIn: [PuzzlePhotoInfraShapeType!]
+  not: PuzzlePhotoInfraShapeTypeNullableFilter
 }
 
 input PuzzlePhotoInfraLayoutTypeNullableFilter {
@@ -615,25 +633,71 @@ input PuzzlePhotoInfraLayoutTypeNullableFilter {
   not: PuzzlePhotoInfraLayoutTypeNullableFilter
 }
 
+input StringNullableFilter {
+  equals: String
+  in: [String!]
+  notIn: [String!]
+  lt: String
+  lte: String
+  gt: String
+  gte: String
+  contains: String
+  startsWith: String
+  endsWith: String
+  mode: QueryMode
+  not: NestedStringNullableFilter
+}
+
+input NestedStringNullableFilter {
+  equals: String
+  in: [String!]
+  notIn: [String!]
+  lt: String
+  lte: String
+  gt: String
+  gte: String
+  contains: String
+  startsWith: String
+  endsWith: String
+  not: NestedStringNullableFilter
+}
+
 input PuzzlePhotoInfraOrderByInput {
   id: OrderDirection
   name: OrderDirection
-  size: OrderDirection
+  shape: OrderDirection
   layout: OrderDirection
   photo1: OrderDirection
+  fitMode1: OrderDirection
+  focusPosition1: OrderDirection
   photo2: OrderDirection
+  fitMode2: OrderDirection
+  focusPosition2: OrderDirection
   photo3: OrderDirection
+  fitMode3: OrderDirection
+  focusPosition3: OrderDirection
   photo4: OrderDirection
+  fitMode4: OrderDirection
+  focusPosition4: OrderDirection
 }
 
 input PuzzlePhotoInfraUpdateInput {
   name: String
-  size: PuzzlePhotoInfraSizeType
+  shape: PuzzlePhotoInfraShapeType
   layout: PuzzlePhotoInfraLayoutType
   photo1: String
+  fitMode1: String
+  focusPosition1: String
   photo2: String
+  fitMode2: String
+  focusPosition2: String
   photo3: String
+  fitMode3: String
+  focusPosition3: String
   photo4: String
+  fitMode4: String
+  focusPosition4: String
+  created_by: UserRelateToOneForUpdateInput
 }
 
 input PuzzlePhotoInfraUpdateArgs {
@@ -643,12 +707,21 @@ input PuzzlePhotoInfraUpdateArgs {
 
 input PuzzlePhotoInfraCreateInput {
   name: String
-  size: PuzzlePhotoInfraSizeType
+  shape: PuzzlePhotoInfraShapeType
   layout: PuzzlePhotoInfraLayoutType
   photo1: String
+  fitMode1: String
+  focusPosition1: String
   photo2: String
+  fitMode2: String
+  focusPosition2: String
   photo3: String
+  fitMode3: String
+  focusPosition3: String
   photo4: String
+  fitMode4: String
+  focusPosition4: String
+  created_by: UserRelateToOneForCreateInput
 }
 
 """
