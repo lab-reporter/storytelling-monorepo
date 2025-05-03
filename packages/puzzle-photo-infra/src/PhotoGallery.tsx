@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { FitModeType, FocusPositionType, LayoutProps } from './types'
-import { PhotoGroupWrapper } from './PhotoGroupWrapper' // whatever you called it
+import { PhotoGroupWrapper } from './PhotoGroupWrapper'
 
 import mediumZoom from 'medium-zoom'
 import { ZoomGlobalStyle } from './ZoomGlobalStyle'
@@ -38,8 +38,8 @@ export function PhotoGallery({
             <Img
               key={i}
               src={url}
-              fitMode={fitModes?.[i] ?? 'width'} // fallback to 'width'
-              focusPosition={focusPositions?.[i] ?? 'center'} // fallback to 'center'
+              fitMode={fitModes?.[i] ?? 'width'}
+              focusPosition={focusPositions?.[i] ?? 'center'} 
               data-zoomable
             />
           ))}
@@ -67,14 +67,14 @@ export const Img = styled.img<{
   ${({ fitMode }) =>
     fitMode === 'width'
       ? `
-          width: 100%;     /* fill the parent’s width */
+          width: 100%;
           height: auto;
-          max-height: 100%; /* but never overflow its height */
+          max-height: 100%;
         `
       : `
           height: 100%;
           width: auto;
-          max-width: 100%;  /* but never overflow its width */
+          max-width: 100%;
         `}
 
   object-fit: cover;
