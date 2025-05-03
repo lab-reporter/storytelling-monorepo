@@ -1,4 +1,3 @@
-// PhotoGroupWrapper.tsx
 import React from 'react'
 import { PhotoGroup } from './PhotoGroup'
 import { PhotoLayout } from './PhotoLayout'
