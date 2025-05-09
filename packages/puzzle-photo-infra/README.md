@@ -26,16 +26,6 @@
 
 ## 專案結構
 專案大致的目錄結構如下：
-- `dev` 中放的是可以透過 Webpack 打包測試的設定檔 `webpack.config.mjs` 和進入點 `entry.js`。
-- `src` 下就是達到不同畫面構圖的 source code 當中每一張照片皆可以進行縮放，這個效果是透過[medium-zoom](https://github.com/francoischalifour/medium-zoom) library 完成
-    - `ZoomGlobalStyle.ts` 針對該 medium-zoom library 的 CSS styles 進行調整
-    - `types.ts` 定義了造成不同版面的參數
-    - `index.tsx` 為使用的入口，會將外部參數傳入 `PhotoGallery.tsx` 中，`PhotoGallery.tsx` 會進行版面的 render
-    - `PhotoGallery.tsx` 中透過了 `mediumZoom`  達到圖片的縮放。並透過 `PhotoGroup.tsx` 進行多張照片的排版，而每張照片個別的排版在 `PhotoLayout.tsx` 中處理。
-    - `PhotoGroup.tsx` 定義了方塊中所有照片之間的排版。
-    - `PhotoLayout.tsx` 定義了個別照片在不同版面中的尺寸大小。
-    - `RectangleContainer.tsx` 為不同方塊的版面大小，由 `PhotoGroup` 繼承。
-    - `PhotoGroup`、`PhotoLayout`、`RectangleContainer` 中皆有針對螢幕寬度的 RWD 設定，其中 `PhotoLayout` 較為繁複因此將它們拉到 `PhotoLayout/` 資料夾下。
 ``` bash
 .
 ├── Makefile
@@ -59,6 +49,16 @@
     ├── index.tsx
     └── types.ts
 ```
+- `dev` 中放的是可以透過 Webpack 打包測試的設定檔 `webpack.config.mjs` 和進入點 `entry.js`。
+- `src` 下就是達到不同畫面構圖的 source code 當中每一張照片皆可以進行縮放，這個效果是透過 [medium-zoom](https://github.com/francoischalifour/medium-zoom) library 完成
+    - `ZoomGlobalStyle.ts` 針對該 medium-zoom library 的 CSS styles 進行調整
+    - `types.ts` 定義了造成不同版面的參數
+    - `index.tsx` 為使用的入口，會將外部參數傳入 `PhotoGallery.tsx` 中，`PhotoGallery.tsx` 會進行版面的 render
+    - `PhotoGallery.tsx` 中透過了 `mediumZoom`  達到圖片的縮放。並透過 `PhotoGroup.tsx` 進行多張照片的排版，而每張照片個別的排版在 `PhotoLayout.tsx` 中處理。
+    - `PhotoGroup.tsx` 定義了方塊中所有照片之間的排版。
+    - `PhotoLayout.tsx` 定義了個別照片在不同版面中的尺寸大小。
+    - `RectangleContainer.tsx` 為不同方塊的版面大小，由 `PhotoGroup` 繼承。
+    - `PhotoGroup`、`PhotoLayout`、`RectangleContainer` 中皆有針對螢幕寬度的 RWD 設定，其中 `PhotoLayout` 較為繁複因此將它們拉到 `PhotoLayout/` 資料夾下。
 
 ## 可使用參數
 ``` js
@@ -96,11 +96,10 @@ export type LayoutProps = {
 - `FocusPositionType`：照片要置左、置中、置右對齊
 - `hasPadding`：為 1 張照片組合中決定要不要 padding 的參數（若為 `ture` 就是組合 1B）
 
-### 組合與參數
+### 版面組合與對應參數
 - 1A
     ``` js
     LayoutProps = {
-      photoCount: 1
       shape: 'square' | 'horizontalRectangle' | 'verticalRectangle'
       hasPadding: false
     }
@@ -108,7 +107,6 @@ export type LayoutProps = {
 - 1B
     ``` js
     LayoutProps = {
-      photoCount: 1
       shape: 'square' | 'horizontalRectangle' | 'verticalRectangle'
       hasPadding: true
     }
@@ -116,7 +114,6 @@ export type LayoutProps = {
 - 2A
     ``` js
     LayoutProps = {
-      photoCount: 2
       shape: 'square' | 'horizontalRectangle' | 'verticalRectangle'
       isVertical: true
     }
@@ -124,7 +121,6 @@ export type LayoutProps = {
 - 2B
     ``` js
     LayoutProps = {
-      photoCount: 2
       shape: 'square' | 'horizontalRectangle' | 'verticalRectangle'
       isVertical: false
     }
@@ -132,7 +128,6 @@ export type LayoutProps = {
 - 3A
     ``` js
     LayoutProps = {
-      photoCount: 3
       shape: 'square' | 'horizontalRectangle' | 'verticalRectangle'
       isVertical: true
       variant: 'line' 
@@ -141,7 +136,6 @@ export type LayoutProps = {
 - 3B
     ``` js
     LayoutProps = {
-      photoCount: 3
       shape: 'square' | 'horizontalRectangle' | 'verticalRectangle'
       isVertical: false
       variant: 'line' 
@@ -150,52 +144,42 @@ export type LayoutProps = {
 - 3C
     ``` js
     LayoutProps = {
-      photoCount: 3
       shape: 'square' | 'horizontalRectangle' | 'verticalRectangle'
       variant: 'grid'
       grid: 'leftBig'
-      index: {i}
     }
     ```
 - 3D
     ``` js
     LayoutProps = {
-      photoCount: 3
       shape: 'square' | 'horizontalRectangle' | 'verticalRectangle'
       variant: 'grid'
       grid: 'topBig'
-      index: {i}
     }
     ```
 - 4A
     ``` js
     LayoutProps = {
-      photoCount: 4
       shape: 'square' | 'horizontalRectangle' | 'verticalRectangle'
       isVertical: false
       variant: 'grid'
       grid: 'uniform'
-      index: {i}
     }
     ```
 - 4B
     ``` js
     LayoutProps = {
-      photoCount: 4
       shape: 'square' | 'horizontalRectangle' | 'verticalRectangle'
       isVertical: true
       variant: 'grid'
       grid: 'uniform'
-      index: {i}
     }
     ```
 - 4C
     ``` js
     LayoutProps = {
-      photoCount: 4
       shape: 'square' | 'horizontalRectangle' | 'verticalRectangle'
       variant: 'grid'
       grid: 'mixed'
-      index: {i}
     }
     ```
