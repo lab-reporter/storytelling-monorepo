@@ -1,4 +1,3 @@
-// layoutProps.ts
 export type ShapeType = 'square' | 'horizontalRectangle' | 'verticalRectangle'
 export type VariantType = 'line' | 'grid'
 export type GridType = 'leftBig' | 'topBig' | 'uniform' | 'mixed'

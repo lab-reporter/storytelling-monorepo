@@ -1,5 +1,3 @@
-// import React, { useState, useEffect, useRef } from 'react'
-// import styled from 'styled-components'
 import React from 'react'
 import { PhotoGallery } from './PhotoGallery'
 import {
@@ -9,9 +7,6 @@ import {
   VariantType,
   GridType,
 } from './types'
-/* function Sqaure() {
-  return <div></div>
-} */
 
 function PuzzlePhotoInfra({
   photoUrls,

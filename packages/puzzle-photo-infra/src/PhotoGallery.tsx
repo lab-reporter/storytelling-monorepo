@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { FitModeType, FocusPositionType, LayoutProps } from './types'
-import { PhotoGroupWrapper } from './PhotoGroupWrapper'
+import { PhotoGroup } from './PhotoGroup'
+import { PhotoLayout } from './PhotoLayout'
 
 import mediumZoom from 'medium-zoom'
 import { ZoomGlobalStyle } from './ZoomGlobalStyle'
@@ -33,17 +34,19 @@ export function PhotoGallery({
     <>
       <ZoomGlobalStyle />
       <Container>
-        <PhotoGroupWrapper config={config}>
+        <PhotoGroup {...config}>
           {photoUrls?.map((url, i) => (
-            <Img
-              key={i}
-              src={url}
-              fitMode={fitModes?.[i] ?? 'width'}
-              focusPosition={focusPositions?.[i] ?? 'center'} 
-              data-zoomable
-            />
+            <PhotoLayout key={i} {...config} index={i}>
+              <Img
+                key={i}
+                src={url}
+                fitMode={fitModes?.[i] ?? 'width'}
+                focusPosition={focusPositions?.[i] ?? 'center'}
+                data-zoomable
+              />
+            </PhotoLayout>
           ))}
-        </PhotoGroupWrapper>
+        </PhotoGroup>
       </Container>
     </>
   )

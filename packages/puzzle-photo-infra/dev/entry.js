@@ -13,8 +13,8 @@ root.render(
       photoUrls={['./photo-1.jpg']}
       shape={'horizontalRectangle'}
       hasPadding={false}
-      fitModes={['height']}
-      focusPositions={['center']}
+      fitModes={['width']}
+      focusPositions={['right']}
     />
   </div>
 )
