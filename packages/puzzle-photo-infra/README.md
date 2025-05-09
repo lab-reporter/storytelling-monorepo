@@ -94,7 +94,7 @@ export type LayoutProps = {
     - `mixed`：4 張圖大，組合 4C
 - `FitModeType`：照片要透過寬度或高度撐滿
 - `FocusPositionType`：照片要置左、置中、置右對齊
-- `hasPadding`：為 1 張照片組合中決定要不要 padding 的參數（若為 `ture` 就是組合 1B）
+- `hasPadding`：為 1 張照片組合中決定要不要 padding 的參數（若為 `true` 就是組合 1B）
 
 ### 版面組合與對應參數
 - 1A
