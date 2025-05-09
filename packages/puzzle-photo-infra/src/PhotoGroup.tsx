@@ -2,9 +2,6 @@ import styled, { css } from 'styled-components'
 import { RectangleContainer } from './RectangleContainer'
 import { LayoutProps } from './types'
 
-// const SMALL_GAP = '30px'
-// const BIG_GAP = '50px'
-
 export const PhotoGroup = styled(RectangleContainer)<LayoutProps>`
   display: flex;
   justify-content: center;
