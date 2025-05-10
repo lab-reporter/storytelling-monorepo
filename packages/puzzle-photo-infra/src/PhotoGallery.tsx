@@ -20,8 +20,6 @@ export function PhotoGallery({
 }) {
   useEffect(() => {
     const zoom = mediumZoom('[data-zoomable]', {
-      background: '#fff',
-      margin: 24,
       scrollOffset: 30,
     })
 

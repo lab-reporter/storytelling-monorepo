@@ -13,38 +13,36 @@ function PuzzlePhotoInfra({
   shape,
   hasPadding,
   focusPositions,
-  isVertical = true,
   fitModes,
+  variant,
   grid,
-  variant = 'line',
+  isVertical,
 }: // className,
 {
   photoUrls: string[]
   shape: ShapeType
   hasPadding?: boolean
   focusPositions: FocusPositionType[]
-  isVertical?: boolean
   fitModes: FitModeType[]
-  grid?: GridType
   variant?: VariantType
+  grid?: GridType
+  isVertical?: boolean
   // className?: string
 }) {
   return (
-    <>
-      <PhotoGallery
-        photoUrls={photoUrls}
-        fitModes={fitModes}
-        focusPositions={focusPositions}
-        config={{
-          photoCount: photoUrls.length,
-          shape: shape,
-          hasPadding: hasPadding,
-          isVertical: isVertical,
-          variant: variant,
-          grid: grid,
-        }}
-      />
-    </>
+    <PhotoGallery
+      photoUrls={photoUrls}
+      fitModes={fitModes}
+      focusPositions={focusPositions}
+      config={{
+        photoCount: photoUrls.length,
+        shape: shape,
+        hasPadding: hasPadding,
+        variant: variant,
+        grid: grid,
+        isVertical: isVertical,
+      }}
+    />
   )
 }
 
