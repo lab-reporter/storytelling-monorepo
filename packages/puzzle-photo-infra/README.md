@@ -62,7 +62,7 @@
 
 
 ## 使用方式
-透過呼叫 `index.js` 中的 `PuzzlePhotoInfra`，將參數傳入 `PhotoGallery` component 使用。`photoUrls` 為要呈現的照片 urls 
+透過呼叫 `index.js` 中的 `PuzzlePhotoInfra`，將參數傳入 `PhotoGallery` component 使用。`photoUrls` 為要呈現的照片 urls。
 由於 `FocusPositionType` 和 `FitModeType` 是每一張照片都要決定，所以各為一個 `array`。剩下的參數能決定所要組成的版面。
 ``` js
 function PuzzlePhotoInfra({
@@ -112,14 +112,13 @@ function PuzzlePhotoInfra({
 - `FocusPositionType`：照片要置左、置中、置右對齊
 - `FitModeType`：照片要透過寬度或高度撐滿
 - `VariantType`：組合是多張排成一線或是呈現網格排列
-- `line`：線狀，並搭配 `LayoutProps` 中的 `isVertical` 決定是成直線還是橫線（若 `isVertical` 為 `true` 就是組合 2A、3A，反之是 2A、3B）
+    - `line`：線狀，並搭配 `LayoutProps` 中的 `isVertical` 決定是成直線還是橫線（若 `isVertical` 為 `true` 就是組合 2A、3A，反之是 2A、3B）
     - `grid`：網格，並搭配下面的 `GridType` 使用
 - `GridType`：不同的網格形式
     - `leftBig`：左圖較大，組合 3C
     - `topBig`：上圖較大，組合 3D
-    - `uniform`：4 張圖一樣大，組合 4A、4B，搭配 `isVertical` 決定整體視覺為長或橫（若 `isVertical` 為 `true` 就是組合 4B）
-    - `mixed`：4 張圖大，組合 4C
-
+    - `uniform`：4 張圖一樣大，組合 4A、4B，搭配 `isVertical` 決定整體視覺為長或橫（若 `isVertical` 為 `true` 就是組合 4B，反之是 4A）
+    - `mixed`：4 張圖大小不同，組合 4C
 
 
 ### 版面組合與對應參數
