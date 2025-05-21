@@ -29,7 +29,7 @@ export function Hint({ className, id }: { className?: string; id: string }) {
           setMuted(!muted)
         }}
       >
-        {muted ? <span>開啟聲音</span> : <span>關閉聲音</span>}
+        {muted ? <span>點擊開啟聲音</span> : <span>點擊關閉聲音</span>}
         {muted ? <SoundIcon /> : <MuteIcon />}
       </Button>
       <SeparationLineContainer>
