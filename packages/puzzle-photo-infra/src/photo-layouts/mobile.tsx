@@ -1,4 +1,4 @@
-import { LayoutProps } from '../types'
+import type { LayoutProps } from '../types'
 
 export function square(p: LayoutProps) {
   const { photoCount, isVertical, variant, grid, index } = p

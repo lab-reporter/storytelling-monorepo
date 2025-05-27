@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components'
-import { RectangleContainer } from './RectangleContainer'
-import { LayoutProps } from './types'
+import { RectangleContainer } from './rectangle-container'
+import type { LayoutProps } from './types'
 
 export const PhotoGroup = styled(RectangleContainer)<LayoutProps>`
   display: flex;

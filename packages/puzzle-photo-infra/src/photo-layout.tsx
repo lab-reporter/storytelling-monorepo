@@ -1,27 +1,26 @@
-// PhotoLayout.tsx
 import styled, { css } from 'styled-components'
-import { LayoutProps } from './types'
+import type { LayoutProps } from './types'
 
 import {
   square as hdSquare,
   horizRect as hdHorizRect,
   vertRect as hdVertRect,
-} from './PhotoLayouts/HD'
+} from './photo-layouts/hd'
 import {
   square as desktopSquare,
   horizRect as desktopHorizRect,
   vertRect as desktopVertRect,
-} from './PhotoLayouts/Desktop'
+} from './photo-layouts/desktop'
 import {
   square as tabletSquarer,
   horizRect as tabletHorizRect,
   vertRect as tabletVertRect,
-} from './PhotoLayouts/Tablet'
+} from './photo-layouts/tablet'
 import {
   square as mobileSquarer,
   horizRect as mobileHorizRect,
   vertRect as mobileVertRect,
-} from './PhotoLayouts/Mobile'
+} from './photo-layouts/mobile'
 
 export const PhotoLayout = styled.div<LayoutProps>`
   box-sizing: border-box;

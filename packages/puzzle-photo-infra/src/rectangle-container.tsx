@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { LayoutProps } from './types'
+import type { LayoutProps } from './types'
 
 export const RectangleContainer = styled.div<LayoutProps>`
   box-sizing: border-box;

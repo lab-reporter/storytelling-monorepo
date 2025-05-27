@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
-import { FitModeType, FocusPositionType, LayoutProps } from './types'
-import { PhotoGroup } from './PhotoGroup'
-import { PhotoLayout } from './PhotoLayout'
+import type { FitModeType, FocusPositionType, LayoutProps } from './types'
+import { PhotoGroup } from './photo-group'
+import { PhotoLayout } from './photo-layout'
 
 import mediumZoom from 'medium-zoom'
-import { ZoomGlobalStyle } from './ZoomGlobalStyle'
+import { ZoomGlobalStyle } from './zoom-global-style'
 
 export function PhotoGallery({
   photoUrls,

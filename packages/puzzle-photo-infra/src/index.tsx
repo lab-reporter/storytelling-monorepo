@@ -1,6 +1,6 @@
 import React from 'react'
-import { PhotoGallery } from './PhotoGallery'
-import {
+import { PhotoGallery } from './photo-gallery'
+import type {
   ShapeType,
   FitModeType,
   FocusPositionType,
