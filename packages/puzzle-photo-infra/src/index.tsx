@@ -9,6 +9,7 @@ import type {
 } from './types'
 
 function PuzzlePhotoInfra({
+  id,
   photoUrls,
   shape,
   hasPadding,
@@ -17,8 +18,8 @@ function PuzzlePhotoInfra({
   variant,
   grid,
   isVertical,
-}: // className,
-{
+}: {
+  id: string
   photoUrls: string[]
   shape: ShapeType
   hasPadding?: boolean
@@ -27,10 +28,10 @@ function PuzzlePhotoInfra({
   variant?: VariantType
   grid?: GridType
   isVertical?: boolean
-  // className?: string
 }) {
   return (
     <PhotoGallery
+      id={id}
       photoUrls={photoUrls}
       fitModes={fitModes}
       focusPositions={focusPositions}

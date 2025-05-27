@@ -8,11 +8,13 @@ import mediumZoom from 'medium-zoom'
 import { ZoomGlobalStyle } from './zoom-global-style'
 
 export function PhotoGallery({
+  id,
   photoUrls,
   fitModes,
   focusPositions,
   config,
 }: {
+  id: string
   photoUrls: string[]
   fitModes: FitModeType[]
   focusPositions: FocusPositionType[]
@@ -29,7 +31,7 @@ export function PhotoGallery({
   }, [photoUrls])
 
   return (
-    <>
+    <div id={id}>
       <ZoomGlobalStyle />
       <Container>
         <PhotoGroup {...config}>
@@ -46,7 +48,7 @@ export function PhotoGallery({
           ))}
         </PhotoGroup>
       </Container>
-    </>
+    </div>
   )
 }
 

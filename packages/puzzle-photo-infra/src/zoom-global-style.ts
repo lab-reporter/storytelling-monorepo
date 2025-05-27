@@ -1,9 +1,9 @@
 import { createGlobalStyle } from 'styled-components'
 
 export const ZoomGlobalStyle = createGlobalStyle`
-.medium-zoom-overlay,
-.medium-zoom-image--opened {
+[id^='puzzle-photo-'] .medium-zoom-overlay,
+[id^='puzzle-photo-'] .medium-zoom-image--opened {
   max-width: 100% !important;
-  max-heihgt: 100% !important;
+  max-height: 100% !important;
 }
 `

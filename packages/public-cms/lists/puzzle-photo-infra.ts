@@ -332,6 +332,7 @@ const listConfigurations = list({
           ].slice(0, photoCount)
 
           const code = buildPuzzlePhotoInfraEmbedCode({
+            id: 'puzzle-photo-' + item.id,
             photoUrls: photoUrls,
             shape: shape,
             focusPositions: focusPositions,
