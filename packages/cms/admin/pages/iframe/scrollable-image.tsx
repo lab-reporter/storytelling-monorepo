@@ -7,7 +7,7 @@ export default function CustomPage() {
     <PageContainer header={<Heading type="h3">橫著滾吧！</Heading>}>
       <div style={{ display: 'flex', width: '100%', height: '100%' }}>
         <iframe
-          src="https://lab-storytelling.twreporter.org/scrollable-image"
+          src="/scrollable-image"
           width="100%"
           height="100%"
           style={{ flexGrow: 1, border: 'none' }}
