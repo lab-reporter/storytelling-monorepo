@@ -195,6 +195,32 @@ export default withAuth(
           }
         )
 
+        app.get(
+          '/demo/puzzle-photo-infras/:id(\\d+)',
+          authenticationMw,
+          async (req, res) => {
+            const itemId = req.params.id
+
+            const context = await commonContext.withRequest(req, res)
+            const item = await context.query.PuzzlePhotoInfra.findOne({
+              where: { id: itemId },
+              query: 'embedCode',
+            })
+
+            if (!item) {
+              return res
+                .status(404)
+                .send(`PuzzlePhotoInfra ${itemId} is not found`)
+            }
+
+            // return res
+            // .status(200)
+            // .send(`ID received:, ${itemId}, ${typeof itemId}`)
+            res.send(renderPuzzlePhotoInfraHtml(item?.embedCode))
+            // res.send(`<html><body><p>test</p></body></html>`)
+          }
+        )
+
         // landing page router
         app.use(
           createLandingMiniApp({
@@ -272,6 +298,18 @@ const renderScrollToAudioHtml = (
     <div style="text-align: center;">捲到式聲音結束點</div>
     ${endEmbedCode}
   </div>
+</body>
+</html>
+`
+}
+
+const renderPuzzlePhotoInfraHtml = (embedCode: string) => {
+  return `
+<html>
+<head>
+</head>
+<body>
+    ${embedCode}
 </body>
 </html>
 `

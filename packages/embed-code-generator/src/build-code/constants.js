@@ -5,4 +5,5 @@ export const pkgNames = {
   scrollableThreeModel: 'scrollable-three-model',
   subtitledAudio: 'subtitled-audio',
   scrollToAudio: 'scroll-to-audio',
+  puzzlePhotoInfra: 'puzzle-photo-infra',
 }
