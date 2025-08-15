@@ -7,7 +7,7 @@ export default function CustomPage() {
     <PageContainer header={<Heading type="h3">大事記</Heading>}>
       <div style={{ display: 'flex', width: '100%', height: '100%' }}>
         <iframe
-          src="https://lab-storytelling.twreporter.org/timeline"
+          src="/timeline"
           width="100%"
           height="100%"
           style={{ flexGrow: 1, border: 'none' }}
