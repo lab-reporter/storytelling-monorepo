@@ -126,12 +126,7 @@ const listConfigurations = list({
   access: {
     operation: {
       query: allowAllRoles(),
-      create: allowRoles([
-        RoleEnum.Owner,
-        RoleEnum.Admin,
-        RoleEnum.Editor,
-        RoleEnum.Contributor,
-      ]),
+      create: allowRoles([RoleEnum.Owner, RoleEnum.Admin, RoleEnum.Editor]),
       update: allowRoles([RoleEnum.Owner, RoleEnum.Admin, RoleEnum.Editor]),
       delete: allowRoles([RoleEnum.Owner, RoleEnum.Admin, RoleEnum.Editor]),
     },

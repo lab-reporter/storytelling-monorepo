@@ -2,6 +2,11 @@ import config from '../config'
 import { buildSubtitledAudioEmbedCode } from '@story-telling-reporter/react-embed-code-generator'
 import { list, graphql } from '@keystone-6/core'
 import { text, file, virtual } from '@keystone-6/core/fields'
+import {
+  allowAllRoles,
+  allowRoles,
+  RoleEnum,
+} from './utils/access-control-list'
 
 const listConfigurations = list({
   fields: {
@@ -66,7 +71,15 @@ const listConfigurations = list({
     labelField: 'name',
   },
 
-  access: () => true,
+  access: {
+    operation: {
+      query: allowAllRoles(),
+      create: allowRoles([RoleEnum.Owner, RoleEnum.Admin, RoleEnum.Editor]),
+      update: allowRoles([RoleEnum.Owner, RoleEnum.Admin, RoleEnum.Editor]),
+      delete: allowRoles([RoleEnum.Owner, RoleEnum.Admin, RoleEnum.Editor]),
+    },
+  },
+
   hooks: {},
 })
 

@@ -8,6 +8,11 @@ import {
   json,
   virtual,
 } from '@keystone-6/core/fields'
+import {
+  allowAllRoles,
+  allowRoles,
+  RoleEnum,
+} from './utils/access-control-list'
 
 const embedCodeWebpackAssets = embedCodeGen.loadWebpackAssets()
 
@@ -82,7 +87,15 @@ const listConfigurations = list({
     labelField: 'name',
   },
 
-  access: () => true,
+  access: {
+    operation: {
+      query: allowAllRoles(),
+      create: allowRoles([RoleEnum.Owner, RoleEnum.Admin, RoleEnum.Editor]),
+      update: allowRoles([RoleEnum.Owner, RoleEnum.Admin, RoleEnum.Editor]),
+      delete: allowRoles([RoleEnum.Owner, RoleEnum.Admin, RoleEnum.Editor]),
+    },
+  },
+
   hooks: {},
 })
 
