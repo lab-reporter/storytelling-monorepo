@@ -35,24 +35,8 @@ const listConfigurations = list({
           value: RoleEnum.Admin,
         },
         {
-          label: RoleEnum.Developer,
-          value: RoleEnum.Developer,
-        },
-        {
           label: RoleEnum.Editor,
           value: RoleEnum.Editor,
-        },
-        {
-          label: RoleEnum.Contributor,
-          value: RoleEnum.Contributor,
-        },
-        {
-          label: RoleEnum.FrontendHeadlessAccount,
-          value: RoleEnum.FrontendHeadlessAccount,
-        },
-        {
-          label: RoleEnum.PreviewHeadlessAccount,
-          value: RoleEnum.PreviewHeadlessAccount,
         },
       ],
       validation: { isRequired: true },
