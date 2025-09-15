@@ -9,6 +9,11 @@ import { customAlphabet } from 'nanoid'
 import CleanCss from 'clean-css'
 import postcss from 'postcss'
 import postcssNesting from 'postcss-nesting'
+import {
+  allowAllRoles,
+  allowRoles,
+  RoleEnum,
+} from './utils/access-control-list'
 
 const nanoid = customAlphabet('abcdefghijklmnopq', 10)
 
@@ -227,7 +232,15 @@ const listConfigurations = list({
     labelField: 'name',
   },
 
-  access: () => true,
+  access: {
+    operation: {
+      query: allowAllRoles(),
+      create: allowRoles([RoleEnum.Owner, RoleEnum.Admin, RoleEnum.Editor]),
+      update: allowRoles([RoleEnum.Owner, RoleEnum.Admin, RoleEnum.Editor]),
+      delete: allowRoles([RoleEnum.Owner, RoleEnum.Admin, RoleEnum.Editor]),
+    },
+  },
+
   hooks: {
     resolveInput: ({ inputData, item, resolvedData }) => {
       const videoSrc = inputData?.videoSrc

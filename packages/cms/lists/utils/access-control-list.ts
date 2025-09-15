@@ -9,11 +9,7 @@ type Session = {
 export const RoleEnum = {
   Owner: 'owner',
   Admin: 'admin',
-  Developer: 'developer',
   Editor: 'editor',
-  Contributor: 'contributor',
-  FrontendHeadlessAccount: 'frontend_headless_account',
-  PreviewHeadlessAccount: 'preview_headless_account',
 }
 
 export const allowRoles = (roles: string[]) => {
@@ -35,15 +31,7 @@ export const allowRoles = (roles: string[]) => {
 }
 
 export const allowAllRoles = () => {
-  const roles = [
-    RoleEnum.Owner,
-    RoleEnum.Admin,
-    RoleEnum.Developer,
-    RoleEnum.Editor,
-    RoleEnum.Contributor,
-    RoleEnum.FrontendHeadlessAccount,
-    RoleEnum.PreviewHeadlessAccount,
-  ]
+  const roles = [RoleEnum.Owner, RoleEnum.Admin, RoleEnum.Editor]
   return allowRoles(roles)
 }
 

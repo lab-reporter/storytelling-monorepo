@@ -2,6 +2,11 @@ import { graphql, list } from '@keystone-6/core'
 import { text, json, virtual } from '@keystone-6/core/fields'
 import { buildScrollableThreeModelEmbedCode } from '@story-telling-reporter/react-embed-code-generator'
 import { ScrollableThreeModelProps } from '@story-telling-reporter/react-three-story-controls'
+import {
+  allowAllRoles,
+  allowRoles,
+  RoleEnum,
+} from './utils/access-control-list'
 
 const listConfigurations = list({
   fields: {
@@ -67,7 +72,15 @@ const listConfigurations = list({
     labelField: 'name',
   },
 
-  access: () => true,
+  access: {
+    operation: {
+      query: allowAllRoles(),
+      create: allowRoles([RoleEnum.Owner, RoleEnum.Admin, RoleEnum.Editor]),
+      update: allowRoles([RoleEnum.Owner, RoleEnum.Admin, RoleEnum.Editor]),
+      delete: allowRoles([RoleEnum.Owner, RoleEnum.Admin, RoleEnum.Editor]),
+    },
+  },
+
   hooks: {
     resolveInput: ({ inputData, item, resolvedData }) => {
       const modelSrc = inputData?.modelSrc
