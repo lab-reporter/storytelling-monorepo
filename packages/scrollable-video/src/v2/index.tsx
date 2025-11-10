@@ -189,7 +189,7 @@ export function ScrollableVideo({
       scrollTriggerInstance.current = ScrollTrigger.create({
         markers: debugMode,
         trigger: scrollTriggerRef.current,
-        start: 'top 50%',
+        start: 'top 100%',
         end: 'bottom 50%',
         scroller: scrollerRef?.current || window,
         onUpdate: ({ progress }: { progress: number }) => {
