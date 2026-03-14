@@ -227,16 +227,6 @@ export const OpenPreviewButton = styled(Icon)`
   }
 `
 
-// export const ZoomInButton = styled(Icon).attrs((props: IconProps) => ({
-//   $className: props?.className,
-//   $onClick: props?.onClick,
-//   $bgImg: cdnPrefix + '/zoom-in.svg',
-//   $hoverBgImg: cdnPrefix + '/zoom-in.hover.svg',
-//   style: {
-//     ...props.style,
-//   },
-// }))``
-
 export const EditLayoutButton = styled(Icon).attrs((props: IconProps) => ({
   $className: props?.className,
   $onClick: props?.onClick,
@@ -249,7 +239,7 @@ export const EditPhotoIcon = styled(Icon)`
   height: 25px;
   background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
   border-radius: 4px; /* Slightly rounded corners */
-  background-image: url(${cdnPrefix + '/rotate.svg'});
+  background-image: url(${cdnPrefix + '/switch-next.svg'});
   filter: invert(100%); /* Make the icon white */
 `
 

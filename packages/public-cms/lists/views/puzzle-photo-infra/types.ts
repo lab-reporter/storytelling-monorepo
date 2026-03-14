@@ -6,7 +6,7 @@ export type Photo = {
   focusPosition: 'left' | 'center' | 'right'
 }
 export type LayoutProps = {
-  layout: LayoutOption
+  layout?: LayoutOption
   photoCount: number
   hasPadding?: boolean
   variant?: 'line' | 'grid'
@@ -59,9 +59,9 @@ export const layoutSettings: Record<
 > = {
   '1A': {
     pickerSetting: {
-      cols: '1fr',
+      cols: '1fr 1fr 1fr 1fr 1fr',
       rows: '1fr',
-      cells: [{ col: '1 / 2', row: '1 / 2' }],
+      cells: [{ col: '1 / 6', row: '1 / 2' }],
     },
     props: {
       layout: '1A',
@@ -128,12 +128,12 @@ export const layoutSettings: Record<
   },
   '3A': {
     pickerSetting: {
-      cols: '1fr',
+      cols: '1fr 1fr 1fr 1fr 1fr',
       rows: '1fr 1fr 1fr',
       cells: [
-        { col: '1 / 2', row: '1 / 2' },
-        { col: '1 / 2', row: '2 / 3' },
-        { col: '1 / 2', row: '3 / 4' },
+        { col: '2 / 5', row: '1 / 2' },
+        { col: '2 / 5', row: '2 / 3' },
+        { col: '2 / 5', row: '3 / 4' },
       ],
       inset: inset,
     },
@@ -149,11 +149,11 @@ export const layoutSettings: Record<
   '3B': {
     pickerSetting: {
       cols: '1fr 1fr 1fr',
-      rows: '1fr',
+      rows: '1fr 1fr 1fr 1fr 1fr',
       cells: [
-        { col: '1 / 2', row: '1 / 2' },
-        { col: '2 / 3', row: '1 / 2' },
-        { col: '3 / 4', row: '1 / 2' },
+        { col: '1 / 2', row: '2 / 5' },
+        { col: '2 / 3', row: '2 / 5' },
+        { col: '3 / 4', row: '2 / 5' },
       ],
       inset: inset,
     },

@@ -76,7 +76,6 @@ const listConfigurations = list({
         className,
       },
       ui: {
-        // A module path that is resolved from where `keystone start` is run
         views: './lists/views/scrollable-image-editor/index',
         createView: {
           fieldMode: 'hidden',

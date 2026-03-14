@@ -13,20 +13,31 @@ export const PuzzlePhotoEditorContainer = styled.div`
 
 export const LayoutPickerContainer = styled.div`
   position: absolute;
+  top: 0;
+  left: 0;
   display: flex;
   height: 100%;
   width: 100%;
   justify-content: center;
   align-items: center;
-  z-index: 1;
+  z-index: 100;
   background-color: #323232;
+`
+
+export const LayoutPickerCloseOverlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
 `
 
 export const LayoutPickerGrid = styled.div`
   display: grid;
   gap: 20px;
-  height: 75%;
-  width: 75%;
+  height: 90%;
+  width: 90%;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   place-items: center;
 `
@@ -34,14 +45,13 @@ export const LayoutPickerGrid = styled.div`
 export const LayoutPickerButton = styled.button`
   margin: 10px;
   border: none;
-  height: 90%;
-  // width: 90%;
+  height: 100%;
   aspect-ratio: 1 / 1;
-  padding: 0;
-  background: rbga(239, 243, 246, 0);
+  background: #f2f4f7;
   cursor: pointer;
   display: flex;
-  padding: 20px;
+  padding: 10px;
+  position: relative;
 `
 
 export const LayoutOptionButtonWrapper = styled.div<{
@@ -54,7 +64,6 @@ export const LayoutOptionButtonWrapper = styled.div<{
   width: 100%;
   height: 100%;
   // padding: 10%;
-  border-radius: 8px;
   display: grid;
   gap: 5px;
   grid-template-columns: ${(props) => props.cols};
@@ -72,7 +81,7 @@ export const LayoutOptionCell = styled.div<{
   grid-row: ${(props) => props.row};
   background: #fff;
   border: 1px solid #e1e5ea;
-  border-radius: 3px;
+  // border-radius: 3px;
 `
 
 export const EditorLayoutWrapper = styled.div<{
@@ -194,26 +203,46 @@ export const ActionButton = styled.button<{ primary?: boolean }>`
 
 export const CellOverlay = styled.div`
   position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  & > * {
+    pointer-events: auto;
+  }
+`
+
+export const EditPhotoIconWrapper = styled.div`
+  /* Centered by flex parent */
+`
+
+export const DeletePhotoIconWrapper = styled.div`
+  position: absolute;
   bottom: 8px;
   left: 50%;
   transform: translateX(-50%);
-  display: flex;
-  gap: 8px;
 `
 
 export const CheckIcon = styled.div`
   position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 24px;
-  height: 24px;
-  background-color: #2563eb;
-  border-radius: 50%;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  // border-radius: 8px;
+  background-color: #000;
   background-image: url(${cdnPrefix + '/lexical/success-alt.svg'});
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 16px;
+  background-size: 100%;
   filter: invert(100%);
   z-index: 2;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  margin: 0;
+  padding: 0;
 `

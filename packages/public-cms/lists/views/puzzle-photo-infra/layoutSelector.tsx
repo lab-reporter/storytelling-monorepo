@@ -67,8 +67,8 @@ function LayoutOptionButton({
             row={cell.row}
           />
         ))}
-        {selected && <CheckIcon />}
       </LayoutOptionButtonWrapper>
+      {selected && <CheckIcon />}
     </>
   )
 }

@@ -15,10 +15,7 @@ import { createdByFilter, createdByHooks } from './utils/access-control-list'
 import type { PuzzlePhotoConfig } from './views/puzzle-photo-infra/types'
 
 const defaultConfig: PuzzlePhotoConfig = {
-  layout: '1A',
-  // shape: 'square',
-  direction: 'horizontal',
-  photoCount: 1,
+  photoCount: 0,
   photos: [],
   hasPadding: true,
 }

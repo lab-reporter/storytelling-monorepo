@@ -5,6 +5,7 @@ import { controller } from '@keystone-6/core/fields/types/json/views'
 import {
   FieldContainerWithMaxWidth,
   LayoutPickerContainer,
+  LayoutPickerCloseOverlay,
   PuzzlePhotoEditorContainer,
   EditorLayoutWrapper,
   EditorLayoutCell,
@@ -18,7 +19,8 @@ import {
   Input,
   ActionButton,
   CellOverlay,
-  CheckIcon,
+  EditPhotoIconWrapper,
+  DeletePhotoIconWrapper,
 } from './styles'
 import { Panel } from '../utils/containers'
 import { LayoutPicker } from './layoutSelector'
@@ -43,7 +45,7 @@ export const Field = ({
   value,
   onChange: onFieldChange,
 }: FieldProps<typeof controller>) => {
-  const config = value ? JSON.parse(value) : { layout: '1A', photos: [] }
+  const config = value ? JSON.parse(value) : { photos: [] }
 
   const onChange = useCallback(
     (newConfig: PuzzlePhotoConfig) => {
@@ -66,8 +68,8 @@ function PuzzlePhotoEditor({
   onChange,
   ...initialConfig
 }: PuzzlePhotoConfig & { onChange: (arg: PuzzlePhotoConfig) => void }) {
-  const [layout, setLayout] = useState<LayoutOption>(
-    initialConfig.layout || '1A'
+  const [layout, setLayout] = useState<LayoutOption | undefined>(
+    initialConfig.layout
   )
   const [photos, setPhotos] = useState<Photo[]>(initialConfig.photos || [])
   const [fullScreen, setFullScreen] = useState(false)
@@ -94,7 +96,7 @@ function PuzzlePhotoEditor({
   )
 
   const onPhotoConfirm = () => {
-    if (editingIndex !== null) {
+    if (editingIndex !== null && layout) {
       const newPhotos = [...photos]
       newPhotos[editingIndex] = tempPhoto
       setPhotos(newPhotos)
@@ -108,14 +110,16 @@ function PuzzlePhotoEditor({
   }
 
   const onPhotoDelete = (index: number) => {
-    const newPhotos = [...photos]
-    newPhotos[index] = { url: '', fitMode: 'height', focusPosition: 'center' }
-    setPhotos(newPhotos)
-    onChange({
-      ...initialConfig,
-      ...layoutSettings[layout].props,
-      photos: newPhotos,
-    })
+    if (layout) {
+      const newPhotos = [...photos]
+      newPhotos[index] = { url: '', fitMode: 'height', focusPosition: 'center' }
+      setPhotos(newPhotos)
+      onChange({
+        ...initialConfig,
+        ...layoutSettings[layout].props,
+        photos: newPhotos,
+      })
+    }
   }
 
   const zoomButtonJsx = fullScreen ? (
@@ -148,59 +152,64 @@ function PuzzlePhotoEditor({
     />
   )
 
-  const layoutSetting = layoutSettings[layout]
+  const layoutSetting = layout ? layoutSettings[layout] : null
 
   return (
     <Panel $fullScreen={fullScreen}>
       {zoomButtonJsx}
-      <EditorLayoutWrapper
-        cols={layoutSetting.pickerSetting.cols}
-        rows={layoutSetting.pickerSetting.rows}
-        inset={layoutSetting.pickerSetting.inset}
-      >
-        {layoutSetting.pickerSetting.cells.map((cell, index) => {
-          const photo = getPhotoAt(index)
-          return (
-            <EditorLayoutCell key={index} col={cell.col} row={cell.row}>
-              {photo.url ? (
-                <img
-                  src={photo.url}
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    // objectFit: photo.fitMode === 'width' ? 'contain' : 'cover',
-                    objectFit: 'cover',
-                    // objectPosition: photo.focusPosition,
-                  }}
-                />
-              ) : (
-                <EditLayoutButton
-                  onClick={() => {
-                    setEditingIndex(index)
-                    setTempPhoto(getPhotoAt(index))
-                  }}
-                  style={{
-                    width: '50px',
-                    height: '50px',
-                    backgroundColor: 'transparent',
-                    filter: 'none',
-                  }}
-                />
-              )}
-              <CellOverlay>
-                <EditPhotoIcon
-                  onClick={() => {
-                    setEditingIndex(index)
-                    setTempPhoto(getPhotoAt(index))
-                  }}
-                />
-                <DeletePhotoIcon onClick={() => onPhotoDelete(index)} />
-              </CellOverlay>
-              {photo.url && <CheckIcon />}
-            </EditorLayoutCell>
-          )
-        })}
-      </EditorLayoutWrapper>
+      {layoutSetting && (
+        <EditorLayoutWrapper
+          cols={layoutSetting.pickerSetting.cols}
+          rows={layoutSetting.pickerSetting.rows}
+          inset={layoutSetting.pickerSetting.inset}
+        >
+          {layoutSetting.pickerSetting.cells.map((cell, index) => {
+            const photo = getPhotoAt(index)
+            return (
+              <EditorLayoutCell key={index} col={cell.col} row={cell.row}>
+                {photo.url ? (
+                  <img
+                    src={photo.url}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      // objectFit: photo.fitMode === 'width' ? 'contain' : 'cover',
+                      objectFit: 'cover',
+                      // objectPosition: photo.focusPosition,
+                    }}
+                  />
+                ) : (
+                  <EditLayoutButton
+                    onClick={() => {
+                      setEditingIndex(index)
+                      setTempPhoto(getPhotoAt(index))
+                    }}
+                    style={{
+                      width: '50px',
+                      height: '50px',
+                      backgroundColor: 'transparent',
+                      filter: 'none',
+                    }}
+                  />
+                )}
+                <CellOverlay>
+                  <EditPhotoIconWrapper>
+                    <EditPhotoIcon
+                      onClick={() => {
+                        setEditingIndex(index)
+                        setTempPhoto(getPhotoAt(index))
+                      }}
+                    />
+                  </EditPhotoIconWrapper>
+                  <DeletePhotoIconWrapper>
+                    <DeletePhotoIcon onClick={() => onPhotoDelete(index)} />
+                  </DeletePhotoIconWrapper>
+                </CellOverlay>
+              </EditorLayoutCell>
+            )
+          })}
+        </EditorLayoutWrapper>
+      )}
 
       <AddButton
         onClick={() => {
@@ -215,6 +224,9 @@ function PuzzlePhotoEditor({
 
       {layoutPickerOpen && (
         <LayoutPickerContainer>
+          <LayoutPickerCloseOverlay
+            onClick={() => setLayoutPickerOpen(false)}
+          />
           <LayoutPicker
             onChange={onLayoutChange}
             layout={layout}
