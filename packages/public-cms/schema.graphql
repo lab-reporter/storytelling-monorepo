@@ -553,12 +553,25 @@ input ScrollableThreeModelCreateInput {
 type PuzzlePhotoInfra {
   id: ID!
   name: String
+  shape: PuzzlePhotoInfraShapeType
+  direction: PuzzlePhotoInfraDirectionType
   config: JSON
   embedCode: String
   preview: JSON
   created_at: DateTime
   updated_at: DateTime
   created_by: User
+}
+
+enum PuzzlePhotoInfraShapeType {
+  square
+  horizontalRectangle
+  verticalRectangle
+}
+
+enum PuzzlePhotoInfraDirectionType {
+  horizontalScroll
+  verticalRectangleScroll
 }
 
 input PuzzlePhotoInfraWhereUniqueInput {
@@ -571,20 +584,40 @@ input PuzzlePhotoInfraWhereInput {
   NOT: [PuzzlePhotoInfraWhereInput!]
   id: IDFilter
   name: StringFilter
+  shape: PuzzlePhotoInfraShapeTypeNullableFilter
+  direction: PuzzlePhotoInfraDirectionTypeNullableFilter
   created_at: DateTimeNullableFilter
   updated_at: DateTimeNullableFilter
   created_by: UserWhereInput
 }
 
+input PuzzlePhotoInfraShapeTypeNullableFilter {
+  equals: PuzzlePhotoInfraShapeType
+  in: [PuzzlePhotoInfraShapeType!]
+  notIn: [PuzzlePhotoInfraShapeType!]
+  not: PuzzlePhotoInfraShapeTypeNullableFilter
+}
+
+input PuzzlePhotoInfraDirectionTypeNullableFilter {
+  equals: PuzzlePhotoInfraDirectionType
+  in: [PuzzlePhotoInfraDirectionType!]
+  notIn: [PuzzlePhotoInfraDirectionType!]
+  not: PuzzlePhotoInfraDirectionTypeNullableFilter
+}
+
 input PuzzlePhotoInfraOrderByInput {
   id: OrderDirection
   name: OrderDirection
+  shape: OrderDirection
+  direction: OrderDirection
   created_at: OrderDirection
   updated_at: OrderDirection
 }
 
 input PuzzlePhotoInfraUpdateInput {
   name: String
+  shape: PuzzlePhotoInfraShapeType
+  direction: PuzzlePhotoInfraDirectionType
   config: JSON
   created_at: DateTime
   updated_at: DateTime
@@ -598,6 +631,8 @@ input PuzzlePhotoInfraUpdateArgs {
 
 input PuzzlePhotoInfraCreateInput {
   name: String
+  shape: PuzzlePhotoInfraShapeType
+  direction: PuzzlePhotoInfraDirectionType
   config: JSON
   created_at: DateTime
   updated_at: DateTime

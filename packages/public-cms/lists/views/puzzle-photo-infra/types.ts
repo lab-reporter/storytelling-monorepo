@@ -1,5 +1,5 @@
-type Shape = 'square' | 'horizontalRectangle' | 'verticalRectangle'
-type Direction = 'horizontal' | 'vertical'
+// type Shape = 'square' | 'horizontalRectangle' | 'verticalRectangle'
+// type Direction = 'horizontal' | 'vertical'
 export type Photo = {
   url: string
   fitMode: 'width' | 'height'
@@ -14,8 +14,6 @@ export type LayoutProps = {
   isVertical?: boolean
 }
 export type PuzzlePhotoConfig = LayoutProps & {
-  shape: Shape
-  direction: Direction
   photos: Photo[]
 }
 
@@ -53,6 +51,8 @@ export type PickerSetting = {
   cells: { col: string; row: string }[]
 }
 
+const inset = 10
+
 export const layoutSettings: Record<
   LayoutOption,
   { pickerSetting: PickerSetting; props: LayoutProps }
@@ -76,7 +76,7 @@ export const layoutSettings: Record<
     pickerSetting: {
       cols: '1fr',
       rows: '1fr',
-      inset: 8,
+      inset: inset,
       cells: [{ col: '1 / 2', row: '1 / 2' }],
     },
     props: {
@@ -96,6 +96,7 @@ export const layoutSettings: Record<
         { col: '1 / 2', row: '1 / 2' },
         { col: '1 / 2', row: '2 / 3' },
       ],
+      inset: inset,
     },
     props: {
       layout: '2A',
@@ -114,6 +115,7 @@ export const layoutSettings: Record<
         { col: '1 / 2', row: '1 / 2' },
         { col: '2 / 3', row: '1 / 2' },
       ],
+      inset: inset,
     },
     props: {
       layout: '2B',
@@ -133,6 +135,7 @@ export const layoutSettings: Record<
         { col: '1 / 2', row: '2 / 3' },
         { col: '1 / 2', row: '3 / 4' },
       ],
+      inset: inset,
     },
     props: {
       layout: '3A',
@@ -152,6 +155,7 @@ export const layoutSettings: Record<
         { col: '2 / 3', row: '1 / 2' },
         { col: '3 / 4', row: '1 / 2' },
       ],
+      inset: inset,
     },
     props: {
       layout: '3B',
@@ -171,6 +175,7 @@ export const layoutSettings: Record<
         { col: '2 / 3', row: '1 / 2' },
         { col: '2 / 3', row: '2 / 3' },
       ],
+      inset: inset,
     },
     props: {
       layout: '3C',
@@ -190,6 +195,7 @@ export const layoutSettings: Record<
         { col: '1 / 2', row: '2 / 3' },
         { col: '2 / 3', row: '2 / 3' },
       ],
+      inset: inset,
     },
     props: {
       layout: '3D',
@@ -203,13 +209,14 @@ export const layoutSettings: Record<
   '4A': {
     pickerSetting: {
       cols: '1fr 1fr',
-      rows: '1fr 1fr',
+      rows: '1fr 1fr 1fr 1fr 1fr 1fr',
       cells: [
-        { col: '1 / 2', row: '1 / 2' },
-        { col: '2 / 3', row: '1 / 2' },
-        { col: '1 / 2', row: '2 / 3' },
-        { col: '2 / 3', row: '2 / 3' },
+        { col: '1 / 2', row: '2 / 4' },
+        { col: '2 / 3', row: '2 / 4' },
+        { col: '1 / 2', row: '4 / 6' },
+        { col: '2 / 3', row: '4 / 6' },
       ],
+      inset: inset,
     },
     props: {
       layout: '4A',
@@ -222,14 +229,15 @@ export const layoutSettings: Record<
   },
   '4B': {
     pickerSetting: {
-      cols: '1fr 1fr',
+      cols: '1fr 1fr 1fr 1fr 1fr 1fr',
       rows: '1fr 1fr',
       cells: [
-        { col: '1 / 2', row: '1 / 2' },
-        { col: '2 / 3', row: '1 / 2' },
-        { col: '1 / 2', row: '2 / 3' },
-        { col: '2 / 3', row: '2 / 3' },
+        { col: '2 / 4', row: '1 / 2' },
+        { col: '4 / 6', row: '1 / 2' },
+        { col: '2 / 4', row: '2 / 3' },
+        { col: '4 / 6', row: '2 / 3' },
       ],
+      inset: inset,
     },
     props: {
       layout: '4B',
@@ -250,6 +258,7 @@ export const layoutSettings: Record<
         { col: '1 / 2', row: '2 / 3' },
         { col: '2 / 4', row: '2 / 3' },
       ],
+      inset: inset,
     },
     props: {
       layout: '4C',

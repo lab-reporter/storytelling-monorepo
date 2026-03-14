@@ -5,6 +5,7 @@ import {
 import { list, graphql } from '@keystone-6/core'
 import {
   text,
+  select,
   virtual,
   relationship,
   timestamp,
@@ -15,7 +16,7 @@ import type { PuzzlePhotoConfig } from './views/puzzle-photo-infra/types'
 
 const defaultConfig: PuzzlePhotoConfig = {
   layout: '1A',
-  shape: 'square',
+  // shape: 'square',
   direction: 'horizontal',
   photoCount: 1,
   photos: [],
@@ -27,6 +28,33 @@ const listConfigurations = list({
     name: text({
       label: '拼圖照片-基礎建設名稱',
       validation: { isRequired: true },
+    }),
+    shape: select({
+      label: '尺寸',
+      type: 'enum',
+      options: [
+        { label: '正方', value: 'square' },
+        { label: '橫方', value: 'horizontalRectangle' },
+        { label: '直方', value: 'verticalRectangle' },
+      ],
+      defaultValue: 'square',
+      validation: { isRequired: true },
+      ui: {
+        displayMode: 'select',
+      },
+    }),
+    direction: select({
+      label: '捲動方向',
+      type: 'enum',
+      options: [
+        { label: '橫著滾', value: 'horizontalScroll' },
+        { label: '直著滾', value: 'verticalRectangleScroll' },
+      ],
+      defaultValue: 'horizontalScroll',
+      validation: { isRequired: true },
+      ui: {
+        displayMode: 'select',
+      },
     }),
     config: json({
       label: '方塊們',
@@ -50,7 +78,8 @@ const listConfigurations = list({
             grid: config.grid,
             isVertical: config.isVertical,
           }
-          const shape = config.shape
+          // const shape = config.shape
+          const shape = item?.shape as string
           const photoCount = config.photoCount
 
           const photoUrls = config.photos

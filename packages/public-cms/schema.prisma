@@ -116,13 +116,26 @@ model ScrollableThreeModel {
 }
 
 model PuzzlePhotoInfra {
-  id           Int       @id @default(autoincrement())
-  name         String    @default("")
-  config       Json?     @default("{\"layout\":\"1A\",\"shape\":\"square\",\"direction\":\"horizontal\",\"photoCount\":1,\"photos\":[],\"hasPadding\":true}")
-  created_at   DateTime? @default(now())
-  updated_at   DateTime? @updatedAt
-  created_by   User?     @relation("PuzzlePhotoInfra_created_by", fields: [created_byId], references: [id])
-  created_byId Int?      @map("created_by")
+  id           Int                           @id @default(autoincrement())
+  name         String                        @default("")
+  shape        PuzzlePhotoInfraShapeType     @default(square)
+  direction    PuzzlePhotoInfraDirectionType @default(horizontalScroll)
+  config       Json?                         @default("{\"layout\":\"1A\",\"direction\":\"horizontal\",\"photoCount\":1,\"photos\":[],\"hasPadding\":true}")
+  created_at   DateTime?                     @default(now())
+  updated_at   DateTime?                     @updatedAt
+  created_by   User?                         @relation("PuzzlePhotoInfra_created_by", fields: [created_byId], references: [id])
+  created_byId Int?                          @map("created_by")
 
   @@index([created_byId])
+}
+
+enum PuzzlePhotoInfraShapeType {
+  square
+  horizontalRectangle
+  verticalRectangle
+}
+
+enum PuzzlePhotoInfraDirectionType {
+  horizontalScroll
+  verticalRectangleScroll
 }

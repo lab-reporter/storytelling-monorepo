@@ -34,7 +34,8 @@ export const LayoutPickerGrid = styled.div`
 export const LayoutPickerButton = styled.button`
   margin: 10px;
   border: none;
-  height: 100%;
+  height: 90%;
+  // width: 90%;
   aspect-ratio: 1 / 1;
   padding: 0;
   background: rbga(239, 243, 246, 0);
@@ -54,15 +55,12 @@ export const LayoutOptionButtonWrapper = styled.div<{
   height: 100%;
   // padding: 10%;
   border-radius: 8px;
-  /* border: ${(props) =>
-    props.selected ? '2px solid #111827' : '1px solid #d8dde3'}; */
-  background: #f2f4f7;
   display: grid;
-  gap: 0px;
+  gap: 5px;
   grid-template-columns: ${(props) => props.cols};
   grid-template-rows: ${(props) => props.rows};
   box-sizing: border-box;
-  // padding: ${(props) => (props.inset ? `${props.inset}px` : 0)};
+  padding: ${(props) => (props.inset ? `${props.inset}%` : 0)};
 `
 
 export const LayoutOptionCell = styled.div<{
@@ -87,8 +85,8 @@ export const EditorLayoutWrapper = styled.div<{
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 100%;
-  height: 100%;
+  width: 60%;
+  height: 90%;
   aspect-ratio: ${(props) => props.aspectRatio || '1 / 1'};
   display: grid;
   gap: 8px;

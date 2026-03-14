@@ -168,8 +168,9 @@ function PuzzlePhotoEditor({
                   style={{
                     width: '100%',
                     height: '100%',
-                    objectFit: photo.fitMode === 'width' ? 'contain' : 'cover',
-                    objectPosition: photo.focusPosition,
+                    // objectFit: photo.fitMode === 'width' ? 'contain' : 'cover',
+                    objectFit: 'cover',
+                    // objectPosition: photo.focusPosition,
                   }}
                 />
               ) : (
@@ -257,8 +258,8 @@ function PuzzlePhotoEditor({
                     border: '1px solid #444',
                   }}
                 >
-                  <option value="width">寬</option>
-                  <option value="height">高</option>
+                  <option value="width">寬度</option>
+                  <option value="height">高度</option>
                 </select>
               </InputGroup>
               <InputGroup>
