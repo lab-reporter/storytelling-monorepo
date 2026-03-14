@@ -36,6 +36,7 @@ export const Field = ({
         style={{ position: 'relative', zIndex: 30, backgroundColor: '#fff' }}
       >
         {' '}
+        {/* add zIndex to be in front of list's save button */}
         <ScrollableImageEditor {...siProps} onChange={onChange} />
       </div>
     </FieldContainer>

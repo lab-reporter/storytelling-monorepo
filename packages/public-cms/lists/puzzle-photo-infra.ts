@@ -75,8 +75,8 @@ const listConfigurations = list({
             grid: config.grid,
             isVertical: config.isVertical,
           }
-          // const shape = config.shape
           const shape = item?.shape as string
+          // const direction = item?.direction as string
           const photoCount = config.photoCount
 
           const photoUrls = config.photos
@@ -123,7 +123,6 @@ const listConfigurations = list({
         },
       }),
       ui: {
-        // A module path that is resolved from where `keystone start` is run
         views: './lists/views/link-button',
         createView: {
           fieldMode: 'hidden',
@@ -183,7 +182,6 @@ const listConfigurations = list({
   },
   ui: {
     listView: {
-      // initialSort: { field: 'id', direction: 'DESC' },
       initialColumns: ['name'],
       pageSize: 50,
     },
