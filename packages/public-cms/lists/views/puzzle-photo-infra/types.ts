@@ -18,6 +18,7 @@ export type PuzzlePhotoConfig = LayoutProps & {
 }
 
 export type LayoutOption =
+  | undefined
   | '1A'
   | '1B'
   | '2A'

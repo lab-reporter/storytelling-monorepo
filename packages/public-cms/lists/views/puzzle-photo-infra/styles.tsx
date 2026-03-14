@@ -63,7 +63,6 @@ export const LayoutOptionButtonWrapper = styled.div<{
   position: relative;
   width: 100%;
   height: 100%;
-  // padding: 10%;
   display: grid;
   gap: 5px;
   grid-template-columns: ${(props) => props.cols};
@@ -81,7 +80,6 @@ export const LayoutOptionCell = styled.div<{
   grid-row: ${(props) => props.row};
   background: #fff;
   border: 1px solid #e1e5ea;
-  // border-radius: 3px;
 `
 
 export const EditorLayoutWrapper = styled.div<{
@@ -218,9 +216,7 @@ export const CellOverlay = styled.div`
   }
 `
 
-export const EditPhotoIconWrapper = styled.div`
-  /* Centered by flex parent */
-`
+export const EditPhotoIconWrapper = styled.div``
 
 export const DeletePhotoIconWrapper = styled.div`
   position: absolute;
@@ -235,7 +231,6 @@ export const CheckIcon = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  // border-radius: 8px;
   background-color: #000;
   background-image: url(${cdnPrefix + '/lexical/success-alt.svg'});
   background-repeat: no-repeat;

@@ -28,9 +28,8 @@ import {
   AddButton,
   ZoomInButton,
   ZoomOutButton,
-  EditPhotoIcon,
-  DeletePhotoIcon,
-  EditLayoutButton,
+  EditPhotoButton,
+  DeletePhotoButton,
 } from '../utils/buttons'
 import {
   LayoutOption,
@@ -173,28 +172,15 @@ function PuzzlePhotoEditor({
                     style={{
                       width: '100%',
                       height: '100%',
-                      // objectFit: photo.fitMode === 'width' ? 'contain' : 'cover',
                       objectFit: 'cover',
-                      // objectPosition: photo.focusPosition,
                     }}
                   />
                 ) : (
-                  <EditLayoutButton
-                    onClick={() => {
-                      setEditingIndex(index)
-                      setTempPhoto(getPhotoAt(index))
-                    }}
-                    style={{
-                      width: '50px',
-                      height: '50px',
-                      backgroundColor: 'transparent',
-                      filter: 'none',
-                    }}
-                  />
+                  <></>
                 )}
                 <CellOverlay>
                   <EditPhotoIconWrapper>
-                    <EditPhotoIcon
+                    <EditPhotoButton
                       onClick={() => {
                         setEditingIndex(index)
                         setTempPhoto(getPhotoAt(index))
@@ -202,7 +188,7 @@ function PuzzlePhotoEditor({
                     />
                   </EditPhotoIconWrapper>
                   <DeletePhotoIconWrapper>
-                    <DeletePhotoIcon onClick={() => onPhotoDelete(index)} />
+                    <DeletePhotoButton onClick={() => onPhotoDelete(index)} />
                   </DeletePhotoIconWrapper>
                 </CellOverlay>
               </EditorLayoutCell>
