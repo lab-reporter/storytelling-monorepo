@@ -116,46 +116,13 @@ model ScrollableThreeModel {
 }
 
 model PuzzlePhotoInfra {
-  id             Int                        @id @default(autoincrement())
-  name           String                     @default("")
-  shape          PuzzlePhotoInfraShapeType  @default(square)
-  layout         PuzzlePhotoInfraLayoutType @default(A1)
-  photo1         String                     @default("")
-  fitMode1       String?                    @default("width")
-  focusPosition1 String?                    @default("center")
-  photo2         String                     @default("")
-  fitMode2       String?                    @default("width")
-  focusPosition2 String?                    @default("center")
-  photo3         String                     @default("")
-  fitMode3       String?                    @default("width")
-  focusPosition3 String?                    @default("center")
-  photo4         String                     @default("")
-  fitMode4       String?                    @default("width")
-  focusPosition4 String?                    @default("center")
-  created_at     DateTime?                  @default(now())
-  updated_at     DateTime?                  @updatedAt
-  created_by     User?                      @relation("PuzzlePhotoInfra_created_by", fields: [created_byId], references: [id])
-  created_byId   Int?                       @map("created_by")
+  id           Int       @id @default(autoincrement())
+  name         String    @default("")
+  config       Json?     @default("{\"layout\":\"1A\",\"shape\":\"square\",\"direction\":\"horizontal\",\"photoCount\":1,\"photos\":[],\"hasPadding\":true}")
+  created_at   DateTime? @default(now())
+  updated_at   DateTime? @updatedAt
+  created_by   User?     @relation("PuzzlePhotoInfra_created_by", fields: [created_byId], references: [id])
+  created_byId Int?      @map("created_by")
 
   @@index([created_byId])
-}
-
-enum PuzzlePhotoInfraShapeType {
-  square
-  horizontalRectangle
-  verticalRectangle
-}
-
-enum PuzzlePhotoInfraLayoutType {
-  A1
-  B1
-  A2
-  B2
-  A3
-  B3
-  C3
-  D3
-  A4
-  B4
-  C4
 }
