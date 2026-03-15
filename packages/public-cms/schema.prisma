@@ -120,7 +120,7 @@ model PuzzlePhotoInfra {
   name         String                        @default("")
   shape        PuzzlePhotoInfraShapeType     @default(square)
   direction    PuzzlePhotoInfraDirectionType @default(horizontalScroll)
-  config       Json?                         @default("{\"layout\":\"1A\",\"direction\":\"horizontal\",\"photoCount\":1,\"photos\":[],\"hasPadding\":true}")
+  config       Json?                         @default("{\"photoCount\":0,\"photos\":[],\"hasPadding\":true}")
   created_at   DateTime?                     @default(now())
   updated_at   DateTime?                     @updatedAt
   created_by   User?                         @relation("PuzzlePhotoInfra_created_by", fields: [created_byId], references: [id])

@@ -55,5 +55,8 @@ packages/cms/public/images
 packages/cms/public/files
 packages/three-hong-kong-project/webpack-bundles
 
+packages/public-cms/public/images
+packages/public-cms/public/files
+
 .gemini/
 gha-creds-*.json
