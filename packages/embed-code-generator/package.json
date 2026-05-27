@@ -1,6 +1,6 @@
 {
   "name": "@story-telling-reporter/react-embed-code-generator",
-  "version": "2.2.17",
+  "version": "2.2.18",
   "description": "",
   "main": "lib/index.js",
   "scripts": {
