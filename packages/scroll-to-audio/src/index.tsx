@@ -18,6 +18,7 @@ function ScrollToAudio({
   preload = 'auto',
   hintOnly = false,
   hintId,
+  scrollerRef,
 }: {
   id: string
   audioUrls: string[]
@@ -26,6 +27,7 @@ function ScrollToAudio({
   bottomEntryOnly?: boolean
   hintOnly?: boolean
   hintId?: string
+  scrollerRef?: React.RefObject<HTMLElement>
 }) {
   const audioRef = useRef<HTMLAudioElement>(null)
   const [muted, setMuted] = hooks.useMuted(true, audioRef)
@@ -45,6 +47,9 @@ function ScrollToAudio({
       return
     }
 
+    const scrollTarget: Window | HTMLElement = scrollerRef?.current ?? window
+    const containerEl = scrollerRef?.current
+
     const handleScroll = _.debounce(() => {
       const topEntryElement = topEntryPointRef.current
       const bottomEntryElement = bottomEntryPointRef.current
@@ -57,13 +62,17 @@ function ScrollToAudio({
         console.log(
           `[react-scroll-to-audio][${id}] \`topEntryElement\` is not available. Remove scroll event listener.`
         )
-        window.removeEventListener('scroll', handleScroll)
+        scrollTarget.removeEventListener('scroll', handleScroll)
         return
       }
 
-      const viewportHeight = window.innerHeight
+      const containerRect = containerEl
+        ? containerEl.getBoundingClientRect()
+        : { top: 0, height: window.innerHeight }
+      const viewportHeight = containerRect.height
       const rootMargin = Math.ceil(viewportHeight * 0.25)
-      const topEntryY = topEntryElement.getBoundingClientRect().y
+      const topEntryY =
+        topEntryElement.getBoundingClientRect().y - containerRect.top
 
       // top entry point is below viewport
       // which means element is outside viewport bottom
@@ -79,7 +88,8 @@ function ScrollToAudio({
       if (!bottomEntryElement) {
         bottomEntryY = topEntryY + viewportHeight
       } else {
-        bottomEntryY = bottomEntryElement.getBoundingClientRect().y
+        bottomEntryY =
+          bottomEntryElement.getBoundingClientRect().y - containerRect.top
       }
 
       // bottom entry point is above viewport top,
@@ -108,15 +118,16 @@ function ScrollToAudio({
     console.log(
       `[react-scroll-to-audio][${id}] add scroll event listener. \`muted\` state is ${muted}`
     )
-    window.addEventListener('scroll', handleScroll)
+    scrollTarget.addEventListener('scroll', handleScroll)
 
     return () => {
       console.log(
         `[react-scroll-to-audio][${id}] useEffect cleanup function. Remove scroll event listener.`
       )
-      window.removeEventListener('scroll', handleScroll)
+      scrollTarget.removeEventListener('scroll', handleScroll)
+      handleScroll.cancel()
     }
-  }, [muted, hintOnly])
+  }, [muted, hintOnly, id, scrollerRef])
 
   // set audio muted attribute according to browser muted state
   useEffect(() => {

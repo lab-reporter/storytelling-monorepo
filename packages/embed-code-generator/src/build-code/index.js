@@ -60,7 +60,55 @@ export function buildScrollToAudioEmbedCode(
   if (bottomEntryPointOnly) {
     return buildBottomEntryPointStaticMarkup({ id: data?.id })
   }
-  return buildEmbedCode(data, pkgNames.scrollToAudio, ScrollToAudio)
+
+  const uuid = uuidv4()
+  const dataWithUuid = { ...data, uuid }
+
+  const sheet = new ServerStyleSheet()
+  let jsx = ''
+  let styleTags = ''
+  try {
+    jsx = ReactDOMServer.renderToStaticMarkup(
+      sheet.collectStyles(<ScrollToAudio {...data} />)
+    )
+    styleTags = sheet.getStyleTags()
+  } finally {
+    sheet.seal()
+  }
+
+  const pkgName = pkgNames.scrollToAudio
+
+  return `
+    ${styleTags}
+    <div id="${uuid}">${jsx}</div>
+    <script>
+      (function() {
+        var namespace = '@story-telling-reporter/react-embed-code-generator@${
+          manifest.version
+        }';
+        var pkg = '${pkgName}';
+        if (typeof window != 'undefined') {
+          if (!window.hasOwnProperty(namespace)) {
+            window[namespace] = {};
+          }
+          if (window[namespace] && !window[namespace].hasOwnProperty(pkg)) {
+            window[namespace][pkg] = [];
+          }
+          if (Array.isArray(window[namespace][pkg])) {
+            var embedEl = document.getElementById('${uuid}');
+            var scrollerEl = embedEl && embedEl.closest('.editor-fullscreen-scroller');
+            var scrollerRef = scrollerEl ? { current: scrollerEl } : undefined;
+            var data = ${serialize(dataWithUuid)};
+            data.scrollerRef = scrollerRef;
+            window[namespace][pkg].push(data);
+          }
+        }
+      })()
+    </script>
+    <script type="text/javascript" defer crossorigin src="${
+      manifest?.[pkgName]
+    }"></script>
+  `
 }
 
 /**
