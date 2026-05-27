@@ -1,6 +1,6 @@
 {
   "name": "@story-telling-reporter/react-embed-code-generator",
-  "version": "2.2.16",
+  "version": "2.2.17",
   "description": "",
   "main": "lib/index.js",
   "scripts": {
@@ -30,7 +30,7 @@
   "dependencies": {
     "@story-telling-reporter/react-karaoke": "^1.0.3",
     "@story-telling-reporter/react-puzzle-photo-infra": "^1.0.0",
-    "@story-telling-reporter/react-scroll-to-audio": "^3.0.3",
+    "@story-telling-reporter/react-scroll-to-audio": "^3.1.0",
     "@story-telling-reporter/react-scrollable-image": "^0.3.4",
     "@story-telling-reporter/react-scrollable-video": "^3.0.2",
     "@story-telling-reporter/react-subtitled-audio": "^1.1.4",
