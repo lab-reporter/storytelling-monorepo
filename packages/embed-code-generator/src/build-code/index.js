@@ -36,7 +36,7 @@ export function buildSubtitledAudioEmbedCode(data) {
  *  @returns string
  */
 export function buildScrollableImageEmbedCode(data) {
-  return buildEmbedCode(data, pkgNames.scrollableImage, null)
+  return buildScrollerAwareEmbedCode(data, pkgNames.scrollableImage)
 }
 
 /**
@@ -44,7 +44,7 @@ export function buildScrollableImageEmbedCode(data) {
  *  @returns string
  */
 export function buildScrollableVideoEmbedCode(data) {
-  return buildEmbedCode(data, pkgNames.scrollableVideo, null)
+  return buildScrollerAwareEmbedCode(data, pkgNames.scrollableVideo)
 }
 
 /**
@@ -61,54 +61,11 @@ export function buildScrollToAudioEmbedCode(
     return buildBottomEntryPointStaticMarkup({ id: data?.id })
   }
 
-  const uuid = uuidv4()
-  const dataWithUuid = { ...data, uuid }
-
-  const sheet = new ServerStyleSheet()
-  let jsx = ''
-  let styleTags = ''
-  try {
-    jsx = ReactDOMServer.renderToStaticMarkup(
-      sheet.collectStyles(<ScrollToAudio {...data} />)
-    )
-    styleTags = sheet.getStyleTags()
-  } finally {
-    sheet.seal()
-  }
-
-  const pkgName = pkgNames.scrollToAudio
-
-  return `
-    ${styleTags}
-    <div id="${uuid}">${jsx}</div>
-    <script>
-      (function() {
-        var namespace = '@story-telling-reporter/react-embed-code-generator@${
-          manifest.version
-        }';
-        var pkg = '${pkgName}';
-        if (typeof window != 'undefined') {
-          if (!window.hasOwnProperty(namespace)) {
-            window[namespace] = {};
-          }
-          if (window[namespace] && !window[namespace].hasOwnProperty(pkg)) {
-            window[namespace][pkg] = [];
-          }
-          if (Array.isArray(window[namespace][pkg])) {
-            var embedEl = document.getElementById('${uuid}');
-            var scrollerEl = embedEl && embedEl.closest('.editor-fullscreen-scroller');
-            var scrollerRef = scrollerEl ? { current: scrollerEl } : undefined;
-            var data = ${serialize(dataWithUuid)};
-            data.scrollerRef = scrollerRef;
-            window[namespace][pkg].push(data);
-          }
-        }
-      })()
-    </script>
-    <script type="text/javascript" defer crossorigin src="${
-      manifest?.[pkgName]
-    }"></script>
-  `
+  return buildScrollerAwareEmbedCode(
+    data,
+    pkgNames.scrollToAudio,
+    ScrollToAudio
+  )
 }
 
 /**
@@ -177,6 +134,69 @@ export function buildEmbedCode(data, pkgName, Component) {
       })()
     </script>
     <div id="${uuid}">${jsx}</div>
+    <script type="text/javascript" defer crossorigin src="${
+      manifest?.[pkgName]
+    }"></script>
+  `
+}
+
+/**
+ * Shared builder for components that support a custom scroll container via
+ * `scrollerRef`. Puts the mount `<div>` before the inline `<script>` so that
+ * `document.getElementById(uuid)` is reliable, and injects `scrollerRef` when
+ * the embed is placed inside `.editor-fullscreen-scroller`.
+ *
+ * @param {Object} data
+ * @param {string} pkgName - values specified in `pkgNames`
+ * @param {Function|null} [Component=null] - optional React component for SSR
+ * @returns {string} embedded code
+ */
+function buildScrollerAwareEmbedCode(data, pkgName, Component = null) {
+  const uuid = uuidv4()
+  const dataWithUuid = { ...data, uuid }
+
+  let jsx = ''
+  let styleTags = ''
+
+  if (Component) {
+    const sheet = new ServerStyleSheet()
+    try {
+      jsx = ReactDOMServer.renderToStaticMarkup(
+        sheet.collectStyles(<Component {...data} />)
+      )
+      styleTags = sheet.getStyleTags()
+    } finally {
+      sheet.seal()
+    }
+  }
+
+  return `
+    ${styleTags}
+    <div id="${uuid}">${jsx}</div>
+    <script>
+      (function() {
+        var namespace = '@story-telling-reporter/react-embed-code-generator@${
+          manifest.version
+        }';
+        var pkg = '${pkgName}';
+        if (typeof window != 'undefined') {
+          if (!window.hasOwnProperty(namespace)) {
+            window[namespace] = {};
+          }
+          if (window[namespace] && !window[namespace].hasOwnProperty(pkg)) {
+            window[namespace][pkg] = [];
+          }
+          if (Array.isArray(window[namespace][pkg])) {
+            var embedEl = document.getElementById('${uuid}');
+            var scrollerEl = embedEl && embedEl.closest('.editor-fullscreen-scroller');
+            var scrollerRef = scrollerEl ? { current: scrollerEl } : undefined;
+            var data = ${serialize(dataWithUuid)};
+            data.scrollerRef = scrollerRef;
+            window[namespace][pkg].push(data);
+          }
+        }
+      })()
+    </script>
     <script type="text/javascript" defer crossorigin src="${
       manifest?.[pkgName]
     }"></script>
