@@ -12,7 +12,7 @@ import {
   createdByHooks,
   createImageFieldHooks,
 } from './utils/access-control-list'
-const limit = 5
+const limit = 10
 const imageFieldHooks = createImageFieldHooks(limit, config.images.storagePath)
 
 const listConfigurations = list({
