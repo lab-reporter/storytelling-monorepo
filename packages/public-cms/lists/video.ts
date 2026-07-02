@@ -13,7 +13,7 @@ import {
   createFileFieldHooks,
 } from './utils/access-control-list'
 
-const limit = 5
+const limit = 10
 const fileFieldHooks = createFileFieldHooks(limit, config.files.storagePath)
 
 const listConfigurations = list({
