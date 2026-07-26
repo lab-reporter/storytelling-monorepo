@@ -68,26 +68,26 @@ const listConfigurations = list({
       field: graphql.field({
         type: graphql.String,
         resolve: async (item: Record<string, unknown>): Promise<string> => {
-          const config = item?.config as PuzzlePhotoConfig
+          const config =
+            (item?.config as PuzzlePhotoConfig | null) || defaultConfig
+          const photosList = Array.isArray(config.photos) ? config.photos : []
           const layoutSetting = {
-            hasPadding: config.hasPadding,
+            hasPadding: config.hasPadding ?? true,
             variant: config.variant,
             grid: config.grid,
             isVertical: config.isVertical,
           }
-          const shape = item?.shape as string
-          // const direction = item?.direction as string
-          const photoCount = config.photoCount
+          const shape = (item?.shape as string) || 'square'
+          const photoCount = config.photoCount || 0
 
-          const photoUrls = config.photos
-            .slice(0, photoCount)
-            .map((photo) => photo.url)
-          const fitModes = config.photos
-            .slice(0, photoCount)
-            .map((photo) => photo.fitMode)
-          const focusPositions = config.photos
-            .slice(0, photoCount)
-            .map((photo) => photo.focusPosition)
+          const selectedPhotos = photosList.slice(0, photoCount)
+          const photoUrls = selectedPhotos.map((photo) => photo.url || '')
+          const fitModes = selectedPhotos.map(
+            (photo) => photo.fitMode || 'height'
+          )
+          const focusPositions = selectedPhotos.map(
+            (photo) => photo.focusPosition || 'center'
+          )
 
           const code = buildEmbedCode(
             {

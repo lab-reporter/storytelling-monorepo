@@ -123,7 +123,7 @@ export const ConfigPanelOverlay = styled.div`
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100%;
+  height: 100vh;
   background-color: rgba(0, 0, 0, 0.3);
   z-index: 1000;
 `
@@ -181,7 +181,7 @@ export const Input = styled.input`
   &:focus {
     outline: none;
     border-color: #2563eb;
-    ring: 2px solid #3b82f6;
+    box-shadow: 0 0 0 2px #3b82f6;
   }
 `
 

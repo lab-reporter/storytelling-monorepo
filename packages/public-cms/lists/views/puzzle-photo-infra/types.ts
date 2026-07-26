@@ -55,7 +55,7 @@ export type PickerSetting = {
 const inset = 10
 
 export const layoutSettings: Record<
-  LayoutOption,
+  Exclude<LayoutOption, undefined>,
   { pickerSetting: PickerSetting; props: LayoutProps }
 > = {
   '1A': {

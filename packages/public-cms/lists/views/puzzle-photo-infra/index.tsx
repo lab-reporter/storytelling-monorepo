@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import { FieldProps } from '@keystone-6/core/types'
 import { FieldLabel } from '@keystone-ui/fields'
 import { controller } from '@keystone-6/core/fields/types/json/views'
@@ -44,7 +44,14 @@ export const Field = ({
   value,
   onChange: onFieldChange,
 }: FieldProps<typeof controller>) => {
-  const config = value ? JSON.parse(value) : { photos: [] }
+  let config: PuzzlePhotoConfig = { photoCount: 0, photos: [] }
+  if (value) {
+    try {
+      config = JSON.parse(value)
+    } catch (e) {
+      console.error('Failed to parse PuzzlePhotoConfig JSON', e)
+    }
+  }
 
   const onChange = useCallback(
     (newConfig: PuzzlePhotoConfig) => {
@@ -80,6 +87,11 @@ function PuzzlePhotoEditor({
     focusPosition: 'center',
   })
 
+  useEffect(() => {
+    setLayout(initialConfig.layout)
+    setPhotos(initialConfig.photos || [])
+  }, [initialConfig.layout, JSON.stringify(initialConfig.photos)])
+
   const getPhotoAt = (index: number): Photo => {
     return (
       photos[index] || { url: '', fitMode: 'height', focusPosition: 'center' }
@@ -95,7 +107,7 @@ function PuzzlePhotoEditor({
   )
 
   const onPhotoConfirm = () => {
-    if (editingIndex !== null && layout) {
+    if (editingIndex !== null && layout && layoutSettings[layout]) {
       const newPhotos = [...photos]
       newPhotos[editingIndex] = tempPhoto
       setPhotos(newPhotos)
@@ -109,7 +121,7 @@ function PuzzlePhotoEditor({
   }
 
   const onPhotoDelete = (index: number) => {
-    if (layout) {
+    if (layout && layoutSettings[layout]) {
       const newPhotos = [...photos]
       newPhotos[index] = { url: '', fitMode: 'height', focusPosition: 'center' }
       setPhotos(newPhotos)
@@ -141,17 +153,12 @@ function PuzzlePhotoEditor({
         position: 'absolute',
         right: '10px',
         top: '10px',
-        width: '50px',
-        height: '50px',
-        border: 'none',
-        borderRadius: '12px',
-        backgroundColor: '#191919',
-        color: 'white',
       }}
     />
   )
 
-  const layoutSetting = layout ? layoutSettings[layout] : null
+  const layoutSetting =
+    layout && layoutSettings[layout] ? layoutSettings[layout] : null
 
   return (
     <Panel $fullScreen={fullScreen}>
@@ -169,15 +176,18 @@ function PuzzlePhotoEditor({
                 {photo.url ? (
                   <img
                     src={photo.url}
+                    alt={`Photo ${index + 1}`}
                     style={{
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'cover',
+                      width: photo.fitMode === 'width' ? '100%' : 'auto',
+                      height: photo.fitMode === 'height' ? '100%' : 'auto',
+                      objectFit:
+                        photo.fitMode === 'width' || photo.fitMode === 'height'
+                          ? 'contain'
+                          : 'cover',
+                      objectPosition: photo.focusPosition || 'center',
                     }}
                   />
-                ) : (
-                  <></>
-                )}
+                ) : null}
                 <CellOverlay>
                   <EditPhotoIconWrapper>
                     <EditPhotoButton
@@ -245,7 +255,7 @@ function PuzzlePhotoEditor({
                   onChange={(e) =>
                     setTempPhoto({
                       ...tempPhoto,
-                      fitMode: e.target.value as any,
+                      fitMode: e.target.value as Photo['fitMode'],
                     })
                   }
                   style={{
@@ -267,7 +277,7 @@ function PuzzlePhotoEditor({
                   onChange={(e) =>
                     setTempPhoto({
                       ...tempPhoto,
-                      focusPosition: e.target.value as any,
+                      focusPosition: e.target.value as Photo['focusPosition'],
                     })
                   }
                   style={{

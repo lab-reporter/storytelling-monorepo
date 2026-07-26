@@ -3,7 +3,7 @@ import styled, { CSSProperties } from 'styled-components'
 export const cdnPrefix =
   'https://cdn.jsdelivr.net/npm/@story-telling-reporter/react-scrollable-image/public/icons'
 
-export const Icon = styled.div<{
+export const Icon = styled.button<{
   $bgImg?: string
   $hoverBgImg?: string
   $focusBgImg?: string
@@ -15,9 +15,11 @@ export const Icon = styled.div<{
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+  background-color: transparent;
   z-index: 10;
   border: none;
   border-radius: 12px;
+  padding: 0;
 
   &:hover {
     background-image: url(${(props) => props.$hoverBgImg || ''});
@@ -34,8 +36,6 @@ export type IconProps = {
 }
 
 export const ZoomInButton = styled(Icon).attrs((props: IconProps) => ({
-  $className: props?.className,
-  $onClick: props?.onClick,
   $bgImg: cdnPrefix + '/zoom-in.svg',
   $hoverBgImg: cdnPrefix + '/zoom-in.hover.svg',
   style: {
@@ -43,13 +43,11 @@ export const ZoomInButton = styled(Icon).attrs((props: IconProps) => ({
     height: '50px',
     borderRadius: '12px',
     backgroundColor: '#191919',
-    ...props.style,
-  },
+    ...(props.style || {}),
+  } as CSSProperties,
 }))``
 
 export const ZoomOutButton = styled(Icon).attrs((props: IconProps) => ({
-  $className: props?.className,
-  $onClick: props?.onClick,
   $bgImg: cdnPrefix + '/zoom-out.svg',
   $hoverBgImg: cdnPrefix + '/zoom-out.hover.svg',
   style: {
@@ -57,8 +55,8 @@ export const ZoomOutButton = styled(Icon).attrs((props: IconProps) => ({
     height: '50px',
     borderRadius: '12px',
     backgroundColor: '#191919',
-    ...props.style,
-  },
+    ...(props.style || {}),
+  } as CSSProperties,
 }))``
 
 export const AddButton = styled(Icon).attrs((props: IconProps) => ({
@@ -67,8 +65,8 @@ export const AddButton = styled(Icon).attrs((props: IconProps) => ({
   style: {
     width: '50px',
     height: '50px',
-    ...props.style,
-  },
+    ...(props.style || {}),
+  } as CSSProperties,
 }))``
 
 export const EditPhotoButton = styled(Icon).attrs((props: IconProps) => ({
@@ -77,8 +75,8 @@ export const EditPhotoButton = styled(Icon).attrs((props: IconProps) => ({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     borderRadius: '4px',
     filter: 'invert(100%)',
-    ...props.style,
-  },
+    ...(props.style || {}),
+  } as CSSProperties,
 }))``
 
 export const DeletePhotoButton = styled(Icon).attrs((props: IconProps) => ({
@@ -87,6 +85,6 @@ export const DeletePhotoButton = styled(Icon).attrs((props: IconProps) => ({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     borderRadius: '4px',
     filter: 'invert(100%)',
-    ...props.style,
-  },
+    ...(props.style || {}),
+  } as CSSProperties,
 }))``

@@ -20,37 +20,38 @@ export function LayoutPicker({
 }) {
   return (
     <LayoutPickerGrid>
-      {layoutOptions.map((optionId) => (
-        <LayoutPickerButton
-          key={optionId}
-          type="button"
-          aria-label={`Layout ${optionId}`}
-        >
-          <LayoutOptionButton
+      {layoutOptions.map((optionId) => {
+        if (!optionId) return null
+        const setting = layoutSettings[optionId]
+        return (
+          <LayoutPickerButton
             key={optionId}
-            layout={optionId}
-            selected={layout === optionId}
-            onClick={(newLayoutProps) => {
-              onChange(newLayoutProps)
+            type="button"
+            aria-label={`Layout ${optionId}`}
+            onClick={() => {
+              onChange(setting.props)
               onClose()
             }}
-          />
-        </LayoutPickerButton>
-      ))}
+          >
+            <LayoutOptionPreview
+              layout={optionId}
+              selected={layout === optionId}
+            />
+          </LayoutPickerButton>
+        )
+      })}
     </LayoutPickerGrid>
   )
 }
 
-function LayoutOptionButton({
+function LayoutOptionPreview({
   layout,
   selected,
-  onClick,
 }: {
-  layout: LayoutOption
+  layout: Exclude<LayoutOption, undefined>
   selected: boolean
-  onClick: (props: LayoutProps) => void
 }) {
-  const { pickerSetting: setting, props } = layoutSettings[layout]
+  const { pickerSetting: setting } = layoutSettings[layout]
   return (
     <>
       <LayoutOptionButtonWrapper
@@ -58,7 +59,6 @@ function LayoutOptionButton({
         cols={setting.cols}
         rows={setting.rows}
         inset={setting.inset}
-        onClick={() => onClick(props)}
       >
         {setting.cells.map((cell, index) => (
           <LayoutOptionCell
