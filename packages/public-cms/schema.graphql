@@ -554,19 +554,8 @@ type PuzzlePhotoInfra {
   id: ID!
   name: String
   shape: PuzzlePhotoInfraShapeType
-  layout: PuzzlePhotoInfraLayoutType
-  photo1: String
-  fitMode1: String
-  focusPosition1: String
-  photo2: String
-  fitMode2: String
-  focusPosition2: String
-  photo3: String
-  fitMode3: String
-  focusPosition3: String
-  photo4: String
-  fitMode4: String
-  focusPosition4: String
+  direction: PuzzlePhotoInfraDirectionType
+  config: JSON
   embedCode: String
   preview: JSON
   created_at: DateTime
@@ -580,18 +569,9 @@ enum PuzzlePhotoInfraShapeType {
   verticalRectangle
 }
 
-enum PuzzlePhotoInfraLayoutType {
-  A1
-  B1
-  A2
-  B2
-  A3
-  B3
-  C3
-  D3
-  A4
-  B4
-  C4
+enum PuzzlePhotoInfraDirectionType {
+  horizontalScroll
+  verticalRectangleScroll
 }
 
 input PuzzlePhotoInfraWhereUniqueInput {
@@ -605,19 +585,7 @@ input PuzzlePhotoInfraWhereInput {
   id: IDFilter
   name: StringFilter
   shape: PuzzlePhotoInfraShapeTypeNullableFilter
-  layout: PuzzlePhotoInfraLayoutTypeNullableFilter
-  photo1: StringFilter
-  fitMode1: StringNullableFilter
-  focusPosition1: StringNullableFilter
-  photo2: StringFilter
-  fitMode2: StringNullableFilter
-  focusPosition2: StringNullableFilter
-  photo3: StringFilter
-  fitMode3: StringNullableFilter
-  focusPosition3: StringNullableFilter
-  photo4: StringFilter
-  fitMode4: StringNullableFilter
-  focusPosition4: StringNullableFilter
+  direction: PuzzlePhotoInfraDirectionTypeNullableFilter
   created_at: DateTimeNullableFilter
   updated_at: DateTimeNullableFilter
   created_by: UserWhereInput
@@ -630,45 +598,18 @@ input PuzzlePhotoInfraShapeTypeNullableFilter {
   not: PuzzlePhotoInfraShapeTypeNullableFilter
 }
 
-input PuzzlePhotoInfraLayoutTypeNullableFilter {
-  equals: PuzzlePhotoInfraLayoutType
-  in: [PuzzlePhotoInfraLayoutType!]
-  notIn: [PuzzlePhotoInfraLayoutType!]
-  not: PuzzlePhotoInfraLayoutTypeNullableFilter
-}
-
-input StringNullableFilter {
-  equals: String
-  in: [String!]
-  notIn: [String!]
-  lt: String
-  lte: String
-  gt: String
-  gte: String
-  contains: String
-  startsWith: String
-  endsWith: String
-  mode: QueryMode
-  not: StringNullableFilter
+input PuzzlePhotoInfraDirectionTypeNullableFilter {
+  equals: PuzzlePhotoInfraDirectionType
+  in: [PuzzlePhotoInfraDirectionType!]
+  notIn: [PuzzlePhotoInfraDirectionType!]
+  not: PuzzlePhotoInfraDirectionTypeNullableFilter
 }
 
 input PuzzlePhotoInfraOrderByInput {
   id: OrderDirection
   name: OrderDirection
   shape: OrderDirection
-  layout: OrderDirection
-  photo1: OrderDirection
-  fitMode1: OrderDirection
-  focusPosition1: OrderDirection
-  photo2: OrderDirection
-  fitMode2: OrderDirection
-  focusPosition2: OrderDirection
-  photo3: OrderDirection
-  fitMode3: OrderDirection
-  focusPosition3: OrderDirection
-  photo4: OrderDirection
-  fitMode4: OrderDirection
-  focusPosition4: OrderDirection
+  direction: OrderDirection
   created_at: OrderDirection
   updated_at: OrderDirection
 }
@@ -676,19 +617,8 @@ input PuzzlePhotoInfraOrderByInput {
 input PuzzlePhotoInfraUpdateInput {
   name: String
   shape: PuzzlePhotoInfraShapeType
-  layout: PuzzlePhotoInfraLayoutType
-  photo1: String
-  fitMode1: String
-  focusPosition1: String
-  photo2: String
-  fitMode2: String
-  focusPosition2: String
-  photo3: String
-  fitMode3: String
-  focusPosition3: String
-  photo4: String
-  fitMode4: String
-  focusPosition4: String
+  direction: PuzzlePhotoInfraDirectionType
+  config: JSON
   created_at: DateTime
   updated_at: DateTime
   created_by: UserRelateToOneForUpdateInput
@@ -702,19 +632,8 @@ input PuzzlePhotoInfraUpdateArgs {
 input PuzzlePhotoInfraCreateInput {
   name: String
   shape: PuzzlePhotoInfraShapeType
-  layout: PuzzlePhotoInfraLayoutType
-  photo1: String
-  fitMode1: String
-  focusPosition1: String
-  photo2: String
-  fitMode2: String
-  focusPosition2: String
-  photo3: String
-  fitMode3: String
-  focusPosition3: String
-  photo4: String
-  fitMode4: String
-  focusPosition4: String
+  direction: PuzzlePhotoInfraDirectionType
+  config: JSON
   created_at: DateTime
   updated_at: DateTime
   created_by: UserRelateToOneForCreateInput
