@@ -1,6 +1,6 @@
 {
   "name": "@story-telling-reporter/react-scrollable-video",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "",
   "main": "lib/index.js",
   "types": "types/index.d.ts",
@@ -33,17 +33,17 @@
   "devDependencies": {
     "@keystone-ui/fields": "^7.2.0",
     "@keystone-ui/modals": "^6.0.3",
-    "@story-telling-reporter/draft-editor": "^2.1.2",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
+    "@story-telling-reporter/draft-editor": "^2.1.4",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
     "styled-components": "5.3.5"
   },
   "peerDependencies": {
     "@keystone-ui/fields": "^7.2.0",
     "@keystone-ui/modals": "^6.0.3",
-    "@story-telling-reporter/draft-editor": "^2.1.2",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
+    "@story-telling-reporter/draft-editor": "^2.1.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "styled-components": "5.3.5"
   },
   "files": [

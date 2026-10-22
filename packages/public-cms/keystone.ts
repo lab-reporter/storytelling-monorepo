@@ -86,11 +86,11 @@ export default withAuth(
     },
     server: {
       maxFileSize: 25 * 1024 * 1024, // 25MiB
-      healthCheck: {
-        path: '/health_check',
-        data: { status: 'healthy' },
-      },
       extendExpressApp: (app, commonContext) => {
+        app.get('/health_check', (_req, res) => {
+          res.json({ status: 'healthy' })
+        })
+
         // extend JSON fileSize limit
         app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }))
         app.use(bodyParser.json({ limit: '10mb' }))

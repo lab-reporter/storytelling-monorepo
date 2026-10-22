@@ -47,7 +47,7 @@
     "@types/dat.gui": "^0.7.13",
     "@types/draft-js": "^0.11.10",
     "@types/lodash": "^4.14.197",
-    "@types/node": "^18.0.0",
+    "@types/node": "^22.20.5",
     "@types/react": "^18.0.12",
     "@types/styled-components": "^5.1.26",
     "@types/three": "^0.163.0",

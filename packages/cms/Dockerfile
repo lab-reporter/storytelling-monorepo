@@ -1,4 +1,4 @@
-FROM node:18.18.2-slim
+FROM node:22.23.4-slim
 
 ## Install system dependencies, `gcsfuse` in particular.
 RUN set -e; \
